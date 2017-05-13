@@ -1,0 +1,145 @@
+.profile-wrap {
+  display: flex;
+  justify-content: center;
+  min-width: 90%;
+  max-width: 90%;
+  margin: 0 auto; }
+
+.profile-left {
+  margin: 0;
+  min-width: 20%;
+  max-width: 20%;
+  padding: 2em; }
+  .profile-left img:hover {
+    opacity: 0.7; }
+  .profile-left img:active {
+    opacity: 0.9; }
+  .profile-left .profile-picture-wrap {
+    height: 12em; }
+  .profile-left .user-name-wrap {
+    font: 1.5em gray Roboto, "sans-serif";
+    display: flex;
+    justify-content: center;
+    background-color: whitesmoke;
+    cursor: default;
+    padding: 1em;
+    border: 1px solid antiquewhite; }
+
+.latest-post {
+  margin-top: 3em;
+  flex: 1; }
+  .latest-post :hover {
+    opacity: 0.8; }
+  .latest-post :active {
+    opacity: 0.9; }
+  .latest-post header {
+    display: flex;
+    justify-content: center;
+    font: 1.5em gray Roboto, "sans-serif";
+    text-align: center;
+    background-color: whitesmoke;
+    padding: 1em;
+    border: 1px solid antiquewhite;
+    cursor: pointer; }
+  .latest-post img {
+    width: 100%;
+    height: 100%; }
+  .latest-post collectionName {
+    display: flex;
+    justify-content: center;
+    background: #00bcd4;
+    color: white; }
+
+.profile-right {
+  text-align: center;
+  max-width: 70%;
+  min-width: 70%; }
+  .profile-right img:hover {
+    opacity: 0.5; }
+  .profile-right img:active {
+    opacity: 0.9; }
+  .profile-right .cover-wrap {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    height: 12em; }
+  .profile-right .content-wrap {
+    width: 100%;
+    padding: 0 2em 2em 2em; }
+
+.tabs {
+  display: flex;
+  justify-content: center; }
+
+body {
+  margin: 0;
+  font-size: 16px;
+  font-family: Roboto,'sans-serif'; }
+
+a {
+  color: dodgerblue;
+  text-decoration: none;
+  transition: color 0.4s; }
+  a :hover {
+    color: white; }
+
+.error-message {
+  display: flex;
+  justify-content: center;
+  color: red; }
+
+.success-message {
+  padding: 0 16px;
+  color: deepskyblue; }
+
+.text-center {
+  text-align: center; }
+
+.top-bar {
+  display: flex;
+  flex: 1;
+  background: #2d2d2d;
+  justify-content: space-between;
+  margin-bottom: 30px; }
+  .top-bar a,
+  .top-bar .nav a {
+    margin: 0 8px; }
+
+.logo {
+  padding: 5px; }
+
+.actions {
+  padding: 5px; }
+
+.container {
+  background-color: gray;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+  height: 100%; }
+
+.card-heading {
+  padding: 16px; }
+
+.button-login-signup {
+  padding: 16px;
+  display: flex;
+  flex: 1;
+  justify-content: center; }
+
+.login-header {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-family: Roboto, 'sans-serif';
+  font-size: 2em; }
+
+.signup-header {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-family: Roboto, 'sans-serif';
+  font-size: 2em; }
+
+/*# sourceMappingURL=main.css.map */

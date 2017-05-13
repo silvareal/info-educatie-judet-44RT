@@ -35555,55 +35555,55 @@
 
 	var _UpdateView2 = _interopRequireDefault(_UpdateView);
 
-	var _ProfileView = __webpack_require__(673);
+	var _ProfileView = __webpack_require__(634);
 
 	var _ProfileView2 = _interopRequireDefault(_ProfileView);
 
-	var _AdminView = __webpack_require__(639);
+	var _AdminView = __webpack_require__(637);
 
 	var _AdminView2 = _interopRequireDefault(_AdminView);
 
-	var _UsersView = __webpack_require__(643);
+	var _UsersView = __webpack_require__(639);
 
 	var _UsersView2 = _interopRequireDefault(_UsersView);
 
-	var _CreateView3 = __webpack_require__(645);
+	var _CreateView3 = __webpack_require__(641);
 
 	var _CreateView4 = _interopRequireDefault(_CreateView3);
 
-	var _ReadAllView3 = __webpack_require__(647);
+	var _ReadAllView3 = __webpack_require__(643);
 
 	var _ReadAllView4 = _interopRequireDefault(_ReadAllView3);
 
-	var _ReadOneView3 = __webpack_require__(652);
+	var _ReadOneView3 = __webpack_require__(648);
 
 	var _ReadOneView4 = _interopRequireDefault(_ReadOneView3);
 
-	var _UpdateView3 = __webpack_require__(655);
+	var _UpdateView3 = __webpack_require__(651);
 
 	var _UpdateView4 = _interopRequireDefault(_UpdateView3);
 
-	var _DeleteView3 = __webpack_require__(657);
+	var _DeleteView3 = __webpack_require__(653);
 
 	var _DeleteView4 = _interopRequireDefault(_DeleteView3);
 
-	var _CreateView5 = __webpack_require__(659);
+	var _CreateView5 = __webpack_require__(655);
 
 	var _CreateView6 = _interopRequireDefault(_CreateView5);
 
-	var _ReadAllView5 = __webpack_require__(660);
+	var _ReadAllView5 = __webpack_require__(657);
 
 	var _ReadAllView6 = _interopRequireDefault(_ReadAllView5);
 
-	var _ReadOneView5 = __webpack_require__(661);
+	var _ReadOneView5 = __webpack_require__(662);
 
 	var _ReadOneView6 = _interopRequireDefault(_ReadOneView5);
 
-	var _UpdateView5 = __webpack_require__(662);
+	var _UpdateView5 = __webpack_require__(665);
 
 	var _UpdateView6 = _interopRequireDefault(_UpdateView5);
 
-	var _DeleteView5 = __webpack_require__(663);
+	var _DeleteView5 = __webpack_require__(667);
 
 	var _DeleteView6 = _interopRequireDefault(_DeleteView5);
 
@@ -69678,7 +69678,7 @@
 /* 626 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -69694,6 +69694,12 @@
 
 	var _materialUi = __webpack_require__(400);
 
+	var _FontIcon = __webpack_require__(432);
+
+	var _FontIcon2 = _interopRequireDefault(_FontIcon);
+
+	var _colors = __webpack_require__(247);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -69706,187 +69712,257 @@
 	    _inherits(Create, _Component);
 
 	    function Create() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
 	        _classCallCheck(this, Create);
 
-	        return _possibleConstructorReturn(this, (Create.__proto__ || Object.getPrototypeOf(Create)).apply(this, arguments));
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Create.__proto__ || Object.getPrototypeOf(Create)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	            stepIndex: 0
+	        }, _this.handleNext = function () {
+	            var stepIndex = _this.state.stepIndex;
+
+	            if (stepIndex < 2) {
+	                _this.setState({ stepIndex: stepIndex + 1 });
+	            }
+	        }, _this.handlePrev = function () {
+	            var stepIndex = _this.state.stepIndex;
+
+	            if (stepIndex > 0) {
+	                _this.setState({ stepIndex: stepIndex - 1 });
+	            }
+	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    _createClass(Create, [{
-	        key: 'render',
-	        value: function render() {
+	        key: "getStepContent",
+	        value: function getStepContent(stepIndex) {
 	            var _this2 = this;
 
+	            switch (stepIndex) {
+	                case 0:
+	                    return _react2.default.createElement(
+	                        "div",
+	                        null,
+	                        _react2.default.createElement(
+	                            "div",
+	                            null,
+	                            this.props.collectionName.length > 100 ? _react2.default.createElement(
+	                                "div",
+	                                null,
+	                                "Please use a name that is shorter than 100 characters"
+	                            ) : null,
+	                            _react2.default.createElement(_materialUi.TextField, {
+	                                type: "text", floatingLabelText: "Name of the collection",
+	                                value: this.props.collectionName,
+	                                onChange: this.props.onCollectionChange,
+	                                errorText: this.props.errors.collectionName })
+	                        ),
+	                        _react2.default.createElement(
+	                            "div",
+	                            null,
+	                            this.props.collectionDescription.length > 5000 ? _react2.default.createElement(
+	                                "div",
+	                                null,
+	                                "Please use a description that is shorther than 5000 characters"
+	                            ) : null,
+	                            _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Collection description",
+	                                value: this.props.collectionDescription,
+	                                onChange: this.props.onCollectionDescriptionChange,
+	                                errorText: this.props.errors.collectionDescription })
+	                        )
+	                    );
+	                case 1:
+	                    return _react2.default.createElement(
+	                        "div",
+	                        null,
+	                        this.props.pictures.map(function (picture, i) {
+	                            return _react2.default.createElement(
+	                                "div",
+	                                { key: i },
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "input-field" },
+	                                    picture.pictureName.length > 100 ? _react2.default.createElement(
+	                                        "div",
+	                                        null,
+	                                        "Please use a name that is shorter than 100 characters"
+	                                    ) : null,
+	                                    _this2.props.pictureNameError[i] == "Please use a valid name for this picture" ? _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture name",
+	                                        value: picture.pictureName,
+	                                        onChange: _this2.props.handlePicturesNameChange(i),
+	                                        errorText: _this2.props.pictureNameError[i] }) : _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture name",
+	                                        value: picture.pictureName,
+	                                        onChange: _this2.props.handlePicturesNameChange(i) })
+	                                ),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "input-field" },
+	                                    _this2.props.pictureLinkError[i] == "Please use a link for the picture" ? _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture link",
+	                                        value: picture.pictureLink,
+	                                        onChange: _this2.props.handlePicturesLinkChange(i),
+	                                        errorText: _this2.props.pictureLinkError[i] }) : _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture link",
+	                                        value: picture.pictureLink,
+	                                        onChange: _this2.props.handlePicturesLinkChange(i) }),
+	                                    _react2.default.createElement("img", { src: picture.pictureLink, style: { width: 100, height: 100 } })
+	                                ),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "input-field" },
+	                                    picture.pictureDescription.length > 5000 ? _react2.default.createElement(
+	                                        "div",
+	                                        null,
+	                                        "Please use a description that is shorther than 5000 characters"
+	                                    ) : null,
+	                                    _this2.props.pictureDescriptionError[i] == "Please use a valid description for this picture" ? _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture description",
+	                                        value: picture.pictureDescription,
+	                                        onChange: _this2.props.handlePicturesDescriptionChange(i),
+	                                        errorText: _this2.props.pictureDescriptionError[i] }) : _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture description",
+	                                        value: picture.pictureDescription,
+	                                        onChange: _this2.props.handlePicturesDescriptionChange(i) })
+	                                ),
+	                                i === 0 ? _react2.default.createElement(_materialUi.RaisedButton, { type: "button", primary: true, label: "+",
+	                                    onClick: _this2.props.handleAddPictures(i) }) : null,
+	                                i != 0 ? _react2.default.createElement(_materialUi.RaisedButton, { type: "button", secondary: true, label: "-",
+	                                    onClick: _this2.props.handleRemovePictures(i) }) : null
+	                            );
+	                        })
+	                    );
+	                case 2:
+	                    return _react2.default.createElement(
+	                        "div",
+	                        null,
+	                        "Preview todo"
+	                    );
+	                default:
+	                    return 'You\'re a long way from home sonny jim!';
+	            }
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this3 = this;
+
+	            var stepIndex = this.state.stepIndex;
+
+	            var contentStyle = { margin: '0 16px' };
+
 	            return _react2.default.createElement(
-	                'div',
-	                null,
+	                "div",
+	                { style: { width: '100%', maxWidth: 700, margin: 'auto' } },
 	                this.props.successCreation === true ? _react2.default.createElement(
-	                    'div',
-	                    { className: 'alert alert-success' },
+	                    "div",
+	                    { className: "alert alert-success" },
 	                    _react2.default.createElement(
 	                        _reactRouter.Link,
-	                        { to: '/manage' },
-	                        'Back'
+	                        { to: "/manage" },
+	                        "Back"
 	                    ),
-	                    'Item was added'
+	                    "Item was added"
 	                ) : null,
 	                this.props.errorMessage != '' ? _react2.default.createElement(
-	                    'div',
+	                    "div",
 	                    null,
 	                    this.props.errorMessage
 	                ) : null,
 	                this.props.errors.summary ? _react2.default.createElement(
-	                    'div',
+	                    "div",
 	                    null,
 	                    this.props.errors.summary
 	                ) : null,
 	                _react2.default.createElement(
-	                    'form',
-	                    { onSubmit: this.props.onSave },
+	                    _materialUi.Stepper,
+	                    { linear: false, activeStep: stepIndex },
 	                    _react2.default.createElement(
-	                        'table',
-	                        { className: 'table' },
+	                        _materialUi.Step,
+	                        null,
 	                        _react2.default.createElement(
-	                            'tbody',
-	                            null,
-	                            _react2.default.createElement(
-	                                'tr',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'td',
-	                                    { className: 'input-field' },
-	                                    this.props.collectionName.length > 100 ? _react2.default.createElement(
-	                                        'div',
-	                                        null,
-	                                        'Please use a name that is shorter than 100 characters'
-	                                    ) : null,
-	                                    _react2.default.createElement(_materialUi.TextField, { type: 'text',
-	                                        floatingLabelText: 'Name of the collection',
-	                                        value: this.props.collectionName,
-	                                        onChange: this.props.onCollectionChange,
-	                                        errorText: this.props.errors.collectionName,
-	                                        required: true
-	                                    })
+	                            _materialUi.StepButton,
+	                            {
+	                                onClick: function onClick() {
+	                                    return _this3.setState({ stepIndex: 0 });
+	                                },
+	                                icon: this.props.pictureLinkError[0] == "Please use a link for the picture" ? _react2.default.createElement(
+	                                    _FontIcon2.default,
+	                                    { className: "material-icons", color: _colors.red500 },
+	                                    "warning"
+	                                ) : _react2.default.createElement(
+	                                    _FontIcon2.default,
+	                                    { className: "material-icons" },
+	                                    "mode_edit"
 	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'tr',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'td',
-	                                    { className: 'input-field' },
-	                                    this.props.collectionDescription.length > 5000 ? _react2.default.createElement(
-	                                        'div',
-	                                        null,
-	                                        'Please use a description that is shorther than 5000 characters'
-	                                    ) : null,
-	                                    _react2.default.createElement(_materialUi.TextField, {
-	                                        type: 'text',
-	                                        floatingLabelText: 'Collection description',
-	                                        value: this.props.collectionDescription,
-	                                        onChange: this.props.onCollectionDescriptionChange,
-	                                        errorText: this.props.errors.collectionDescription,
-	                                        required: true
-	                                    })
+	                            },
+	                            "Step 1"
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.Step,
+	                        null,
+	                        _react2.default.createElement(
+	                            _materialUi.StepButton,
+	                            {
+	                                onClick: function onClick() {
+	                                    return _this3.setState({ stepIndex: 1 });
+	                                },
+	                                icon: this.props.pictureLinkError[0] == "Please use a link for the picture" ? _react2.default.createElement(
+	                                    _FontIcon2.default,
+	                                    { className: "material-icons", color: _colors.red500 },
+	                                    "warning"
+	                                ) : _react2.default.createElement(
+	                                    _FontIcon2.default,
+	                                    { className: "material-icons" },
+	                                    "add_a_photo"
 	                                )
-	                            ),
-	                            this.props.pictures.map(function (picture, i) {
-	                                return _react2.default.createElement(
-	                                    'tr',
-	                                    { key: i },
-	                                    _react2.default.createElement(
-	                                        'td',
-	                                        { className: 'input-field' },
-	                                        picture.pictureName.length > 100 ? _react2.default.createElement(
-	                                            'div',
-	                                            null,
-	                                            'Please use a name that is shorter than 100 characters'
-	                                        ) : null,
-	                                        _this2.props.pictureNameError[i] == "Please use a valid name for this picture" ? _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture name',
-	                                            value: picture.pictureName,
-	                                            onChange: _this2.props.handlePicturesNameChange(i),
-	                                            errorText: _this2.props.pictureNameError[i]
-	                                        }) : _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture name',
-	                                            value: picture.pictureName,
-	                                            onChange: _this2.props.handlePicturesNameChange(i)
-	                                        })
-	                                    ),
-	                                    _react2.default.createElement(
-	                                        'td',
-	                                        { className: 'input-field' },
-	                                        _this2.props.pictureLinkError[i] == "Please use a link for the picture" ? _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture link',
-	                                            value: picture.pictureLink,
-	                                            onChange: _this2.props.handlePicturesLinkChange(i),
-	                                            errorText: _this2.props.pictureLinkError[i]
-	                                        }) : _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture link',
-	                                            value: picture.pictureLink,
-	                                            onChange: _this2.props.handlePicturesLinkChange(i)
-	                                        }),
-	                                        _react2.default.createElement('img', { src: picture.pictureLink, style: { width: 100, height: 100 } })
-	                                    ),
-	                                    _react2.default.createElement(
-	                                        'td',
-	                                        { className: 'input-field' },
-	                                        picture.pictureDescription.length > 5000 ? _react2.default.createElement(
-	                                            'div',
-	                                            null,
-	                                            'Please use a description that is shorther than 5000 characters'
-	                                        ) : null,
-	                                        _this2.props.pictureDescriptionError[i] == "Please use a valid description for this picture" ? _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture description',
-	                                            value: picture.pictureDescription,
-	                                            onChange: _this2.props.handlePicturesDescriptionChange(i),
-	                                            errorText: _this2.props.pictureDescriptionError[i]
-	                                        }) : _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture description',
-	                                            value: picture.pictureDescription,
-	                                            onChange: _this2.props.handlePicturesDescriptionChange(i)
-	                                        })
-	                                    ),
-	                                    i === 0 ? _react2.default.createElement(_materialUi.RaisedButton, { type: 'button',
-	                                        primary: true,
-	                                        label: 'I want to add more pictures',
-	                                        onClick: _this2.props.handleAddPictures(i)
-	                                    }) : null,
-	                                    i != 0 ? _react2.default.createElement(_materialUi.RaisedButton, { type: 'button',
-	                                        secondary: true,
-	                                        label: 'I want to remove this picture',
-	                                        onClick: _this2.props.handleRemovePictures(i)
-	                                    }) : null
-	                                );
-	                            }),
-	                            _react2.default.createElement(
-	                                'tr',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'td',
-	                                    null,
-	                                    _react2.default.createElement(_materialUi.RaisedButton, {
-	                                        label: 'Add collection',
-	                                        primary: true,
-	                                        onClick: this.props.onSave
-	                                    }),
-	                                    _react2.default.createElement(
-	                                        _reactRouter.Link,
-	                                        {
-	                                            to: '/manage'
-	                                        },
-	                                        _react2.default.createElement(_materialUi.RaisedButton, {
-	                                            label: 'Cancel and return',
-	                                            secondary: true
-	                                        })
-	                                    )
+	                            },
+	                            "Step 2"
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.Step,
+	                        null,
+	                        _react2.default.createElement(
+	                            _materialUi.StepButton,
+	                            { onClick: function onClick() {
+	                                    return _this3.setState({ stepIndex: 2 });
+	                                },
+	                                icon: this.props.pictureLinkError[0] == "Please use a link for the picture" ? _react2.default.createElement(
+	                                    _FontIcon2.default,
+	                                    { className: "material-icons", color: _colors.red500 },
+	                                    "warning"
+	                                ) : _react2.default.createElement(
+	                                    _FontIcon2.default,
+	                                    { className: "material-icons" },
+	                                    "done"
 	                                )
-	                            )
+	                            },
+	                            "Preview&Finish"
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { style: contentStyle },
+	                    _react2.default.createElement(
+	                        "div",
+	                        null,
+	                        this.getStepContent(stepIndex)
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { style: { marginTop: 12 } },
+	                        _react2.default.createElement(_materialUi.FlatButton, { label: "Back", disabled: stepIndex === 0, onTouchTap: this.handlePrev,
+	                            style: { marginRight: 12 } }),
+	                        _react2.default.createElement(_materialUi.RaisedButton, { label: stepIndex === 2 ? "Add collection" : "Next", primary: true,
+	                            onTouchTap: stepIndex === 2 ? this.props.onSave : this.handleNext }),
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: "/manage" },
+	                            _react2.default.createElement(_materialUi.RaisedButton, { label: "Cancel and return", secondary: true })
 	                        )
 	                    )
 	                )
@@ -70942,7 +71018,308 @@
 	exports.default = Update;
 
 /***/ }),
-/* 634 */,
+/* 634 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Profile = __webpack_require__(635);
+
+	var _Profile2 = _interopRequireDefault(_Profile);
+
+	var _NotFoundPage = __webpack_require__(636);
+
+	var _NotFoundPage2 = _interopRequireDefault(_NotFoundPage);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ProfileView = function (_Component) {
+	    _inherits(ProfileView, _Component);
+
+	    function ProfileView(props, context) {
+	        _classCallCheck(this, ProfileView);
+
+	        var _this = _possibleConstructorReturn(this, (ProfileView.__proto__ || Object.getPrototypeOf(ProfileView)).call(this, props, context));
+
+	        _this.onFirstNameChange = function (e) {
+	            _this.setState({ firstName: e.target.value });
+	        };
+
+	        _this.onLastNameChange = function (e) {
+	            _this.setState({ lastName: e.target.value });
+	        };
+
+	        _this.onBirthDateChange = function (e, date) {
+	            _this.setState({ birthDate: date });
+	        };
+
+	        _this.onCityChange = function (e) {
+	            _this.setState({ city: e.target.value });
+	        };
+
+	        _this.onCountryChange = function (e) {
+	            _this.setState({ country: e.target.value });
+	        };
+
+	        _this.onProfessionChange = function (e) {
+	            _this.setState({ profession: e.target.value });
+	        };
+
+	        _this.onCompanyNameChange = function (e) {
+	            _this.setState({ companyName: e.target.value });
+	        };
+
+	        _this.onProfilePictureLinkChange = function (e) {
+	            _this.setState({ profilePictureLink: e.target.value });
+	        };
+
+	        _this.onProfileCoverChange = function (e) {
+	            _this.setState({ profileCover: e.target.value });
+	        };
+
+	        _this.onEdit = function () {
+	            _this.setState({
+	                successUpdate: null
+	            });
+	        };
+
+	        _this.onCancelEdit = function () {
+	            _this.setState({
+	                firstName: _this.state.firstNameOld,
+	                lastName: _this.state.lastNameOld,
+	                birthDate: _this.state.birthDateOld,
+	                city: _this.state.cityOld,
+	                country: _this.state.countryOld,
+	                profession: _this.state.professionOld,
+	                companyName: _this.state.companyNameOld,
+	                profilePictureLink: _this.state.profilePictureLinkOld,
+	                profileCover: _this.state.profileCoverOld,
+	                successUpdate: null
+	            });
+	        };
+
+	        _this.onSave = function () {
+	            //newState
+	            var firstName = encodeURIComponent(_this.state.firstName);
+	            var lastName = encodeURIComponent(_this.state.lastName);
+	            var birthDate = encodeURIComponent(_this.state.birthDate);
+	            var city = encodeURIComponent(_this.state.city);
+	            var country = encodeURIComponent(_this.state.country);
+	            var profession = encodeURIComponent(_this.state.profession);
+	            var companyName = encodeURIComponent(_this.state.companyName);
+	            var profilePictureLink = encodeURIComponent(_this.state.profilePictureLink);
+	            var profileCover = encodeURIComponent(_this.state.profileCover);
+
+	            //oldState
+	            var firstNameOld = encodeURIComponent(_this.state.firstNameOld);
+	            var lastNameOld = encodeURIComponent(_this.state.lastNameOld);
+	            var birthDateOld = encodeURIComponent(_this.state.birthDateOld);
+	            var cityOld = encodeURIComponent(_this.state.cityOld);
+	            var countryOld = encodeURIComponent(_this.state.countryOld);
+	            var professionOld = encodeURIComponent(_this.state.professionOld);
+	            var companyNameOld = encodeURIComponent(_this.state.companyNameOld);
+	            var profilePictureLinkOld = encodeURIComponent(_this.state.profilePictureLinkOld);
+	            var profileCoverOld = encodeURIComponent(_this.state.profileCoverOld);
+
+	            var formData = 'firstName=' + firstName + '&lastName=' + lastName + '&birthDate=' + birthDate + '&city=' + city + '&country=' + country + '&profession=' + profession + '&companyName=' + companyName + '&profilePictureLink=' + profilePictureLink + '&profileCover=' + profileCover + '&firstNameOld=' + firstNameOld + '&lastNameOld=' + lastNameOld + '&birthDateOld=' + birthDateOld + '&cityOld=' + cityOld + '&countryOld=' + countryOld + '&professionOld=' + professionOld + '&companyNameOld=' + companyNameOld + '&profilePictureLinkOld=' + profilePictureLinkOld + '&profileCoverOld=' + profileCoverOld;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('post', '/profile/profile-edit');
+	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this.setState({
+	                        errors: {},
+	                        successUpdate: xhr.response.successStatus
+	                    });
+	                } else {
+	                    var errors = xhr.response.errors ? xhr.response.errors : {};
+	                    errors.summary = xhr.response.message;
+
+	                    _this.setState({
+	                        errors: errors
+	                    });
+	                }
+	            });
+	            xhr.send(formData);
+
+	            _this.setState({
+	                profilePictureLinkOld: _this.state.profilePictureLink,
+	                profileCoverOld: _this.state.profileCover,
+	                firstNameOld: _this.state.firstName,
+	                lastNameOld: _this.state.lastName,
+	                birthDateOld: _this.state.birthDate,
+	                cityOld: _this.state.city,
+	                countryOld: _this.state.country,
+	                professionOld: _this.state.profession,
+	                companyNameOld: _this.state.companyName
+	            });
+	        };
+
+	        var storedMessage = localStorage.getItem('successMessage');
+	        var successMessage = '';
+
+	        if (storedMessage) {
+	            successMessage = storedMessage;
+	            localStorage.removeItem('successMessage');
+	        }
+
+	        _this.state = {
+	            errors: {},
+	            successMessage: successMessage,
+	            userName: '',
+	            ownUser: '',
+	            birthDate: '',
+	            city: '',
+	            companyName: '',
+	            country: '',
+	            firstName: '',
+	            lastName: '',
+	            profession: '',
+	            profilePictureLink: '',
+	            profileCover: '',
+	            successUpdate: null,
+	            userId: '',
+	            collectionId: '',
+	            collectionName: '',
+	            pictureOneLink: '',
+	            latestCollection: {},
+	            //oldState if exists
+	            profilePictureLinkOld: '',
+	            profileCoverOld: '',
+	            firstNameOld: '',
+	            lastNameOld: '',
+	            birthDateOld: '',
+	            cityOld: '',
+	            countryOld: '',
+	            professionOld: '',
+	            companyNameOld: ''
+	        };
+	        return _this;
+	    }
+
+	    _createClass(ProfileView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var userName = encodeURIComponent(this.props.params.userName);
+	            var formData = 'userName=' + userName;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('post', '/profile/profile');
+	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        errors: {},
+	                        userId: xhr.response.user.userId,
+	                        userName: xhr.response.user.name,
+	                        ownUser: xhr.response.user.ownUser,
+	                        birthDate: xhr.response.user.birthDate,
+	                        city: xhr.response.user.city,
+	                        companyName: xhr.response.user.companyName,
+	                        country: xhr.response.user.country,
+	                        firstName: xhr.response.user.firstName,
+	                        lastName: xhr.response.user.lastName,
+	                        profession: xhr.response.user.profession,
+	                        profilePictureLink: xhr.response.user.profilePictureLink,
+	                        profileCover: xhr.response.user.profileCover,
+	                        latestCollection: xhr.response.user.latestCollection,
+	                        profilePictureLinkOld: xhr.response.user.profilePictureLink,
+	                        profileCoverOld: xhr.response.user.profileCover,
+	                        firstNameOld: xhr.response.user.firstName,
+	                        lastNameOld: xhr.response.user.lastName,
+	                        birthDateOld: xhr.response.user.birthDate,
+	                        cityOld: xhr.response.user.city,
+	                        countryOld: xhr.response.user.country,
+	                        professionOld: xhr.response.user.profession,
+	                        companyNameOld: xhr.response.user.companyName
+	                    });
+	                } else {
+	                    var errors = xhr.response.errors ? xhr.response.errors : {};
+	                    errors.summary = xhr.response.message;
+
+	                    _this2.setState({
+	                        errors: errors
+	                    });
+	                }
+	            });
+	            xhr.send(formData);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.state.errors.summary == "User is not a member") {
+	                document.title = "404 not found";
+	                return _react2.default.createElement(_NotFoundPage2.default, null);
+	            } else {
+	                document.title = this.state.userName + ' - Profile';
+	                return _react2.default.createElement(_Profile2.default, {
+	                    latestCollection: this.state.latestCollection,
+	                    city: this.state.city,
+	                    companyName: this.state.companyName,
+	                    country: this.state.country,
+	                    firstName: this.state.firstName,
+	                    lastName: this.state.lastName,
+	                    profession: this.state.profession,
+	                    profilePictureLink: this.state.profilePictureLink,
+	                    profileCover: this.state.profileCover,
+	                    userName: this.state.userName,
+	                    ownUser: this.state.ownUser,
+	                    successUpdate: this.state.successUpdate,
+	                    collectionId: this.state.collectionId,
+	                    collectionName: this.state.collectionName,
+	                    pictureOneLink: this.state.pictureOneLink,
+	                    onFirstNameChange: this.onFirstNameChange,
+	                    onLastNameChange: this.onLastNameChange,
+	                    onBirthDateChange: this.onBirthDateChange,
+	                    birthDate: JSON.stringify(this.state.birthDate),
+	                    onCityChange: this.onCityChange,
+	                    onCountryChange: this.onCountryChange,
+	                    onProfessionChange: this.onProfessionChange,
+	                    onCompanyNameChange: this.onCompanyNameChange,
+	                    onProfilePictureLinkChange: this.onProfilePictureLinkChange,
+	                    onProfileCoverChange: this.onProfileCoverChange,
+	                    onEdit: this.onEdit,
+	                    onCancelEdit: this.onCancelEdit,
+	                    onSave: this.onSave,
+	                    errors: this.state.errors
+	                });
+	            }
+	        }
+	    }]);
+
+	    return ProfileView;
+	}(_react.Component);
+
+	exports.default = ProfileView;
+
+/***/ }),
 /* 635 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -71668,9 +72045,7 @@
 	exports.default = NotFoundPage;
 
 /***/ }),
-/* 637 */,
-/* 638 */,
-/* 639 */
+/* 637 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -71685,7 +72060,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _AdminPage = __webpack_require__(640);
+	var _AdminPage = __webpack_require__(638);
 
 	var _AdminPage2 = _interopRequireDefault(_AdminPage);
 
@@ -71761,7 +72136,7 @@
 	exports.default = AdminView;
 
 /***/ }),
-/* 640 */
+/* 638 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -71873,9 +72248,7 @@
 	exports.default = AdminPage;
 
 /***/ }),
-/* 641 */,
-/* 642 */,
-/* 643 */
+/* 639 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -71890,7 +72263,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _UsersPage = __webpack_require__(644);
+	var _UsersPage = __webpack_require__(640);
 
 	var _UsersPage2 = _interopRequireDefault(_UsersPage);
 
@@ -72033,7 +72406,7 @@
 	exports.default = UsersView;
 
 /***/ }),
-/* 644 */
+/* 640 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -72215,7 +72588,7 @@
 	exports.default = UsersPage;
 
 /***/ }),
-/* 645 */
+/* 641 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -72232,7 +72605,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Create = __webpack_require__(646);
+	var _Create = __webpack_require__(642);
 
 	var _Create2 = _interopRequireDefault(_Create);
 
@@ -72414,7 +72787,7 @@
 	exports.default = CreateView;
 
 /***/ }),
-/* 646 */
+/* 642 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -72620,7 +72993,7 @@
 	exports.default = Create;
 
 /***/ }),
-/* 647 */
+/* 643 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -72635,7 +73008,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ReadAll = __webpack_require__(648);
+	var _ReadAll = __webpack_require__(644);
 
 	var _ReadAll2 = _interopRequireDefault(_ReadAll);
 
@@ -72731,7 +73104,7 @@
 	exports.default = ReadAllView;
 
 /***/ }),
-/* 648 */
+/* 644 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -72750,11 +73123,11 @@
 
 	var _reactRouter = __webpack_require__(337);
 
-	var _TopActions = __webpack_require__(649);
+	var _TopActions = __webpack_require__(645);
 
 	var _TopActions2 = _interopRequireDefault(_TopActions);
 
-	var _ViewTable = __webpack_require__(650);
+	var _ViewTable = __webpack_require__(646);
 
 	var _ViewTable2 = _interopRequireDefault(_ViewTable);
 
@@ -72858,7 +73231,7 @@
 	exports.default = ReadAll;
 
 /***/ }),
-/* 649 */
+/* 645 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -72920,7 +73293,7 @@
 	exports.default = TopActions;
 
 /***/ }),
-/* 650 */
+/* 646 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -72937,7 +73310,7 @@
 
 	var _materialUi = __webpack_require__(400);
 
-	var _ViewRow = __webpack_require__(651);
+	var _ViewRow = __webpack_require__(647);
 
 	var _ViewRow2 = _interopRequireDefault(_ViewRow);
 
@@ -72996,7 +73369,7 @@
 	exports.default = ViewTable;
 
 /***/ }),
-/* 651 */
+/* 647 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73084,7 +73457,7 @@
 	exports.default = ViewRow;
 
 /***/ }),
-/* 652 */
+/* 648 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73099,7 +73472,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ReadOne = __webpack_require__(653);
+	var _ReadOne = __webpack_require__(649);
 
 	var _ReadOne2 = _interopRequireDefault(_ReadOne);
 
@@ -73180,7 +73553,7 @@
 	exports.default = ReadOneView;
 
 /***/ }),
-/* 653 */
+/* 649 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73199,7 +73572,7 @@
 
 	var _materialUi = __webpack_require__(400);
 
-	var _PictureRow = __webpack_require__(654);
+	var _PictureRow = __webpack_require__(650);
 
 	var _PictureRow2 = _interopRequireDefault(_PictureRow);
 
@@ -73277,7 +73650,7 @@
 	exports.default = ReadOne;
 
 /***/ }),
-/* 654 */
+/* 650 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73330,7 +73703,7 @@
 	exports.default = PictureRow;
 
 /***/ }),
-/* 655 */
+/* 651 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73347,7 +73720,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Update = __webpack_require__(656);
+	var _Update = __webpack_require__(652);
 
 	var _Update2 = _interopRequireDefault(_Update);
 
@@ -73600,7 +73973,7 @@
 	exports.default = UpdateView;
 
 /***/ }),
-/* 656 */
+/* 652 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73817,7 +74190,7 @@
 	exports.default = Update;
 
 /***/ }),
-/* 657 */
+/* 653 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73832,7 +74205,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Delete = __webpack_require__(658);
+	var _Delete = __webpack_require__(654);
 
 	var _Delete2 = _interopRequireDefault(_Delete);
 
@@ -73953,7 +74326,7 @@
 	exports.default = DeleteView;
 
 /***/ }),
-/* 658 */
+/* 654 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -74061,7 +74434,7 @@
 	exports.default = Delete;
 
 /***/ }),
-/* 659 */
+/* 655 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -74078,7 +74451,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Create = __webpack_require__(664);
+	var _Create = __webpack_require__(656);
 
 	var _Create2 = _interopRequireDefault(_Create);
 
@@ -74319,7 +74692,7 @@
 	exports.default = CreateView;
 
 /***/ }),
-/* 660 */
+/* 656 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -74334,7 +74707,245 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ReadAll = __webpack_require__(665);
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Create = function (_Component) {
+	    _inherits(Create, _Component);
+
+	    function Create() {
+	        _classCallCheck(this, Create);
+
+	        return _possibleConstructorReturn(this, (Create.__proto__ || Object.getPrototypeOf(Create)).apply(this, arguments));
+	    }
+
+	    _createClass(Create, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.props.successCreation === true ? _react2.default.createElement(
+	                    'div',
+	                    { className: 'alert alert-success' },
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/admin/' + this.props.adminId + '/collections' },
+	                        'Back'
+	                    ),
+	                    'Item was added'
+	                ) : null,
+	                this.props.errorMessage != '' ? _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    this.props.errorMessage
+	                ) : null,
+	                this.props.errors.summary ? _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    this.props.errors.summary
+	                ) : null,
+	                _react2.default.createElement(
+	                    'form',
+	                    { onSubmit: this.props.onSave },
+	                    _react2.default.createElement(
+	                        'table',
+	                        { className: 'table' },
+	                        _react2.default.createElement(
+	                            'tbody',
+	                            null,
+	                            _react2.default.createElement(
+	                                'tr',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    { className: 'input-field' },
+	                                    _react2.default.createElement(_materialUi.TextField, { type: 'text',
+	                                        floatingLabelText: 'User id',
+	                                        value: this.props.userId,
+	                                        onChange: this.props.onUserIdChange,
+	                                        errorText: this.props.errors.userId,
+	                                        required: true
+	                                    })
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'tr',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    { className: 'input-field' },
+	                                    this.props.collectionName.length > 100 ? _react2.default.createElement(
+	                                        'div',
+	                                        null,
+	                                        'Please use a name that is shorter than 100 characters'
+	                                    ) : null,
+	                                    _react2.default.createElement(_materialUi.TextField, { type: 'text',
+	                                        floatingLabelText: 'Name of the collection',
+	                                        value: this.props.collectionName,
+	                                        onChange: this.props.onCollectionChange,
+	                                        errorText: this.props.errors.collectionName,
+	                                        required: true
+	                                    })
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'tr',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    { className: 'input-field' },
+	                                    this.props.collectionDescription.length > 5000 ? _react2.default.createElement(
+	                                        'div',
+	                                        null,
+	                                        'Please use a description that is shorther than 5000 characters'
+	                                    ) : null,
+	                                    _react2.default.createElement(_materialUi.TextField, {
+	                                        type: 'text',
+	                                        floatingLabelText: 'Collection description',
+	                                        value: this.props.collectionDescription,
+	                                        onChange: this.props.onCollectionDescriptionChange,
+	                                        errorText: this.props.errors.collectionDescription,
+	                                        required: true
+	                                    })
+	                                )
+	                            ),
+	                            this.props.pictures.map(function (picture, i) {
+	                                return _react2.default.createElement(
+	                                    'tr',
+	                                    { key: i },
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        { className: 'input-field' },
+	                                        picture.pictureName.length > 100 ? _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Please use a name that is shorter than 100 characters'
+	                                        ) : null,
+	                                        _this2.props.pictureNameError[i] == "Please use a valid name for this picture" ? _react2.default.createElement(_materialUi.TextField, {
+	                                            type: 'text',
+	                                            floatingLabelText: 'Picture name',
+	                                            value: picture.pictureName,
+	                                            onChange: _this2.props.handlePicturesNameChange(i),
+	                                            errorText: _this2.props.pictureNameError[i]
+	                                        }) : _react2.default.createElement(_materialUi.TextField, {
+	                                            type: 'text',
+	                                            floatingLabelText: 'Picture name',
+	                                            value: picture.pictureName,
+	                                            onChange: _this2.props.handlePicturesNameChange(i)
+	                                        })
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        { className: 'input-field' },
+	                                        _this2.props.pictureLinkError[i] == "Please use a link for the picture" ? _react2.default.createElement(_materialUi.TextField, {
+	                                            type: 'text',
+	                                            floatingLabelText: 'Picture link',
+	                                            value: picture.pictureLink,
+	                                            onChange: _this2.props.handlePicturesLinkChange(i),
+	                                            errorText: _this2.props.pictureLinkError[i]
+	                                        }) : _react2.default.createElement(_materialUi.TextField, {
+	                                            type: 'text',
+	                                            floatingLabelText: 'Picture link',
+	                                            value: picture.pictureLink,
+	                                            onChange: _this2.props.handlePicturesLinkChange(i)
+	                                        }),
+	                                        _react2.default.createElement('img', { src: picture.pictureLink, style: { width: 100, height: 100 } })
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        { className: 'input-field' },
+	                                        picture.pictureDescription.length > 5000 ? _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Please use a description that is shorther than 5000 characters'
+	                                        ) : null,
+	                                        _this2.props.pictureDescriptionError[i] == "Please use a valid description for this picture" ? _react2.default.createElement(_materialUi.TextField, {
+	                                            type: 'text',
+	                                            floatingLabelText: 'Picture description',
+	                                            value: picture.pictureDescription,
+	                                            onChange: _this2.props.handlePicturesDescriptionChange(i),
+	                                            errorText: _this2.props.pictureDescriptionError[i]
+	                                        }) : _react2.default.createElement(_materialUi.TextField, {
+	                                            type: 'text',
+	                                            floatingLabelText: 'Picture description',
+	                                            value: picture.pictureDescription,
+	                                            onChange: _this2.props.handlePicturesDescriptionChange(i)
+	                                        })
+	                                    ),
+	                                    i === 0 ? _react2.default.createElement(_materialUi.RaisedButton, { type: 'button',
+	                                        primary: true,
+	                                        label: 'I want to add more pictures',
+	                                        onClick: _this2.props.handleAddPictures(i)
+	                                    }) : null,
+	                                    i != 0 ? _react2.default.createElement(_materialUi.RaisedButton, { type: 'button',
+	                                        secondary: true,
+	                                        label: 'I want to remove this picture',
+	                                        onClick: _this2.props.handleRemovePictures(i)
+	                                    }) : null
+	                                );
+	                            }),
+	                            _react2.default.createElement(
+	                                'tr',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    null,
+	                                    _react2.default.createElement(_materialUi.RaisedButton, {
+	                                        label: 'Add collection',
+	                                        primary: true,
+	                                        onClick: this.props.onSave
+	                                    }),
+	                                    _react2.default.createElement(
+	                                        _reactRouter.Link,
+	                                        { to: '/admin/' + this.props.adminId + '/collections' },
+	                                        _react2.default.createElement(_materialUi.RaisedButton, {
+	                                            label: 'Cancel and return',
+	                                            secondary: true
+	                                        })
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Create;
+	}(_react.Component);
+
+	exports.default = Create;
+
+/***/ }),
+/* 657 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _ReadAll = __webpack_require__(658);
 
 	var _ReadAll2 = _interopRequireDefault(_ReadAll);
 
@@ -74430,6 +75041,271 @@
 	exports.default = ReadAllView;
 
 /***/ }),
+/* 658 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _materialUi = __webpack_require__(400);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _TopActions = __webpack_require__(659);
+
+	var _TopActions2 = _interopRequireDefault(_TopActions);
+
+	var _ViewTable = __webpack_require__(660);
+
+	var _ViewTable2 = _interopRequireDefault(_ViewTable);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ReadAll = function (_Component) {
+	    _inherits(ReadAll, _Component);
+
+	    function ReadAll(props) {
+	        _classCallCheck(this, ReadAll);
+
+	        var _this = _possibleConstructorReturn(this, (ReadAll.__proto__ || Object.getPrototypeOf(ReadAll)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: true
+	        };
+	        return _this;
+	    }
+
+	    _createClass(ReadAll, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    _materialUi.Card,
+	                    { className: 'container' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
+	                ),
+	                _react2.default.createElement(_TopActions2.default, {
+	                    adminId: this.props.adminId
+	                }),
+	                _react2.default.createElement(_ViewTable2.default, {
+	                    adminId: this.props.adminId,
+	                    collections: this.props.collections,
+	                    errorMessage: this.props.errorMessage
+	                }),
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.adminId, activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.adminId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.adminId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.adminId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ReadAll;
+	}(_react.Component);
+
+	exports.default = ReadAll;
+
+/***/ }),
+/* 659 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TopActions = function (_Component) {
+	    _inherits(TopActions, _Component);
+
+	    function TopActions() {
+	        _classCallCheck(this, TopActions);
+
+	        return _possibleConstructorReturn(this, (TopActions.__proto__ || Object.getPrototypeOf(TopActions)).apply(this, arguments));
+	    }
+
+	    _createClass(TopActions, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    _reactRouter.Link,
+	                    {
+	                        to: '/admin/' + this.props.adminId + '/collections/create' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, {
+	                        type: 'button',
+	                        primary: true,
+	                        label: 'Add a new collection'
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return TopActions;
+	}(_react.Component);
+
+	exports.default = TopActions;
+
+/***/ }),
+/* 660 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _materialUi = __webpack_require__(400);
+
+	var _ViewRow = __webpack_require__(661);
+
+	var _ViewRow2 = _interopRequireDefault(_ViewRow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ViewTable = function (_Component) {
+	    _inherits(ViewTable, _Component);
+
+	    function ViewTable() {
+	        _classCallCheck(this, ViewTable);
+
+	        return _possibleConstructorReturn(this, (ViewTable.__proto__ || Object.getPrototypeOf(ViewTable)).apply(this, arguments));
+	    }
+
+	    _createClass(ViewTable, [{
+	        key: 'render',
+	        value: function render() {
+	            var rows = this.props.collections.map(function (collection, i) {
+	                return _react2.default.createElement(_ViewRow2.default, {
+	                    key: i,
+	                    collection: collection,
+	                    adminId: this.props.adminId
+	                });
+	            }.bind(this));
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.props.errorMessage == 'You have not added anything yet' || this.props.errorMessage == 'Please contact an administrator' ? _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    this.props.errorMessage
+	                ) : null,
+	                this.props.errorMessage == 'Fetched collections' ? _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        _materialUi.Card,
+	                        { className: 'container' },
+	                        rows
+	                    )
+	                ) : null,
+	                this.props.errorMessage == 'Fetching' ? _react2.default.createElement(_materialUi.CircularProgress, null) : null
+	            );
+	        }
+	    }]);
+
+	    return ViewTable;
+	}(_react.Component);
+
+	exports.default = ViewTable;
+
+/***/ }),
 /* 661 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -74445,7 +75321,95 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ReadOne = __webpack_require__(669);
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ViewRow = function (_Component) {
+	    _inherits(ViewRow, _Component);
+
+	    function ViewRow() {
+	        _classCallCheck(this, ViewRow);
+
+	        return _possibleConstructorReturn(this, (ViewRow.__proto__ || Object.getPrototypeOf(ViewRow)).apply(this, arguments));
+	    }
+
+	    _createClass(ViewRow, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'list' },
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        this.props.collection.collectionName
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        {
+	                            to: '/admin/' + this.props.adminId + '/collections/readOne/' + this.props.collection._id },
+	                        _react2.default.createElement(_materialUi.RaisedButton, {
+	                            type: 'button',
+	                            label: 'Read more'
+	                        })
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/admin/' + this.props.adminId + '/collections/update/' + this.props.collection._id },
+	                        _react2.default.createElement(_materialUi.RaisedButton, {
+	                            type: 'button',
+	                            primary: true,
+	                            label: 'Update'
+	                        })
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/admin/' + this.props.adminId + '/collections/delete/' + this.props.collection._id },
+	                        _react2.default.createElement(_materialUi.RaisedButton, {
+	                            type: 'button',
+	                            secondary: true,
+	                            label: 'Delete'
+	                        })
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ViewRow;
+	}(_react.Component);
+
+	exports.default = ViewRow;
+
+/***/ }),
+/* 662 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _ReadOne = __webpack_require__(663);
 
 	var _ReadOne2 = _interopRequireDefault(_ReadOne);
 
@@ -74527,7 +75491,180 @@
 	exports.default = ReadOneView;
 
 /***/ }),
-/* 662 */
+/* 663 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	var _PictureRow = __webpack_require__(664);
+
+	var _PictureRow2 = _interopRequireDefault(_PictureRow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ReadOne = function (_Component) {
+	    _inherits(ReadOne, _Component);
+
+	    function ReadOne() {
+	        _classCallCheck(this, ReadOne);
+
+	        return _possibleConstructorReturn(this, (ReadOne.__proto__ || Object.getPrototypeOf(ReadOne)).apply(this, arguments));
+	    }
+
+	    _createClass(ReadOne, [{
+	        key: 'render',
+	        value: function render() {
+	            var pictures = this.props.collection.picturesArray;
+
+	            var rows = void 0;
+
+	            if (pictures) {
+	                rows = Object.keys(pictures).map(function (key) {
+	                    return _react2.default.createElement(_PictureRow2.default, {
+	                        key: key,
+	                        pictureName: pictures[key].pictureName,
+	                        pictureLink: pictures[key].pictureLink,
+	                        pictureDescription: pictures[key].pictureDescription
+	                    });
+	                });
+	            }
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    _materialUi.Card,
+	                    { className: 'container' },
+	                    this.props.errorMessage ? null : _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            {
+	                                to: '/admin/' + this.props.adminId + '/collections' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                type: 'button',
+	                                primary: true,
+	                                label: 'Back'
+	                            })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            'Collection name: ',
+	                            this.props.collection.collectionName
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            'Collection description: ',
+	                            this.props.collection.collectionDescription
+	                        ),
+	                        rows,
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            'Id of the owner: ',
+	                            this.props.collection.userId
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ReadOne;
+	}(_react.Component);
+
+	exports.default = ReadOne;
+
+/***/ }),
+/* 664 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var PictureRow = function (_Component) {
+	    _inherits(PictureRow, _Component);
+
+	    function PictureRow() {
+	        _classCallCheck(this, PictureRow);
+
+	        return _possibleConstructorReturn(this, (PictureRow.__proto__ || Object.getPrototypeOf(PictureRow)).apply(this, arguments));
+	    }
+
+	    _createClass(PictureRow, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    'Picture name: ',
+	                    this.props.pictureName
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement('img', { src: this.props.pictureLink })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    'Picture description: ',
+	                    this.props.pictureDescription
+	                )
+	            );
+	        }
+	    }]);
+
+	    return PictureRow;
+	}(_react.Component);
+
+	exports.default = PictureRow;
+
+/***/ }),
+/* 665 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -74544,7 +75681,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Update = __webpack_require__(671);
+	var _Update = __webpack_require__(666);
 
 	var _Update2 = _interopRequireDefault(_Update);
 
@@ -74833,905 +75970,7 @@
 	exports.default = UpdateView;
 
 /***/ }),
-/* 663 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Delete = __webpack_require__(672);
-
-	var _Delete2 = _interopRequireDefault(_Delete);
-
-	var _Auth = __webpack_require__(397);
-
-	var _Auth2 = _interopRequireDefault(_Auth);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var DeleteView = function (_Component) {
-	    _inherits(DeleteView, _Component);
-
-	    function DeleteView(props) {
-	        _classCallCheck(this, DeleteView);
-
-	        var _this = _possibleConstructorReturn(this, (DeleteView.__proto__ || Object.getPrototypeOf(DeleteView)).call(this, props));
-
-	        _this.onDelete = function () {
-	            if (_this.state.response === true) {
-	                var ownerId = encodeURIComponent(_this.state.ownerId);
-	                var collectionName = encodeURIComponent(_this.state.collectionName);
-	                var collectionDescription = encodeURIComponent(_this.state.collectionDescription);
-	                var picturesArray = encodeURIComponent(JSON.stringify(_this.state.pictures));
-	                var collectionId = encodeURIComponent(_this.props.params._collectionId);
-
-	                var formData = 'ownerId=' + ownerId + '&collectionId=' + collectionId + '&collectionName=' + collectionName + '&collectionDescription=' + collectionDescription + '&picturesArray=' + picturesArray;
-
-	                var xhr = new XMLHttpRequest();
-	                xhr.open('post', '/admin/deleteCollection');
-	                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	                xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
-	                xhr.responseType = 'json';
-	                xhr.addEventListener('load', function () {
-	                    if (xhr.response === 200) {
-	                        //Collection was successfully deleted
-	                        _this.setState({
-	                            message: xhr.response.message
-	                        });
-	                    } else {
-	                        //Collection was not deleted/Was already deleted/Database error
-	                        _this.setState({
-	                            message: xhr.response.message
-	                        });
-	                    }
-	                });
-	                xhr.send(formData);
-	            }
-	        };
-
-	        _this.state = {
-	            message: '',
-	            response: null,
-	            ownerId: '',
-	            collectionName: '',
-	            collectionDescription: '',
-	            pictures: [{}]
-	        };
-	        return _this;
-	    }
-
-	    _createClass(DeleteView, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var _this2 = this;
-
-	            var collectionId = encodeURIComponent(this.props.params._collectionId);
-
-	            var formData = 'collectionId=' + collectionId;
-
-	            var xhr = new XMLHttpRequest();
-	            xhr.open('post', '/admin/deleteShowCollection');
-	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
-	            xhr.responseType = 'json';
-	            xhr.addEventListener('load', function () {
-	                if (xhr.status === 200) {
-	                    //Collection exists and the user that wants to delete it is the creator
-	                    _this2.setState({
-	                        message: xhr.response.message,
-	                        response: true,
-	                        collectionName: xhr.response.collection.collectionName,
-	                        collectionDescription: xhr.response.collection.collectionDescription,
-	                        pictures: xhr.response.collection.picturesArray,
-	                        ownerId: xhr.response.collection.userId
-	                    });
-	                } else {
-	                    //Collection or user doesn't exist
-	                    _this2.setState({
-	                        message: xhr.response.message,
-	                        response: false
-	                    });
-	                }
-	            });
-	            xhr.send(formData);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            if (this.state.collectionName) document.title = "Delete - " + this.state.collectionName;else document.title = "404 not found";
-	            return _react2.default.createElement(_Delete2.default, {
-	                adminId: this.props.params._id,
-	                message: this.state.message,
-	                onDelete: this.onDelete });
-	        }
-	    }]);
-
-	    return DeleteView;
-	}(_react.Component);
-
-	exports.default = DeleteView;
-
-/***/ }),
-/* 664 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(337);
-
-	var _materialUi = __webpack_require__(400);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Create = function (_Component) {
-	    _inherits(Create, _Component);
-
-	    function Create() {
-	        _classCallCheck(this, Create);
-
-	        return _possibleConstructorReturn(this, (Create.__proto__ || Object.getPrototypeOf(Create)).apply(this, arguments));
-	    }
-
-	    _createClass(Create, [{
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                this.props.successCreation === true ? _react2.default.createElement(
-	                    'div',
-	                    { className: 'alert alert-success' },
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: '/admin/' + this.props.adminId + '/collections' },
-	                        'Back'
-	                    ),
-	                    'Item was added'
-	                ) : null,
-	                this.props.errorMessage != '' ? _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    this.props.errorMessage
-	                ) : null,
-	                this.props.errors.summary ? _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    this.props.errors.summary
-	                ) : null,
-	                _react2.default.createElement(
-	                    'form',
-	                    { onSubmit: this.props.onSave },
-	                    _react2.default.createElement(
-	                        'table',
-	                        { className: 'table' },
-	                        _react2.default.createElement(
-	                            'tbody',
-	                            null,
-	                            _react2.default.createElement(
-	                                'tr',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'td',
-	                                    { className: 'input-field' },
-	                                    _react2.default.createElement(_materialUi.TextField, { type: 'text',
-	                                        floatingLabelText: 'User id',
-	                                        value: this.props.userId,
-	                                        onChange: this.props.onUserIdChange,
-	                                        errorText: this.props.errors.userId,
-	                                        required: true
-	                                    })
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'tr',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'td',
-	                                    { className: 'input-field' },
-	                                    this.props.collectionName.length > 100 ? _react2.default.createElement(
-	                                        'div',
-	                                        null,
-	                                        'Please use a name that is shorter than 100 characters'
-	                                    ) : null,
-	                                    _react2.default.createElement(_materialUi.TextField, { type: 'text',
-	                                        floatingLabelText: 'Name of the collection',
-	                                        value: this.props.collectionName,
-	                                        onChange: this.props.onCollectionChange,
-	                                        errorText: this.props.errors.collectionName,
-	                                        required: true
-	                                    })
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'tr',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'td',
-	                                    { className: 'input-field' },
-	                                    this.props.collectionDescription.length > 5000 ? _react2.default.createElement(
-	                                        'div',
-	                                        null,
-	                                        'Please use a description that is shorther than 5000 characters'
-	                                    ) : null,
-	                                    _react2.default.createElement(_materialUi.TextField, {
-	                                        type: 'text',
-	                                        floatingLabelText: 'Collection description',
-	                                        value: this.props.collectionDescription,
-	                                        onChange: this.props.onCollectionDescriptionChange,
-	                                        errorText: this.props.errors.collectionDescription,
-	                                        required: true
-	                                    })
-	                                )
-	                            ),
-	                            this.props.pictures.map(function (picture, i) {
-	                                return _react2.default.createElement(
-	                                    'tr',
-	                                    { key: i },
-	                                    _react2.default.createElement(
-	                                        'td',
-	                                        { className: 'input-field' },
-	                                        picture.pictureName.length > 100 ? _react2.default.createElement(
-	                                            'div',
-	                                            null,
-	                                            'Please use a name that is shorter than 100 characters'
-	                                        ) : null,
-	                                        _this2.props.pictureNameError[i] == "Please use a valid name for this picture" ? _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture name',
-	                                            value: picture.pictureName,
-	                                            onChange: _this2.props.handlePicturesNameChange(i),
-	                                            errorText: _this2.props.pictureNameError[i]
-	                                        }) : _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture name',
-	                                            value: picture.pictureName,
-	                                            onChange: _this2.props.handlePicturesNameChange(i)
-	                                        })
-	                                    ),
-	                                    _react2.default.createElement(
-	                                        'td',
-	                                        { className: 'input-field' },
-	                                        _this2.props.pictureLinkError[i] == "Please use a link for the picture" ? _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture link',
-	                                            value: picture.pictureLink,
-	                                            onChange: _this2.props.handlePicturesLinkChange(i),
-	                                            errorText: _this2.props.pictureLinkError[i]
-	                                        }) : _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture link',
-	                                            value: picture.pictureLink,
-	                                            onChange: _this2.props.handlePicturesLinkChange(i)
-	                                        }),
-	                                        _react2.default.createElement('img', { src: picture.pictureLink, style: { width: 100, height: 100 } })
-	                                    ),
-	                                    _react2.default.createElement(
-	                                        'td',
-	                                        { className: 'input-field' },
-	                                        picture.pictureDescription.length > 5000 ? _react2.default.createElement(
-	                                            'div',
-	                                            null,
-	                                            'Please use a description that is shorther than 5000 characters'
-	                                        ) : null,
-	                                        _this2.props.pictureDescriptionError[i] == "Please use a valid description for this picture" ? _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture description',
-	                                            value: picture.pictureDescription,
-	                                            onChange: _this2.props.handlePicturesDescriptionChange(i),
-	                                            errorText: _this2.props.pictureDescriptionError[i]
-	                                        }) : _react2.default.createElement(_materialUi.TextField, {
-	                                            type: 'text',
-	                                            floatingLabelText: 'Picture description',
-	                                            value: picture.pictureDescription,
-	                                            onChange: _this2.props.handlePicturesDescriptionChange(i)
-	                                        })
-	                                    ),
-	                                    i === 0 ? _react2.default.createElement(_materialUi.RaisedButton, { type: 'button',
-	                                        primary: true,
-	                                        label: 'I want to add more pictures',
-	                                        onClick: _this2.props.handleAddPictures(i)
-	                                    }) : null,
-	                                    i != 0 ? _react2.default.createElement(_materialUi.RaisedButton, { type: 'button',
-	                                        secondary: true,
-	                                        label: 'I want to remove this picture',
-	                                        onClick: _this2.props.handleRemovePictures(i)
-	                                    }) : null
-	                                );
-	                            }),
-	                            _react2.default.createElement(
-	                                'tr',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'td',
-	                                    null,
-	                                    _react2.default.createElement(_materialUi.RaisedButton, {
-	                                        label: 'Add collection',
-	                                        primary: true,
-	                                        onClick: this.props.onSave
-	                                    }),
-	                                    _react2.default.createElement(
-	                                        _reactRouter.Link,
-	                                        { to: '/admin/' + this.props.adminId + '/collections' },
-	                                        _react2.default.createElement(_materialUi.RaisedButton, {
-	                                            label: 'Cancel and return',
-	                                            secondary: true
-	                                        })
-	                                    )
-	                                )
-	                            )
-	                        )
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return Create;
-	}(_react.Component);
-
-	exports.default = Create;
-
-/***/ }),
-/* 665 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _materialUi = __webpack_require__(400);
-
-	var _reactRouter = __webpack_require__(337);
-
-	var _TopActions = __webpack_require__(666);
-
-	var _TopActions2 = _interopRequireDefault(_TopActions);
-
-	var _ViewTable = __webpack_require__(667);
-
-	var _ViewTable2 = _interopRequireDefault(_ViewTable);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ReadAll = function (_Component) {
-	    _inherits(ReadAll, _Component);
-
-	    function ReadAll(props) {
-	        _classCallCheck(this, ReadAll);
-
-	        var _this = _possibleConstructorReturn(this, (ReadAll.__proto__ || Object.getPrototypeOf(ReadAll)).call(this, props));
-
-	        _this.handleToggle = function () {
-	            _this.setState({ open: !_this.state.open });
-	        };
-
-	        _this.state = {
-	            open: true
-	        };
-	        return _this;
-	    }
-
-	    _createClass(ReadAll, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    _materialUi.Card,
-	                    { className: 'container' },
-	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
-	                ),
-	                _react2.default.createElement(_TopActions2.default, {
-	                    adminId: this.props.adminId
-	                }),
-	                _react2.default.createElement(_ViewTable2.default, {
-	                    adminId: this.props.adminId,
-	                    collections: this.props.collections,
-	                    errorMessage: this.props.errorMessage
-	                }),
-	                _react2.default.createElement(
-	                    _materialUi.Drawer,
-	                    { open: this.state.open },
-	                    _react2.default.createElement(
-	                        'h1',
-	                        null,
-	                        'Admin panel'
-	                    ),
-	                    _react2.default.createElement(
-	                        _materialUi.MenuItem,
-	                        null,
-	                        _react2.default.createElement(
-	                            _reactRouter.Link,
-	                            { to: '/admin/' + this.props.adminId, activeStyle: { color: 'blue' } },
-	                            'Logs component'
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        _materialUi.MenuItem,
-	                        null,
-	                        _react2.default.createElement(
-	                            _reactRouter.Link,
-	                            { to: '/admin/' + this.props.adminId + '/news', activeStyle: { color: 'blue' } },
-	                            'News management component'
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        _materialUi.MenuItem,
-	                        null,
-	                        _react2.default.createElement(
-	                            _reactRouter.Link,
-	                            { to: '/admin/' + this.props.adminId + '/users', activeStyle: { color: 'blue' } },
-	                            'Users management component'
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        _materialUi.MenuItem,
-	                        null,
-	                        _react2.default.createElement(
-	                            _reactRouter.Link,
-	                            { to: '/admin/' + this.props.adminId + '/collections', activeStyle: { color: 'blue' } },
-	                            'Collections management'
-	                        )
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return ReadAll;
-	}(_react.Component);
-
-	exports.default = ReadAll;
-
-/***/ }),
 /* 666 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(337);
-
-	var _materialUi = __webpack_require__(400);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var TopActions = function (_Component) {
-	    _inherits(TopActions, _Component);
-
-	    function TopActions() {
-	        _classCallCheck(this, TopActions);
-
-	        return _possibleConstructorReturn(this, (TopActions.__proto__ || Object.getPrototypeOf(TopActions)).apply(this, arguments));
-	    }
-
-	    _createClass(TopActions, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    {
-	                        to: '/admin/' + this.props.adminId + '/collections/create' },
-	                    _react2.default.createElement(_materialUi.RaisedButton, {
-	                        type: 'button',
-	                        primary: true,
-	                        label: 'Add a new collection'
-	                    })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return TopActions;
-	}(_react.Component);
-
-	exports.default = TopActions;
-
-/***/ }),
-/* 667 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _materialUi = __webpack_require__(400);
-
-	var _ViewRow = __webpack_require__(668);
-
-	var _ViewRow2 = _interopRequireDefault(_ViewRow);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ViewTable = function (_Component) {
-	    _inherits(ViewTable, _Component);
-
-	    function ViewTable() {
-	        _classCallCheck(this, ViewTable);
-
-	        return _possibleConstructorReturn(this, (ViewTable.__proto__ || Object.getPrototypeOf(ViewTable)).apply(this, arguments));
-	    }
-
-	    _createClass(ViewTable, [{
-	        key: 'render',
-	        value: function render() {
-	            var rows = this.props.collections.map(function (collection, i) {
-	                return _react2.default.createElement(_ViewRow2.default, {
-	                    key: i,
-	                    collection: collection,
-	                    adminId: this.props.adminId
-	                });
-	            }.bind(this));
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                this.props.errorMessage == 'You have not added anything yet' || this.props.errorMessage == 'Please contact an administrator' ? _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    this.props.errorMessage
-	                ) : null,
-	                this.props.errorMessage == 'Fetched collections' ? _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    _react2.default.createElement(
-	                        _materialUi.Card,
-	                        { className: 'container' },
-	                        rows
-	                    )
-	                ) : null,
-	                this.props.errorMessage == 'Fetching' ? _react2.default.createElement(_materialUi.CircularProgress, null) : null
-	            );
-	        }
-	    }]);
-
-	    return ViewTable;
-	}(_react.Component);
-
-	exports.default = ViewTable;
-
-/***/ }),
-/* 668 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(337);
-
-	var _materialUi = __webpack_require__(400);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ViewRow = function (_Component) {
-	    _inherits(ViewRow, _Component);
-
-	    function ViewRow() {
-	        _classCallCheck(this, ViewRow);
-
-	        return _possibleConstructorReturn(this, (ViewRow.__proto__ || Object.getPrototypeOf(ViewRow)).apply(this, arguments));
-	    }
-
-	    _createClass(ViewRow, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'list' },
-	                _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    _react2.default.createElement(
-	                        'div',
-	                        null,
-	                        this.props.collection.collectionName
-	                    ),
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        {
-	                            to: '/admin/' + this.props.adminId + '/collections/readOne/' + this.props.collection._id },
-	                        _react2.default.createElement(_materialUi.RaisedButton, {
-	                            type: 'button',
-	                            label: 'Read more'
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: '/admin/' + this.props.adminId + '/collections/update/' + this.props.collection._id },
-	                        _react2.default.createElement(_materialUi.RaisedButton, {
-	                            type: 'button',
-	                            primary: true,
-	                            label: 'Update'
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: '/admin/' + this.props.adminId + '/collections/delete/' + this.props.collection._id },
-	                        _react2.default.createElement(_materialUi.RaisedButton, {
-	                            type: 'button',
-	                            secondary: true,
-	                            label: 'Delete'
-	                        })
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return ViewRow;
-	}(_react.Component);
-
-	exports.default = ViewRow;
-
-/***/ }),
-/* 669 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(337);
-
-	var _materialUi = __webpack_require__(400);
-
-	var _PictureRow = __webpack_require__(670);
-
-	var _PictureRow2 = _interopRequireDefault(_PictureRow);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ReadOne = function (_Component) {
-	    _inherits(ReadOne, _Component);
-
-	    function ReadOne() {
-	        _classCallCheck(this, ReadOne);
-
-	        return _possibleConstructorReturn(this, (ReadOne.__proto__ || Object.getPrototypeOf(ReadOne)).apply(this, arguments));
-	    }
-
-	    _createClass(ReadOne, [{
-	        key: 'render',
-	        value: function render() {
-	            var pictures = this.props.collection.picturesArray;
-
-	            var rows = void 0;
-
-	            if (pictures) {
-	                rows = Object.keys(pictures).map(function (key) {
-	                    return _react2.default.createElement(_PictureRow2.default, {
-	                        key: key,
-	                        pictureName: pictures[key].pictureName,
-	                        pictureLink: pictures[key].pictureLink,
-	                        pictureDescription: pictures[key].pictureDescription
-	                    });
-	                });
-	            }
-
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    _materialUi.Card,
-	                    { className: 'container' },
-	                    this.props.errorMessage ? null : _react2.default.createElement(
-	                        'div',
-	                        null,
-	                        _react2.default.createElement(
-	                            _reactRouter.Link,
-	                            {
-	                                to: '/admin/' + this.props.adminId + '/collections' },
-	                            _react2.default.createElement(_materialUi.RaisedButton, {
-	                                type: 'button',
-	                                primary: true,
-	                                label: 'Back'
-	                            })
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            null,
-	                            'Collection name: ',
-	                            this.props.collection.collectionName
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            null,
-	                            'Collection description: ',
-	                            this.props.collection.collectionDescription
-	                        ),
-	                        rows,
-	                        _react2.default.createElement(
-	                            'div',
-	                            null,
-	                            'Id of the owner: ',
-	                            this.props.collection.userId
-	                        )
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return ReadOne;
-	}(_react.Component);
-
-	exports.default = ReadOne;
-
-/***/ }),
-/* 670 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var PictureRow = function (_Component) {
-	    _inherits(PictureRow, _Component);
-
-	    function PictureRow() {
-	        _classCallCheck(this, PictureRow);
-
-	        return _possibleConstructorReturn(this, (PictureRow.__proto__ || Object.getPrototypeOf(PictureRow)).apply(this, arguments));
-	    }
-
-	    _createClass(PictureRow, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    'Picture name: ',
-	                    this.props.pictureName
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    _react2.default.createElement('img', { src: this.props.pictureLink })
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    'Picture description: ',
-	                    this.props.pictureDescription
-	                )
-	            );
-	        }
-	    }]);
-
-	    return PictureRow;
-	}(_react.Component);
-
-	exports.default = PictureRow;
-
-/***/ }),
-/* 671 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75997,7 +76236,141 @@
 	exports.default = Update;
 
 /***/ }),
-/* 672 */
+/* 667 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Delete = __webpack_require__(668);
+
+	var _Delete2 = _interopRequireDefault(_Delete);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var DeleteView = function (_Component) {
+	    _inherits(DeleteView, _Component);
+
+	    function DeleteView(props) {
+	        _classCallCheck(this, DeleteView);
+
+	        var _this = _possibleConstructorReturn(this, (DeleteView.__proto__ || Object.getPrototypeOf(DeleteView)).call(this, props));
+
+	        _this.onDelete = function () {
+	            if (_this.state.response === true) {
+	                var ownerId = encodeURIComponent(_this.state.ownerId);
+	                var collectionName = encodeURIComponent(_this.state.collectionName);
+	                var collectionDescription = encodeURIComponent(_this.state.collectionDescription);
+	                var picturesArray = encodeURIComponent(JSON.stringify(_this.state.pictures));
+	                var collectionId = encodeURIComponent(_this.props.params._collectionId);
+
+	                var formData = 'ownerId=' + ownerId + '&collectionId=' + collectionId + '&collectionName=' + collectionName + '&collectionDescription=' + collectionDescription + '&picturesArray=' + picturesArray;
+
+	                var xhr = new XMLHttpRequest();
+	                xhr.open('post', '/admin/deleteCollection');
+	                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	                xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	                xhr.responseType = 'json';
+	                xhr.addEventListener('load', function () {
+	                    if (xhr.response === 200) {
+	                        //Collection was successfully deleted
+	                        _this.setState({
+	                            message: xhr.response.message
+	                        });
+	                    } else {
+	                        //Collection was not deleted/Was already deleted/Database error
+	                        _this.setState({
+	                            message: xhr.response.message
+	                        });
+	                    }
+	                });
+	                xhr.send(formData);
+	            }
+	        };
+
+	        _this.state = {
+	            message: '',
+	            response: null,
+	            ownerId: '',
+	            collectionName: '',
+	            collectionDescription: '',
+	            pictures: [{}]
+	        };
+	        return _this;
+	    }
+
+	    _createClass(DeleteView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var collectionId = encodeURIComponent(this.props.params._collectionId);
+
+	            var formData = 'collectionId=' + collectionId;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('post', '/admin/deleteShowCollection');
+	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    //Collection exists and the user that wants to delete it is the creator
+	                    _this2.setState({
+	                        message: xhr.response.message,
+	                        response: true,
+	                        collectionName: xhr.response.collection.collectionName,
+	                        collectionDescription: xhr.response.collection.collectionDescription,
+	                        pictures: xhr.response.collection.picturesArray,
+	                        ownerId: xhr.response.collection.userId
+	                    });
+	                } else {
+	                    //Collection or user doesn't exist
+	                    _this2.setState({
+	                        message: xhr.response.message,
+	                        response: false
+	                    });
+	                }
+	            });
+	            xhr.send(formData);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.state.collectionName) document.title = "Delete - " + this.state.collectionName;else document.title = "404 not found";
+	            return _react2.default.createElement(_Delete2.default, {
+	                adminId: this.props.params._id,
+	                message: this.state.message,
+	                onDelete: this.onDelete });
+	        }
+	    }]);
+
+	    return DeleteView;
+	}(_react.Component);
+
+	exports.default = DeleteView;
+
+/***/ }),
+/* 668 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76103,308 +76476,6 @@
 	}(_react.Component);
 
 	exports.default = Delete;
-
-/***/ }),
-/* 673 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Profile = __webpack_require__(635);
-
-	var _Profile2 = _interopRequireDefault(_Profile);
-
-	var _NotFoundPage = __webpack_require__(636);
-
-	var _NotFoundPage2 = _interopRequireDefault(_NotFoundPage);
-
-	var _Auth = __webpack_require__(397);
-
-	var _Auth2 = _interopRequireDefault(_Auth);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ProfileView = function (_Component) {
-	    _inherits(ProfileView, _Component);
-
-	    function ProfileView(props, context) {
-	        _classCallCheck(this, ProfileView);
-
-	        var _this = _possibleConstructorReturn(this, (ProfileView.__proto__ || Object.getPrototypeOf(ProfileView)).call(this, props, context));
-
-	        _this.onFirstNameChange = function (e) {
-	            _this.setState({ firstName: e.target.value });
-	        };
-
-	        _this.onLastNameChange = function (e) {
-	            _this.setState({ lastName: e.target.value });
-	        };
-
-	        _this.onBirthDateChange = function (e, date) {
-	            _this.setState({ birthDate: date });
-	        };
-
-	        _this.onCityChange = function (e) {
-	            _this.setState({ city: e.target.value });
-	        };
-
-	        _this.onCountryChange = function (e) {
-	            _this.setState({ country: e.target.value });
-	        };
-
-	        _this.onProfessionChange = function (e) {
-	            _this.setState({ profession: e.target.value });
-	        };
-
-	        _this.onCompanyNameChange = function (e) {
-	            _this.setState({ companyName: e.target.value });
-	        };
-
-	        _this.onProfilePictureLinkChange = function (e) {
-	            _this.setState({ profilePictureLink: e.target.value });
-	        };
-
-	        _this.onProfileCoverChange = function (e) {
-	            _this.setState({ profileCover: e.target.value });
-	        };
-
-	        _this.onEdit = function () {
-	            _this.setState({
-	                successUpdate: null
-	            });
-	        };
-
-	        _this.onCancelEdit = function () {
-	            _this.setState({
-	                firstName: _this.state.firstNameOld,
-	                lastName: _this.state.lastNameOld,
-	                birthDate: _this.state.birthDateOld,
-	                city: _this.state.cityOld,
-	                country: _this.state.countryOld,
-	                profession: _this.state.professionOld,
-	                companyName: _this.state.companyNameOld,
-	                profilePictureLink: _this.state.profilePictureLinkOld,
-	                profileCover: _this.state.profileCoverOld,
-	                successUpdate: null
-	            });
-	        };
-
-	        _this.onSave = function () {
-	            //newState
-	            var firstName = encodeURIComponent(_this.state.firstName);
-	            var lastName = encodeURIComponent(_this.state.lastName);
-	            var birthDate = encodeURIComponent(_this.state.birthDate);
-	            var city = encodeURIComponent(_this.state.city);
-	            var country = encodeURIComponent(_this.state.country);
-	            var profession = encodeURIComponent(_this.state.profession);
-	            var companyName = encodeURIComponent(_this.state.companyName);
-	            var profilePictureLink = encodeURIComponent(_this.state.profilePictureLink);
-	            var profileCover = encodeURIComponent(_this.state.profileCover);
-
-	            //oldState
-	            var firstNameOld = encodeURIComponent(_this.state.firstNameOld);
-	            var lastNameOld = encodeURIComponent(_this.state.lastNameOld);
-	            var birthDateOld = encodeURIComponent(_this.state.birthDateOld);
-	            var cityOld = encodeURIComponent(_this.state.cityOld);
-	            var countryOld = encodeURIComponent(_this.state.countryOld);
-	            var professionOld = encodeURIComponent(_this.state.professionOld);
-	            var companyNameOld = encodeURIComponent(_this.state.companyNameOld);
-	            var profilePictureLinkOld = encodeURIComponent(_this.state.profilePictureLinkOld);
-	            var profileCoverOld = encodeURIComponent(_this.state.profileCoverOld);
-
-	            var formData = 'firstName=' + firstName + '&lastName=' + lastName + '&birthDate=' + birthDate + '&city=' + city + '&country=' + country + '&profession=' + profession + '&companyName=' + companyName + '&profilePictureLink=' + profilePictureLink + '&profileCover=' + profileCover + '&firstNameOld=' + firstNameOld + '&lastNameOld=' + lastNameOld + '&birthDateOld=' + birthDateOld + '&cityOld=' + cityOld + '&countryOld=' + countryOld + '&professionOld=' + professionOld + '&companyNameOld=' + companyNameOld + '&profilePictureLinkOld=' + profilePictureLinkOld + '&profileCoverOld=' + profileCoverOld;
-
-	            var xhr = new XMLHttpRequest();
-	            xhr.open('post', '/profile/profile-edit');
-	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
-	            xhr.responseType = 'json';
-	            xhr.addEventListener('load', function () {
-	                if (xhr.status === 200) {
-	                    _this.setState({
-	                        errors: {},
-	                        successUpdate: xhr.response.successStatus
-	                    });
-	                } else {
-	                    var errors = xhr.response.errors ? xhr.response.errors : {};
-	                    errors.summary = xhr.response.message;
-
-	                    _this.setState({
-	                        errors: errors
-	                    });
-	                }
-	            });
-	            xhr.send(formData);
-
-	            _this.setState({
-	                profilePictureLinkOld: _this.state.profilePictureLink,
-	                profileCoverOld: _this.state.profileCover,
-	                firstNameOld: _this.state.firstName,
-	                lastNameOld: _this.state.lastName,
-	                birthDateOld: _this.state.birthDate,
-	                cityOld: _this.state.city,
-	                countryOld: _this.state.country,
-	                professionOld: _this.state.profession,
-	                companyNameOld: _this.state.companyName
-	            });
-	        };
-
-	        var storedMessage = localStorage.getItem('successMessage');
-	        var successMessage = '';
-
-	        if (storedMessage) {
-	            successMessage = storedMessage;
-	            localStorage.removeItem('successMessage');
-	        }
-
-	        _this.state = {
-	            errors: {},
-	            successMessage: successMessage,
-	            userName: '',
-	            ownUser: '',
-	            birthDate: '',
-	            city: '',
-	            companyName: '',
-	            country: '',
-	            firstName: '',
-	            lastName: '',
-	            profession: '',
-	            profilePictureLink: '',
-	            profileCover: '',
-	            successUpdate: null,
-	            userId: '',
-	            collectionId: '',
-	            collectionName: '',
-	            pictureOneLink: '',
-	            latestCollection: {},
-	            //oldState if exists
-	            profilePictureLinkOld: '',
-	            profileCoverOld: '',
-	            firstNameOld: '',
-	            lastNameOld: '',
-	            birthDateOld: '',
-	            cityOld: '',
-	            countryOld: '',
-	            professionOld: '',
-	            companyNameOld: ''
-	        };
-	        return _this;
-	    }
-
-	    _createClass(ProfileView, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var _this2 = this;
-
-	            var userName = encodeURIComponent(this.props.params.userName);
-	            var formData = 'userName=' + userName;
-
-	            var xhr = new XMLHttpRequest();
-	            xhr.open('post', '/profile/profile');
-	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
-	            xhr.responseType = 'json';
-	            xhr.addEventListener('load', function () {
-	                if (xhr.status === 200) {
-	                    _this2.setState({
-	                        errors: {},
-	                        userId: xhr.response.user.userId,
-	                        userName: xhr.response.user.name,
-	                        ownUser: xhr.response.user.ownUser,
-	                        birthDate: xhr.response.user.birthDate,
-	                        city: xhr.response.user.city,
-	                        companyName: xhr.response.user.companyName,
-	                        country: xhr.response.user.country,
-	                        firstName: xhr.response.user.firstName,
-	                        lastName: xhr.response.user.lastName,
-	                        profession: xhr.response.user.profession,
-	                        profilePictureLink: xhr.response.user.profilePictureLink,
-	                        profileCover: xhr.response.user.profileCover,
-	                        latestCollection: xhr.response.user.latestCollection,
-	                        profilePictureLinkOld: xhr.response.user.profilePictureLink,
-	                        profileCoverOld: xhr.response.user.profileCover,
-	                        firstNameOld: xhr.response.user.firstName,
-	                        lastNameOld: xhr.response.user.lastName,
-	                        birthDateOld: xhr.response.user.birthDate,
-	                        cityOld: xhr.response.user.city,
-	                        countryOld: xhr.response.user.country,
-	                        professionOld: xhr.response.user.profession,
-	                        companyNameOld: xhr.response.user.companyName
-	                    });
-	                } else {
-	                    var errors = xhr.response.errors ? xhr.response.errors : {};
-	                    errors.summary = xhr.response.message;
-
-	                    _this2.setState({
-	                        errors: errors
-	                    });
-	                }
-	            });
-	            xhr.send(formData);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            if (this.state.errors.summary == "User is not a member") {
-	                document.title = "404 not found";
-	                return _react2.default.createElement(_NotFoundPage2.default, null);
-	            } else {
-	                document.title = this.state.userName + ' - Profile';
-	                return _react2.default.createElement(_Profile2.default, {
-	                    latestCollection: this.state.latestCollection,
-	                    city: this.state.city,
-	                    companyName: this.state.companyName,
-	                    country: this.state.country,
-	                    firstName: this.state.firstName,
-	                    lastName: this.state.lastName,
-	                    profession: this.state.profession,
-	                    profilePictureLink: this.state.profilePictureLink,
-	                    profileCover: this.state.profileCover,
-	                    userName: this.state.userName,
-	                    ownUser: this.state.ownUser,
-	                    successUpdate: this.state.successUpdate,
-	                    collectionId: this.state.collectionId,
-	                    collectionName: this.state.collectionName,
-	                    pictureOneLink: this.state.pictureOneLink,
-	                    onFirstNameChange: this.onFirstNameChange,
-	                    onLastNameChange: this.onLastNameChange,
-	                    onBirthDateChange: this.onBirthDateChange,
-	                    birthDate: JSON.stringify(this.state.birthDate),
-	                    onCityChange: this.onCityChange,
-	                    onCountryChange: this.onCountryChange,
-	                    onProfessionChange: this.onProfessionChange,
-	                    onCompanyNameChange: this.onCompanyNameChange,
-	                    onProfilePictureLinkChange: this.onProfilePictureLinkChange,
-	                    onProfileCoverChange: this.onProfileCoverChange,
-	                    onEdit: this.onEdit,
-	                    onCancelEdit: this.onCancelEdit,
-	                    onSave: this.onSave,
-	                    errors: this.state.errors
-	                });
-	            }
-	        }
-	    }]);
-
-	    return ProfileView;
-	}(_react.Component);
-
-	exports.default = ProfileView;
 
 /***/ })
 /******/ ]);

@@ -1,0 +1,116 @@
+$roboto: Roboto, 'sans-serif';
+
+@mixin font($fontName:"", $fontSize:"", $textAlign:"", $color:"") {
+    font: unquote($fontSize) unquote($color) unquote($fontName);
+    text-align: unquote($textAlign);
+}
+
+@mixin box-sizing($value:"") {
+    -webkit-box-sizing: unquote($value);
+    -moz-box-sizing: unquote($value);
+    box-sizing: unquote($value);
+}
+
+@mixin display-flex($display:"", $justify:"", $flex:"") {
+    display: unquote($display);
+    justify-content: unquote($justify);
+    flex: unquote($flex);
+}
+
+.profile-wrap {
+    @include display-flex(flex,center);
+    min-width: 90%;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.profile-left {
+    margin: 0;
+    min-width: 20%;
+    max-width: 20%;
+    padding: 2em;
+
+    img:hover {
+        opacity: 0.7;
+    }
+
+    img:active {
+        opacity: 0.9;
+    }
+
+    .profile-picture-wrap {
+        height: 12em;
+    }
+
+    .user-name-wrap {
+
+        @include font($roboto, 1.5em, "", gray);
+        @include display-flex(flex, center);
+        background-color: whitesmoke;
+        cursor: default;
+        padding: 1em;
+        border: 1px solid antiquewhite;
+    }
+}
+
+.latest-post {
+    margin-top: 3em;
+    flex: 1;
+
+    :hover {
+        opacity: 0.8;
+    }
+
+    :active {
+        opacity: 0.9;
+    }
+
+    header {
+        @include display-flex(flex, center);
+        @include font($roboto, 1.5em, center, gray);
+        background-color: whitesmoke;
+        padding: 1em;
+        border: 1px solid antiquewhite;
+        cursor: pointer;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+
+    collectionName {
+        @include display-flex(flex, center);
+        background: rgb(0, 188, 212);
+        color: white;
+    }
+}
+
+.profile-right {
+    text-align: center;
+    max-width: 70%;
+    min-width: 70%;
+
+    img:hover {
+        opacity: 0.5;
+    }
+
+    img:active {
+        opacity: 0.9;
+    }
+
+    .cover-wrap {
+        @include box-sizing(border-box);
+        width: 100%;
+        height: 12em;
+    }
+
+    .content-wrap {
+        width: 100%;
+        padding: 0 2em 2em 2em;
+    }
+}
+
+.tabs {
+    @include display-flex(flex, center);
+}

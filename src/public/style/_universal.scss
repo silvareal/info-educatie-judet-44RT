@@ -1,0 +1,68 @@
+body {
+    margin: 0;
+    font-size: 16px;
+    font-family: Roboto,'sans-serif';
+}
+
+a {
+    color: dodgerblue;
+    text-decoration: none;
+    transition: color 0.4s;
+    :hover {
+        color: white;
+    }
+}
+
+.error-message {
+    display: flex;
+    justify-content: center;
+    color: red;
+}
+
+.success-message {
+    padding: 0 16px;
+    color: deepskyblue;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.top-bar {
+    display: flex;
+    flex: 1;
+    background: #2d2d2d;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    a,
+    .nav a {
+        margin: 0 8px;
+    }
+}
+
+.logo {
+    padding: 5px;
+}
+
+.actions {
+    padding: 5px;
+}
+
+.container {
+    background-color: gray;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.card-heading {
+    padding: 16px;
+}
+
+.button-login-signup {
+    padding: 16px;
+    display: flex;
+    flex: 1;
+    justify-content:center;
+}
