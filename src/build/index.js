@@ -35607,6 +35607,54 @@
 
 	var _DeleteView6 = _interopRequireDefault(_DeleteView5);
 
+	var _LogsView = __webpack_require__(670);
+
+	var _LogsView2 = _interopRequireDefault(_LogsView);
+
+	var _LogsLoginView = __webpack_require__(676);
+
+	var _LogsLoginView2 = _interopRequireDefault(_LogsLoginView);
+
+	var _LogsSignupView = __webpack_require__(677);
+
+	var _LogsSignupView2 = _interopRequireDefault(_LogsSignupView);
+
+	var _LogsNewsView = __webpack_require__(678);
+
+	var _LogsNewsView2 = _interopRequireDefault(_LogsNewsView);
+
+	var _LogsNewsCreateView = __webpack_require__(680);
+
+	var _LogsNewsCreateView2 = _interopRequireDefault(_LogsNewsCreateView);
+
+	var _LogsNewsUpdateView = __webpack_require__(681);
+
+	var _LogsNewsUpdateView2 = _interopRequireDefault(_LogsNewsUpdateView);
+
+	var _LogsNewsDeleteView = __webpack_require__(682);
+
+	var _LogsNewsDeleteView2 = _interopRequireDefault(_LogsNewsDeleteView);
+
+	var _LogsCollectionsView = __webpack_require__(679);
+
+	var _LogsCollectionsView2 = _interopRequireDefault(_LogsCollectionsView);
+
+	var _LogsCollectionsCreateView = __webpack_require__(683);
+
+	var _LogsCollectionsCreateView2 = _interopRequireDefault(_LogsCollectionsCreateView);
+
+	var _LogsCollectionsUpdateView = __webpack_require__(684);
+
+	var _LogsCollectionsUpdateView2 = _interopRequireDefault(_LogsCollectionsUpdateView);
+
+	var _LogsCollectionsDeleteView = __webpack_require__(685);
+
+	var _LogsCollectionsDeleteView2 = _interopRequireDefault(_LogsCollectionsDeleteView);
+
+	var _LogsProfileView = __webpack_require__(692);
+
+	var _LogsProfileView2 = _interopRequireDefault(_LogsProfileView);
+
 	var _NotFoundPage = __webpack_require__(636);
 
 	var _NotFoundPage2 = _interopRequireDefault(_NotFoundPage);
@@ -35763,6 +35811,114 @@
 	            }
 	        }
 	    }, {
+	        path: 'admin/:_id/logs',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/login',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsLoginView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/signup',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsSignupView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/collections',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsCollectionsView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/collections/create',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsCollectionsCreateView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/collections/update',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsCollectionsUpdateView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/collections/delete',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsCollectionsDeleteView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/news',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsNewsView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/news/create',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsNewsCreateView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/news/update',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsNewsUpdateView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/news/delete',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsNewsDeleteView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
+	        path: 'admin/:_id/logs/profile',
+	        getComponent: function getComponent(location, callback) {
+	            if (_Auth2.default.isUserAuthenticated()) {
+	                callback(null, _LogsProfileView2.default);
+	            } else {
+	                callback(null, _LoginView2.default);
+	            }
+	        }
+	    }, {
 	        path: '/manage',
 	        getComponent: function getComponent(location, callback) {
 	            if (_Auth2.default.isUserAuthenticated()) {
@@ -35821,7 +35977,6 @@
 	        component: _NotFoundPage2.default
 	    }]
 	};
-	//New lines are added to separate components that serve different purposes
 
 	exports.default = routes;
 
@@ -71529,8 +71684,7 @@
 	                                    _react2.default.createElement(
 	                                        _materialUi.Table,
 	                                        {
-	                                            selectable: false
-	                                        },
+	                                            selectable: false },
 	                                        _react2.default.createElement(
 	                                            _materialUi.TableHeader,
 	                                            { displaySelectAll: false },
@@ -71824,7 +71978,8 @@
 	                                    null,
 	                                    'Latest post'
 	                                ),
-	                                _react2.default.createElement('img', { src: this.props.latestCollection[0].picturesArray[0].pictureLink, alt: this.props.latestCollection[0].collectionName })
+	                                _react2.default.createElement('img', { src: this.props.latestCollection[0].picturesArray[0].pictureLink,
+	                                    alt: this.props.latestCollection[0].collectionName })
 	                            ) : null
 	                        )
 	                    ),
@@ -72207,6 +72362,15 @@
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
 	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
 	                            'Logs component'
 	                        )
 	                    ),
@@ -72458,7 +72622,7 @@
 	        };
 
 	        _this.state = {
-	            open: true
+	            open: false
 	        };
 	        return _this;
 	    }
@@ -72490,6 +72654,11 @@
 	                                    _react2.default.createElement(
 	                                        _materialUi.TableHeaderColumn,
 	                                        null,
+	                                        'Id'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        _materialUi.TableHeaderColumn,
+	                                        null,
 	                                        'Email'
 	                                    ),
 	                                    _react2.default.createElement(
@@ -72514,6 +72683,11 @@
 	                                        _react2.default.createElement(
 	                                            _materialUi.TableRowColumn,
 	                                            null,
+	                                            users[i]._id
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            _materialUi.TableRowColumn,
+	                                            null,
 	                                            users[i].email
 	                                        ),
 	                                        _react2.default.createElement(
@@ -72530,7 +72704,8 @@
 	                                })
 	                            )
 	                        ),
-	                        _react2.default.createElement(_materialUi.RaisedButton, { type: 'button', primary: true, label: 'Give/Revoke moderator permissions', onTouchTap: this.props.addModerators })
+	                        _react2.default.createElement(_materialUi.RaisedButton, { type: 'button', primary: true, label: 'Give/Revoke moderator permissions',
+	                            onTouchTap: this.props.addModerators })
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -72547,6 +72722,15 @@
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
 	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
 	                            'Logs component'
 	                        )
 	                    ),
@@ -73152,7 +73336,7 @@
 	        };
 
 	        _this.state = {
-	            open: true
+	            open: false
 	        };
 	        return _this;
 	    }
@@ -73190,6 +73374,15 @@
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
 	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
 	                            'Logs component'
 	                        )
 	                    ),
@@ -75089,7 +75282,7 @@
 	        };
 
 	        _this.state = {
-	            open: true
+	            open: false
 	        };
 	        return _this;
 	    }
@@ -75127,6 +75320,15 @@
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
 	                            { to: '/admin/' + this.props.adminId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.adminId + '/logs', activeStyle: { color: 'blue' } },
 	                            'Logs component'
 	                        )
 	                    ),
@@ -76476,6 +76678,3243 @@
 	}(_react.Component);
 
 	exports.default = Delete;
+
+/***/ }),
+/* 669 */,
+/* 670 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Logs = __webpack_require__(671);
+
+	var _Logs2 = _interopRequireDefault(_Logs);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsView = function (_Component) {
+	    _inherits(LogsView, _Component);
+
+	    function LogsView() {
+	        _classCallCheck(this, LogsView);
+
+	        return _possibleConstructorReturn(this, (LogsView.__proto__ || Object.getPrototypeOf(LogsView)).apply(this, arguments));
+	    }
+
+	    _createClass(LogsView, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_Logs2.default, { userId: this.props.params._id });
+	        }
+	    }]);
+
+	    return LogsView;
+	}(_react.Component);
+
+	exports.default = LogsView;
+
+/***/ }),
+/* 671 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Logs = function (_Component) {
+	    _inherits(Logs, _Component);
+
+	    function Logs(props) {
+	        _classCallCheck(this, Logs);
+
+	        var _this = _possibleConstructorReturn(this, (Logs.__proto__ || Object.getPrototypeOf(Logs)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(Logs, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle }),
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/login' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Login logs'
+	                            })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/signup' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Logs signup'
+	                            })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/news' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Logs news'
+	                            })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/collections' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Logs collections'
+	                            })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/profile' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Profile update collections'
+	                            })
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Logs;
+	}(_react.Component);
+
+	exports.default = Logs;
+
+/***/ }),
+/* 672 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsNews = function (_Component) {
+	    _inherits(LogsNews, _Component);
+
+	    function LogsNews(props) {
+	        _classCallCheck(this, LogsNews);
+
+	        var _this = _possibleConstructorReturn(this, (LogsNews.__proto__ || Object.getPrototypeOf(LogsNews)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsNews, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle }),
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/news/create' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Create logs'
+	                            })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/news/update' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Update logs'
+	                            })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/news/delete' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Delete logs'
+	                            })
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsNews;
+	}(_react.Component);
+
+	exports.default = LogsNews;
+
+/***/ }),
+/* 673 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsCollections = function (_Component) {
+	    _inherits(LogsCollections, _Component);
+
+	    function LogsCollections(props) {
+	        _classCallCheck(this, LogsCollections);
+
+	        var _this = _possibleConstructorReturn(this, (LogsCollections.__proto__ || Object.getPrototypeOf(LogsCollections)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsCollections, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle }),
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/collections/create' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Create logs'
+	                            })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/collections/update' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Update logs'
+	                            })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs/collections/delete' },
+	                            _react2.default.createElement(_materialUi.RaisedButton, {
+	                                primary: true,
+	                                label: 'Delete logs'
+	                            })
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsCollections;
+	}(_react.Component);
+
+	exports.default = LogsCollections;
+
+/***/ }),
+/* 674 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsSignup = function (_Component) {
+	    _inherits(LogsSignup, _Component);
+
+	    function LogsSignup(props) {
+	        _classCallCheck(this, LogsSignup);
+
+	        var _this = _possibleConstructorReturn(this, (LogsSignup.__proto__ || Object.getPrototypeOf(LogsSignup)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsSignup, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var rows = Object.keys(this.props.logs).map(function (i) {
+	                var date = new Date(_this2.props.logs[i].time);
+	                if (date != "Invalid Date") {
+	                    return _react2.default.createElement(
+	                        _materialUi.TableRow,
+	                        { key: i },
+	                        _react2.default.createElement(
+	                            _materialUi.TableRowColumn,
+	                            null,
+	                            _this2.props.logs[i].email
+	                        ),
+	                        _react2.default.createElement(
+	                            _materialUi.TableRowColumn,
+	                            null,
+	                            _this2.props.logs[i].userName
+	                        ),
+	                        _react2.default.createElement(
+	                            _materialUi.TableRowColumn,
+	                            null,
+	                            date.toString()
+	                        )
+	                    );
+	                }
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
+	                ),
+	                _react2.default.createElement(
+	                    _materialUi.Table,
+	                    {
+	                        selectable: false },
+	                    _react2.default.createElement(
+	                        _materialUi.TableHeader,
+	                        { displaySelectAll: false },
+	                        _react2.default.createElement(
+	                            _materialUi.TableRow,
+	                            null,
+	                            _react2.default.createElement(
+	                                _materialUi.TableHeaderColumn,
+	                                null,
+	                                'Email'
+	                            ),
+	                            _react2.default.createElement(
+	                                _materialUi.TableHeaderColumn,
+	                                null,
+	                                'Username'
+	                            ),
+	                            _react2.default.createElement(
+	                                _materialUi.TableHeaderColumn,
+	                                null,
+	                                'Time'
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.TableBody,
+	                        { displayRowCheckbox: false },
+	                        rows
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsSignup;
+	}(_react.Component);
+
+	exports.default = LogsSignup;
+
+/***/ }),
+/* 675 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsLogin = function (_Component) {
+	    _inherits(LogsLogin, _Component);
+
+	    function LogsLogin(props) {
+	        _classCallCheck(this, LogsLogin);
+
+	        var _this = _possibleConstructorReturn(this, (LogsLogin.__proto__ || Object.getPrototypeOf(LogsLogin)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsLogin, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var rows = Object.keys(this.props.logs).map(function (i) {
+	                var date = new Date(_this2.props.logs[i].time);
+	                if (date != "Invalid Date") {
+	                    return _react2.default.createElement(
+	                        _materialUi.TableRow,
+	                        { key: i },
+	                        _react2.default.createElement(
+	                            _materialUi.TableRowColumn,
+	                            null,
+	                            _this2.props.logs[i].userId
+	                        ),
+	                        _react2.default.createElement(
+	                            _materialUi.TableRowColumn,
+	                            null,
+	                            date.toString()
+	                        )
+	                    );
+	                }
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
+	                ),
+	                _react2.default.createElement(
+	                    _materialUi.Table,
+	                    {
+	                        selectable: false },
+	                    _react2.default.createElement(
+	                        _materialUi.TableHeader,
+	                        { displaySelectAll: false },
+	                        _react2.default.createElement(
+	                            _materialUi.TableRow,
+	                            null,
+	                            _react2.default.createElement(
+	                                _materialUi.TableHeaderColumn,
+	                                null,
+	                                'The user _id'
+	                            ),
+	                            _react2.default.createElement(
+	                                _materialUi.TableHeaderColumn,
+	                                null,
+	                                'Time'
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.TableBody,
+	                        { displayRowCheckbox: false },
+	                        rows
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsLogin;
+	}(_react.Component);
+
+	exports.default = LogsLogin;
+
+/***/ }),
+/* 676 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _LogsLogin = __webpack_require__(675);
+
+	var _LogsLogin2 = _interopRequireDefault(_LogsLogin);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsLoginView = function (_Component) {
+	    _inherits(LogsLoginView, _Component);
+
+	    function LogsLoginView(props) {
+	        _classCallCheck(this, LogsLoginView);
+
+	        var _this = _possibleConstructorReturn(this, (LogsLoginView.__proto__ || Object.getPrototypeOf(LogsLoginView)).call(this, props));
+
+	        _this.state = {
+	            logs: [{}]
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsLoginView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('get', '/admin/logsLogin');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        logs: xhr.response.logs
+	                    });
+	                }
+	            });
+
+	            xhr.send();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsLogin2.default, {
+	                logs: this.state.logs
+	            });
+	        }
+	    }]);
+
+	    return LogsLoginView;
+	}(_react.Component);
+
+	exports.default = LogsLoginView;
+
+/***/ }),
+/* 677 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _LogsSignup = __webpack_require__(674);
+
+	var _LogsSignup2 = _interopRequireDefault(_LogsSignup);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsSignupView = function (_Component) {
+	    _inherits(LogsSignupView, _Component);
+
+	    function LogsSignupView(props) {
+	        _classCallCheck(this, LogsSignupView);
+
+	        var _this = _possibleConstructorReturn(this, (LogsSignupView.__proto__ || Object.getPrototypeOf(LogsSignupView)).call(this, props));
+
+	        _this.state = {
+	            logs: [{}]
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsSignupView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open('get', '/admin/logsSignup');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        logs: xhr.response.logs
+	                    });
+	                }
+	            });
+
+	            xhr.send();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsSignup2.default, {
+	                logs: this.state.logs
+	            });
+	        }
+	    }]);
+
+	    return LogsSignupView;
+	}(_react.Component);
+
+	exports.default = LogsSignupView;
+
+/***/ }),
+/* 678 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _LogsNews = __webpack_require__(672);
+
+	var _LogsNews2 = _interopRequireDefault(_LogsNews);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsNewsView = function (_Component) {
+	    _inherits(LogsNewsView, _Component);
+
+	    function LogsNewsView() {
+	        _classCallCheck(this, LogsNewsView);
+
+	        return _possibleConstructorReturn(this, (LogsNewsView.__proto__ || Object.getPrototypeOf(LogsNewsView)).apply(this, arguments));
+	    }
+
+	    _createClass(LogsNewsView, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsNews2.default, { userId: this.props.params._id });
+	        }
+	    }]);
+
+	    return LogsNewsView;
+	}(_react.Component);
+
+	exports.default = LogsNewsView;
+
+/***/ }),
+/* 679 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _LogsCollections = __webpack_require__(673);
+
+	var _LogsCollections2 = _interopRequireDefault(_LogsCollections);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsCollectionsView = function (_Component) {
+	    _inherits(LogsCollectionsView, _Component);
+
+	    function LogsCollectionsView() {
+	        _classCallCheck(this, LogsCollectionsView);
+
+	        return _possibleConstructorReturn(this, (LogsCollectionsView.__proto__ || Object.getPrototypeOf(LogsCollectionsView)).apply(this, arguments));
+	    }
+
+	    _createClass(LogsCollectionsView, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsCollections2.default, { userId: this.props.params._id });
+	        }
+	    }]);
+
+	    return LogsCollectionsView;
+	}(_react.Component);
+
+	exports.default = LogsCollectionsView;
+
+/***/ }),
+/* 680 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _LogsNewsCreate = __webpack_require__(689);
+
+	var _LogsNewsCreate2 = _interopRequireDefault(_LogsNewsCreate);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsNewsCreateView = function (_Component) {
+	    _inherits(LogsNewsCreateView, _Component);
+
+	    function LogsNewsCreateView(props) {
+	        _classCallCheck(this, LogsNewsCreateView);
+
+	        var _this = _possibleConstructorReturn(this, (LogsNewsCreateView.__proto__ || Object.getPrototypeOf(LogsNewsCreateView)).call(this, props));
+
+	        _this.state = {
+	            logs: [{}]
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsNewsCreateView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("get", "/admin/logsNewsCreate");
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        logs: xhr.response.logs
+	                    });
+	                }
+	            });
+
+	            xhr.send();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsNewsCreate2.default, { logs: this.state.logs });
+	        }
+	    }]);
+
+	    return LogsNewsCreateView;
+	}(_react.Component);
+
+	exports.default = LogsNewsCreateView;
+
+/***/ }),
+/* 681 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _LogsNewsUpdate = __webpack_require__(691);
+
+	var _LogsNewsUpdate2 = _interopRequireDefault(_LogsNewsUpdate);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsNewsUpdateView = function (_Component) {
+	    _inherits(LogsNewsUpdateView, _Component);
+
+	    function LogsNewsUpdateView(props) {
+	        _classCallCheck(this, LogsNewsUpdateView);
+
+	        var _this = _possibleConstructorReturn(this, (LogsNewsUpdateView.__proto__ || Object.getPrototypeOf(LogsNewsUpdateView)).call(this, props));
+
+	        _this.state = {
+	            logs: [{}]
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsNewsUpdateView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("get", "/admin/logsNewsUpdate");
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        logs: xhr.response.logs
+	                    });
+	                }
+	            });
+
+	            xhr.send();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsNewsUpdate2.default, { logs: this.state.logs });
+	        }
+	    }]);
+
+	    return LogsNewsUpdateView;
+	}(_react.Component);
+
+	exports.default = LogsNewsUpdateView;
+
+/***/ }),
+/* 682 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _LogsNewsDelete = __webpack_require__(690);
+
+	var _LogsNewsDelete2 = _interopRequireDefault(_LogsNewsDelete);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsNewsDeleteView = function (_Component) {
+	    _inherits(LogsNewsDeleteView, _Component);
+
+	    function LogsNewsDeleteView(props) {
+	        _classCallCheck(this, LogsNewsDeleteView);
+
+	        var _this = _possibleConstructorReturn(this, (LogsNewsDeleteView.__proto__ || Object.getPrototypeOf(LogsNewsDeleteView)).call(this, props));
+
+	        _this.state = {
+	            logs: [{}]
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsNewsDeleteView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("get", "/admin/logsNewsDelete");
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        logs: xhr.response.logs
+	                    });
+	                }
+	            });
+
+	            xhr.send();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsNewsDelete2.default, { logs: this.state.logs });
+	        }
+	    }]);
+
+	    return LogsNewsDeleteView;
+	}(_react.Component);
+
+	exports.default = LogsNewsDeleteView;
+
+/***/ }),
+/* 683 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _LogsCollectionsCreate = __webpack_require__(686);
+
+	var _LogsCollectionsCreate2 = _interopRequireDefault(_LogsCollectionsCreate);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsCollectionsCreateView = function (_Component) {
+	    _inherits(LogsCollectionsCreateView, _Component);
+
+	    function LogsCollectionsCreateView(props) {
+	        _classCallCheck(this, LogsCollectionsCreateView);
+
+	        var _this = _possibleConstructorReturn(this, (LogsCollectionsCreateView.__proto__ || Object.getPrototypeOf(LogsCollectionsCreateView)).call(this, props));
+
+	        _this.state = {
+	            logs: [{}]
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsCollectionsCreateView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("get", "/admin/logsCollectionsCreate");
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        logs: xhr.response.logs
+	                    });
+	                }
+	            });
+
+	            xhr.send();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsCollectionsCreate2.default, { logs: this.state.logs });
+	        }
+	    }]);
+
+	    return LogsCollectionsCreateView;
+	}(_react.Component);
+
+	exports.default = LogsCollectionsCreateView;
+
+/***/ }),
+/* 684 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _LogsCollectionsUpdate = __webpack_require__(688);
+
+	var _LogsCollectionsUpdate2 = _interopRequireDefault(_LogsCollectionsUpdate);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsCollectionsUpdateView = function (_Component) {
+	    _inherits(LogsCollectionsUpdateView, _Component);
+
+	    function LogsCollectionsUpdateView(props) {
+	        _classCallCheck(this, LogsCollectionsUpdateView);
+
+	        var _this = _possibleConstructorReturn(this, (LogsCollectionsUpdateView.__proto__ || Object.getPrototypeOf(LogsCollectionsUpdateView)).call(this, props));
+
+	        _this.state = {
+	            logs: [{}]
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsCollectionsUpdateView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("get", "/admin/logsCollectionsUpdate");
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        logs: xhr.response.logs
+	                    });
+	                }
+	            });
+
+	            xhr.send();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsCollectionsUpdate2.default, { logs: this.state.logs });
+	        }
+	    }]);
+
+	    return LogsCollectionsUpdateView;
+	}(_react.Component);
+
+	exports.default = LogsCollectionsUpdateView;
+
+/***/ }),
+/* 685 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _LogsCollectionsDelete = __webpack_require__(687);
+
+	var _LogsCollectionsDelete2 = _interopRequireDefault(_LogsCollectionsDelete);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsCollectionsDeleteView = function (_Component) {
+	    _inherits(LogsCollectionsDeleteView, _Component);
+
+	    function LogsCollectionsDeleteView(props) {
+	        _classCallCheck(this, LogsCollectionsDeleteView);
+
+	        var _this = _possibleConstructorReturn(this, (LogsCollectionsDeleteView.__proto__ || Object.getPrototypeOf(LogsCollectionsDeleteView)).call(this, props));
+
+	        _this.state = {
+	            logs: [{}]
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsCollectionsDeleteView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("get", "/admin/logsCollectionsDelete");
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        logs: xhr.response.logs
+	                    });
+	                }
+	            });
+
+	            xhr.send();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsCollectionsDelete2.default, { logs: this.state.logs });
+	        }
+	    }]);
+
+	    return LogsCollectionsDeleteView;
+	}(_react.Component);
+
+	exports.default = LogsCollectionsDeleteView;
+
+/***/ }),
+/* 686 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsCollectionsCreate = function (_Component) {
+	    _inherits(LogsCollectionsCreate, _Component);
+
+	    function LogsCollectionsCreate(props) {
+	        _classCallCheck(this, LogsCollectionsCreate);
+
+	        var _this = _possibleConstructorReturn(this, (LogsCollectionsCreate.__proto__ || Object.getPrototypeOf(LogsCollectionsCreate)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsCollectionsCreate, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var rows = Object.keys(this.props.logs).map(function (i) {
+	                var date = new Date(_this2.props.logs[i].time);
+	                if (date != "Invalid Date") {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        {
+	                            key: i,
+	                            className: 'logs-display' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Details:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Created on the user id: ',
+	                                _this2.props.logs[i].userId
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Collection\'s name: ',
+	                                _this2.props.logs[i].collectionName
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Created by admin ? : ',
+	                                _this2.props.logs[i].createdByAdmin.toString()
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Date and time:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                date.toString()
+	                            )
+	                        )
+	                    );
+	                }
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
+	                ),
+	                rows,
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsCollectionsCreate;
+	}(_react.Component);
+
+	exports.default = LogsCollectionsCreate;
+
+/***/ }),
+/* 687 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsCollectionsDelete = function (_Component) {
+	    _inherits(LogsCollectionsDelete, _Component);
+
+	    function LogsCollectionsDelete(props) {
+	        _classCallCheck(this, LogsCollectionsDelete);
+
+	        var _this = _possibleConstructorReturn(this, (LogsCollectionsDelete.__proto__ || Object.getPrototypeOf(LogsCollectionsDelete)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsCollectionsDelete, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var rows = Object.keys(this.props.logs).map(function (i) {
+	                var date = new Date(_this2.props.logs[i].time);
+	                if (date != "Invalid Date") {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        {
+	                            key: i,
+	                            className: 'logs-display' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Details:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Deleter id: ',
+	                                _this2.props.logs[i].userId
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Owner id: ',
+	                                _this2.props.logs[i].ownerId
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Collection id: ',
+	                                _this2.props.logs[i].collectionId
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Collection name: ',
+	                                _this2.props.logs[i].collectionName
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Collection description: ',
+	                                _this2.props.logs[i].collectionDescription
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Pictures details:',
+	                                Object.keys(_this2.props.logs[i].picturesArray).map(function (j) {
+	                                    return _react2.default.createElement(
+	                                        'div',
+	                                        { key: j },
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture name: ',
+	                                            _this2.props.logs[i].picturesArray[j].pictureName
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture description: ',
+	                                            _this2.props.logs[i].picturesArray[j].pictureDescription
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture link: ',
+	                                            _this2.props.logs[i].picturesArray[j].pictureLink
+	                                        )
+	                                    );
+	                                })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Date and time:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                date.toString()
+	                            )
+	                        )
+	                    );
+	                }
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
+	                ),
+	                rows,
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsCollectionsDelete;
+	}(_react.Component);
+
+	exports.default = LogsCollectionsDelete;
+
+/***/ }),
+/* 688 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsCollectionsUpdate = function (_Component) {
+	    _inherits(LogsCollectionsUpdate, _Component);
+
+	    function LogsCollectionsUpdate(props) {
+	        _classCallCheck(this, LogsCollectionsUpdate);
+
+	        var _this = _possibleConstructorReturn(this, (LogsCollectionsUpdate.__proto__ || Object.getPrototypeOf(LogsCollectionsUpdate)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsCollectionsUpdate, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var rows = Object.keys(this.props.logs).map(function (i) {
+	                var date = new Date(_this2.props.logs[i].time);
+	                if (date != "Invalid Date") {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        {
+	                            style: { padding: 30 },
+	                            key: i,
+	                            className: 'logs-display' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Collection id: ',
+	                                _this2.props.logs[i].collectionId
+	                            ),
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'New state:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Owner id: ',
+	                                _this2.props.logs[i].userId
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Collection name: ',
+	                                _this2.props.logs[i].collectionName
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Collection description: ',
+	                                _this2.props.logs[i].collectionDescription
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Pictures details:',
+	                                Object.keys(_this2.props.logs[i].picturesArray).map(function (j) {
+	                                    return _react2.default.createElement(
+	                                        'div',
+	                                        { key: j },
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture name: ',
+	                                            _this2.props.logs[i].picturesArray[j].pictureName
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture description: ',
+	                                            _this2.props.logs[i].picturesArray[j].pictureDescription
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture link: ',
+	                                            _this2.props.logs[i].picturesArray[j].pictureLink
+	                                        )
+	                                    );
+	                                })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Old state:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Owner id: ',
+	                                _this2.props.logs[i].userIdOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Collection name: ',
+	                                _this2.props.logs[i].collectionNameOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Collection description: ',
+	                                _this2.props.logs[i].collectionDescriptionOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Pictures details:',
+	                                Object.keys(_this2.props.logs[i].picturesArrayOld).map(function (j) {
+	                                    return _react2.default.createElement(
+	                                        'div',
+	                                        { key: j },
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture name: ',
+	                                            _this2.props.logs[i].picturesArrayOld[j].pictureName
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture description: ',
+	                                            _this2.props.logs[i].picturesArrayOld[j].pictureDescription
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture link: ',
+	                                            _this2.props.logs[i].picturesArrayOld[j].pictureLink
+	                                        )
+	                                    );
+	                                })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Date and time:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                date.toString()
+	                            )
+	                        )
+	                    );
+	                }
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
+	                ),
+	                rows,
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsCollectionsUpdate;
+	}(_react.Component);
+
+	exports.default = LogsCollectionsUpdate;
+
+/***/ }),
+/* 689 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsNewsCreate = function (_Component) {
+	    _inherits(LogsNewsCreate, _Component);
+
+	    function LogsNewsCreate(props) {
+	        _classCallCheck(this, LogsNewsCreate);
+
+	        var _this = _possibleConstructorReturn(this, (LogsNewsCreate.__proto__ || Object.getPrototypeOf(LogsNewsCreate)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsNewsCreate, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var rows = Object.keys(this.props.logs).map(function (i) {
+	                var date = new Date(_this2.props.logs[i].time);
+	                if (date != "Invalid Date") {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        {
+	                            key: i,
+	                            className: 'logs-display' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Details:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Title: ',
+	                                _this2.props.logs[i].newsTitle
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Date and time:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                date.toString()
+	                            )
+	                        )
+	                    );
+	                }
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
+	                ),
+	                rows,
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsNewsCreate;
+	}(_react.Component);
+
+	exports.default = LogsNewsCreate;
+
+/***/ }),
+/* 690 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsNewsDelete = function (_Component) {
+	    _inherits(LogsNewsDelete, _Component);
+
+	    function LogsNewsDelete(props) {
+	        _classCallCheck(this, LogsNewsDelete);
+
+	        var _this = _possibleConstructorReturn(this, (LogsNewsDelete.__proto__ || Object.getPrototypeOf(LogsNewsDelete)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsNewsDelete, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var rows = Object.keys(this.props.logs).map(function (i) {
+	                var date = new Date(_this2.props.logs[i].time);
+	                if (date != "Invalid Date") {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        {
+	                            key: i,
+	                            className: 'logs-display' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Details:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'News id: ',
+	                                _this2.props.logs[i].newsId
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'News title: ',
+	                                _this2.props.logs[i].newsTitle
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'News description: ',
+	                                _this2.props.logs[i].newsDescription
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'News cover link: ',
+	                                _this2.props.logs[i].newsCoverLink
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Pictures details:',
+	                                Object.keys(_this2.props.logs[i].picturesArray).map(function (j) {
+	                                    return _react2.default.createElement(
+	                                        'div',
+	                                        { key: j },
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture name: ',
+	                                            _this2.props.logs[i].picturesArray[j].newsPictureLink
+	                                        )
+	                                    );
+	                                })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Date and time:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                date.toString()
+	                            )
+	                        )
+	                    );
+	                }
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
+	                ),
+	                rows,
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsNewsDelete;
+	}(_react.Component);
+
+	exports.default = LogsNewsDelete;
+
+/***/ }),
+/* 691 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsNewsUpdate = function (_Component) {
+	    _inherits(LogsNewsUpdate, _Component);
+
+	    function LogsNewsUpdate(props) {
+	        _classCallCheck(this, LogsNewsUpdate);
+
+	        var _this = _possibleConstructorReturn(this, (LogsNewsUpdate.__proto__ || Object.getPrototypeOf(LogsNewsUpdate)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsNewsUpdate, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var rows = Object.keys(this.props.logs).map(function (i) {
+	                var date = new Date(_this2.props.logs[i].time);
+	                if (date != "Invalid Date") {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        {
+	                            style: { padding: 30 },
+	                            key: i,
+	                            className: 'logs-display' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'News id: ',
+	                                _this2.props.logs[i].newsId
+	                            ),
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'New state:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Title: ',
+	                                _this2.props.logs[i].newsTitle
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'News cover link: ',
+	                                _this2.props.logs[i].newsCoverLink
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'News description: ',
+	                                _this2.props.logs[i].newsDescription
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Pictures details:',
+	                                Object.keys(_this2.props.logs[i].picturesArray).map(function (j) {
+	                                    return _react2.default.createElement(
+	                                        'div',
+	                                        { key: j },
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture name: ',
+	                                            _this2.props.logs[i].picturesArray[j].newsPictureLink
+	                                        )
+	                                    );
+	                                })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Old state:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Title: ',
+	                                _this2.props.logs[i].newsTitleOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'News cover link: ',
+	                                _this2.props.logs[i].newsCoverLinkOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'News description: ',
+	                                _this2.props.logs[i].newsDescriptionOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Pictures details:',
+	                                Object.keys(_this2.props.logs[i].picturesArrayOld).map(function (j) {
+	                                    return _react2.default.createElement(
+	                                        'div',
+	                                        { key: j },
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            'Picture name: ',
+	                                            _this2.props.logs[i].picturesArrayOld[j].newsPictureLink
+	                                        )
+	                                    );
+	                                })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Date and time:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                date.toString()
+	                            )
+	                        )
+	                    );
+	                }
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
+	                ),
+	                rows,
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsNewsUpdate;
+	}(_react.Component);
+
+	exports.default = LogsNewsUpdate;
+
+/***/ }),
+/* 692 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(397);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _LogsProfile = __webpack_require__(693);
+
+	var _LogsProfile2 = _interopRequireDefault(_LogsProfile);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsProfileView = function (_Component) {
+	    _inherits(LogsProfileView, _Component);
+
+	    function LogsProfileView(props) {
+	        _classCallCheck(this, LogsProfileView);
+
+	        var _this = _possibleConstructorReturn(this, (LogsProfileView.__proto__ || Object.getPrototypeOf(LogsProfileView)).call(this, props));
+
+	        _this.state = {
+	            logs: [{}]
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsProfileView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("get", "/admin/logsProfile");
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        logs: xhr.response.logs
+	                    });
+	                }
+	            });
+
+	            xhr.send();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_LogsProfile2.default, { logs: this.state.logs });
+	        }
+	    }]);
+
+	    return LogsProfileView;
+	}(_react.Component);
+
+	exports.default = LogsProfileView;
+
+/***/ }),
+/* 693 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(337);
+
+	var _materialUi = __webpack_require__(400);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LogsNewsUpdate = function (_Component) {
+	    _inherits(LogsNewsUpdate, _Component);
+
+	    function LogsNewsUpdate(props) {
+	        _classCallCheck(this, LogsNewsUpdate);
+
+	        var _this = _possibleConstructorReturn(this, (LogsNewsUpdate.__proto__ || Object.getPrototypeOf(LogsNewsUpdate)).call(this, props));
+
+	        _this.handleToggle = function () {
+	            _this.setState({ open: !_this.state.open });
+	        };
+
+	        _this.state = {
+	            open: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(LogsNewsUpdate, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var rows = Object.keys(this.props.logs).map(function (i) {
+	                var date = new Date(_this2.props.logs[i].time);
+	                if (date != "Invalid Date") {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        {
+	                            style: { padding: 30 },
+	                            key: i,
+	                            className: 'logs-display' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'User id: ',
+	                                _this2.props.logs[i].userId
+	                            ),
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'New state:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Profile cover link: ',
+	                                _this2.props.logs[i].profileCover
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Profile picture link: ',
+	                                _this2.props.logs[i].profilePictureLink
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'First name: ',
+	                                _this2.props.logs[i].firstName
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Last name: ',
+	                                _this2.props.logs[i].lastName
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Birthdate: ',
+	                                _this2.props.logs[i].birthDate
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'City: ',
+	                                _this2.props.logs[i].city
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Country: ',
+	                                _this2.props.logs[i].country
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Profession: ',
+	                                _this2.props.logs[i].profession
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Company name: ',
+	                                _this2.props.logs[i].companyName
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Old state:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Profile cover link: ',
+	                                _this2.props.logs[i].profileCoverOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Profile picture link: ',
+	                                _this2.props.logs[i].profilePictureLinkOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'First name: ',
+	                                _this2.props.logs[i].firstNameOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Last name: ',
+	                                _this2.props.logs[i].lastNameOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Birthdate: ',
+	                                _this2.props.logs[i].birthDateOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'City: ',
+	                                _this2.props.logs[i].cityOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Country: ',
+	                                _this2.props.logs[i].countryOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Profession: ',
+	                                _this2.props.logs[i].professionOld
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Company name: ',
+	                                _this2.props.logs[i].companyNameOld
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Date and time:'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                date.toString()
+	                            )
+	                        )
+	                    );
+	                }
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'logs-wrap' },
+	                    _react2.default.createElement(_materialUi.RaisedButton, { label: 'Toggle drawer', onTouchTap: this.handleToggle })
+	                ),
+	                rows,
+	                _react2.default.createElement(
+	                    _materialUi.Drawer,
+	                    { open: this.state.open },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Admin panel'
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId, activeStyle: { color: 'blue' } },
+	                            'Admin CP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/logs', activeStyle: { color: 'blue' } },
+	                            'Logs component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/news', activeStyle: { color: 'blue' } },
+	                            'News management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/users', activeStyle: { color: 'blue' } },
+	                            'Users management component'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _materialUi.MenuItem,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/admin/' + this.props.userId + '/collections', activeStyle: { color: 'blue' } },
+	                            'Collections management'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LogsNewsUpdate;
+	}(_react.Component);
+
+	exports.default = LogsNewsUpdate;
 
 /***/ })
 /******/ ]);

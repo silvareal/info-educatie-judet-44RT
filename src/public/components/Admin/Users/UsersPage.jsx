@@ -18,7 +18,7 @@ class UsersPage extends Component {
         super(props);
 
         this.state = {
-            open: true
+            open: false
         };
     }
 
@@ -50,6 +50,7 @@ class UsersPage extends Component {
                         <Table multiSelectable={true} onCellClick={this.handleCellClick}>
                             <TableHeader displaySelectAll={false}>
                                 <TableRow>
+                                    <TableHeaderColumn>Id</TableHeaderColumn>
                                     <TableHeaderColumn>Email</TableHeaderColumn>
                                     <TableHeaderColumn>Username</TableHeaderColumn>
                                     <TableHeaderColumn>Moderator(Y/N)</TableHeaderColumn>
@@ -58,6 +59,7 @@ class UsersPage extends Component {
                             <TableBody>
                                 {Object.keys(users).map((i) => (
                                     <TableRow key={i}>
+                                        <TableRowColumn>{users[i]._id}</TableRowColumn>
                                         <TableRowColumn>{users[i].email}</TableRowColumn>
                                         <TableRowColumn>{users[i].name}</TableRowColumn>
                                         <TableRowColumn>{users[i].moderator === false ? "N" : "Y"}</TableRowColumn>
@@ -65,17 +67,23 @@ class UsersPage extends Component {
                                 ))}
                             </TableBody>
                         </Table>
-                        <RaisedButton type="button" primary={true} label="Give/Revoke moderator permissions" onTouchTap={this.props.addModerators}/>
+                        <RaisedButton type="button" primary={true} label="Give/Revoke moderator permissions"
+                                      onTouchTap={this.props.addModerators}/>
                     </form>
                 </Card>
                 <Drawer open={this.state.open}>
                     <h1>Admin panel</h1>
-                    <MenuItem><Link to={`/admin/${this.props.userId}`} activeStyle={{color: 'blue'}}>Logs
+                    <MenuItem><Link to={`/admin/${this.props.userId}`} activeStyle={{color: 'blue'}}>Admin
+                        CP</Link></MenuItem>
+                    <MenuItem><Link to={`/admin/${this.props.userId}/logs`} activeStyle={{color: 'blue'}}>Logs
                         component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/news`} activeStyle={{color: 'blue'}}>News management component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/users`} activeStyle={{color: 'blue'}}>Users management
+                    <MenuItem><Link to={`/admin/${this.props.userId}/news`} activeStyle={{color: 'blue'}}>News
+                        management component</Link></MenuItem>
+                    <MenuItem><Link to={`/admin/${this.props.userId}/users`} activeStyle={{color: 'blue'}}>Users
+                        management
                         component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/collections`} activeStyle={{color: 'blue'}}>Collections management</Link></MenuItem>
+                    <MenuItem><Link to={`/admin/${this.props.userId}/collections`} activeStyle={{color: 'blue'}}>Collections
+                        management</Link></MenuItem>
                 </Drawer>
             </div>
         )

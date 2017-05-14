@@ -8,6 +8,9 @@ const DeleteCollectionLogs = require('mongoose').model('DeleteCollectionLogs');
 const CreateNewsLogs = require('mongoose').model('CreateNewsLogs');
 const UpdateNewsLogs = require('mongoose').model('UpdateNewsLogs');
 const DeleteNewsLogs = require('mongoose').model('DeleteNewsLogs');
+const LoginLogs = require('mongoose').model('LoginLogs');
+const SignupLogs = require('mongoose').model('SignupLogs');
+const UpdateProfileLogs = require('mongoose').model('UpdateProfileLogs');
 const config = require('../../config');
 const sanitize = require('mongo-sanitize');
 const jwt = require('jsonwebtoken');
@@ -1053,6 +1056,197 @@ router.post("/deleteCollection", (req, res) => {
             });
         });
     });
+});
+
+router.get("/logsLogin", (req, res) => {
+     LoginLogs.find({}, (err, logs) => {
+
+         if (err) {
+             res.status(400).json({
+                 message: "Database error"
+             });
+         }
+
+         if (!logs) {
+             res.status(404).json({
+                 message: "No logs found"
+             });
+         }
+
+         res.json({
+             logs: logs
+         });
+
+     }).sort({creationDate: -1});
+});
+
+router.get("/logsSignup", (req, res) => {
+    SignupLogs.find({}, (err, logs) => {
+
+        if (err) {
+            res.status(400).json({
+                message: "Database error"
+            });
+        }
+
+        if (!logs) {
+            res.status(404).json({
+                message: "No logs found"
+            });
+        }
+
+        res.json({
+            logs: logs
+        });
+
+    }).sort({creationDate: -1});
+});
+
+router.get("/logsCollectionsCreate", (req, res) => {
+    CreateCollectionLogs.find({}, (err, logs) => {
+
+        if (err) {
+            res.status(400).json({
+                message: "Database error"
+            });
+        }
+
+        if (!logs) {
+            res.status(404).json({
+                message: "No logs found"
+            });
+        }
+
+        res.json({
+            logs: logs
+        });
+    }).sort({creationDate: -1});
+});
+
+router.get("/logsCollectionsDelete", (req, res) => {
+    DeleteCollectionLogs.find({}, (err, logs) => {
+
+        if (err) {
+            res.status(400).json({
+                message: "Database error"
+            });
+        }
+
+        if (!logs) {
+            res.status(404).json({
+                message: "No logs found"
+            });
+        }
+
+        res.json({
+            logs: logs
+        });
+    }).sort({creationDate: -1});
+});
+
+router.get("/logsCollectionsUpdate", (req, res) => {
+    UpdateCollectionLogs.find({}, (err, logs) => {
+
+        if (err) {
+            res.status(400).json({
+                message: "Database error"
+            });
+        }
+
+        if (!logs) {
+            res.status(404).json({
+                message: "No logs found"
+            });
+        }
+
+        res.json({
+            logs: logs
+        });
+    }).sort({creationDate: -1});
+});
+
+router.get("/logsNewsUpdate", (req, res) => {
+    UpdateNewsLogs.find({}, (err, logs) => {
+
+        if (err) {
+            res.status(400).json({
+                message: "Database error"
+            });
+        }
+
+        if (!logs) {
+            res.status(404).json({
+                message: "No logs found"
+            });
+        }
+
+        res.json({
+            logs: logs
+        });
+    }).sort({creationDate: -1});
+});
+
+router.get("/logsNewsCreate", (req, res) => {
+    CreateNewsLogs.find({}, (err, logs) => {
+
+        if (err) {
+            res.status(400).json({
+                message: "Database error"
+            });
+        }
+
+        if (!logs) {
+            res.status(404).json({
+                message: "No logs found"
+            });
+        }
+
+        res.json({
+            logs: logs
+        });
+    }).sort({creationDate: -1});
+});
+
+router.get("/logsNewsDelete", (req, res) => {
+    DeleteNewsLogs.find({}, (err, logs) => {
+
+        if (err) {
+            res.status(400).json({
+                message: "Database error"
+            });
+        }
+
+        if (!logs) {
+            res.status(404).json({
+                message: "No logs found"
+            });
+        }
+
+        res.json({
+            logs: logs
+        });
+    }).sort({creationDate: -1});
+});
+
+router.get("/logsProfile", (req, res) => {
+    UpdateProfileLogs.find({}, (err, logs) => {
+
+        if (err) {
+            res.status(400).json({
+                message: "Database error"
+            });
+        }
+
+        if (!logs) {
+            res.status(404).json({
+                message: "No logs found"
+            });
+        }
+
+        res.json({
+            logs: logs
+        });
+    }).sort({creationDate: -1});
 });
 
 module.exports = router;

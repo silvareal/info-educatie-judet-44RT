@@ -15,7 +15,7 @@ class ReadAll extends Component {
         super(props);
 
         this.state = {
-            open: true
+            open: false
         };
     }
 
@@ -39,12 +39,17 @@ class ReadAll extends Component {
                 />
                 <Drawer open={this.state.open}>
                     <h1>Admin panel</h1>
-                    <MenuItem><Link to={`/admin/${this.props.adminId}`} activeStyle={{color: 'blue'}}>Logs
+                    <MenuItem><Link to={`/admin/${this.props.adminId}`} activeStyle={{color: 'blue'}}>Admin
+                        CP</Link></MenuItem>
+                    <MenuItem><Link to={`/admin/${this.props.adminId}/logs`} activeStyle={{color: 'blue'}}>Logs
                         component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.adminId}/news`} activeStyle={{color: 'blue'}}>News management component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.adminId}/users`} activeStyle={{color: 'blue'}}>Users management
+                    <MenuItem><Link to={`/admin/${this.props.adminId}/news`} activeStyle={{color: 'blue'}}>News
+                        management component</Link></MenuItem>
+                    <MenuItem><Link to={`/admin/${this.props.adminId}/users`} activeStyle={{color: 'blue'}}>Users
+                        management
                         component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.adminId}/collections`} activeStyle={{color: 'blue'}}>Collections management</Link></MenuItem>
+                    <MenuItem><Link to={`/admin/${this.props.adminId}/collections`} activeStyle={{color: 'blue'}}>Collections
+                        management</Link></MenuItem>
                 </Drawer>
             </div>
         );

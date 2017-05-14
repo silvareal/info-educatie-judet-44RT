@@ -4,21 +4,21 @@ const passport = require('passport');
 const config = require('./config');
 
 //models for mongodb
-require('./ressource/mongo-models').connect(config.dbUri);
+require('./resource/mongo-models').connect(config.dbUri);
 
 //middleware
-const registerPassport = require('./ressource/authentication/signup');
-const loginPassport = require('./ressource/authentication/login');
+const registerPassport = require('./resource/authentication/signup');
+const loginPassport = require('./resource/authentication/login');
 
-const authenticationRoutes = require('./ressource/routes/authentication');
-const crudRoutes = require('./ressource/routes/crud');
-const profileRoutes = require('./ressource/routes/profile');
-const homeRoutes = require('./ressource/routes/home');
-const adminRoutes = require('./ressource/routes/admin');
+const authenticationRoutes = require('./resource/routes/authentication');
+const crudRoutes = require('./resource/routes/crud');
+const profileRoutes = require('./resource/routes/profile');
+const homeRoutes = require('./resource/routes/home');
+const adminRoutes = require('./resource/routes/admin');
 
 const express = require('express');
 //tell the app to actually use the middleware
-app.use(express.static('./ressource/index/'));
+app.use(express.static('./resource/index/'));
 app.use(express.static('./src/build/'));
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -28,7 +28,7 @@ passport.use('login', loginPassport);
 app.use('/authentication', authenticationRoutes);
 
 //Avoid writing useless code - more info in the path of this require ( in the file )
-const authenticationChecker = require('./ressource/middleware/authentication-check');
+const authenticationChecker = require('./resource/middleware/authentication-check');
 app.use('/home', authenticationChecker);
 app.use('/crud', authenticationChecker);
 
@@ -38,7 +38,7 @@ app.use('/home', homeRoutes);
 app.use('/admin', adminRoutes);
 
 app.get('*', function (req, res) {
-    res.sendFile(__dirname + '/ressource' + '/index' + '/index.html');
+    res.sendFile(__dirname + '/resource' + '/index' + '/index.html');
 });
 
 app.listen(3000, function () {

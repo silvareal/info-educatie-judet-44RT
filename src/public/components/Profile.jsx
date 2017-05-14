@@ -128,14 +128,14 @@ class Profile extends Component {
                         <div className="user-name-wrap">{this.props.userName}</div>
 
                         <div className="latest-post">
-                            {this.props.latestCollection[0]?
+                            {this.props.latestCollection[0] ?
                                 <Link to={`/manage/readOne/${this.props.latestCollection[0]._id}`}>
                                     <header>Latest post</header>
                                     <img
                                         src={this.props.latestCollection[0].picturesArray[0].pictureLink}
                                         alt={this.props.latestCollection[0].collectionName}
                                     />
-                                </Link>:null
+                                </Link> : null
                             }
                         </div>
                     </Card>
@@ -167,11 +167,11 @@ class Profile extends Component {
                                  onClick={this.props.onCancelEdit}>
                                 <div className="content-wrap">
                                     <Table
-                                        selectable={false}
-                                    >
+                                        selectable={false}>
                                         <TableHeader displaySelectAll={false}>
                                             <TableRow>
-                                                <TableHeaderColumn>Details about : {this.props.userName}: </TableHeaderColumn>
+                                                <TableHeaderColumn>Details about
+                                                    : {this.props.userName}: </TableHeaderColumn>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody displayRowCheckbox={false}>
@@ -294,10 +294,10 @@ class Profile extends Component {
                                             </TableRow>
                                         </TableBody>
                                     </Table>
-                                        <RaisedButton
-                                            label="Save changes"
-                                            primary={true}
-                                            onClick={this.props.onSave}/>
+                                    <RaisedButton
+                                        label="Save changes"
+                                        primary={true}
+                                        onClick={this.props.onSave}/>
                                 </div>
                             </Tab>
                         </Tabs>
@@ -321,11 +321,12 @@ class Profile extends Component {
                         <div className="user-name-wrap">{this.props.userName}</div>
 
                         <div className="latest-post">
-                            {this.props.latestCollection[0]?
-                             <Link to={`/manage/readOne/${this.props.latestCollection[0]._id}`}>
+                            {this.props.latestCollection[0] ?
+                                <Link to={`/manage/readOne/${this.props.latestCollection[0]._id}`}>
                                     <header>Latest post</header>
-                                    <img src={this.props.latestCollection[0].picturesArray[0].pictureLink} alt={this.props.latestCollection[0].collectionName}/>
-                                </Link>:null
+                                    <img src={this.props.latestCollection[0].picturesArray[0].pictureLink}
+                                         alt={this.props.latestCollection[0].collectionName}/>
+                                </Link> : null
                             }
                         </div>
                     </Card>
@@ -346,7 +347,8 @@ class Profile extends Component {
                                     >
                                         <TableHeader displaySelectAll={false}>
                                             <TableRow>
-                                                <TableHeaderColumn>Details about : {this.props.userName}: </TableHeaderColumn>
+                                                <TableHeaderColumn>Details about
+                                                    : {this.props.userName}: </TableHeaderColumn>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody displayRowCheckbox={false}>

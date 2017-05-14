@@ -108,7 +108,7 @@ router.post('/profile', (req, res) => {
 
             if (userId == user._id) {
 
-                Collection.find({userId: userId}, (err, collection) => {
+                Collection.find({userId: user._id}, (err, collection) => {
                     const data = {
                         name: user.name,
                         userId: userId,
@@ -122,6 +122,32 @@ router.post('/profile', (req, res) => {
                         profilePictureLink: user.profilePictureLink,
                         profileCover: user.profileCover,
                         ownUser: true,
+                        latestCollection: collection
+                    };
+
+                    return res.json({
+                        message: 'Successfully fetched profile',
+                        user: data
+                    });
+
+                }).sort({creationDate: -1}).limit(1);
+            }
+
+            else {
+                Collection.find({userId: user._id}, (err, collection) => {
+                    const data = {
+                        name: user.name,
+                        userId: userId,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        birthDate: user.birthDate,
+                        profession: user.profession,
+                        companyName: user.companyName,
+                        city: user.city,
+                        country: user.country,
+                        profilePictureLink: user.profilePictureLink,
+                        profileCover: user.profileCover,
+                        ownUser: false,
                         latestCollection: collection
                     };
 

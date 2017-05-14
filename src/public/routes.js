@@ -1,5 +1,4 @@
 import MainApp from './containers/MainApp.jsx';
-//New lines are added to separate components that serve different purposes
 
 import HomeView from './containers/HomeView.jsx';
 
@@ -26,6 +25,18 @@ import ReadAllViewAdminControl from './containers/Admin/Collections/ReadAllView.
 import ReadOneViewAdminControl from './containers/Admin/Collections/ReadOneView.jsx';
 import UpdateViewAdminControl from './containers/Admin/Collections/UpdateView.jsx';
 import DeleteViewAdminControl from './containers/Admin/Collections/DeleteView.jsx';
+import LogsView from './containers/Admin/Logs/LogsView.jsx';
+import LogsLoginView from './containers/Admin/Logs/LogsLoginView.jsx';
+import LogsSignupView from './containers/Admin/Logs/LogsSignupView.jsx';
+import LogsNewsView from './containers/Admin/Logs/LogsNewsView.jsx';
+import LogsNewsCreateView from './containers/Admin/Logs/LogsNewsCreateView.jsx';
+import LogsNewsUpdateView from './containers/Admin/Logs/LogsNewsUpdateView.jsx';
+import LogsNewsDeleteView from './containers/Admin/Logs/LogsNewsDeleteView.jsx';
+import LogsCollectionsView from './containers/Admin/Logs/LogsCollectionsView.jsx';
+import LogsCollectionsCreateView from './containers/Admin/Logs/LogsCollectionsCreateView.jsx';
+import LogsCollectionsUpdateView from './containers/Admin/Logs/LogsCollectionsUpdateView.jsx';
+import LogsCollectionsDeleteView from './containers/Admin/Logs/LogsCollectionsDeleteView.jsx';
+import LogsProfileView from './containers/Admin/Logs/LogsProfileView.jsx';
 
 import NotFoundPage from './containers/NotFoundPage.jsx';
 
@@ -204,6 +215,138 @@ const routes = {
             getComponent: (location, callback) => {
                 if (Auth.isUserAuthenticated()) {
                     callback(null, UsersView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/login',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsLoginView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/signup',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsSignupView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/collections',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsCollectionsView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/collections/create',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsCollectionsCreateView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/collections/update',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsCollectionsUpdateView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/collections/delete',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsCollectionsDeleteView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/news',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsNewsView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/news/create',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsNewsCreateView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/news/update',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsNewsUpdateView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/news/delete',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsNewsDeleteView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: 'admin/:_id/logs/profile',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, LogsProfileView);
                 } else {
                     callback(null, LoginView);
                 }

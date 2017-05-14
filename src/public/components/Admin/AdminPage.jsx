@@ -29,12 +29,17 @@ class AdminPage extends Component {
                 </Card>
                 <Drawer open={this.state.open}>
                     <h1>Admin panel</h1>
-                    <MenuItem><Link to={`/admin/${this.props.userId}`} activeStyle={{color: 'blue'}}>Logs
+                    <MenuItem><Link to={`/admin/${this.props.userId}`} activeStyle={{color: 'blue'}}>Admin
+                        CP</Link></MenuItem>
+                    <MenuItem><Link to={`/admin/${this.props.userId}/logs`} activeStyle={{color: 'blue'}}>Logs
                         component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/news`} activeStyle={{color: 'blue'}}>News management component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/users`} activeStyle={{color: 'blue'}}>Users management
+                    <MenuItem><Link to={`/admin/${this.props.userId}/news`} activeStyle={{color: 'blue'}}>News
+                        management component</Link></MenuItem>
+                    <MenuItem><Link to={`/admin/${this.props.userId}/users`} activeStyle={{color: 'blue'}}>Users
+                        management
                         component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/collections`} activeStyle={{color: 'blue'}}>Collections management</Link></MenuItem>
+                    <MenuItem><Link to={`/admin/${this.props.userId}/collections`} activeStyle={{color: 'blue'}}>Collections
+                        management</Link></MenuItem>
                 </Drawer>
             </div>
         )

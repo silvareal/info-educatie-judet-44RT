@@ -1,16 +1,12 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router';
 import {
-    Drawer,
-    MenuItem,
     RaisedButton,
-    Card
+    Drawer,
+    MenuItem
 } from 'material-ui';
-import {Link} from 'react-router'
 
-import TopActions from './TopActions.jsx';
-import ViewTable from './ViewTable.jsx';
-
-class ReadAll extends Component {
+class LogsNewsCreate extends Component {
     constructor(props) {
         super(props);
 
@@ -24,19 +20,33 @@ class ReadAll extends Component {
     };
 
     render() {
+
+        let rows = Object.keys(this.props.logs).map((i) => {
+            let date = new Date(this.props.logs[i].time);
+            if (date != "Invalid Date") {
+                return (
+                    <div
+                        key={i}
+                        className="logs-display">
+                        <div>
+                            <h1>Details:</h1>
+                            <div>Title: {this.props.logs[i].newsTitle}</div>
+                        </div>
+                        <div>
+                            <h1>Date and time:</h1>
+                            <div>{date.toString()}</div>
+                        </div>
+                    </div>
+                )
+            }
+        });
+
         return (
             <div>
-                <Card className="container">
+                <div className="logs-wrap">
                     <RaisedButton label="Toggle drawer" onTouchTap={this.handleToggle}/>
-                </Card>
-                <TopActions
-                    userId={this.props.userId}
-                />
-                <ViewTable
-                    userId={this.props.userId}
-                    news={this.props.news}
-                    errorMessage={this.props.errorMessage}
-                />
+                </div>
+                {rows}
                 <Drawer open={this.state.open}>
                     <h1>Admin panel</h1>
                     <MenuItem><Link to={`/admin/${this.props.userId}`} activeStyle={{color: 'blue'}}>Admin
@@ -52,8 +62,8 @@ class ReadAll extends Component {
                         management</Link></MenuItem>
                 </Drawer>
             </div>
-        );
+        )
     }
 }
 
-export default ReadAll
+export default LogsNewsCreate;
