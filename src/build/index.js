@@ -69891,6 +69891,10 @@
 	            if (stepIndex > 0) {
 	                _this.setState({ stepIndex: stepIndex - 1 });
 	            }
+	        }, _this.handleKeyPress = function (e) {
+	            if (e.key === 'Enter') {
+	                _this.handleNext();
+	            }
 	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
@@ -69916,7 +69920,10 @@
 	                                type: "text", floatingLabelText: "Name of the collection",
 	                                value: this.props.collectionName,
 	                                onChange: this.props.onCollectionChange,
-	                                errorText: this.props.errors.collectionName })
+	                                errorText: this.props.errors.collectionName,
+	                                onKeyDown: this.handleKeyPress,
+	                                autoFocus: true
+	                            })
 	                        ),
 	                        _react2.default.createElement(
 	                            "div",
@@ -69929,7 +69936,9 @@
 	                            _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Collection description",
 	                                value: this.props.collectionDescription,
 	                                onChange: this.props.onCollectionDescriptionChange,
-	                                errorText: this.props.errors.collectionDescription })
+	                                errorText: this.props.errors.collectionDescription,
+	                                onKeyDown: this.handleKeyPress
+	                            })
 	                        )
 	                    );
 	                case 1:
@@ -69951,9 +69960,15 @@
 	                                    _this2.props.pictureNameError[i] == "Please use a valid name for this picture" ? _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture name",
 	                                        value: picture.pictureName,
 	                                        onChange: _this2.props.handlePicturesNameChange(i),
-	                                        errorText: _this2.props.pictureNameError[i] }) : _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture name",
+	                                        errorText: _this2.props.pictureNameError[i],
+	                                        onKeyDown: _this2.handleKeyPress,
+	                                        autoFocus: true
+	                                    }) : _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture name",
 	                                        value: picture.pictureName,
-	                                        onChange: _this2.props.handlePicturesNameChange(i) })
+	                                        onChange: _this2.props.handlePicturesNameChange(i),
+	                                        onKeyDown: _this2.handleKeyPress,
+	                                        autoFocus: true
+	                                    })
 	                                ),
 	                                _react2.default.createElement(
 	                                    "div",
@@ -69961,9 +69976,13 @@
 	                                    _this2.props.pictureLinkError[i] == "Please use a link for the picture" ? _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture link",
 	                                        value: picture.pictureLink,
 	                                        onChange: _this2.props.handlePicturesLinkChange(i),
-	                                        errorText: _this2.props.pictureLinkError[i] }) : _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture link",
+	                                        errorText: _this2.props.pictureLinkError[i],
+	                                        onKeyDown: _this2.handleKeyPress
+	                                    }) : _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture link",
 	                                        value: picture.pictureLink,
-	                                        onChange: _this2.props.handlePicturesLinkChange(i) }),
+	                                        onChange: _this2.props.handlePicturesLinkChange(i),
+	                                        onKeyDown: _this2.handleKeyPress
+	                                    }),
 	                                    _react2.default.createElement("img", { src: picture.pictureLink, style: { width: 100, height: 100 } })
 	                                ),
 	                                _react2.default.createElement(
@@ -69977,9 +69996,13 @@
 	                                    _this2.props.pictureDescriptionError[i] == "Please use a valid description for this picture" ? _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture description",
 	                                        value: picture.pictureDescription,
 	                                        onChange: _this2.props.handlePicturesDescriptionChange(i),
-	                                        errorText: _this2.props.pictureDescriptionError[i] }) : _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture description",
+	                                        errorText: _this2.props.pictureDescriptionError[i],
+	                                        onKeyDown: _this2.handleKeyPress
+	                                    }) : _react2.default.createElement(_materialUi.TextField, { type: "text", floatingLabelText: "Picture description",
 	                                        value: picture.pictureDescription,
-	                                        onChange: _this2.props.handlePicturesDescriptionChange(i) })
+	                                        onChange: _this2.props.handlePicturesDescriptionChange(i),
+	                                        onKeyDown: _this2.handleKeyPress
+	                                    })
 	                                ),
 	                                i === 0 ? _react2.default.createElement(_materialUi.RaisedButton, { type: "button", primary: true, label: "+",
 	                                    onClick: _this2.props.handleAddPictures(i) }) : null,
@@ -70170,20 +70193,27 @@
 
 	        var _this = _possibleConstructorReturn(this, (ReadOneView.__proto__ || Object.getPrototypeOf(ReadOneView)).call(this, props));
 
-	        _this.state = {
-	            collection: '',
-	            errorMessage: ''
-	        };
-	        return _this;
-	    }
+	        _this.getUser = function () {
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("get", "/comment/getUserCredentials");
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    _this.setState({
+	                        userName: xhr.response.userName,
+	                        firstName: xhr.response.firstName
+	                    });
+	                }
+	            });
 
-	    _createClass(ReadOneView, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var _this2 = this;
+	            xhr.send();
+	        };
+
+	        _this.getCollection = function () {
 
 	            //The next few lines will define the HTTP body message
-	            var collectionId = encodeURIComponent(this.props.params._id);
+	            var collectionId = encodeURIComponent(_this.props.params._id);
 
 	            var formData = 'collectionId=' + collectionId;
 
@@ -70197,12 +70227,12 @@
 	                if (xhr.status === 200) {
 
 	                    //Retrieve the data for a single collection
-	                    _this2.setState({
+	                    _this.setState({
 	                        errorMessage: '',
 	                        collection: xhr.response.collection
 	                    });
 	                } else {
-	                    _this2.setState({
+	                    _this.setState({
 	                        errorMessage: xhr.response.message
 	                    });
 	                }
@@ -70210,12 +70240,108 @@
 
 	            //Send data for db interrogation
 	            xhr.send(formData);
+	        };
+
+	        _this.getComments = function () {
+
+	            var collectionId = encodeURIComponent(_this.props.params._id);
+
+	            var formData = 'collectionId=' + collectionId;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("post", "/comment/retrieveCollectionsComments");
+	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+	                    //retrieved comments
+	                    _this.setState({
+	                        comments: xhr.response.comments
+	                    });
+	                } else if (xhr.status === 401) {
+	                    //user is not logged in -- only used if we will allow un-logged users to see this page
+	                }
+	            });
+	            xhr.send(formData);
+	        };
+
+	        _this.onCommentChange = function (e) {
+	            _this.setState({ comment: e.target.value });
+	        };
+
+	        _this.onSave = function () {
+
+	            var collectionId = encodeURIComponent(_this.props.params._id);
+	            var userName = encodeURIComponent(_this.state.userName);
+	            var firstName = encodeURIComponent(_this.state.firstName);
+	            var comment = encodeURIComponent(_this.state.comment);
+
+	            var formData = 'collectionId=' + collectionId + '&userName=' + userName + '&firstName=' + firstName + '&comment=' + comment;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("post", "/comment/postCommentCollections");
+	            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	            xhr.setRequestHeader('Authorization', 'bearer ' + _Auth2.default.getToken());
+	            xhr.responseType = 'json';
+	            xhr.addEventListener('load', function () {
+	                if (xhr.status === 200) {
+
+	                    _this.setState({
+	                        commentAdded: xhr.response.commentAdded,
+	                        comment: ''
+	                    });
+	                } else {
+	                    _this.setState({
+	                        commentAdded: false
+	                    });
+	                }
+	            });
+
+	            xhr.send(formData);
+
+	            _this.getComments();
+	        };
+
+	        _this.state = {
+	            collection: '',
+	            errorMessage: '',
+	            //for the comment section
+	            userId: '',
+	            userName: '',
+	            firstName: '',
+	            comment: '',
+	            comments: [],
+	            commentAdded: null
+	        };
+	        return _this;
+	    }
+
+	    _createClass(ReadOneView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            //get userName and firstName of the user
+	            this.getUser();
+	            //get collection details
+	            this.getCollection();
+	            //retrieve all comments for this specific collection
+	            this.getComments();
 	        }
+
+	        //for the comment section
+
 	    }, {
 	        key: 'render',
 	        value: function render() {
 	            if (this.state.collection.collectionName) document.title = this.state.collection.collectionName;else document.title = "404 not found";
-	            return _react2.default.createElement(_ReadOne2.default, { collection: this.state.collection });
+	            return _react2.default.createElement(_ReadOne2.default, {
+	                comments: this.state.comments,
+	                commentAdded: this.state.commentAdded,
+	                collection: this.state.collection,
+	                comment: this.state.comment,
+	                onCommentChange: this.onCommentChange,
+	                onSave: this.onSave
+	            });
 	        }
 	    }]);
 
@@ -70260,9 +70386,21 @@
 	    _inherits(ReadOne, _Component);
 
 	    function ReadOne() {
+	        var _ref;
+
+	        var _temp, _this, _ret;
+
 	        _classCallCheck(this, ReadOne);
 
-	        return _possibleConstructorReturn(this, (ReadOne.__proto__ || Object.getPrototypeOf(ReadOne)).apply(this, arguments));
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReadOne.__proto__ || Object.getPrototypeOf(ReadOne)).call.apply(_ref, [this].concat(args))), _this), _this.handleKeyPress = function (e) {
+	            if (e.key === 'Enter') {
+	                _this.props.onSave();
+	            }
+	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    _createClass(ReadOne, [{
@@ -70281,6 +70419,57 @@
 	                        pictureDescription: pictures[key].pictureDescription
 	                    });
 	                });
+	            }
+
+	            var comments = this.props.comments;
+
+	            var commentsRows = void 0;
+
+	            if (comments) {
+	                commentsRows = Object.keys(comments).map(function (key) {
+	                    var date = new Date(comments[key].time);
+	                    console.log(comments[key].firstName);
+	                    return _react2.default.createElement(
+	                        'div',
+	                        { key: key, style: { border: "2px solid black", padding: 5 } },
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            'Comment: ',
+	                            comments[key].comment
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            'Added on: ',
+	                            date.toString()
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            'By: ',
+	                            comments[key].firstName !== "undefined" ? _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                comments[key].firstName,
+	                                ' @ ',
+	                                comments[key].userName
+	                            ) : _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                comments[key].userName
+	                            )
+	                        )
+	                    );
+	                });
+	            }
+
+	            if (this.props.comments.length === 0) {
+	                commentsRows = _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    'No comments found'
+	                );
 	            }
 
 	            return _react2.default.createElement(
@@ -70311,7 +70500,25 @@
 	                        'Collection description: ',
 	                        this.props.collection.collectionDescription
 	                    ),
-	                    rows
+	                    rows,
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        this.props.commentAdded === false ? "Comments can only have 1000 characters and they cannot be empty" : null,
+	                        _react2.default.createElement(_materialUi.TextField, {
+	                            floatingLabelText: 'Post comment',
+	                            value: this.props.comment,
+	                            onChange: this.props.onCommentChange,
+	                            errorText: this.props.commentAdded === false ? "Comment not valid" : null,
+	                            onKeyDown: this.handleKeyPress
+	                        }),
+	                        _react2.default.createElement(_materialUi.RaisedButton, {
+	                            label: 'Post comment',
+	                            primary: true,
+	                            onTouchTap: this.props.onSave
+	                        })
+	                    ),
+	                    commentsRows
 	                )
 	            );
 	        }

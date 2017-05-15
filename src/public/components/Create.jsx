@@ -25,6 +25,12 @@ class Create extends Component {
         }
     };
 
+    handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            this.handleNext();
+        }
+    };
+
     getStepContent(stepIndex) {
         switch (stepIndex) {
             case 0:
@@ -39,7 +45,10 @@ class Create extends Component {
                                 type="text" floatingLabelText="Name of the collection"
                                 value={this.props.collectionName}
                                 onChange={this.props.onCollectionChange}
-                                errorText={this.props.errors.collectionName}/>
+                                errorText={this.props.errors.collectionName}
+                                onKeyDown={this.handleKeyPress}
+                                autoFocus={true}
+                            />
                         </div>
                         <div>
                             {this.props.collectionDescription.length > 5000 ?
@@ -50,7 +59,9 @@ class Create extends Component {
                             <TextField type="text" floatingLabelText="Collection description"
                                        value={this.props.collectionDescription}
                                        onChange={this.props.onCollectionDescriptionChange}
-                                       errorText={this.props.errors.collectionDescription}/>
+                                       errorText={this.props.errors.collectionDescription}
+                                       onKeyDown={this.handleKeyPress}
+                            />
                         </div>
                     </div>
                 );
@@ -68,11 +79,17 @@ class Create extends Component {
                                         <TextField type="text" floatingLabelText="Picture name"
                                                    value={picture.pictureName}
                                                    onChange={this.props.handlePicturesNameChange(i)}
-                                                   errorText={this.props.pictureNameError[i]}/>
+                                                   errorText={this.props.pictureNameError[i]}
+                                                   onKeyDown={this.handleKeyPress}
+                                                   autoFocus={true}
+                                        />
                                         :
                                         <TextField type="text" floatingLabelText="Picture name"
                                                    value={picture.pictureName}
-                                                   onChange={this.props.handlePicturesNameChange(i)}/>
+                                                   onChange={this.props.handlePicturesNameChange(i)}
+                                                   onKeyDown={this.handleKeyPress}
+                                                   autoFocus={true}
+                                        />
                                     }
                                 </div>
                                 <div className="input-field">
@@ -80,11 +97,15 @@ class Create extends Component {
                                         <TextField type="text" floatingLabelText="Picture link"
                                                    value={picture.pictureLink}
                                                    onChange={this.props.handlePicturesLinkChange(i)}
-                                                   errorText={this.props.pictureLinkError[i]}/>
+                                                   errorText={this.props.pictureLinkError[i]}
+                                                   onKeyDown={this.handleKeyPress}
+                                        />
                                         :
                                         <TextField type="text" floatingLabelText="Picture link"
                                                    value={picture.pictureLink}
-                                                   onChange={this.props.handlePicturesLinkChange(i)}/>
+                                                   onChange={this.props.handlePicturesLinkChange(i)}
+                                                   onKeyDown={this.handleKeyPress}
+                                        />
                                     }
                                     <img src={picture.pictureLink} style={{width: 100, height: 100}}/>
                                 </div>
@@ -98,11 +119,15 @@ class Create extends Component {
                                         <TextField type="text" floatingLabelText="Picture description"
                                                    value={picture.pictureDescription}
                                                    onChange={this.props.handlePicturesDescriptionChange(i)}
-                                                   errorText={this.props.pictureDescriptionError[i]}/>
+                                                   errorText={this.props.pictureDescriptionError[i]}
+                                                   onKeyDown={this.handleKeyPress}
+                                        />
                                         :
                                         <TextField type="text" floatingLabelText="Picture description"
                                                    value={picture.pictureDescription}
-                                                   onChange={this.props.handlePicturesDescriptionChange(i)}/>
+                                                   onChange={this.props.handlePicturesDescriptionChange(i)}
+                                                   onKeyDown={this.handleKeyPress}
+                                        />
                                     }
                                 </div>
                                 { (i === 0) ? (

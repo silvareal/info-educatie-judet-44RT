@@ -15,6 +15,7 @@ const crudRoutes = require('./resource/routes/crud');
 const profileRoutes = require('./resource/routes/profile');
 const homeRoutes = require('./resource/routes/home');
 const adminRoutes = require('./resource/routes/admin');
+const commentRoutes = require('./resource/routes/comment');
 
 const express = require('express');
 //tell the app to actually use the middleware
@@ -36,6 +37,8 @@ app.use('/crud', crudRoutes);
 app.use('/profile', profileRoutes);
 app.use('/home', homeRoutes);
 app.use('/admin', adminRoutes);
+
+app.use('/comment', commentRoutes);
 
 app.get('*', function (req, res) {
     res.sendFile(__dirname + '/resource' + '/index' + '/index.html');
