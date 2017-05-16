@@ -57,7 +57,8 @@ router.get("/getUserCredentials", (req, res) => {
 
             res.json({
                 userName: user.name,
-                firstName: user.firstName
+                firstName: user.firstName,
+                userId: userId
             });
 
         });

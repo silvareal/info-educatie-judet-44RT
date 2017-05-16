@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import ReadOne from '../components/ReadOne.jsx';
 import Auth from '../modules/Auth.js';
 
+let socket = io.connect();
+
 class ReadOneView extends Component {
     constructor(props) {
         super(props);
@@ -29,7 +31,8 @@ class ReadOneView extends Component {
             if (xhr.status === 200) {
                 this.setState({
                     userName: xhr.response.userName,
-                    firstName: xhr.response.firstName
+                    firstName: xhr.response.firstName,
+                    userId: xhr.response.userId
                 });
             }
         });
@@ -96,12 +99,15 @@ class ReadOneView extends Component {
     };
 
     componentDidMount() {
+
         //get userName and firstName of the user
         this.getUser();
         //get collection details
         this.getCollection();
         //retrieve all comments for this specific collection
         this.getComments();
+
+        socket.on('send:comment', this.getComments);
     };
 
     onCommentChange = (e) => {
@@ -141,9 +147,21 @@ class ReadOneView extends Component {
         xhr.send(formData);
 
         this.getComments();
+
+        socket.emit('send:comment', {
+            comment: this.state.comment,
+            collectionId: this.props.params._id,
+            userName: this.state.userName,
+            firstName: this.state.firstName,
+            userId: this.state.userId
+        });
     };
 
     render() {
+
+        let date = new Date();
+        console.log(date);
+
         if (this.state.collection.collectionName)
         document.title = this.state.collection.collectionName;
         else document.title = "404 not found";

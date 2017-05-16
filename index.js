@@ -1,7 +1,11 @@
 const app = require('express')();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const config = require('./config');
+
+const socket = require('./resource/routes/socket.js');
 
 //models for mongodb
 require('./resource/mongo-models').connect(config.dbUri);
@@ -40,10 +44,12 @@ app.use('/admin', adminRoutes);
 
 app.use('/comment', commentRoutes);
 
+io.sockets.on('connection', socket);
+
 app.get('*', function (req, res) {
     res.sendFile(__dirname + '/resource' + '/index' + '/index.html');
 });
 
-app.listen(3000, function () {
+server.listen(3000, function () {
     console.log('Server is running');
 });

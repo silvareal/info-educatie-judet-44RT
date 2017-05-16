@@ -1,15 +1,23 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
 
+import {Editor, EditorState, RichUtils} from 'draft-js';
+
 import {FlatButton, RaisedButton, Step, StepButton, Stepper, TextField} from "material-ui";
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
 
 class Create extends Component {
+    constructor(props){
+        super(props);
 
-    state = {
-        stepIndex: 0,
-    };
+        this.state = {
+            stepIndex: 0,
+            editorState: EditorState.createEmpty()
+        };
+        this.onChange = (editorState) => this.setState({editorState});
+        this.handleKeyCommand = this.handleKeyCommand.bind(this);
+    }
 
     handleNext = () => {
         const {stepIndex} = this.state;
@@ -31,7 +39,24 @@ class Create extends Component {
         }
     };
 
+    //DRAFT JS functions
+
+    handleKeyCommand(command) {
+        const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+        if (newState) {
+            this.onChange(newState);
+            return 'handled';
+        }
+        return 'not-handled';
+    }
+
+    _onBoldClick() {
+        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
+    }
+
+
     getStepContent(stepIndex) {
+
         switch (stepIndex) {
             case 0:
                 return (
@@ -61,6 +86,14 @@ class Create extends Component {
                                        onChange={this.props.onCollectionDescriptionChange}
                                        errorText={this.props.errors.collectionDescription}
                                        onKeyDown={this.handleKeyPress}
+                            />
+                        </div>
+                        <div>
+                            <button onClick={this._onBoldClick.bind(this)}>Bold</button>
+                            <Editor
+                                editorState={this.state.editorState}
+                                handleKeyCommand={this.handleKeyCommand}
+                                onChange={this.onChange}
                             />
                         </div>
                     </div>
