@@ -1,22 +1,29 @@
-import React, {Component} from "react";
+import React, {Component, PropTypes} from "react";
 import {Link} from "react-router";
 
-import {Editor, EditorState, RichUtils} from 'draft-js';
+import RichTextEditor from 'react-rte';
+import {convertToRaw} from 'draft-js';
+import {stateToHTML} from 'draft-js-export-html';
 
 import {FlatButton, RaisedButton, Step, StepButton, Stepper, TextField} from "material-ui";
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
 
 class Create extends Component {
-    constructor(props){
+
+    static propTypes = {
+        onChange: PropTypes.func
+    };
+
+    constructor(props) {
         super(props);
 
         this.state = {
             stepIndex: 0,
-            editorState: EditorState.createEmpty()
+            value: RichTextEditor.createEmptyValue(),
+            rawValue: '',
+            renderValue: ''
         };
-        this.onChange = (editorState) => this.setState({editorState});
-        this.handleKeyCommand = this.handleKeyCommand.bind(this);
     }
 
     handleNext = () => {
@@ -41,19 +48,21 @@ class Create extends Component {
 
     //DRAFT JS functions
 
-    handleKeyCommand(command) {
-        const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
-        if (newState) {
-            this.onChange(newState);
-            return 'handled';
-        }
-        return 'not-handled';
-    }
+  /*  logStateRaw = () => {
+        let editorState = this.state.value.getEditorState();
+        let contentState = editorState.getCurrentContent();
+        let rawContentState = window.rawContentState = convertToRaw(contentState);
+        let rawValue = JSON.stringify(rawContentState);
+        this.setState({rawValue});
+    };*/
 
-    _onBoldClick() {
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
-    }
+    onChange = (value) => {
+        this.setState({value: value, renderValue: stateToHTML(value.getEditorState().getCurrentContent())});
+    };
 
+    getHTML = () => {
+        return {__html: this.state.renderValue}
+    };
 
     getStepContent(stepIndex) {
 
@@ -89,12 +98,14 @@ class Create extends Component {
                             />
                         </div>
                         <div>
-                            <button onClick={this._onBoldClick.bind(this)}>Bold</button>
-                            <Editor
-                                editorState={this.state.editorState}
-                                handleKeyCommand={this.handleKeyCommand}
+                            <RichTextEditor
+                                value={this.state.value}
                                 onChange={this.onChange}
+                                placeholder="Tell a story"
                             />
+                            <div>
+                                <div dangerouslySetInnerHTML={this.getHTML()} />
+                            </div>
                         </div>
                     </div>
                 );
@@ -184,7 +195,7 @@ class Create extends Component {
                     </div>
                 );
             default:
-                return 'You\'re a long way from home sonny jim!';
+                return 'Unknown error';
         }
     }
 
