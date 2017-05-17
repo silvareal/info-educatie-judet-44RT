@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/phpMyAdmin/libraries/plugins/auth/recaptcha" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/phpMyAdmin/libraries/sql-parser/src" isTestSource="false" packagePrefix="SqlParser" />
       <sourceFolder url="file://$MODULE_DIR$/phpMyAdmin" isTestSource="false" packagePrefix="PMA" />
+      <excludeFolder url="file://$MODULE_DIR$/src/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

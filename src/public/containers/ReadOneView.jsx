@@ -160,7 +160,6 @@ class ReadOneView extends Component {
     render() {
 
         let date = new Date();
-        console.log(date);
 
         if (this.state.collection.collectionName)
         document.title = this.state.collection.collectionName;

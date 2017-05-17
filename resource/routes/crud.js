@@ -42,9 +42,9 @@ validateCreateForm = (payload) => {
             isFormValid = false;
             errorsPicturesArray[key].pictureName = "Please use a valid name for this picture"
         }
-        if (!errorsPicturesArray[key].pictureDescription || typeof errorsPicturesArray[key].pictureDescription !== 'string' || errorsPicturesArray[key].pictureDescription.trim().length > 5000) {
+        if (!errorsPicturesArray[key].pictureDescriptionRender || typeof errorsPicturesArray[key].pictureDescriptionRender !== 'string' || errorsPicturesArray[key].pictureDescriptionRender.trim().length > 5000) {
             isFormValid = false;
-            errorsPicturesArray[key].pictureDescription = "Please use a valid description for this picture"
+            errorsPicturesArray[key].pictureDescriptionRender = "Please use a valid description for this picture"
         }
         if (!errorsPicturesArray[key].pictureLink || typeof errorsPicturesArray[key].pictureLink !== 'string') {
             isFormValid = false;
@@ -132,6 +132,7 @@ router.post('/create', (req, res) => {
             userId: userId,
             collectionName: req.body.collectionName,
             collectionDescription: req.body.collectionDescription,
+            collectionDescriptionRender: req.body.collectionDescriptionRender,
             picturesArray: JSON.parse(req.body.picturesArray)
         };
 

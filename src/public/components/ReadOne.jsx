@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import {Card, RaisedButton, TextField} from 'material-ui';
+import {Card, RaisedButton} from 'material-ui';
 
 import PictureRow from './PictureRow.jsx';
 import CommentList from './CommentList.jsx';
@@ -13,7 +13,12 @@ class ReadOne extends Component {
         }
     };
 
+    getHTML = () => {
+            return {__html: this.props.collection.collectionDescriptionRender};
+    };
+
     render() {
+
         let pictures = this.props.collection.picturesArray;
 
         let rows;
@@ -25,7 +30,7 @@ class ReadOne extends Component {
                         key={key}
                         pictureName={pictures[key].pictureName}
                         pictureLink={pictures[key].pictureLink}
-                        pictureDescription={pictures[key].pictureDescription}
+                        pictureDescriptionRender={pictures[key].pictureDescriptionRender}
                     />
                 )
             });
@@ -43,7 +48,7 @@ class ReadOne extends Component {
                         />
                     </Link>
                     <div>Collection name: {this.props.collection.collectionName}</div>
-                    <div>Collection description: {this.props.collection.collectionDescription}</div>
+                    <div dangerouslySetInnerHTML={this.getHTML()} />
                     {rows}
                     <CommentList
                     comments={this.props.comments}

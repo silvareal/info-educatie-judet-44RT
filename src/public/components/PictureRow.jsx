@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 
 class PictureRow extends Component {
+
+    getHTML = () => {
+        return {__html: this.props.pictureDescriptionRender};
+    };
+
     render() {
         return (
             <div>
@@ -10,9 +15,7 @@ class PictureRow extends Component {
                 <div>
                     <img src={this.props.pictureLink} />
                 </div>
-                <div>
-                    Picture description: {this.props.pictureDescription}
-                </div>
+                <div dangerouslySetInnerHTML={this.getHTML()} />
             </div>
         )
     }

@@ -1,5 +1,9 @@
 import React, {Component} from 'react'
 
+import RichTextEditor from 'react-rte';
+import {stateToHTML} from 'draft-js-export-html';
+import {convertToRaw} from 'draft-js';
+
 import Create from '../components/Create.jsx'
 import Auth from '../modules/Auth.js';
 
@@ -10,7 +14,6 @@ class CreateView extends Component {
             userId: '',
             successCreation: '',
             collectionName: '',
-            collectionDescription: '',
             inputCount: 1,
             errorMessage: '',
             errors: {},
@@ -21,29 +24,27 @@ class CreateView extends Component {
             pictures: [{
                 pictureName: '',
                 pictureLink: '',
-                pictureDescription: ''
-            }]
+                pictureDescription: RichTextEditor.createEmptyValue(),
+                pictureDescriptionRender: '',
+                pictureDescriptionRaw: '',
+            }],
+            collectionDescription: RichTextEditor.createEmptyValue(),
+            collectionDescriptionRender: '',
+            pictureDescriptionRaw: '',
         };
+    };
+
+    getHTML = () => {
+        if (this.state.collectionDescriptionRender.search("/script") === -1 && this.state.collectionDescriptionRender.search("script") === -1)
+            return {__html: this.state.collectionDescriptionRender};
     };
 
     onCollectionChange = (e) => {
         this.setState({collectionName: e.target.value});
     };
 
-    onCollectionDescriptionChange = (e) => {
-        this.setState({collectionDescription: e.target.value});
-    };
-
-    onPictureNameChange = (e) => {
-        this.setState({pictureName: e.target.value});
-    };
-
-    onPictureLinkChange = (e) => {
-        this.setState({pictureLink: e.target.value});
-    };
-
-    onPictureDescriptionChange = (e) => {
-        this.setState({pictureDescription: e.target.value});
+    onCollectionDescriptionChange = (value) => {
+        this.setState({collectionDescription: value, collectionDescriptionRender: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
     handlePicturesNameChange = (i) => (e) => {
@@ -62,10 +63,16 @@ class CreateView extends Component {
         this.setState({pictures: newPictures});
     };
 
-    handlePicturesDescriptionChange = (i) => (e) => {
+    handlePicturesDescriptionChange = (i) => (value) => {
         const newPictures = this.state.pictures.map((picture, j) => {
             if (i !== j) return picture;
-            return {...picture, pictureDescription: e.target.value};
+
+            let editorState = value.getEditorState();
+            let contentState = editorState.getCurrentContent();
+            let rawContentState = window.rawContentState = convertToRaw(contentState);
+
+            let pictureDescription = JSON.stringify(stateToHTML(value.getEditorState().getCurrentContent()));
+            return {...picture, pictureDescription: value, pictureDescriptionRender: pictureDescription, pictureDescriptionRaw: JSON.stringify(rawContentState)};
         });
         this.setState({pictures: newPictures});
     };
@@ -77,7 +84,8 @@ class CreateView extends Component {
                 pictures: this.state.pictures.concat([{
                     pictureName: '',
                     pictureLink: '',
-                    pictureDescription: ''
+                    pictureDescription: RichTextEditor.createEmptyValue(),
+                    pictureDescriptionRender: ''
                 }])
             });
         }
@@ -95,12 +103,18 @@ class CreateView extends Component {
     };
 
     onSave = () => {
+
+        let editorState = this.state.collectionDescription.getEditorState();
+        let contentState = editorState.getCurrentContent();
+        let rawContentState = window.rawContentState = convertToRaw(contentState);
+
         //The next few lines will define the HTTP body message
         const collectionName = encodeURIComponent(this.state.collectionName);
-        const collectionDescription = encodeURIComponent(this.state.collectionDescription);
+        const collectionDescriptionRender = encodeURIComponent(this.state.collectionDescriptionRender);
+        const collectionDescription = encodeURIComponent(JSON.stringify(rawContentState));
         const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
 
-        const formData = `collectionName=${collectionName}&collectionDescription=${collectionDescription}&picturesArray=${picturesArray}`;
+        const formData = `collectionName=${collectionName}&collectionDescription=${collectionDescription}&picturesArray=${picturesArray}&collectionDescriptionRender=${collectionDescriptionRender}`;
 
         //AJAX
         const xhr = new XMLHttpRequest();
@@ -118,12 +132,14 @@ class CreateView extends Component {
                     successCreation: true,
                     errorMessage: '',
                     collectionName: '',
-                    collectionDescription: '',
+                    collectionDescription: RichTextEditor.createEmptyValue(),
+                    collectionDescriptionRender: '',
                     pictures: [
                         {
                             pictureName: '',
                             pictureLink: '',
-                            pictureDescription: ''
+                            pictureDescription: '',
+                            pictureDescriptionRender: ''
                         }
                     ],
                     pictureNameError: '',
@@ -170,12 +186,15 @@ class CreateView extends Component {
     };
 
     render() {
+
         document.title = "Add collection" ;
         return (
             <Create
                 collectionName={this.state.collectionName}
                 onCollectionChange={this.onCollectionChange}
                 collectionDescription={this.state.collectionDescription}
+                collectionDescriptionRender={this.state.collectionDescriptionRender}
+                getHTML={this.getHTML}
                 onCollectionDescriptionChange={this.onCollectionDescriptionChange}
                 pictures={this.state.pictures}
                 errorMessage={this.state.errorMessage}

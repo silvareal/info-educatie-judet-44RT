@@ -2,8 +2,6 @@ import React, {Component, PropTypes} from "react";
 import {Link} from "react-router";
 
 import RichTextEditor from 'react-rte';
-import {convertToRaw} from 'draft-js';
-import {stateToHTML} from 'draft-js-export-html';
 
 import {FlatButton, RaisedButton, Step, StepButton, Stepper, TextField} from "material-ui";
 import FontIcon from 'material-ui/FontIcon';
@@ -20,9 +18,6 @@ class Create extends Component {
 
         this.state = {
             stepIndex: 0,
-            value: RichTextEditor.createEmptyValue(),
-            rawValue: '',
-            renderValue: ''
         };
     }
 
@@ -46,24 +41,6 @@ class Create extends Component {
         }
     };
 
-    //DRAFT JS functions
-
-  /*  logStateRaw = () => {
-        let editorState = this.state.value.getEditorState();
-        let contentState = editorState.getCurrentContent();
-        let rawContentState = window.rawContentState = convertToRaw(contentState);
-        let rawValue = JSON.stringify(rawContentState);
-        this.setState({rawValue});
-    };*/
-
-    onChange = (value) => {
-        this.setState({value: value, renderValue: stateToHTML(value.getEditorState().getCurrentContent())});
-    };
-
-    getHTML = () => {
-        return {__html: this.state.renderValue}
-    };
-
     getStepContent(stepIndex) {
 
         switch (stepIndex) {
@@ -85,26 +62,22 @@ class Create extends Component {
                             />
                         </div>
                         <div>
-                            {this.props.collectionDescription.length > 5000 ?
+                            {this.props.collectionDescriptionRender.length > 5000 ?
                                 <div>
-                                    Please use a description that is shorther than 5000 characters
+                                    Write less, keep it simple !
                                 </div> : null
                             }
-                            <TextField type="text" floatingLabelText="Collection description"
-                                       value={this.props.collectionDescription}
-                                       onChange={this.props.onCollectionDescriptionChange}
-                                       errorText={this.props.errors.collectionDescription}
-                                       onKeyDown={this.handleKeyPress}
+                            {this.props.errors.collectionDescription ? <div style={{color: 'red'}}>{this.props.errors.collectionDescription}</div> : null}
+                            <RichTextEditor
+                                value={this.props.collectionDescription}
+                                onChange={this.props.onCollectionDescriptionChange}
+                                placeholder="Collection description"
                             />
                         </div>
                         <div>
-                            <RichTextEditor
-                                value={this.state.value}
-                                onChange={this.onChange}
-                                placeholder="Tell a story"
-                            />
+
                             <div>
-                                <div dangerouslySetInnerHTML={this.getHTML()} />
+                                <div dangerouslySetInnerHTML={this.props.getHTML()} />
                             </div>
                         </div>
                     </div>
@@ -160,18 +133,23 @@ class Create extends Component {
                                         </div> : null
                                     }
                                     {this.props.pictureDescriptionError[i] == "Please use a valid description for this picture" ?
-                                        <TextField type="text" floatingLabelText="Picture description"
-                                                   value={picture.pictureDescription}
-                                                   onChange={this.props.handlePicturesDescriptionChange(i)}
-                                                   errorText={this.props.pictureDescriptionError[i]}
-                                                   onKeyDown={this.handleKeyPress}
-                                        />
+
+                                        <div>
+                                            {this.props.pictureDescriptionError[i]}
+                                            <RichTextEditor
+                                                value={picture.pictureDescription}
+                                                onChange={this.props.handlePicturesDescriptionChange(i)}
+                                                placeholder="Collection description"
+                                            />
+                                        </div>
                                         :
-                                        <TextField type="text" floatingLabelText="Picture description"
-                                                   value={picture.pictureDescription}
-                                                   onChange={this.props.handlePicturesDescriptionChange(i)}
-                                                   onKeyDown={this.handleKeyPress}
-                                        />
+                                        <div>
+                                            <RichTextEditor
+                                                value={picture.pictureDescription}
+                                                onChange={this.props.handlePicturesDescriptionChange(i)}
+                                                placeholder="Collection description"
+                                            />
+                                        </div>
                                     }
                                 </div>
                                 { (i === 0) ? (
