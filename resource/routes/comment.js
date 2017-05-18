@@ -1,18 +1,12 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const config = require('../../config');
-const sanitize = require('mongo-sanitize');
 const CommentCollection = require('mongoose').model("CommentCollection");
 const User = require('mongoose').model('User');
 
 const router = new express.Router();
 
-cleanBody = (req, res, next) => {
-    req.body = sanitize(req.body);
-    next();
-};
-
-validateCommentForm = (payload) => {
+function validateCommentForm(payload) {
     let isFormValid = true;
     let message = '';
 
@@ -27,7 +21,7 @@ validateCommentForm = (payload) => {
         message
     };
 
-};
+}
 
 router.get("/getUserCredentials", (req, res) => {
 

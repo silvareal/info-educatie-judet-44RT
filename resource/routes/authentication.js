@@ -5,15 +5,9 @@ const User = require('mongoose').model('User');
 const LoginLogs = require('mongoose').model('LoginLogs');
 const SignupLogs = require('mongoose').model('SignupLogs');
 const config = require('../../config');
-const sanitize = require('mongo-sanitize');
 const jwt = require('jsonwebtoken');
 
 const router = new express.Router();
-
-cleanBody = (req, res, next) => {
-    req.body = sanitize(req.body);
-    next();
-};
 
 function validateLoginForm(payload) {
     const errors = {};

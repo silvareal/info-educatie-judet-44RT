@@ -5,20 +5,13 @@ const CreateCollectionLogs = require('mongoose').model('CreateCollectionLogs');
 const UpdateCollectionLogs = require('mongoose').model('UpdateCollectionLogs');
 const DeleteCollectionLogs = require('mongoose').model('DeleteCollectionLogs');
 const CommentCollection = require('mongoose').model("CommentCollection");
-const sanitize = require('mongo-sanitize');
 const jwt = require('jsonwebtoken');
 
 const config = require('../../config');
 
 const router = new express.Router();
 
-//sanitize the user input
-cleanBody = (req, res, next) => {
-    req.body = sanitize(req.body);
-    next();
-};
-
-validateCreateForm = (payload) => {
+function validateCreateForm(payload) {
     const errors = {};
     let isFormValid = true;
     let message = '';
@@ -62,9 +55,9 @@ validateCreateForm = (payload) => {
         errors,
         errorsPicturesArray
     };
-};
+}
 
-validateUpdateForm = (payload) => {
+function validateUpdateForm(payload) {
     const errors = {};
     let isFormValid = true;
     let message = '';
@@ -108,7 +101,7 @@ validateUpdateForm = (payload) => {
         errors,
         errorsPicturesArray
     };
-};
+}
 
 //create a new entry
 router.post('/create', (req, res) => {
@@ -196,8 +189,39 @@ router.get('/readAll', (req, res) => {
             return res.json({
                 collections: collections
             });
-        }).sort({creationDate: -1});
+        }).sort({time: -1}).limit(5);
     });
+});
+
+router.post('/loadMore', (req, res) => {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        const userId = decoded.sub;
+
+        Collection.find({userId: userId}, (err, collections) => {
+            if (err) {
+                return res.status(400).json({
+                    message: "Database error at /crud/readAll : retrieving collections"
+                });
+            }
+
+            if (collections.length == 0) {
+                return res.status(404).json({
+                    message: "You have not added anything yet"
+                })
+            }
+
+            return res.json({
+                collections: collections
+            });
+        }).sort({time: -1}).limit(5).skip(parseInt(req.body.loadAfter));
+    })
 });
 
 router.post('/readOne', (req, res) => {

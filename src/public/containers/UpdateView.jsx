@@ -186,7 +186,6 @@ class UpdateView extends Component {
     };
 
     handleAddPictures = (i) => () => {
-        console.log(this.state.inputCount);
         if (this.state.inputCount < 4) {
             this.setState({
                 inputCount: this.state.inputCount + 1,

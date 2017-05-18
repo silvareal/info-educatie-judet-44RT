@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import ReadOne from '../components/ReadOne.jsx';
 import Auth from '../modules/Auth.js';
+import {CircularProgress} from 'material-ui';
 
 let socket = io.connect();
 
@@ -18,7 +19,8 @@ class ReadOneView extends Component {
             firstName: '',
             comment: '',
             comments: [],
-            commentAdded : null
+            commentAdded : null,
+            fetched: false
         };
     }
 
@@ -59,7 +61,8 @@ class ReadOneView extends Component {
                 //Retrieve the data for a single collection
                 this.setState({
                     errorMessage: '',
-                    collection: xhr.response.collection
+                    collection: xhr.response.collection,
+                    fetched: true
                 })
             }
             else {
@@ -159,21 +162,22 @@ class ReadOneView extends Component {
 
     render() {
 
-        let date = new Date();
-
         if (this.state.collection.collectionName)
         document.title = this.state.collection.collectionName;
         else document.title = "404 not found";
-        return (
-            <ReadOne
-                comments={this.state.comments}
-                commentAdded={this.state.commentAdded}
-                collection={this.state.collection}
-                comment={this.state.comment}
-                onCommentChange={this.onCommentChange}
-                onSave={this.onSave}
-            />
-        );
+        if (this.state.fetched === true) {
+            return (
+                <ReadOne
+                    comments={this.state.comments}
+                    commentAdded={this.state.commentAdded}
+                    collection={this.state.collection}
+                    comment={this.state.comment}
+                    onCommentChange={this.onCommentChange}
+                    onSave={this.onSave}
+                />
+            );
+        }
+        else return <CircularProgress/>
     }
 }
 

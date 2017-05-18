@@ -60,7 +60,7 @@ class Logs extends Component {
                         <Link to={`/admin/${this.props.userId}/logs/profile`}>
                             <RaisedButton
                                 primary={true}
-                                label="Profile update collections"
+                                label="Logs profile update"
                             />
                         </Link>
                     </div>

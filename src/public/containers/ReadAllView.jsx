@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import ReadAll from '../components/ReadAll.jsx';
 import Auth from '../modules/Auth.js';
 
+
+
 class ReadAllView extends Component {
 
     constructor(props) {
@@ -10,19 +12,17 @@ class ReadAllView extends Component {
 
         this.state = {
             errorMessage: '',
-            collections: []
+            collections: [],
+            loadAfter: 0
         };
     };
 
-    componentDidMount() {
-
+    fetchAllCollections = () => {
         //errorMessage name might confuse, it is also used to tell when to show a loading component
         //all comparisons can be found in ViewTable.jsx
         this.setState({
             errorMessage: 'Fetching'
         });
-
-        //The next few lines will define the HTTP body message
 
         //AJAX for checking identity and retrieving all collections that belong to the user with the _id specified
         const xhr = new XMLHttpRequest();
@@ -55,8 +55,57 @@ class ReadAllView extends Component {
         //Send the identity check only when the page loads
         //Any further modifications to localStorage are futile for attackers, we don't use that data for DB selection
         xhr.send();
-
     };
+
+    componentDidMount() {
+            this.fetchAllCollections(this.state.collectionsToRender);
+
+            //the load more event listener
+
+            window.addEventListener('scroll', (e) => {
+                if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 200) {
+                    this.loadMore();
+                }
+            });
+    };
+
+    loadAndAppendCollections = (loadAfter) => {
+
+        const loadAfterParam = encodeURIComponent(loadAfter);
+
+        const formData = `loadAfter=${loadAfterParam}`;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('post', '/crud/loadMore');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+
+                console.log(typeof xhr.response.collections);
+
+                //Do this to not mutate state
+                let newCollections = this.state.collections;
+
+                console.log(typeof newCollections);
+
+                Object.keys(xhr.response.collections).map((key) => {
+                    newCollections.push(xhr.response.collections[key]);
+                });
+
+                this.setState({collections: newCollections});
+            }
+        });
+
+        xhr.send(formData);
+    };
+
+    loadMore = () => {
+        this.loadAndAppendCollections(this.state.loadAfter+5);
+        this.setState({loadAfter: this.state.loadAfter+5});
+    };
+
 
     render() {
         document.title = "Manage collections";

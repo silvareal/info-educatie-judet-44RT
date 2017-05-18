@@ -4,16 +4,10 @@ const User = require('mongoose').model('User');
 const Collection = require('mongoose').model('Collection');
 const UpdateProfileLogs = require('mongoose').model('UpdateProfileLogs');
 const config = require('../../config');
-const sanitize = require('mongo-sanitize');
 
 const router = new express.Router();
 
-cleanBody = (req, res, next) => {
-    req.body = sanitize(req.body);
-    next();
-};
-
-validateProfileForm = (payload) => {
+function validateProfileForm(payload) {
     const errors = {};
     let isFormValid = true;
     let message = '';
@@ -76,7 +70,7 @@ validateProfileForm = (payload) => {
         message,
         errors
     }
-};
+}
 
 router.post('/profile', (req, res) => {
     User.findOne({name: req.body.userName}, (err, user) => {
@@ -130,7 +124,7 @@ router.post('/profile', (req, res) => {
                         user: data
                     });
 
-                }).sort({creationDate: -1}).limit(1);
+                }).sort({time: -1}).limit(1);
             }
 
             else {
@@ -156,7 +150,7 @@ router.post('/profile', (req, res) => {
                         user: data
                     });
 
-                }).sort({creationDate: -1}).limit(1);
+                }).sort({time: -1}).limit(1);
             }
         })
     });

@@ -12,17 +12,11 @@ const LoginLogs = require('mongoose').model('LoginLogs');
 const SignupLogs = require('mongoose').model('SignupLogs');
 const UpdateProfileLogs = require('mongoose').model('UpdateProfileLogs');
 const config = require('../../config');
-const sanitize = require('mongo-sanitize');
 const jwt = require('jsonwebtoken');
 
 const router = new express.Router();
 
-cleanBody = (req, res, next) => {
-    req.body = sanitize(req.body);
-    next();
-};
-
-validateCreateCollectionForm = (payload) => {
+function validateCreateCollectionForm(payload) {
     const errors = {};
     let isFormValid = true;
     let message = '';
@@ -71,9 +65,9 @@ validateCreateCollectionForm = (payload) => {
         errors,
         errorsPicturesArray
     };
-};
+}
 
-validateUpdateCollectionsForm = (payload) => {
+function validateUpdateCollectionsForm(payload) {
     const errors = {};
     let isFormValid = true;
     let message = '';
@@ -122,10 +116,10 @@ validateUpdateCollectionsForm = (payload) => {
         errors,
         errorsPicturesArray
     };
-};
+}
 
 //retrieve the array from the ajax request and make a new array for database update query
-validateMakeModeratorsForm = (payload) => {
+function validateMakeModeratorsForm(payload)  {
     let i = 0;
     let makeModerators = [];
     payload.moderators = JSON.parse(payload.moderators);
@@ -138,9 +132,9 @@ validateMakeModeratorsForm = (payload) => {
     return {
         makeModerators: makeModerators
     }
-};
+}
 
-validateCreateNewsForm = (payload) => {
+function validateCreateNewsForm(payload) {
     const errors = {};
     let isFormValid = true;
     let message = '';
@@ -181,9 +175,9 @@ validateCreateNewsForm = (payload) => {
         errors,
         errorsNewsPicturesArray
     };
-};
+}
 
-validateUpdateNewsForm = (payload) => {
+function validateUpdateNewsForm(payload) {
     const errors = {};
     let isFormValid = true;
     let message = '';
@@ -224,7 +218,7 @@ validateUpdateNewsForm = (payload) => {
         errors,
         errorsNewsPicturesArray
     };
-};
+}
 
 router.get('/adminAuthentication', (req, res) => {
 
@@ -471,7 +465,7 @@ router.get("/readAll", (req, res) => {
             return res.json({
                 news: news
             });
-        }).sort({creationDate: -1});
+        }).sort({time: -1});
     });
 });
 
@@ -804,7 +798,7 @@ router.get("/readAllCollections", (req, res) => {
             return res.json({
                 collections: collections
             });
-        }).sort({creationDate: -1});
+        }).sort({time: -1});
     });
 });
 
@@ -1077,7 +1071,7 @@ router.get("/logsLogin", (req, res) => {
              logs: logs
          });
 
-     }).sort({creationDate: -1});
+     }).sort({time: -1});
 });
 
 router.get("/logsSignup", (req, res) => {
@@ -1099,7 +1093,7 @@ router.get("/logsSignup", (req, res) => {
             logs: logs
         });
 
-    }).sort({creationDate: -1});
+    }).sort({time: -1});
 });
 
 router.get("/logsCollectionsCreate", (req, res) => {
@@ -1120,7 +1114,7 @@ router.get("/logsCollectionsCreate", (req, res) => {
         res.json({
             logs: logs
         });
-    }).sort({creationDate: -1});
+    }).sort({time: -1});
 });
 
 router.get("/logsCollectionsDelete", (req, res) => {
@@ -1141,7 +1135,7 @@ router.get("/logsCollectionsDelete", (req, res) => {
         res.json({
             logs: logs
         });
-    }).sort({creationDate: -1});
+    }).sort({time: -1});
 });
 
 router.get("/logsCollectionsUpdate", (req, res) => {
@@ -1162,7 +1156,7 @@ router.get("/logsCollectionsUpdate", (req, res) => {
         res.json({
             logs: logs
         });
-    }).sort({creationDate: -1});
+    }).sort({time: -1});
 });
 
 router.get("/logsNewsUpdate", (req, res) => {
@@ -1183,7 +1177,7 @@ router.get("/logsNewsUpdate", (req, res) => {
         res.json({
             logs: logs
         });
-    }).sort({creationDate: -1});
+    }).sort({time: -1});
 });
 
 router.get("/logsNewsCreate", (req, res) => {
@@ -1204,7 +1198,7 @@ router.get("/logsNewsCreate", (req, res) => {
         res.json({
             logs: logs
         });
-    }).sort({creationDate: -1});
+    }).sort({time: -1});
 });
 
 router.get("/logsNewsDelete", (req, res) => {
@@ -1225,7 +1219,7 @@ router.get("/logsNewsDelete", (req, res) => {
         res.json({
             logs: logs
         });
-    }).sort({creationDate: -1});
+    }).sort({time: -1});
 });
 
 router.get("/logsProfile", (req, res) => {
@@ -1246,7 +1240,7 @@ router.get("/logsProfile", (req, res) => {
         res.json({
             logs: logs
         });
-    }).sort({creationDate: -1});
+    }).sort({time: -1});
 });
 
 module.exports = router;
