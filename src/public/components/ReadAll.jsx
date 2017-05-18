@@ -7,7 +7,9 @@ class ReadAll extends Component {
     render(){
         return(
             <div>
-                <TopActions />
+                <TopActions
+                            onSearchChange={this.props.onSearchChange}
+                />
                 <ViewTable
                     collections={this.props.collections}
                     errorMessage={this.props.errorMessage}

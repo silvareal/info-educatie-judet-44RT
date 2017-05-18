@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import {RaisedButton} from 'material-ui';
+import {RaisedButton, TextField} from 'material-ui';
 
 class TopActions extends Component {
     render() {
         return (
-            <div>
+            <div style={{display: 'flex', flex: '1', justifyContent: 'center'}}>
                 <Link
                     to="/manage/create">
                     <RaisedButton
@@ -14,6 +14,10 @@ class TopActions extends Component {
                         label="Add a new collection"
                     />
                 </Link>
+                <TextField
+                    type="text"
+                    onChange={this.props.onSearchChange}
+                />
             </div>
         );
     }

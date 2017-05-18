@@ -12,7 +12,10 @@ class ReadAllView extends Component {
             errorMessage: '',
             collections: [],
             loadAfter: 0,
-            finished: false
+            finished: false,
+            searchErrorMessage: '',
+            collectionsPreSearch: [],
+            searching: false
         };
     };
 
@@ -60,48 +63,91 @@ class ReadAllView extends Component {
         this.fetchAllCollections(this.state.collectionsToRender);
 
         //the load more event listener
-            window.addEventListener('scroll', (e) => {
-                if (this.state.finished === false && document.title === "Manage collections")
+        window.addEventListener('scroll', (e) => {
+            if (this.state.finished === false && document.title === "Manage collections" && this.state.searching === false)
                 if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 200) {
                     this.loadMore();
                 }
-            });
+        });
+    };
+
+    loadMore = () => {
+        if (this.state.finished === false) {
+            this.loadAndAppendCollections(this.state.loadAfter + 10);
+            this.setState({loadAfter: this.state.loadAfter + 10})
+        }
     };
 
     loadAndAppendCollections = (loadAfter) => {
 
-        const loadAfterParam = encodeURIComponent(loadAfter);
+        if (this.state.finished === false) {
+            const loadAfterParam = encodeURIComponent(loadAfter);
 
-        const formData = `loadAfter=${loadAfterParam}`;
+            const formData = `loadAfter=${loadAfterParam}`;
 
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/crud/loadMore');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //Do this to not mutate state
-                let newCollections = this.state.collections;
+            const xhr = new XMLHttpRequest();
+            xhr.open('post', '/crud/loadMore');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+            xhr.responseType = 'json';
+            xhr.addEventListener('load', () => {
+                if (xhr.status === 200) {
+                    //Do this to not mutate state
+                    let newCollections = this.state.collections;
 
-                Object.keys(xhr.response.collections).map((key) => {
-                    newCollections.push(xhr.response.collections[key]);
-                });
+                    Object.keys(xhr.response.collections).map((key) => {
+                        newCollections.push(xhr.response.collections[key]);
+                    });
 
-                this.setState({collections: newCollections});
-            }
-            else {
-                this.setState({finished: true});
-            }
-        });
-
-        if (this.state.finished === false)
-        xhr.send(formData);
+                    this.setState({collections: newCollections});
+                }
+                else {
+                    this.setState({finished: true});
+                }
+            });
+            xhr.send(formData);
+        }
     };
 
-    loadMore = () => {
-            this.loadAndAppendCollections(this.state.loadAfter + 5);
-            this.setState({loadAfter: this.state.loadAfter + 5});
+    onSearchChange = (e) => {
+          let query = e.target.value;
+          if (this.state.collections.length !== 0)
+            this.setState({collectionsPreSearch: this.state.collections});
+
+          //if the search box is not empty
+          if (query){
+
+              this.setState({
+                  searching: true
+              });
+
+              const searchQuery = encodeURIComponent(query);
+
+              const formData = `searchQuery=${searchQuery}`;
+
+              const xhr = new XMLHttpRequest();
+              xhr.open('post', '/crud/searchCollections');
+              xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+              xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+              xhr.responseType = 'json';
+              xhr.addEventListener('load', () => {
+                    if (xhr.status === 200){
+
+                        //no collections found
+                        if (xhr.response.errorMessage) {
+                            this.setState({searchErrorMessage: xhr.response.errorMessage, collections:[]});
+                        }
+                        else {
+                            this.setState({collections: xhr.response.collections})
+                        }
+                    }
+              });
+
+              xhr.send(formData);
+          }
+          else {
+              this.setState({collections: this.state.collectionsPreSearch, searching: false});
+          }
     };
 
     render() {
@@ -111,6 +157,7 @@ class ReadAllView extends Component {
                 <ReadAll
                     collections={this.state.collections}
                     errorMessage={this.state.errorMessage}
+                    onSearchChange={this.onSearchChange}
                 />
             </div>
         );

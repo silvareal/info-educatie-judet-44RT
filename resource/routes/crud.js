@@ -189,7 +189,7 @@ router.get('/readAll', (req, res) => {
             return res.json({
                 collections: collections
             });
-        }).sort({time: -1}).limit(5);
+        }).sort({time: -1}).limit(10);
     });
 });
 
@@ -220,7 +220,39 @@ router.post('/loadMore', (req, res) => {
             return res.json({
                 collections: collections
             });
-        }).sort({time: -1}).limit(5).skip(parseInt(req.body.loadAfter));
+        }).sort({time: -1}).limit(10).skip(parseInt(req.body.loadAfter));
+    })
+});
+
+router.post("/searchCollections", (req, res) => {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        const userId = decoded.sub;
+
+        Collection.find({collectionName: { $regex: req.body.searchQuery.trim(), $options: 'si', }, userId: userId}, (err, collections) => {
+            if (err) {
+                return res.status(400).json({
+                    message: "Database error"
+                });
+            }
+
+            if (collections.length === 0) {
+                return res.json({
+                    errorMessage: "NoRecordsError"
+                })
+            }
+
+            res.json({
+                collections: collections
+            });
+        }).sort({time: -1});
+
     })
 });
 

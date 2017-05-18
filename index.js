@@ -53,6 +53,6 @@ app.get('*', function (req, res) {
     res.sendFile(__dirname + '/resource' + '/index' + '/index.html');
 });
 
-server.listen(3000, function () {
+server.listen(8080, function () {
     console.log('Server is running');
 });
