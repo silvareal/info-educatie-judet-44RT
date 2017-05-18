@@ -3,8 +3,6 @@ import React, {Component} from 'react';
 import ReadAll from '../components/ReadAll.jsx';
 import Auth from '../modules/Auth.js';
 
-
-
 class ReadAllView extends Component {
 
     constructor(props) {
@@ -13,7 +11,8 @@ class ReadAllView extends Component {
         this.state = {
             errorMessage: '',
             collections: [],
-            loadAfter: 0
+            loadAfter: 0,
+            finished: false
         };
     };
 
@@ -58,11 +57,11 @@ class ReadAllView extends Component {
     };
 
     componentDidMount() {
-            this.fetchAllCollections(this.state.collectionsToRender);
+        this.fetchAllCollections(this.state.collectionsToRender);
 
-            //the load more event listener
-
+        //the load more event listener
             window.addEventListener('scroll', (e) => {
+                if (this.state.finished === false && document.title === "Manage collections")
                 if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 200) {
                     this.loadMore();
                 }
@@ -82,13 +81,8 @@ class ReadAllView extends Component {
         xhr.responseType = 'json';
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
-
-                console.log(typeof xhr.response.collections);
-
                 //Do this to not mutate state
                 let newCollections = this.state.collections;
-
-                console.log(typeof newCollections);
 
                 Object.keys(xhr.response.collections).map((key) => {
                     newCollections.push(xhr.response.collections[key]);
@@ -96,16 +90,19 @@ class ReadAllView extends Component {
 
                 this.setState({collections: newCollections});
             }
+            else {
+                this.setState({finished: true});
+            }
         });
 
+        if (this.state.finished === false)
         xhr.send(formData);
     };
 
     loadMore = () => {
-        this.loadAndAppendCollections(this.state.loadAfter+5);
-        this.setState({loadAfter: this.state.loadAfter+5});
+            this.loadAndAppendCollections(this.state.loadAfter + 5);
+            this.setState({loadAfter: this.state.loadAfter + 5});
     };
-
 
     render() {
         document.title = "Manage collections";
