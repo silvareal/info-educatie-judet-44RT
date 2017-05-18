@@ -8,7 +8,10 @@ class ReadAll extends Component {
         return(
             <div>
                 <TopActions
-                            onSearchChange={this.props.onSearchChange}
+                            handleKeyPress={this.props.handleKeyPress}
+                            searchQuery={this.props.searchQuery}
+                            onQueryChange={this.props.onQueryChange}
+                            onSearch={this.props.onSearch}
                 />
                 <ViewTable
                     collections={this.props.collections}

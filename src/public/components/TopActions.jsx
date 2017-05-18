@@ -6,6 +6,7 @@ class TopActions extends Component {
     render() {
         return (
             <div style={{display: 'flex', flex: '1', justifyContent: 'center'}}>
+                <div>
                 <Link
                     to="/manage/create">
                     <RaisedButton
@@ -14,10 +15,24 @@ class TopActions extends Component {
                         label="Add a new collection"
                     />
                 </Link>
+                </div>
+                <div>
                 <TextField
                     type="text"
-                    onChange={this.props.onSearchChange}
+                    floatingLabelText="Search..."
+                    value={this.props.searchQuery}
+                    onChange={this.props.onQueryChange}
+                    onKeyDown={this.props.handleKeyPress}
                 />
+                </div>
+                <div>
+                    <RaisedButton
+                        type="button"
+                        primary={true}
+                        label="Search"
+                        onTouchTap={this.props.onSearch}
+                    />
+                </div>
             </div>
         );
     }

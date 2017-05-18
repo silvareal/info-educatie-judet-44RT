@@ -15,6 +15,7 @@ class ReadAllView extends Component {
             finished: false,
             searchErrorMessage: '',
             collectionsPreSearch: [],
+            searchQuery: '',
             searching: false
         };
     };
@@ -37,7 +38,8 @@ class ReadAllView extends Component {
                 //We store our results for further safe data management in state
                 this.setState({
                     errorMessage: 'Fetched collections',
-                    collections: xhr.response.collections
+                    collections: xhr.response.collections,
+                    collectionsPreSearch: xhr.response.collections
                 });
             }
             else if (xhr.status === 404) {
@@ -99,7 +101,7 @@ class ReadAllView extends Component {
                         newCollections.push(xhr.response.collections[key]);
                     });
 
-                    this.setState({collections: newCollections});
+                    this.setState({collections: newCollections, collectionsPreSearch: newCollections});
                 }
                 else {
                     this.setState({finished: true});
@@ -109,19 +111,26 @@ class ReadAllView extends Component {
         }
     };
 
-    onSearchChange = (e) => {
-          let query = e.target.value;
-          if (this.state.collections.length !== 0)
-            this.setState({collectionsPreSearch: this.state.collections});
+    onQueryChange = (e) => {
+          if (e.target.value.length === 0) {
+              this.setState({searchQuery: e.target.value, searching: false, collections: this.state.collectionsPreSearch})
+          }
+          else
+              this.setState({searchQuery: e.target.value});
+    };
+
+    handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            this.onSearch();
+        }
+    };
+
+    onSearch = () => {
 
           //if the search box is not empty
-          if (query){
+          if (this.state.searchQuery){
 
-              this.setState({
-                  searching: true
-              });
-
-              const searchQuery = encodeURIComponent(query);
+              const searchQuery = encodeURIComponent(this.state.searchQuery);
 
               const formData = `searchQuery=${searchQuery}`;
 
@@ -144,9 +153,10 @@ class ReadAllView extends Component {
               });
 
               xhr.send(formData);
+              this.setState({searching: true});
           }
           else {
-              this.setState({collections: this.state.collectionsPreSearch, searching: false});
+              this.setState({collections: this.state.collectionsPreSearch});
           }
     };
 
@@ -155,9 +165,12 @@ class ReadAllView extends Component {
         return (
             <div>
                 <ReadAll
+                    handleKeyPress={this.handleKeyPress}
+                    onQueryChange={this.onQueryChange}
+                    searchQuery={this.state.searchQuery}
                     collections={this.state.collections}
                     errorMessage={this.state.errorMessage}
-                    onSearchChange={this.onSearchChange}
+                    onSearch={this.onSearch}
                 />
             </div>
         );
