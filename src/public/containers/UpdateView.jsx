@@ -20,7 +20,7 @@ class UpdateView extends Component {
             collectionName: '',
             collectionDescription: RichTextEditor.createEmptyValue(),
             collectionDescriptionRaw: '',
-            inputToRender: 1,
+            inputCount: 1,
             errors: {},
             errorsPicturesArray: {},
             pictureNameError: [],
@@ -69,7 +69,7 @@ class UpdateView extends Component {
                     collectionName: xhr.response.collection.collectionName,
                     collectionDescriptionRaw: xhr.response.collection.collectionDescriptionRaw,
                     pictures: xhr.response.collection.picturesArray,
-                    inputToRender: xhr.response.collection.picturesArray.length,
+                    inputCount: xhr.response.collection.picturesArray.length,
                     response: true,
                     collectionNameOld: xhr.response.collection.collectionName,
                     collectionDescriptionRawOld: xhr.response.collection.collectionDescriptionRaw,
@@ -186,6 +186,7 @@ class UpdateView extends Component {
     };
 
     handleAddPictures = (i) => () => {
+        console.log(this.state.inputCount);
         if (this.state.inputCount < 4) {
             this.setState({
                 inputCount: this.state.inputCount + 1,
