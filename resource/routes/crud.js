@@ -30,9 +30,9 @@ validateCreateForm = (payload) => {
         errors.collectionName = "Please use a valid name for the collection"
     }
 
-    if (!payload.collectionDescription || typeof payload.collectionDescription !== 'string' || payload.collectionDescription.trim().length > 5000) {
+    if (!payload.collectionDescriptionRaw || typeof payload.collectionDescriptionRaw !== 'string' || payload.collectionDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
-        errors.collectionDescription = "Please use a valid description"
+        errors.collectionDescriptionRaw = "Please use a valid description"
     }
 
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
@@ -42,9 +42,9 @@ validateCreateForm = (payload) => {
             isFormValid = false;
             errorsPicturesArray[key].pictureName = "Please use a valid name for this picture"
         }
-        if (!errorsPicturesArray[key].pictureDescriptionRender || typeof errorsPicturesArray[key].pictureDescriptionRender !== 'string' || errorsPicturesArray[key].pictureDescriptionRender.trim().length > 5000) {
+        if (!errorsPicturesArray[key].pictureDescriptionRaw || typeof errorsPicturesArray[key].pictureDescriptionRaw !== 'string' || errorsPicturesArray[key].pictureDescriptionRaw.trim().length > 5000) {
             isFormValid = false;
-            errorsPicturesArray[key].pictureDescriptionRender = "Please use a valid description for this picture"
+            errorsPicturesArray[key].pictureDescriptionRaw = "Please use a valid description for this picture"
         }
         if (!errorsPicturesArray[key].pictureLink || typeof errorsPicturesArray[key].pictureLink !== 'string') {
             isFormValid = false;
@@ -76,9 +76,9 @@ validateUpdateForm = (payload) => {
         errors.collectionName = "Please use a valid name for the collection"
     }
 
-    if (!payload.collectionDescription || typeof payload.collectionDescription !== 'string' || payload.collectionDescription.trim().length > 5000) {
+    if (!payload.collectionDescriptionRaw || typeof payload.collectionDescriptionRaw !== 'string' || payload.collectionDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
-        errors.collectionDescription = "Please use a valid description"
+        errors.collectionDescriptionRaw = "Please use a valid description"
     }
 
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
@@ -88,9 +88,9 @@ validateUpdateForm = (payload) => {
             isFormValid = false;
             errorsPicturesArray[key].pictureName = "Please use a valid name for this picture"
         }
-        if (!errorsPicturesArray[key].pictureDescription || typeof errorsPicturesArray[key].pictureDescription !== 'string' || errorsPicturesArray[key].pictureDescription.trim().length > 5000) {
+        if (!errorsPicturesArray[key].pictureDescriptionRaw || typeof errorsPicturesArray[key].pictureDescriptionRaw !== 'string' || errorsPicturesArray[key].pictureDescriptionRaw.trim().length > 5000) {
             isFormValid = false;
-            errorsPicturesArray[key].pictureDescription = "Please use a valid description for this picture"
+            errorsPicturesArray[key].pictureDescriptionRaw = "Please use a valid description for this picture"
         }
         if (!errorsPicturesArray[key].pictureLink || typeof errorsPicturesArray[key].pictureLink !== 'string') {
             isFormValid = false;
@@ -128,11 +128,13 @@ router.post('/create', (req, res) => {
 
         const userId = decoded.sub;
 
+        //Values we don't necessarily need and we set to a string
+        //We can simply convert the rawState we save from the editors to HTML
+
         const collectionData = {
             userId: userId,
             collectionName: req.body.collectionName,
-            collectionDescription: req.body.collectionDescription,
-            collectionDescriptionRender: req.body.collectionDescriptionRender,
+            collectionDescriptionRaw: req.body.collectionDescriptionRaw,
             picturesArray: JSON.parse(req.body.picturesArray)
         };
 
@@ -277,7 +279,7 @@ router.post('/updateSave', (req, res) => {
         Collection.updateOne({_id: {$eq: req.body.collectionId}}, {
             $set: {
                 collectionName: req.body.collectionName,
-                collectionDescription: req.body.collectionDescription,
+                collectionDescriptionRaw: req.body.collectionDescriptionRaw,
                 picturesArray: JSON.parse(req.body.picturesArray)
             }
         }, (err, collection) => {
@@ -294,10 +296,10 @@ router.post('/updateSave', (req, res) => {
                 userId: userId,
                 userIdOld: userId,
                 collectionName: req.body.collectionName,
-                collectionDescription: req.body.collectionDescription,
+                collectionDescriptionRaw: req.body.collectionDescriptionRaw,
                 picturesArray: JSON.parse(req.body.picturesArray),
                 collectionNameOld: req.body.collectionNameOld,
-                collectionDescriptionOld: req.body.collectionDescriptionOld,
+                collectionDescriptionRawOld: req.body.collectionDescriptionRawOld,
                 picturesArrayOld: JSON.parse(req.body.picturesArrayOld),
                 updatedByAdmin: false
             };
@@ -331,8 +333,6 @@ router.post('/deleteShow', (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
 
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
-
-        const userId = decoded.sub;
 
         Collection.findOne({_id: req.body.collectionId}, (err, collection) => {
             if (err) {
@@ -377,7 +377,7 @@ router.post('/deleteExecute', (req, res) => {
             userId: userId,
             collectionId: req.body.collectionId,
             collectionName: req.body.collectionName,
-            collectionDescription: req.body.collectionDescription,
+            collectionDescriptionRaw: req.body.collectionDescriptionRaw,
             picturesArray: JSON.parse(req.body.picturesArray),
             deletedByAdmin: false
         };

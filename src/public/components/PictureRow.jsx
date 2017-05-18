@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class PictureRow extends Component {
 
     getHTML = () => {
-        return {__html: this.props.pictureDescriptionRender};
+        return {__html: this.props.pictureDescription};
     };
 
     render() {

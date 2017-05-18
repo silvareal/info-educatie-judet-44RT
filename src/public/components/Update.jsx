@@ -2,6 +2,11 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {TextField, RaisedButton, CircularProgress} from 'material-ui';
 
+import RichTextEditor from 'react-rte';
+import PictureRow from './PictureRow.jsx';
+import {convertFromRaw} from 'draft-js';
+import {stateToHTML} from 'draft-js-export-html';
+
 class Update extends Component {
     render() {
         if (this.props.errorMessage == "The item you are searching for does not exist")
@@ -54,21 +59,25 @@ class Update extends Component {
                                     </tr>
                                     <tr>
                                         <td className="input-field">
-                                            {this.props.collectionDescription.length > 5000 ?
+                                            {this.props.__html.length > 5000 ?
                                                 <div>
-                                                    Please use a description that is shorther than 5000 characters
+                                                    Write less, keep it simple !
                                                 </div> : null
                                             }
-                                            <TextField
-                                                type="text"
-                                                value={this.props.collectionDescription}
-                                                floatingLabelText="Collection description"
-                                                onChange={this.props.onCollectionDescriptionChange}
-                                                errorText={this.props.errors.collectionDescription}
-                                                required
-                                            />
+                                            {this.props.collectionDescription && this.props.errors.collectionDescriptionRaw ? <div style={{color: 'red'}}>{this.props.errors.collectionDescriptionRaw}</div> : null}
+
+
                                         </td>
                                     </tr>
+
+                                    <div>
+                                        <RichTextEditor
+                                            value={this.props.collectionDescription}
+                                            onChange={this.props.onCollectionDescriptionChange}
+                                            placeholder="Collection description"
+                                        />
+                                    </div>
+
                                     {this.props.pictures.map((picture, i) => (
                                         <tr key={i}>
                                             <td className="input-field">
@@ -114,28 +123,31 @@ class Update extends Component {
                                                 <img src={picture.pictureLink} style={{width: 100, height: 100}}/>
                                             </td>
                                             <td className="input-field">
-                                                {picture.pictureDescription.length > 5000 ?
+                                                {picture.pictureDescriptionRaw && picture.pictureDescriptionRaw.length > 5000 ?
                                                     <div>
                                                         Please use a description that is shorther than 5000 characters
                                                     </div> : null
                                                 }
-                                                {this.props.pictureDescriptionError[i] == "Please use a valid description for this picture" ?
-                                                    <TextField
-                                                        key={i}
-                                                        type="text"
-                                                        floatingLabelText="Picture description"
-                                                        value={picture.pictureDescription}
-                                                        onChange={this.props.handlePicturesDescriptionChange(i)}
-                                                        errorText={this.props.pictureDescriptionError[i]}
-                                                    />
+
+                                                {picture.pictureDescription && this.props.pictureDescriptionError[i] == "Please use a valid description for this picture" ?
+                                                    <div>
+                                                        {this.props.pictureDescriptionError[i]}
+                                                        <RichTextEditor
+                                                            value={picture.pictureDescription}
+                                                            onChange={this.props.handlePicturesDescriptionChange(i)}
+                                                            placeholder="Collection description"
+                                                        />
+                                                    </div>
                                                     :
-                                                    <TextField
-                                                        type="text"
-                                                        floatingLabelText="Picture description"
-                                                        value={picture.pictureDescription}
-                                                        onChange={this.props.handlePicturesDescriptionChange(i)}
-                                                    />
+                                                    <div>
+                                                        <RichTextEditor
+                                                            value={picture.pictureDescription}
+                                                            onChange={this.props.handlePicturesDescriptionChange(i)}
+                                                            placeholder="Collection description"
+                                                        />
+                                                    </div>
                                                 }
+
                                             </td>
                                             { (i === 0) ? (
                                                 <RaisedButton
@@ -191,5 +203,9 @@ class Update extends Component {
             )
     }
 }
+/*
+ /* */
+/*
 
+ */
 export default Update

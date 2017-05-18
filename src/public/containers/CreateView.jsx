@@ -25,18 +25,19 @@ class CreateView extends Component {
                 pictureName: '',
                 pictureLink: '',
                 pictureDescription: RichTextEditor.createEmptyValue(),
-                pictureDescriptionRender: '',
                 pictureDescriptionRaw: '',
             }],
             collectionDescription: RichTextEditor.createEmptyValue(),
-            collectionDescriptionRender: '',
-            pictureDescriptionRaw: '',
+            __html: ''
         };
     };
 
     getHTML = () => {
-        if (this.state.collectionDescriptionRender.search("/script") === -1 && this.state.collectionDescriptionRender.search("script") === -1)
-            return {__html: this.state.collectionDescriptionRender};
+        let editorState = this.state.collectionDescription.getEditorState();
+        let contentState = editorState.getCurrentContent();
+        let __html = stateToHTML(contentState);
+        if (__html.search("/script") === -1 && __html.search("script") === -1)
+            return {__html: __html};
     };
 
     onCollectionChange = (e) => {
@@ -44,7 +45,7 @@ class CreateView extends Component {
     };
 
     onCollectionDescriptionChange = (value) => {
-        this.setState({collectionDescription: value, collectionDescriptionRender: stateToHTML(value.getEditorState().getCurrentContent())});
+        this.setState({collectionDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
     handlePicturesNameChange = (i) => (e) => {
@@ -70,9 +71,7 @@ class CreateView extends Component {
             let editorState = value.getEditorState();
             let contentState = editorState.getCurrentContent();
             let rawContentState = window.rawContentState = convertToRaw(contentState);
-
-            let pictureDescription = JSON.stringify(stateToHTML(value.getEditorState().getCurrentContent()));
-            return {...picture, pictureDescription: value, pictureDescriptionRender: pictureDescription, pictureDescriptionRaw: JSON.stringify(rawContentState)};
+            return {...picture, pictureDescription: value, pictureDescriptionRaw: JSON.stringify(rawContentState)};
         });
         this.setState({pictures: newPictures});
     };
@@ -85,7 +84,7 @@ class CreateView extends Component {
                     pictureName: '',
                     pictureLink: '',
                     pictureDescription: RichTextEditor.createEmptyValue(),
-                    pictureDescriptionRender: ''
+                    pictureDescriptionRaw: ''
                 }])
             });
         }
@@ -104,17 +103,17 @@ class CreateView extends Component {
 
     onSave = () => {
 
+        //converting collectionDescription to collectionDescriptionRaw
         let editorState = this.state.collectionDescription.getEditorState();
         let contentState = editorState.getCurrentContent();
         let rawContentState = window.rawContentState = convertToRaw(contentState);
 
         //The next few lines will define the HTTP body message
         const collectionName = encodeURIComponent(this.state.collectionName);
-        const collectionDescriptionRender = encodeURIComponent(this.state.collectionDescriptionRender);
-        const collectionDescription = encodeURIComponent(JSON.stringify(rawContentState));
+        const collectionDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
         const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
 
-        const formData = `collectionName=${collectionName}&collectionDescription=${collectionDescription}&picturesArray=${picturesArray}&collectionDescriptionRender=${collectionDescriptionRender}`;
+        const formData = `collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
 
         //AJAX
         const xhr = new XMLHttpRequest();
@@ -138,8 +137,7 @@ class CreateView extends Component {
                         {
                             pictureName: '',
                             pictureLink: '',
-                            pictureDescription: '',
-                            pictureDescriptionRender: ''
+                            pictureDescription: ''
                         }
                     ],
                     pictureNameError: '',
@@ -187,14 +185,14 @@ class CreateView extends Component {
 
     render() {
 
-        document.title = "Add collection" ;
+        document.title = "Add collection";
         return (
             <Create
                 collectionName={this.state.collectionName}
                 onCollectionChange={this.onCollectionChange}
                 collectionDescription={this.state.collectionDescription}
-                collectionDescriptionRender={this.state.collectionDescriptionRender}
                 getHTML={this.getHTML}
+                __html={this.state.__html}
                 onCollectionDescriptionChange={this.onCollectionDescriptionChange}
                 pictures={this.state.pictures}
                 errorMessage={this.state.errorMessage}

@@ -5,7 +5,7 @@ const UpdateCollectionLogsSchema = new mongoose.Schema({
     //newState
     userId: String,
     collectionName: String,
-    collectionDescription: String,
+    collectionDescriptionRaw: String,
     picturesArray: [
         {
             pictureName: {
@@ -14,7 +14,7 @@ const UpdateCollectionLogsSchema = new mongoose.Schema({
             pictureLink: {
                 type: String,
             },
-            pictureDescription: {
+            pictureDescriptionRaw: {
                 type: String,
             }
         }
@@ -22,7 +22,7 @@ const UpdateCollectionLogsSchema = new mongoose.Schema({
     //oldState
     userIdOld: String,
     collectionNameOld: String,
-    collectionDescriptionOld: String,
+    collectionDescriptionRawOld: String,
     picturesArrayOld: [
         {
             pictureName: {
@@ -31,7 +31,7 @@ const UpdateCollectionLogsSchema = new mongoose.Schema({
             pictureLink: {
                 type: String,
             },
-            pictureDescription: {
+            pictureDescriptionRaw: {
                 type: String,
             }
         }

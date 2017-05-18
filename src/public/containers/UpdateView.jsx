@@ -1,5 +1,11 @@
 import React, {Component} from 'react'
 
+import RichTextEditor from 'react-rte';
+import {stateToHTML} from 'draft-js-export-html';
+import {convertToRaw, convertFromRaw} from 'draft-js';
+
+import {CircularProgress} from 'material-ui';
+
 import Update from '../components/Update.jsx';
 import Auth from '../modules/Auth.js';
 
@@ -12,7 +18,8 @@ class UpdateView extends Component {
             errorMessage: '',
             collectionId: '',
             collectionName: '',
-            collectionDescription: '',
+            collectionDescription: RichTextEditor.createEmptyValue(),
+            collectionDescriptionRaw: '',
             inputToRender: 1,
             errors: {},
             errorsPicturesArray: {},
@@ -21,13 +28,16 @@ class UpdateView extends Component {
             pictureLinkError: [],
             pictures: [{
                 pictureName: '',
-                pictureDescription: '',
-                pictureLink: ''
+                pictureLink: '',
+                pictureDescription: RichTextEditor.createEmptyValue(),
+                pictureDescriptionRaw: ''
             }],
             //oldState
             collectionNameOld: '',
-            collectionDescriptionOld: '',
-            picturesOld: [{}]
+            collectionDescriptionRawOld: '',
+            picturesOld: [{}],
+            __html: '',
+            fetched: false
         };
     };
 
@@ -57,14 +67,35 @@ class UpdateView extends Component {
                     errorMessage: 'Fetched collection',
                     collectionId: xhr.response.collection._id,
                     collectionName: xhr.response.collection.collectionName,
-                    collectionDescription: xhr.response.collection.collectionDescription,
+                    collectionDescriptionRaw: xhr.response.collection.collectionDescriptionRaw,
                     pictures: xhr.response.collection.picturesArray,
                     inputToRender: xhr.response.collection.picturesArray.length,
                     response: true,
                     collectionNameOld: xhr.response.collection.collectionName,
-                    collectionDescriptionOld: xhr.response.collection.collectionDescription,
+                    collectionDescriptionRawOld: xhr.response.collection.collectionDescriptionRaw,
                     picturesOld: xhr.response.collection.picturesArray
                 });
+
+                const contentState = convertFromRaw(JSON.parse(this.state.collectionDescriptionRaw));
+                if (contentState) {
+                    const html = stateToHTML(contentState);
+                    this.setState({
+                        collectionDescription: this.state.collectionDescription.setContentFromString(html, 'html')
+                    })
+                }
+
+                //converting the pictureDescriptionRaw to pictureDescription - editorState
+                let pictures = this.state.pictures;
+
+                for (let i = 0; i < pictures.length; i++) {
+                    this.setRawValue(i);
+                    this.setHTMLValue(i);
+                    if ( i === pictures.length -1 ){
+                        this.setState({
+                            fetched: true,
+                        })
+                    }
+                }
 
             } else if (xhr.status == 404) {
                 //The user or collection does not exist
@@ -86,12 +117,44 @@ class UpdateView extends Component {
         xhr.send(formData);
     };
 
+    setRawValue = (i) => {
+        let pictures = this.state.pictures;
+        const newPictures = pictures.map((picture, j) => {
+            if (i !== j) return picture;
+
+            return {...picture, pictureDescription: RichTextEditor.createEmptyValue()}
+        });
+        this.setState({pictures: newPictures});
+    };
+
+    setHTMLValue = (i) => {
+        let pictures = this.state.pictures;
+        const newPictures = pictures.map((picture, j) => {
+            if (i !== j) return picture;
+
+            const contentState = convertFromRaw(JSON.parse(pictures[i].pictureDescriptionRaw));
+            const html = stateToHTML(contentState);
+            return {...picture, pictureDescription: pictures[i].pictureDescription.setContentFromString(html, 'html')}
+        });
+        this.setState({pictures: newPictures});
+    };
+
+    getHTML = () => {
+        if (this.state.collectionDescriptionRaw) {
+            let editorState = this.state.collectionDescription.getEditorState();
+            let contentState = editorState.getCurrentContent();
+            let __html = stateToHTML(contentState);
+            if (__html.search("/script") === -1 && __html.search("script") === -1)
+                return {__html: __html};
+        }
+    };
+
     onCollectionChange = (e) => {
         this.setState({collectionName: e.target.value});
     };
 
-    onCollectionDescriptionChange = (e) => {
-        this.setState({collectionDescription: e.target.value});
+    onCollectionDescriptionChange = (value) => {
+        this.setState({collectionDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
     handlePicturesNameChange = (i) => (e) => {
@@ -110,22 +173,27 @@ class UpdateView extends Component {
         this.setState({pictures: newPictures});
     };
 
-    handlePicturesDescriptionChange = (i) => (e) => {
+    handlePicturesDescriptionChange = (i) => (value) => {
         const newPictures = this.state.pictures.map((picture, j) => {
             if (i !== j) return picture;
-            return {...picture, pictureDescription: e.target.value};
+
+            let editorState = value.getEditorState();
+            let contentState = editorState.getCurrentContent();
+            let rawContentState = window.rawContentState = convertToRaw(contentState);
+            return {...picture, pictureDescription: value, pictureDescriptionRaw: JSON.stringify(rawContentState)};
         });
         this.setState({pictures: newPictures});
     };
 
     handleAddPictures = (i) => () => {
-        if (this.state.inputToRender < 4) {
+        if (this.state.inputCount < 4) {
             this.setState({
-                inputToRender: this.state.inputToRender + 1,
+                inputCount: this.state.inputCount + 1,
                 pictures: this.state.pictures.concat([{
                     pictureName: '',
                     pictureLink: '',
-                    pictureDescription: ''
+                    pictureDescription: RichTextEditor.createEmptyValue(),
+                    pictureDescriptionRaw: ''
                 }])
             });
         }
@@ -143,17 +211,23 @@ class UpdateView extends Component {
 
     onSave = () => {
         if (this.state.response === true) {
+
+            //converting collectionDescription to collectionDescriptionRaw
+            let editorState = this.state.collectionDescription.getEditorState();
+            let contentState = editorState.getCurrentContent();
+            let rawContentState = window.rawContentState = convertToRaw(contentState);
+
             //The next few lines will define the HTTP body message
             const collectionId = encodeURIComponent(this.state.collectionId);
             const collectionName = encodeURIComponent(this.state.collectionName);
-            const collectionDescription = encodeURIComponent(this.state.collectionDescription);
+            const collectionDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
             const picturesArray = JSON.stringify(this.state.pictures);
 
             const collectionNameOld = encodeURIComponent(this.state.collectionNameOld);
-            const collectionDescriptionOld = encodeURIComponent(this.state.collectionDescriptionOld);
+            const collectionDescriptionRawOld = encodeURIComponent(this.state.collectionDescriptionRawOld);
             const picturesArrayOld = JSON.stringify(this.state.picturesOld);
 
-            const formData = `collectionNameOld=${collectionNameOld}&collectionDescriptionOld=${collectionDescriptionOld}&picturesArrayOld=${picturesArrayOld}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescription=${collectionDescription}&picturesArray=${picturesArray}`;
+            const formData = `collectionNameOld=${collectionNameOld}&collectionDescriptionRawOld=${collectionDescriptionRawOld}&picturesArrayOld=${picturesArrayOld}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
 
             const xhr = new XMLHttpRequest();
             xhr.open('post', '/crud/updateSave');
@@ -219,28 +293,39 @@ class UpdateView extends Component {
             document.title = "Update - " + this.state.collectionName;
         else
             document.title = "404 not found";
-        return (
-            <Update
-                collectionId={this.state.collectionId}
-                collectionName={this.state.collectionName}
-                onCollectionChange={this.onCollectionChange}
-                collectionDescription={this.state.collectionDescription}
-                errorMessage={this.state.errorMessage}
-                errors={this.state.errors}
-                pictureNameError={this.state.pictureNameError}
-                pictureDescriptionError={this.state.pictureDescriptionError}
-                pictureLinkError={this.state.pictureLinkError}
-                onCollectionDescriptionChange={this.onCollectionDescriptionChange}
-                pictures={this.state.pictures}
-                handlePicturesNameChange={this.handlePicturesNameChange}
-                handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
-                handlePicturesLinkChange={this.handlePicturesLinkChange}
-                handleAddPictures={this.handleAddPictures}
-                handleRemovePictures={this.handleRemovePictures}
-                onSave={this.onSave}
-            />
-        )
-    }
+        if (this.state.fetched === true)
+        {
+            return (
+                <Update
+                    collectionId={this.state.collectionId}
+                    collectionName={this.state.collectionName}
+                    onCollectionChange={this.onCollectionChange}
+                    collectionDescription={this.state.collectionDescription}
+                    onCollectionDescriptionChange={this.onCollectionDescriptionChange}
+                    collectionDescriptionRaw={this.state.collectionDescriptionRaw}
+                    getHTML={this.getHTML}
+                    __html={this.state.__html}
+                    errorMessage={this.state.errorMessage}
+                    errors={this.state.errors}
+                    pictureNameError={this.state.pictureNameError}
+                    pictureDescriptionError={this.state.pictureDescriptionError}
+                    pictureLinkError={this.state.pictureLinkError}
+                    pictures={this.state.pictures}
+                    handlePicturesNameChange={this.handlePicturesNameChange}
+                    handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
+                    handlePicturesLinkChange={this.handlePicturesLinkChange}
+                    handleAddPictures={this.handleAddPictures}
+                    handleRemovePictures={this.handleRemovePictures}
+                    onSave={this.onSave}
+                />
+            );
+        }
+        else {
+            return (
+                <CircularProgress/>
+            )
+        }
+        }
 }
 
 export default UpdateView

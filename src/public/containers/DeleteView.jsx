@@ -11,7 +11,7 @@ class DeleteView extends Component {
             message: '',
             response: null,
             collectionName: '',
-            collectionDescription: '',
+            collectionDescriptionRaw: '',
             pictures:[{}]
         };
     };
@@ -34,7 +34,7 @@ class DeleteView extends Component {
                     message: xhr.response.message,
                     response: true,
                     collectionName: xhr.response.collection.collectionName,
-                    collectionDescription: xhr.response.collection.collectionDescription,
+                    collectionDescriptionRaw: xhr.response.collection.collectionDescriptionRaw,
                     pictures: xhr.response.collection.picturesArray
                 });
             }
@@ -52,11 +52,11 @@ class DeleteView extends Component {
     onDelete = () => {
         if (this.state.response === true) {
             const collectionName = encodeURIComponent(this.state.collectionName);
-            const collectionDescription = encodeURIComponent(this.state.collectionDescription);
+            const collectionDescriptionRaw = encodeURIComponent(this.state.collectionDescriptionRaw);
             const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
             const collectionId = encodeURIComponent(this.props.params._id);
 
-            const formData = `collectionId=${collectionId}&collectionName=${collectionName}&collectionDescription=${collectionDescription}&picturesArray=${picturesArray}`;
+            const formData = `collectionId=${collectionId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
 
             const xhr = new XMLHttpRequest();
             xhr.open('post', '/crud/deleteExecute');

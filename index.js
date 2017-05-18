@@ -25,7 +25,7 @@ const express = require('express');
 //tell the app to actually use the middleware
 app.use(express.static('./resource/index/'));
 app.use(express.static('./src/build/'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: false, limit: '1mb'}));
 
 app.use(passport.initialize());
 passport.use('signup', registerPassport);

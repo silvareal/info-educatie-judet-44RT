@@ -6,7 +6,7 @@ const DeleteCollectionLogsSchema = new mongoose.Schema({
     ownerId: String,
     collectionId: String,
     collectionName: String,
-    collectionDescription: String,
+    collectionDescriptionRaw: String,
     picturesArray: [
         {
             pictureName: {
@@ -15,7 +15,7 @@ const DeleteCollectionLogsSchema = new mongoose.Schema({
             pictureLink: {
                 type: String,
             },
-            pictureDescription: {
+            pictureDescriptionRaw: {
                 type: String,
             }
         }

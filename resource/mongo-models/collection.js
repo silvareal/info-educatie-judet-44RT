@@ -9,10 +9,7 @@ const CollectionSchema = new mongoose.Schema({
         type: String,
         index: {unique: true}
     },
-    collectionDescription: {
-        type: Object,
-    },
-    collectionDescriptionRender: {
+    collectionDescriptionRaw: {
         type: String,
     },
     picturesArray: [
@@ -21,12 +18,6 @@ const CollectionSchema = new mongoose.Schema({
                 type: String,
             },
             pictureLink: {
-                type: String,
-            },
-            pictureDescription: {
-                type: Object,
-            },
-            pictureDescriptionRender: {
                 type: String,
             },
             pictureDescriptionRaw: {

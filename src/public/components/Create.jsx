@@ -2,6 +2,9 @@ import React, {Component, PropTypes} from "react";
 import {Link} from "react-router";
 
 import RichTextEditor from 'react-rte';
+import PictureRow from './PictureRow.jsx';
+import {convertFromRaw} from 'draft-js';
+import {stateToHTML} from 'draft-js-export-html';
 
 import {FlatButton, RaisedButton, Step, StepButton, Stepper, TextField} from "material-ui";
 import FontIcon from 'material-ui/FontIcon';
@@ -43,6 +46,28 @@ class Create extends Component {
 
     getStepContent(stepIndex) {
 
+        let pictures = this.props.pictures;
+
+        let contentState;
+
+        let rows;
+
+        if (pictures) {
+            rows = Object.keys(pictures).map((key) => {
+                if (pictures[key].pictureDescriptionRaw) {
+                    contentState = convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw));
+                    return (
+                        <PictureRow
+                            key={key}
+                            pictureName={pictures[key].pictureName}
+                            pictureLink={pictures[key].pictureLink}
+                            pictureDescription={stateToHTML(contentState)}
+                        />
+                    )
+                }
+            });
+        }
+
         switch (stepIndex) {
             case 0:
                 return (
@@ -62,23 +87,17 @@ class Create extends Component {
                             />
                         </div>
                         <div>
-                            {this.props.collectionDescriptionRender.length > 5000 ?
+                            {this.props.__html.length > 5000 ?
                                 <div>
                                     Write less, keep it simple !
                                 </div> : null
                             }
-                            {this.props.errors.collectionDescription ? <div style={{color: 'red'}}>{this.props.errors.collectionDescription}</div> : null}
+                            {this.props.errors.collectionDescriptionRaw ? <div style={{color: 'red'}}>{this.props.errors.collectionDescriptionRaw}</div> : null}
                             <RichTextEditor
                                 value={this.props.collectionDescription}
                                 onChange={this.props.onCollectionDescriptionChange}
                                 placeholder="Collection description"
                             />
-                        </div>
-                        <div>
-
-                            <div>
-                                <div dangerouslySetInnerHTML={this.props.getHTML()} />
-                            </div>
                         </div>
                     </div>
                 );
@@ -127,7 +146,7 @@ class Create extends Component {
                                     <img src={picture.pictureLink} style={{width: 100, height: 100}}/>
                                 </div>
                                 <div className="input-field">
-                                    {picture.pictureDescription.length > 5000 ?
+                                    {picture.pictureDescriptionRaw && picture.pictureDescriptionRaw.length > 5000 ?
                                         <div>
                                             Please use a description that is shorther than 5000 characters
                                         </div> : null
@@ -169,7 +188,9 @@ class Create extends Component {
             case 2:
                 return (
                     <div>
-                        Preview todo
+                        <div>Collecion name: {this.props.collectionName}</div>
+                        <div dangerouslySetInnerHTML={this.props.getHTML()} />
+                        {rows}
                     </div>
                 );
             default:
