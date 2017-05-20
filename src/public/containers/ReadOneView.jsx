@@ -2,7 +2,12 @@ import React, {Component} from 'react';
 
 import ReadOne from '../components/ReadOne.jsx';
 import Auth from '../modules/Auth.js';
+
+import {convertFromRaw} from 'draft-js';
+import {stateToHTML} from 'draft-js-export-html';
+
 import {CircularProgress} from 'material-ui';
+import PictureRow from "../components/PictureRow.jsx";
 
 let socket = io.connect();
 
@@ -20,7 +25,10 @@ class ReadOneView extends Component {
             comment: '',
             comments: [],
             commentAdded : null,
-            fetched: false
+            fetched: false,
+            pictureDescriptionRaw: '',
+            collectionDescriptionRaw: '',
+            rows: ''
         };
     }
 
@@ -62,8 +70,24 @@ class ReadOneView extends Component {
                 this.setState({
                     errorMessage: '',
                     collection: xhr.response.collection,
+                    collectionDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(xhr.response.collection.collectionDescriptionRaw))),
                     fetched: true
-                })
+                });
+
+                let pictures = this.state.collection.picturesArray;
+
+                this.setState({
+                    rows: Object.keys(pictures).map((key) => {
+                        return (
+                            <PictureRow
+                                        key={key}
+                                        pictureName={pictures[key].pictureName}
+                                        pictureLink={pictures[key].pictureLink}
+                                        pictureDescription={stateToHTML(convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw)))}
+                            />
+                        )
+                    })
+                });
             }
             else {
                 this.setState({
@@ -168,6 +192,8 @@ class ReadOneView extends Component {
         if (this.state.fetched === true) {
             return (
                 <ReadOne
+                    rows={this.state.rows}
+                    collectionDescriptionRaw={this.state.collectionDescriptionRaw}
                     comments={this.state.comments}
                     commentAdded={this.state.commentAdded}
                     collection={this.state.collection}

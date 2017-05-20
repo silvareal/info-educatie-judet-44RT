@@ -65,13 +65,19 @@ class ReadAllView extends Component {
         this.fetchAllCollections(this.state.collectionsToRender);
 
         //the load more event listener
-        window.addEventListener('scroll', (e) => {
-            if (this.state.finished === false && document.title === "Manage collections" && this.state.searching === false)
-                if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 200) {
-                    this.loadMore();
-                }
-        });
+        window.addEventListener('scroll', this.onScroll, true);
     };
+
+    onScroll = (e) => {
+        if (this.state.finished === false && document.title === "Manage collections" && this.state.searching === false)
+            if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 200) {
+                this.loadMore();
+            }
+    };
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.onScroll, true);
+    }
 
     loadMore = () => {
         if (this.state.finished === false) {
@@ -94,17 +100,20 @@ class ReadAllView extends Component {
             xhr.responseType = 'json';
             xhr.addEventListener('load', () => {
                 if (xhr.status === 200) {
-                    //Do this to not mutate state
-                    let newCollections = this.state.collections;
 
-                    Object.keys(xhr.response.collections).map((key) => {
-                        newCollections.push(xhr.response.collections[key]);
-                    });
+                    if (xhr.response.message === "NoCollections"){
+                        this.setState({finished: true});
+                    }
+                    else {
+                        //Do this to not mutate state
+                        let newCollections = this.state.collections;
 
-                    this.setState({collections: newCollections, collectionsPreSearch: newCollections});
-                }
-                else {
-                    this.setState({finished: true});
+                        Object.keys(xhr.response.collections).map((key) => {
+                            newCollections.push(xhr.response.collections[key]);
+                        });
+
+                        this.setState({collections: newCollections, collectionsPreSearch: newCollections});
+                    }
                 }
             });
             xhr.send(formData);

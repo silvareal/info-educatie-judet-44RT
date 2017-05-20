@@ -17,36 +17,12 @@ class ReadOne extends Component {
     };
 
     getHTML = () => {
-        if (this.props.collection.collectionDescriptionRaw) {
-            const contentState = convertFromRaw(JSON.parse(this.props.collection.collectionDescriptionRaw));
-            return {__html: stateToHTML(contentState)};
+        if (this.props.collectionDescriptionRaw) {
+            return {__html: this.props.collectionDescriptionRaw};
         }
     };
 
     render() {
-
-        let pictures = this.props.collection.picturesArray;
-
-        let contentState;
-
-        let rows;
-
-        if (pictures) {
-            rows = Object.keys(pictures).map((key) => {
-                if (pictures[key].pictureDescriptionRaw) {
-                    contentState = convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw));
-                    return (
-                        <PictureRow
-                            key={key}
-                            pictureName={pictures[key].pictureName}
-                            pictureLink={pictures[key].pictureLink}
-                            pictureDescription={stateToHTML(contentState)}
-                        />
-                    )
-                }
-            });
-        }
-
         return (
             <div>
                 <Card className="container">
@@ -60,7 +36,7 @@ class ReadOne extends Component {
                     </Link>
                     <div>Collection name: {this.props.collection.collectionName}</div>
                     <div dangerouslySetInnerHTML={this.getHTML()}/>
-                    {rows}
+                    {this.props.rows}
                     <CommentList
                         comments={this.props.comments}
                         comment={this.props.comment}

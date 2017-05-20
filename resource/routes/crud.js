@@ -212,8 +212,8 @@ router.post('/loadMore', (req, res) => {
             }
 
             if (collections.length == 0) {
-                return res.status(404).json({
-                    message: "You have not added anything yet"
+                return res.json({
+                    message: "NoCollections"
                 })
             }
 
