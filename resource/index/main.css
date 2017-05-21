@@ -17,7 +17,6 @@
   .profile-left .profile-picture-wrap {
     height: 12em; }
   .profile-left .user-name-wrap {
-    font: 1.5em gray Roboto, "sans-serif";
     display: flex;
     justify-content: center;
     background-color: whitesmoke;
@@ -35,8 +34,6 @@
   .latest-post header {
     display: flex;
     justify-content: center;
-    font: 1.5em gray Roboto, "sans-serif";
-    text-align: center;
     background-color: whitesmoke;
     padding: 1em;
     border: 1px solid antiquewhite;
@@ -151,5 +148,160 @@ a {
   display: flex;
   flex: 1;
   justify-content: center; }
+
+.header {
+  display: flex;
+  flex: 1;
+  justify-content: ""; }
+  .header .right {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end; }
+
+.appBar {
+  position: fixed !important;
+  transition: top 6s;
+  top: 0;
+  left: 0; }
+
+.hidden {
+  transition: top 6s;
+  top: -300px; }
+
+body {
+  margin: 0; }
+
+body, html, main {
+  width: auto;
+  height: 100%;
+  background-image: url("images/home.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover; }
+
+.force-parallax {
+  width: auto;
+  height: 100%;
+  background-image: url("images/home.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover; }
+
+.parallax-spacing {
+  min-height: 10%; }
+
+.parallax {
+  width: auto;
+  height: 100%; }
+  .parallax .latest-news {
+    font:   bold  60px  "Roboto", "sans-serif";
+    padding: 30px   ;
+    background: #3460f1;
+    text-align: center;
+    color: #ffffff; }
+  .parallax .news-container {
+    padding: 50px   ;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    background: #ffffff; }
+    @media screen and (max-width: 1200px) {
+      .parallax .news-container {
+        padding: 0   ; } }
+    .parallax .news-container .news-desktop {
+      display: flex;
+      flex: 1;
+      justify-content: center; }
+      @media screen and (max-width: 1200px) {
+        .parallax .news-container .news-desktop {
+          display: none;
+          flex: "";
+          justify-content: ""; } }
+      .parallax .news-container .news-desktop ul {
+        padding: 30px   ;
+        display: flex;
+        flex: "";
+        justify-content: "";
+        flex-direction: column;
+        list-style: none;
+        height: auto; }
+        .parallax .news-container .news-desktop ul .left-news {
+          width: auto;
+          height: 450px;
+          display: flex;
+          flex: 1;
+          justify-content: center;
+          flex-direction: column;
+          box-sizing: border-box;
+          max-width: 500px; }
+          .parallax .news-container .news-desktop ul .left-news img {
+            min-height: 350px; }
+        .parallax .news-container .news-desktop ul .right-news {
+          width: auto;
+          height: 450px;
+          width: auto;
+          height: 450px;
+          display: flex;
+          flex: 1;
+          justify-content: center;
+          flex-direction: column;
+          max-width: 500px; }
+          .parallax .news-container .news-desktop ul .right-news img {
+            height: 350px; }
+    @media screen and (min-width: 1200px) {
+      .parallax .news-container .news-mobile {
+        display: none;
+        flex: "";
+        justify-content: ""; } }
+    .parallax .news-container .news-mobile ul {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      display: flex;
+      flex: "";
+      justify-content: center;
+      padding: 30px   ;
+      width: 100%;
+      height: auto;
+      list-style: none;
+      flex-direction: column; }
+      .parallax .news-container .news-mobile ul li {
+        width: 100%;
+        height: auto;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 10px   ; }
+        .parallax .news-container .news-mobile ul li img {
+          width: auto;
+          height: auto; }
+    .parallax .news-container .comments-cancel-padding {
+      padding-top: 0;
+      padding-bottom: 0; }
+  .parallax .footer {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    background: #3460f1;
+    padding: 20px   ;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+    .parallax .footer ul {
+      font:     20px  "Roboto", "sans-serif";
+      list-style: none; }
+      .parallax .footer ul li {
+        padding: 10px   ;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box; }
+        .parallax .footer ul li a {
+          color: #ffffff; }
+        .parallax .footer ul li :hover {
+          color: #454545; }
 
 /*# sourceMappingURL=main.css.map */

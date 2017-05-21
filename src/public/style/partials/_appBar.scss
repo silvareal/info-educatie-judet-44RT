@@ -1,0 +1,24 @@
+@import "../constants/functions";
+@import "../constants/fonts";
+
+.header {
+  @include display(flex, 1);
+  .left {
+
+  }
+  .right {
+    @include display(flex, 1, flex-end);
+  }
+}
+
+.appBar {
+  position: fixed !important;
+  transition: top 6s;
+  top: 0;
+  left: 0;
+}
+
+.hidden {
+  transition: top 6s;
+  top: -300px;
+}

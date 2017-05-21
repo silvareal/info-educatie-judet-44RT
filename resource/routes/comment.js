@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const config = require('../../config');
 const CommentCollection = require('mongoose').model("CommentCollection");
+const CommentNews = require('mongoose').model("CommentNews");
 const User = require('mongoose').model('User');
 
 const router = new express.Router();
@@ -20,8 +21,52 @@ function validateCommentForm(payload) {
         success: isFormValid,
         message
     };
-
 }
+
+router.post("/postCommentNews", (req, res) => {
+
+    const validationResult = validateCommentForm(req.body);
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        const userId = decoded.sub;
+
+        if (validationResult.success) {
+            const commentData = {
+                newsId: req.body.newsId,
+                userId: userId,
+                userName: req.body.userName,
+                firstName: req.body.firstName,
+                comment: req.body.comment
+            };
+
+            const newComment = new CommentNews(commentData);
+            newComment.save((err) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Error while commenting"
+                    })
+                }
+            });
+            res.json({
+                commentAdded: true
+            });
+        }
+        //form isn't valid
+        else {
+            res.json({
+                commentAdded: false
+            })
+        }
+
+    });
+});
 
 router.get("/getUserCredentials", (req, res) => {
 

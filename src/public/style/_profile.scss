@@ -1,22 +1,5 @@
-$roboto: Roboto, 'sans-serif';
-
-@mixin font($fontName:"", $fontSize:"", $textAlign:"", $color:"") {
-    font: unquote($fontSize) unquote($color) unquote($fontName);
-    text-align: unquote($textAlign);
-}
-
-@mixin box-sizing($value:"") {
-    -webkit-box-sizing: unquote($value);
-    -moz-box-sizing: unquote($value);
-    box-sizing: unquote($value);
-}
-
-@mixin display-flex($display:"", $justify:"", $flex:"") {
-    display: unquote($display);
-    justify-content: unquote($justify);
-    flex: unquote($flex);
-}
-
+@import "./constants/functions";
+@import "./constants/fonts";
 .profile-wrap {
     @include display-flex(flex,center);
     min-width: 90%;
@@ -44,7 +27,6 @@ $roboto: Roboto, 'sans-serif';
 
     .user-name-wrap {
 
-        @include font($roboto, 1.5em, "", gray);
         @include display-flex(flex, center);
         background-color: whitesmoke;
         cursor: default;
@@ -67,7 +49,6 @@ $roboto: Roboto, 'sans-serif';
 
     header {
         @include display-flex(flex, center);
-        @include font($roboto, 1.5em, center, gray);
         background-color: whitesmoke;
         padding: 1em;
         border: 1px solid antiquewhite;

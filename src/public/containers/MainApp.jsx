@@ -1,36 +1,98 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router';
-import PropTypes from 'prop-types'
 
 import Auth from '../modules/Auth';
 
-const MainApp = ({children}) => (
-    <div>
-        <div className="top-bar">
-            <div className="logo">
-                <Link to="/">44RT</Link>
-            </div>
-            {Auth.isUserAuthenticated() ?
+import AppBarPersonal from '../components/misc/AppBar.jsx';
 
-                (<div className="actions">
-                    <Link to="/logout">Log out</Link>
-                </div>)
+let runTime = 0;
 
-                :
+class MainApp extends Component {
+    constructor(props){
+        super(props);
 
-                (<div className="actions">
-                    <Link to="/login">Log in</Link>
-                    <Link to="/signup">Sign up</Link>
-                </div>)
+        this.state={
+            userName: '',
+            userId: '',
+            isAdmin: false,
+            openMenu: false
+        }
+    }
 
+    handleOnRequestChange = (value) => {
+        this.setState({
+            openMenu: value,
+        });
+    };
+
+    handleCloseMenu = () => {
+        this.setState({
+            openMenu: false
+        })
+    };
+
+    getCredentials = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/home/credentials');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                this.setState({
+                    userName: xhr.response.userName,
+                    userId: xhr.response.userId
+                })
             }
-        </div>
-        {children}
-    </div>
-);
+        });
+        xhr.send();
+    };
 
-MainApp.propTypes = {
-    children: PropTypes.object.isRequired
-};
+    getAdminStatus = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                if (xhr.response.message === "Welcome admin")
+                this.setState({
+                    isAdmin: true
+                });
+                else {
+                    this.setState({
+                        isAdmin: false
+                    });
+                }
+            }
+        });
+        xhr.send();
+    };
+
+    render() {
+        if (Auth.isUserAuthenticated() && runTime === 0) {
+            this.getAdminStatus();
+            this.getCredentials();
+            runTime++;
+        }
+        if (!Auth.isUserAuthenticated()) {
+            runTime = 0;
+        }
+        return(
+            <div className="force-parallax">
+                <AppBarPersonal
+                userId={this.state.userId}
+                userName={this.state.userName}
+                isAdmin={this.state.isAdmin}
+                handleOnRequestChange={this.handleOnRequestChange}
+                handleCloseMenu={this.handleCloseMenu}
+                openMenu={this.state.openMenu}
+                />
+                <div style={{height: 64}}/>
+                {this.props.children}
+            </div>
+        )
+    }
+}
 
 export default MainApp;

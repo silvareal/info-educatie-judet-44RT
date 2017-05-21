@@ -1,0 +1,92 @@
+//For reference use MDN - CSS : {mixin name}
+
+@mixin font($style:"", $variant:"", $weight:"", $stretch:"", $size:"", $line-height:"", $family:"", $letter-spacing: "") {
+  font: unquote($style) unquote($variant) unquote($weight) unquote($stretch) unquote($size) unquote($line-height) $family;
+  letter-spacing: unquote($letter-spacing);
+}
+
+@mixin textAlign($text-align) {
+  text-align: $text-align;
+}
+
+@mixin border($br-width:"", $color:"") {
+  border: unquote($br-width) unquote($color);
+}
+
+@mixin display($display, $flex:"", $justify-content:"") {
+  display: $display;
+  @if ($flex) {
+    flex: $flex;
+  }
+  @if ($justify-content) {
+    justify-content: $justify-content;
+  }
+}
+
+@mixin border-radius($top-left-or-all: 0, $top-right: 0, $bottom-right: 0, $bottom-left: 0) {
+  -webkit-border-radius: $top-left-or-all $top-right $bottom-right $bottom-left;
+  -moz-border-radius: $top-left-or-all $top-right $bottom-right $bottom-left;
+  border-radius: $top-left-or-all $top-right $bottom-right $bottom-left;
+}
+
+@mixin padding($top-or-all: "", $right: "", $bottom: "", $left: "") {
+  padding: unquote($top-or-all) unquote($right) unquote($bottom) unquote($left);
+}
+
+@mixin margin($top-or-all: 0, $right-or-auto: 0, $bottom: 0, $left: 0) {
+  margin: $top-or-all $right-or-auto $bottom $left;
+}
+
+@mixin box-sizing($box-sizing) {
+  -webkit-box-sizing: $box-sizing;
+  -moz-box-sizing: $box-sizing;
+  box-sizing: $box-sizing;
+}
+
+@mixin widthAndHeight($width:"", $height:"") {
+  width: unquote($width);
+  height: unquote($height);
+}
+
+@mixin position($position, $top: 0, $right: 0, $bottom: 0, $left: 0) {
+  position: $position;
+  @if ($top) {
+    top: $top;
+  }
+  @if ($right) {
+    top: $right;
+  }
+  @if ($bottom) {
+    top: $bottom;
+  }
+  @if ($left) {
+    top: $left;
+  }
+}
+
+@mixin background-color($color) {
+  background: $color;
+}
+
+@mixin background-image($image, $attachment, $position, $repeat, $size) {
+  background-image: url($image);
+  background-attachment: $attachment;
+  background-position: $position;
+  background-repeat: $repeat;
+  background-size: $size;
+}
+
+// DELETE THOSE WHEN YOU FINISH PROFILE PAGE
+
+
+@mixin box-sizing($value:"") {
+  -webkit-box-sizing: unquote($value);
+  -moz-box-sizing: unquote($value);
+  box-sizing: unquote($value);
+}
+
+@mixin display-flex($display:"", $justify:"", $flex:"") {
+  display: unquote($display);
+  justify-content: unquote($justify);
+  flex: unquote($flex);
+}

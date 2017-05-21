@@ -134,6 +134,17 @@ const routes = {
         },
 
         {
+            path: '/collections/:_id',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, ReadOneView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
             path: '/admin/:_id/collections/update/:_collectionId',
             getComponent: (location, callback) => {
                 if (Auth.isUserAuthenticated()) {
@@ -179,6 +190,17 @@ const routes = {
 
         {
             path: '/admin/:_id/news/readOne/:_newsId',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, ReadOneViewNews);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: '/news/:_newsId',
             getComponent: (location, callback) => {
                 if (Auth.isUserAuthenticated()) {
                     callback(null, ReadOneViewNews);

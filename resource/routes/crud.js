@@ -176,7 +176,7 @@ router.get('/readAll', (req, res) => {
         Collection.find({userId: userId}, (err, collections) => {
             if (err) {
                 return res.status(400).json({
-                    message: "Database error at /crud/readAll : retrieving collections"
+                    message: "Database error"
                 });
             }
 

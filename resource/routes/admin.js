@@ -225,7 +225,7 @@ router.get('/adminAuthentication', (req, res) => {
     //check if user is admin and retrieve the users list if so
 
     if (!req.headers.authorization) {
-        return res.status(401).end();
+        return res.status(401);
     }
 
     const token = req.headers.authorization.split(' ')[1];
@@ -233,7 +233,9 @@ router.get('/adminAuthentication', (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            });
         }
 
         const userId = decoded.sub;
@@ -247,7 +249,7 @@ router.get('/adminAuthentication', (req, res) => {
                 });
             }
             else {
-                res.status(401).json({
+                res.json({
                     message: "Not an admin"
                 });
             }
