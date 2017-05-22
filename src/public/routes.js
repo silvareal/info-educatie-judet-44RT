@@ -1,17 +1,17 @@
-import MainApp from './containers/MainApp.jsx';
+import MainApp from './containers/MainApp/MainApp.jsx';
 
-import HomeView from './containers/HomeView.jsx';
+import HomeView from './containers/Home/HomeView.jsx';
 
-import LoginView from './containers/LoginView.jsx';
-import SignUpView from './containers/SignUpView.jsx';
+import LoginView from './containers/Authentication/LoginView.jsx';
+import SignUpView from './containers/Authentication/SignUpView.jsx';
 
-import ReadAllView from './containers/ReadAllView.jsx'
-import CreateView from './containers/CreateView.jsx';
-import ReadOneView from './containers/ReadOneView.jsx';
-import DeleteView from './containers/DeleteView.jsx';
-import UpdateView from './containers/UpdateView.jsx';
+import ReadAllView from './containers/Collections/ReadAllView.jsx'
+import CreateView from './containers/Collections/CreateView.jsx';
+import ReadOneView from './containers/Collections/ReadOneView.jsx';
+import DeleteView from './containers/Collections/DeleteView.jsx';
+import UpdateView from './containers/Collections/UpdateView.jsx';
 
-import ProfileView from './containers/ProfileView.jsx';
+import ProfileView from './containers/Profile/ProfileView.jsx';
 
 import AdminView from './containers/Admin/AdminView.jsx';
 import UsersView from './containers/Admin/Users/UsersView.jsx';
@@ -38,7 +38,7 @@ import LogsCollectionsUpdateView from './containers/Admin/Logs/LogsCollectionsUp
 import LogsCollectionsDeleteView from './containers/Admin/Logs/LogsCollectionsDeleteView.jsx';
 import LogsProfileView from './containers/Admin/Logs/LogsProfileView.jsx';
 
-import NotFoundPage from './containers/NotFoundPage.jsx';
+import NotFoundPage from './containers/Error/NotFoundView.jsx';
 
 import Auth from './modules/Auth';
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
-import ReadAll from '../components/ReadAll.jsx';
-import Auth from '../modules/Auth.js';
+import ReadAll from '../../components/Collections/Main Components/ReadAll.jsx';
+import Auth from '../../modules/Auth.js';
 
 class ReadAllView extends Component {
 
@@ -61,13 +61,6 @@ class ReadAllView extends Component {
         xhr.send();
     };
 
-    componentDidMount() {
-        this.fetchAllCollections(this.state.collectionsToRender);
-
-        //the load more event listener
-        window.addEventListener('scroll', this.onScroll, true);
-    };
-
     onScroll = (e) => {
         if (this.state.finished === false && document.title === "Manage collections" && this.state.searching === false)
             if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 200) {
@@ -75,8 +68,15 @@ class ReadAllView extends Component {
             }
     };
 
+    componentDidMount() {
+        this.fetchAllCollections(this.state.collectionsToRender);
+
+        //the load more event listener
+        window.addEventListener('scroll', this.onScroll);
+    };
+
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.onScroll, true);
+        window.removeEventListener('scroll', this.onScroll);
     }
 
     loadMore = () => {

@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 
 import Create from '../../../components/Admin/News/Create.jsx'
 import Auth from '../../../modules/Auth.js';
+import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 
 class CreateView extends Component {
     constructor(props) {
@@ -18,9 +19,27 @@ class CreateView extends Component {
             errors: {},
             errorMessage: '',
             errorsNewsPicturesArray: {},
-            newsPictureLinkError: ''
+            newsPictureLinkError: '',
+            isAdmin: false
         };
     };
+
+    componentDidMount() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                this.setState({
+                    isAdmin: true
+                })
+            }
+            else this.setState({isAdmin: false})
+        });
+        xhr.send();
+    }
 
     onNewsTitleChange = (e) => {
         this.setState({newsTitle: e.target.value});
@@ -124,26 +143,31 @@ class CreateView extends Component {
     };
 
     render() {
-        return (
-            <Create
-                userId={this.props.params._id}
-                newsTitle={this.state.newsTitle}
-                newsCoverLink={this.state.newsCoverLink}
-                newsDescription={this.state.newsDescription}
-                onNewsTitleChange={this.onNewsTitleChange}
-                onNewsCoverLinkChange={this.onNewsCoverLinkChange}
-                onNewsDescriptionChange={this.onNewsDescriptionChange}
-                newsPictures={this.state.newsPictures}
-                errorMessage={this.state.errorMessage}
-                onNewsPictureLinkChange={this.onNewsPictureLinkChange}
-                handleNewsPicturesLinkChange={this.handleNewsPicturesLinkChange}
-                handleAddNewsPictures={this.handleAddNewsPictures}
-                handleRemoveNewsPictures={this.handleRemoveNewsPictures}
-                onSave={this.onSave}
-                successCreation={this.state.successCreation}
-                errors={this.state.errors}
-                newsPictureLinkError={this.state.newsPictureLinkError}
-            />)
+        document.title = "Create news - Admin Controlled";
+        if (this.state.isAdmin === true)
+        {
+            return (
+                <Create
+                    userId={this.props.params._id}
+                    newsTitle={this.state.newsTitle}
+                    newsCoverLink={this.state.newsCoverLink}
+                    newsDescription={this.state.newsDescription}
+                    onNewsTitleChange={this.onNewsTitleChange}
+                    onNewsCoverLinkChange={this.onNewsCoverLinkChange}
+                    onNewsDescriptionChange={this.onNewsDescriptionChange}
+                    newsPictures={this.state.newsPictures}
+                    errorMessage={this.state.errorMessage}
+                    onNewsPictureLinkChange={this.onNewsPictureLinkChange}
+                    handleNewsPicturesLinkChange={this.handleNewsPicturesLinkChange}
+                    handleAddNewsPictures={this.handleAddNewsPictures}
+                    handleRemoveNewsPictures={this.handleRemoveNewsPictures}
+                    onSave={this.onSave}
+                    successCreation={this.state.successCreation}
+                    errors={this.state.errors}
+                    newsPictureLinkError={this.state.newsPictureLinkError}
+                />)
+        }
+        else return <NotAuthorizedPage/>
     }
 }
 

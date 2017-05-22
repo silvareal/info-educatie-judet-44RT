@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 
 import Delete from '../../../components/Admin/Collections/Delete.jsx';
+import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 import Auth from '../../../modules/Auth.js';
 
 class DeleteView extends Component {
@@ -13,12 +14,29 @@ class DeleteView extends Component {
             ownerId: '',
             collectionName: '',
             collectionDescription: '',
-            pictures:[{}]
+            pictures:[{}],
+            isAdmin: false
         };
     };
 
-    componentDidMount() {
+    adminAuth = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                this.setState({
+                    isAdmin: true
+                })
+            }
+            else this.setState({isAdmin: false})
+        });
+        xhr.send();
+    };
 
+    getCollection = () => {
         const collectionId = encodeURIComponent(this.props.params._collectionId);
 
         const formData = `collectionId=${collectionId}`;
@@ -30,15 +48,14 @@ class DeleteView extends Component {
         xhr.responseType = 'json';
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
-                //Collection exists and the user that wants to delete it is the creator
-                this.setState({
-                    message: xhr.response.message,
-                    response: true,
-                    collectionName: xhr.response.collection.collectionName,
-                    collectionDescription: xhr.response.collection.collectionDescription,
-                    pictures: xhr.response.collection.picturesArray,
-                    ownerId: xhr.response.collection.userId
-                });
+                    this.setState({
+                        message: xhr.response.message,
+                        response: true,
+                        collectionName: xhr.response.collection.collectionName,
+                        collectionDescription: xhr.response.collection.collectionDescription,
+                        pictures: xhr.response.collection.picturesArray,
+                        ownerId: xhr.response.collection.userId
+                    });
             }
             else {
                 //Collection or user doesn't exist
@@ -49,6 +66,11 @@ class DeleteView extends Component {
             }
         });
         xhr.send(formData)
+    };
+
+    componentDidMount() {
+        this.adminAuth();
+        this.getCollection();
     };
 
     onDelete = () => {
@@ -88,12 +110,16 @@ class DeleteView extends Component {
         if (this.state.collectionName)
             document.title = "Delete - " + this.state.collectionName;
         else document.title = "404 not found";
-        return (
-            <Delete
-                adminId={this.props.params._id}
-                message={this.state.message}
-                onDelete={this.onDelete}/>
-        )
+        if (this.state.isAdmin === true)
+        {
+            return (
+                <Delete
+                    adminId={this.props.params._id}
+                    message={this.state.message}
+                    onDelete={this.onDelete}/>
+            )
+        }
+        else return <NotAuthorizedPage/>
     }
 }
 

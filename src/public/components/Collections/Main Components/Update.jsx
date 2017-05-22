@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {TextField, RaisedButton, CircularProgress} from 'material-ui';
 
 import RichTextEditor from 'react-rte';
-import PictureRow from './PictureRow.jsx';
+import PictureRow from '../Partials Components/PictureRow.jsx';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 

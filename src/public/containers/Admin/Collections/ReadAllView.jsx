@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import ReadAll from '../../../components/Admin/Collections/ReadAll.jsx';
+import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 import Auth from '../../../modules/Auth.js';
 
 class ReadAllView extends Component {
@@ -10,12 +11,29 @@ class ReadAllView extends Component {
 
         this.state = {
             errorMessage: '',
-            collections: []
+            collections: [],
+            isAdmin: false
         };
     };
 
-    componentDidMount() {
+    adminAuth = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                    this.setState({
+                        isAdmin: true
+                    })
+            }
+            else this.setState({isAdmin: false})
+        });
+        xhr.send();
+    };
 
+    getCollections = () => {
         //errorMessage name might confuse, it is also used to tell when to show a loading component
         //all comparisons can be found in ViewTable.jsx
         this.setState({
@@ -31,7 +49,6 @@ class ReadAllView extends Component {
         xhr.responseType = 'json';
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
-                //The user is who he says he is
                 //We store our results for further safe data management in state
                 this.setState({
                     errorMessage: 'Fetched collections',
@@ -57,8 +74,14 @@ class ReadAllView extends Component {
         xhr.send();
     };
 
+    componentDidMount() {
+        this.adminAuth();
+        this.getCollections();
+    };
+
     render() {
         document.title = "Manage collections - Admin Controlled";
+        if (this.state.isAdmin === true)
         return (
             <div>
                 <ReadAll
@@ -68,6 +91,9 @@ class ReadAllView extends Component {
                 />
             </div>
         );
+        else return (
+            <NotAuthorizedPage/>
+        )
     }
 }
 

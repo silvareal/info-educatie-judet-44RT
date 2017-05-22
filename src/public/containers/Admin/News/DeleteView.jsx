@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 
 import Delete from '../../../components/Admin/News/Delete.jsx';
 import Auth from '../../../modules/Auth.js';
+import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 
 class DeleteView extends Component {
     constructor(props) {
@@ -13,12 +14,29 @@ class DeleteView extends Component {
             newsTitle: '',
             newsCoverLink: '',
             newsDescription: '',
-            newsPictures: [{}]
+            newsPictures: [{}],
+            isAdmin: false
         };
     };
 
-    componentDidMount() {
+    adminAuth = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                this.setState({
+                    isAdmin: true
+                })
+            }
+            else this.setState({isAdmin: false})
+        });
+        xhr.send();
+    };
 
+    getCollection = () => {
         const newsId = encodeURIComponent(this.props.params._newsId);
 
         const formData = `newsId=${newsId}`;
@@ -48,7 +66,12 @@ class DeleteView extends Component {
                 })
             }
         });
-        xhr.send(formData)
+        xhr.send(formData);
+    };
+
+    componentDidMount() {
+        this.adminAuth();
+        this.getCollection();
     };
 
     //We don t need to verify the identity in the componentDidMount lifecycle
@@ -89,12 +112,16 @@ class DeleteView extends Component {
             document.title = "Delete - " + this.state.newsTitle;
         else
         document.title = "404 not found";
-        return (
-            <Delete
-                userId={this.props.params._id}
-                message={this.state.message}
-                onDelete={this.onDelete}/>
-        )
+        if (this.state.isAdmin === true)
+        {
+            return (
+                <Delete
+                    userId={this.props.params._id}
+                    message={this.state.message}
+                    onDelete={this.onDelete}/>
+            )
+        }
+        else return <NotAuthorizedPage/>
     }
 }
 

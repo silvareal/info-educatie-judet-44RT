@@ -6,8 +6,8 @@ import {convertToRaw, convertFromRaw} from 'draft-js';
 
 import {CircularProgress} from 'material-ui';
 
-import Update from '../components/Update.jsx';
-import Auth from '../modules/Auth.js';
+import Update from '../../components/Collections/Main Components/Update.jsx';
+import Auth from '../../modules/Auth.js';
 
 class UpdateView extends Component {
     constructor(props) {

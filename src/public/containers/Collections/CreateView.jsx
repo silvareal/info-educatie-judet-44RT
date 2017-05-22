@@ -4,8 +4,8 @@ import RichTextEditor from 'react-rte';
 import {stateToHTML} from 'draft-js-export-html';
 import {convertToRaw} from 'draft-js';
 
-import Create from '../components/Create.jsx'
-import Auth from '../modules/Auth.js';
+import Create from '../../components/Collections/Main Components/Create.jsx'
+import Auth from '../../modules/Auth.js';
 
 class CreateView extends Component {
     constructor(props) {

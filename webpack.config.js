@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
 
@@ -8,6 +9,7 @@ module.exports = {
     path: path.join(__dirname, '/src/build'),
     filename: 'index.js',
   },
+
 
   module: {
 

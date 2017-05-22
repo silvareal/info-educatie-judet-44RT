@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 
-import Profile from '../components/Profile.jsx';
-import NotFoundPage from './NotFoundPage.jsx';
+import Profile from '../../components/Profile/Profile.jsx';
+import NotFoundPage from '../Error/NotFoundView.jsx';
 
-import Auth from '../modules/Auth.js';
+import Auth from '../../modules/Auth.js';
 
 class ProfileView extends Component {
     constructor(props, context) {

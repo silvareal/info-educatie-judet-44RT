@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 
 import Update from '../../../components/Admin/News/Update.jsx';
 import Auth from '../../../modules/Auth.js';
+import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 
 class UpdateView extends Component {
     constructor(props) {
@@ -22,12 +23,29 @@ class UpdateView extends Component {
             newsTitleOld: '',
             newsDescriptionOld: '',
             newsCoverLinkOld: '',
-            newsPicturesOld:[{}]
+            newsPicturesOld:[{}],
+            isAdmin: false
         };
     };
 
-    componentDidMount() {
+    adminAuth = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                this.setState({
+                    isAdmin: true
+                })
+            }
+            else this.setState({isAdmin: false})
+        });
+        xhr.send();
+    };
 
+    getCollection = () => {
         this.setState({
             errorMessage: "Fetching"
         });
@@ -78,6 +96,11 @@ class UpdateView extends Component {
         });
 
         xhr.send(formData);
+    };
+
+    componentDidMount() {
+        this.adminAuth();
+        this.getCollection();
     };
 
     onNewsTitleChange = (e) => {
@@ -196,27 +219,31 @@ class UpdateView extends Component {
         document.title = "Update News - " + this.state.newsTitle;
         else
             document.title = "404 not found";
-        return (
-            <Update
-                userId={this.props.params._id}
-                newsTitle={this.state.newsTitle}
-                newsCoverLink={this.state.newsCoverLink}
-                newsDescription={this.state.newsDescription}
-                onNewsTitleChange={this.onNewsTitleChange}
-                onNewsCoverLinkChange={this.onNewsCoverLinkChange}
-                onNewsDescriptionChange={this.onNewsDescriptionChange}
-                newsPictures={this.state.newsPictures}
-                onNewsPictureLinkChange={this.onNewsPictureLinkChange}
-                handleNewsPicturesLinkChange={this.handleNewsPicturesLinkChange}
-                handleAddNewsPictures={this.handleAddNewsPictures}
-                handleRemoveNewsPictures={this.handleRemoveNewsPictures}
-                successCreation={this.state.successCreation}
-                newsPictureLinkError={this.state.newsPictureLinkError}
-                errorMessage={this.state.errorMessage}
-                errors={this.state.errors}
-                onSave={this.onSave}
-            />
-        )
+        if (this.state.isAdmin === true)
+        {
+            return (
+                <Update
+                    userId={this.props.params._id}
+                    newsTitle={this.state.newsTitle}
+                    newsCoverLink={this.state.newsCoverLink}
+                    newsDescription={this.state.newsDescription}
+                    onNewsTitleChange={this.onNewsTitleChange}
+                    onNewsCoverLinkChange={this.onNewsCoverLinkChange}
+                    onNewsDescriptionChange={this.onNewsDescriptionChange}
+                    newsPictures={this.state.newsPictures}
+                    onNewsPictureLinkChange={this.onNewsPictureLinkChange}
+                    handleNewsPicturesLinkChange={this.handleNewsPicturesLinkChange}
+                    handleAddNewsPictures={this.handleAddNewsPictures}
+                    handleRemoveNewsPictures={this.handleRemoveNewsPictures}
+                    successCreation={this.state.successCreation}
+                    newsPictureLinkError={this.state.newsPictureLinkError}
+                    errorMessage={this.state.errorMessage}
+                    errors={this.state.errors}
+                    onSave={this.onSave}
+                />
+            )
+        }
+        else return <NotAuthorizedPage/>
     }
 }
 

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import ReadOne from '../../../components/Admin/News/ReadOne.jsx';
 import Auth from '../../../modules/Auth.js';
+import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 
 class ReadOneView extends Component {
     constructor(props) {
@@ -9,12 +10,29 @@ class ReadOneView extends Component {
 
         this.state = {
             news: '',
-            errorMessage: ''
+            errorMessage: '',
+            isAdmin: false
         };
     };
 
-    componentDidMount() {
+    adminAuth = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                this.setState({
+                    isAdmin: true
+                })
+            }
+            else this.setState({isAdmin: false})
+        });
+        xhr.send();
+    };
 
+    getCollection = () => {
         //The next few lines will define the HTTP body message
         const newsId = encodeURIComponent(this.props.params._newsId);
 
@@ -46,14 +64,23 @@ class ReadOneView extends Component {
         xhr.send(formData);
     };
 
+    componentDidMount() {
+        this.adminAuth();
+        this.getCollection();
+    };
+
     render() {
         if (this.state.news.newsTitle)
             document.title = "Article: " + this.state.news.newsTitle;
-        return (
-            <ReadOne
-                userId={this.props.params._id}
-                news={this.state.news} />
-        );
+        if (this.state.isAdmin === true)
+        {
+            return (
+                <ReadOne
+                    userId={this.props.params._id}
+                    news={this.state.news} />
+            );
+        }
+        else return <NotAuthorizedPage/>
     }
 }
 

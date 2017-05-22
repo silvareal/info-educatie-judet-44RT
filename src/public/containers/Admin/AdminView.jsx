@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import AdminPage from '../../components/Admin/AdminPage.jsx';
 import Auth from '../../modules/Auth.js';
+import NotAuthorizedPage from '../Error/NotAuthorizedView.jsx';
 
 class AdminView extends Component {
     constructor(props) {
@@ -40,7 +41,7 @@ class AdminView extends Component {
                     <AdminPage
                         userId={this.props.params._id}
                         message={this.state.message}
-                    /> : null}
+                    /> : <NotAuthorizedPage/>}
             </div>
         )
     }

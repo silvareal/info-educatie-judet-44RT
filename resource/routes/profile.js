@@ -100,58 +100,31 @@ router.post('/profile', (req, res) => {
 
             const userId = decoded.sub;
 
-            if (userId == user._id) {
+            let boole = (parseInt(userId) === parseInt(user._id));
 
-                Collection.find({userId: user._id}, (err, collection) => {
-                    const data = {
-                        name: user.name,
-                        userId: userId,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        birthDate: user.birthDate,
-                        profession: user.profession,
-                        companyName: user.companyName,
-                        city: user.city,
-                        country: user.country,
-                        profilePictureLink: user.profilePictureLink,
-                        profileCover: user.profileCover,
-                        ownUser: true,
-                        latestCollection: collection
-                    };
+            Collection.find({userId: user._id}, (err, collection) => {
+                const data = {
+                    name: user.name,
+                    userId: userId,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    birthDate: user.birthDate,
+                    profession: user.profession,
+                    companyName: user.companyName,
+                    city: user.city,
+                    country: user.country,
+                    profilePictureLink: user.profilePictureLink,
+                    profileCover: user.profileCover,
+                    ownUser: boole,
+                    latestCollection: collection
+                };
 
-                    return res.json({
-                        message: 'Successfully fetched profile',
-                        user: data
-                    });
+                return res.json({
+                    message: 'Successfully fetched profile',
+                    user: data
+                });
 
-                }).sort({time: -1}).limit(1);
-            }
-
-            else {
-                Collection.find({userId: user._id}, (err, collection) => {
-                    const data = {
-                        name: user.name,
-                        userId: userId,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        birthDate: user.birthDate,
-                        profession: user.profession,
-                        companyName: user.companyName,
-                        city: user.city,
-                        country: user.country,
-                        profilePictureLink: user.profilePictureLink,
-                        profileCover: user.profileCover,
-                        ownUser: false,
-                        latestCollection: collection
-                    };
-
-                    return res.json({
-                        message: 'Successfully fetched profile',
-                        user: data
-                    });
-
-                }).sort({time: -1}).limit(1);
-            }
+            }).sort({time: -1}).limit(1);
         })
     });
 });

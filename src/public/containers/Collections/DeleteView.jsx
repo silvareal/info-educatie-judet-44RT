@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 
-import Delete from '../components/Delete.jsx';
-import Auth from '../modules/Auth.js';
+import Delete from '../../components/Collections/Main Components/Delete.jsx';
+import Auth from '../../modules/Auth.js';
 
 class DeleteView extends Component {
     constructor(props) {

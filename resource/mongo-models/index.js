@@ -13,18 +13,18 @@ module.exports.connect = (uri) => {
     });
 
     // load models
-    require('./user');
-    require('./collection');
-    require('./news');
-    require('./loginLogs');
-    require('./signupLogs');
-    require('./createCollectionLogs');
-    require('./updateCollectionLogs');
-    require('./deleteCollectionLogs');
-    require('./createNewsLogs');
-    require('./updateNewsLogs');
-    require('./deleteNewsLogs');
-    require('./updateProfileLogs');
-    require('./commentCollection');
-    require('./commentNews');
+    require('./authentication/user');
+    require('./collections/collection');
+    require('./news/news');
+    require('./logs-models/authentication-logs/loginLogs');
+    require('./logs-models/authentication-logs/signupLogs');
+    require('./logs-models/collections-logs/createCollectionLogs');
+    require('./logs-models/collections-logs/updateCollectionLogs');
+    require('./logs-models/collections-logs/deleteCollectionLogs');
+    require('./logs-models/news-logs/createNewsLogs');
+    require('./logs-models/news-logs/updateNewsLogs');
+    require('./logs-models/news-logs/deleteNewsLogs');
+    require('./logs-models/profile-logs/updateProfileLogs');
+    require('./collections/commentCollection');
+    require('./news/commentNews');
 };

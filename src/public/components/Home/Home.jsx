@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 
 import {RaisedButton} from 'material-ui';
-import Auth from '../modules/Auth.js';
+import Auth from '../../modules/Auth.js';
 
 class Home extends Component {
     render() {

@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 
 import Create from '../../../components/Admin/Collections/Create.jsx'
+import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 import Auth from '../../../modules/Auth.js';
 
 class CreateView extends Component {
@@ -22,9 +23,27 @@ class CreateView extends Component {
                 pictureName: '',
                 pictureLink: '',
                 pictureDescription: ''
-            }]
+            }],
+            isAdmin: false
         };
     };
+
+    componentDidMount() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                this.setState({
+                    isAdmin: true
+                })
+            }
+            else this.setState({isAdmin: false})
+        });
+        xhr.send();
+    }
 
     onUserIdChange = (e) => {
         this.setState({userId: e.target.value});
@@ -176,32 +195,37 @@ class CreateView extends Component {
     };
 
     render() {
-        return (
-            <Create
-                userId={this.state.userId}
-                adminId={this.props.params._id}
-                onUserIdChange={this.onUserIdChange}
-                collectionName={this.state.collectionName}
-                onCollectionChange={this.onCollectionChange}
-                collectionDescription={this.state.collectionDescription}
-                onCollectionDescriptionChange={this.onCollectionDescriptionChange}
-                pictures={this.state.pictures}
-                errorMessage={this.state.errorMessage}
-                onPictureNameChange={this.onPictureNameChange}
-                onPictureLinkChange={this.onPictureLinkChange}
-                onPictureDescriptionChange={this.onPictureDescriptionChange}
-                handlePicturesNameChange={this.handlePicturesNameChange}
-                handlePicturesLinkChange={this.handlePicturesLinkChange}
-                handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
-                handleAddPictures={this.handleAddPictures}
-                handleRemovePictures={this.handleRemovePictures}
-                onSave={this.onSave}
-                successCreation={this.state.successCreation}
-                errors={this.state.errors}
-                pictureNameError={this.state.pictureNameError}
-                pictureDescriptionError={this.state.pictureDescriptionError}
-                pictureLinkError={this.state.pictureLinkError}
-            />)
+        if (this.state.isAdmin === true)
+        {
+            document.title = "Create collections - Admin Controlled";
+            return (
+                <Create
+                    userId={this.state.userId}
+                    adminId={this.props.params._id}
+                    onUserIdChange={this.onUserIdChange}
+                    collectionName={this.state.collectionName}
+                    onCollectionChange={this.onCollectionChange}
+                    collectionDescription={this.state.collectionDescription}
+                    onCollectionDescriptionChange={this.onCollectionDescriptionChange}
+                    pictures={this.state.pictures}
+                    errorMessage={this.state.errorMessage}
+                    onPictureNameChange={this.onPictureNameChange}
+                    onPictureLinkChange={this.onPictureLinkChange}
+                    onPictureDescriptionChange={this.onPictureDescriptionChange}
+                    handlePicturesNameChange={this.handlePicturesNameChange}
+                    handlePicturesLinkChange={this.handlePicturesLinkChange}
+                    handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
+                    handleAddPictures={this.handleAddPictures}
+                    handleRemovePictures={this.handleRemovePictures}
+                    onSave={this.onSave}
+                    successCreation={this.state.successCreation}
+                    errors={this.state.errors}
+                    pictureNameError={this.state.pictureNameError}
+                    pictureDescriptionError={this.state.pictureDescriptionError}
+                    pictureLinkError={this.state.pictureLinkError}
+                />)
+        }
+        else return <NotAuthorizedPage/>
     }
 }
 

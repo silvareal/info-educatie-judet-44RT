@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 
 import UsersPage from '../../../components/Admin/Users/UsersPage.jsx';
+import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 import Auth from '../../../modules/Auth.js';
 
 let selectedUserId = [];
@@ -17,26 +18,31 @@ class UsersView extends Component {
         };
     }
 
-    componentDidMount() {
+    adminAuth = () => {
         const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/showUsers');
+        xhr.open('get', '/admin/adminAuthentication');
         xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
         xhr.responseType = 'json';
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
                 //User is an admin
-                this.setState({
-                    isAdmin: true,
-                    users: xhr.response.data
-                })
-            }
-            else {
-                this.setState({
-                    message: xhr.response.message
-                })
+                if (xhr.response.message === "Welcome admin")
+                    this.setState({
+                        isAdmin: true
+                    });
+                else {
+                    this.setState({
+                        isAdmin: false
+                    });
+                }
             }
         });
         xhr.send();
+    };
+
+    componentDidMount() {
+        this.adminAuth();
+        this.showAddedModerators();
     }
 
     cellClick = (rowNumber) => {
@@ -89,6 +95,11 @@ class UsersView extends Component {
                     users: xhr.response.data
                 })
             }
+            else {
+                this.setState({
+                    message: xhr.response.message
+                })
+            }
         });
         xhr.send();
     };
@@ -100,20 +111,24 @@ class UsersView extends Component {
 
     render() {
         document.title = "User management";
-        return (
-            <div>
-                {this.state.isAdmin ?
-                 <UsersPage
-                     userId={this.props.params._id}
-                     users={this.state.users}
-                     message={this.state.message}
-                     clicked={clicked}
-                     cellClick={this.cellClick}
-                     cellDeclick={this.cellDeclick}
-                     addModerators={this.addModerators}
-                 /> : null}
-            </div>
-        )
+        if (this.state.isAdmin === true)
+        {
+            return (
+                <div>
+                    {this.state.isAdmin ?
+                        <UsersPage
+                            userId={this.props.params._id}
+                            users={this.state.users}
+                            message={this.state.message}
+                            clicked={clicked}
+                            cellClick={this.cellClick}
+                            cellDeclick={this.cellDeclick}
+                            addModerators={this.addModerators}
+                        /> : null}
+                </div>
+            )
+        }
+        else return <NotAuthorizedPage/>
     }
 }
 export default UsersView;

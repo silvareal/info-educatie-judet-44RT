@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import TopActions from './TopActions.jsx';
-import ViewTable from './ViewTable.jsx';
+import TopActions from '../Partials Components/TopActions.jsx';
+import ViewTable from '../Partials Components/ViewTable.jsx';
 
 class ReadAll extends Component {
     render(){

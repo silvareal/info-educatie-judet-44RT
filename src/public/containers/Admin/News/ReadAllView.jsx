@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import ReadAll from '../../../components/Admin/News/ReadAll.jsx';
 import Auth from '../../../modules/Auth.js';
+import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 
 class ReadAllView extends Component {
 
@@ -10,12 +11,29 @@ class ReadAllView extends Component {
 
         this.state = {
             errorMessage: '',
-            news: []
+            news: [],
+            isAdmin: false
         };
     };
 
-    componentDidMount() {
+    adminAuth = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                this.setState({
+                    isAdmin: true
+                })
+            }
+            else this.setState({isAdmin: false})
+        });
+        xhr.send();
+    };
 
+    getCollections = () => {
         //errorMessage name might confuse, it is also used to tell when to show a loading component
         //all comparisons can be found in ViewTable.jsx
         this.setState({
@@ -55,20 +73,28 @@ class ReadAllView extends Component {
         //Send the identity check only when the page loads
         //Any further modifications to localStorage are futile for attackers, we don't use that data for DB selection
         xhr.send();
+    };
 
+    componentDidMount() {
+        this.adminAuth();
+        this.getCollections();
     };
 
     render() {
         document.title = "News management";
-        return (
-            <div>
-                <ReadAll
-                    userId={this.props.params._id}
-                    news={this.state.news}
-                    errorMessage={this.state.errorMessage}
-                />
-            </div>
-        );
+        if (this.state.isAdmin === true)
+        {
+            return (
+                <div>
+                    <ReadAll
+                        userId={this.props.params._id}
+                        news={this.state.news}
+                        errorMessage={this.state.errorMessage}
+                    />
+                </div>
+            );
+        }
+        else return <NotAuthorizedPage/>
     }
 }
 

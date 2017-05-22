@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 
 import Update from '../../../components/Admin/Collections/Update.jsx';
 import Auth from '../../../modules/Auth.js';
+import NotAuthorizedPage from "../../Error/NotAuthorizedView.jsx";
 
 class UpdateView extends Component {
     constructor(props) {
@@ -28,12 +29,29 @@ class UpdateView extends Component {
             userIdOld: '',
             collectionNameOld: '',
             collectionDescriptionOld: '',
-            picturesOld: [{}]
+            picturesOld: [{}],
+            isAdmin: false
         };
     };
 
-    componentDidMount() {
+    adminAuth = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                this.setState({
+                    isAdmin: true
+                })
+            }
+            else this.setState({isAdmin: false})
+        });
+        xhr.send();
+    };
 
+    getCollection = () => {
         this.setState({
             errorMessage: "Fetching"
         });
@@ -86,6 +104,11 @@ class UpdateView extends Component {
         });
 
         xhr.send(formData);
+    };
+
+    componentDidMount() {
+        this.adminAuth();
+        this.getCollection();
     };
 
     onUserIdChange = (e) => {
@@ -226,30 +249,34 @@ class UpdateView extends Component {
         if (this.state.collectionName)
             document.title = "Update - " + this.state.collectionName;
         else document.title = "404 not found";
-        return (
-            <Update
-                adminId={this.props.params._id}
-                userId={this.state.userId}
-                onUserIdChange={this.onUserIdChange}
-                collectionId={this.state.collectionId}
-                collectionName={this.state.collectionName}
-                onCollectionChange={this.onCollectionChange}
-                collectionDescription={this.state.collectionDescription}
-                errorMessage={this.state.errorMessage}
-                errors={this.state.errors}
-                pictureNameError={this.state.pictureNameError}
-                pictureDescriptionError={this.state.pictureDescriptionError}
-                pictureLinkError={this.state.pictureLinkError}
-                onCollectionDescriptionChange={this.onCollectionDescriptionChange}
-                pictures={this.state.pictures}
-                handlePicturesNameChange={this.handlePicturesNameChange}
-                handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
-                handlePicturesLinkChange={this.handlePicturesLinkChange}
-                handleAddPictures={this.handleAddPictures}
-                handleRemovePictures={this.handleRemovePictures}
-                onSave={this.onSave}
-            />
-        )
+        if (this.state.isAdmin === true)
+        {
+            return (
+                <Update
+                    adminId={this.props.params._id}
+                    userId={this.state.userId}
+                    onUserIdChange={this.onUserIdChange}
+                    collectionId={this.state.collectionId}
+                    collectionName={this.state.collectionName}
+                    onCollectionChange={this.onCollectionChange}
+                    collectionDescription={this.state.collectionDescription}
+                    errorMessage={this.state.errorMessage}
+                    errors={this.state.errors}
+                    pictureNameError={this.state.pictureNameError}
+                    pictureDescriptionError={this.state.pictureDescriptionError}
+                    pictureLinkError={this.state.pictureLinkError}
+                    onCollectionDescriptionChange={this.onCollectionDescriptionChange}
+                    pictures={this.state.pictures}
+                    handlePicturesNameChange={this.handlePicturesNameChange}
+                    handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
+                    handlePicturesLinkChange={this.handlePicturesLinkChange}
+                    handleAddPictures={this.handleAddPictures}
+                    handleRemovePictures={this.handleRemovePictures}
+                    onSave={this.onSave}
+                />
+            )
+        }
+        else return <NotAuthorizedPage/>
     }
 }
 

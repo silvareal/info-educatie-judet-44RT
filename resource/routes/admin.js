@@ -249,7 +249,7 @@ router.get('/adminAuthentication', (req, res) => {
                 });
             }
             else {
-                res.json({
+                res.status(401).json({
                     message: "Not an admin"
                 });
             }

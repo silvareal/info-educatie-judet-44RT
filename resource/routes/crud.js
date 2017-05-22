@@ -287,22 +287,38 @@ router.post('/readOne', (req, res) => {
 });
 
 router.post('/updateShow', (req, res) => {
-    Collection.findOne({_id: req.body.collectionId}, (err, collection) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
         if (err) {
-            //Database error
-            return res.status(400).json({
-                message: "The item you are searching for does not exist"
-            });
+            return res.status(401).end();
         }
 
-        if (!collection) {
-            return res.status(404).json({
-                message: "The item you are searching for does not exist"
-            });
-        }
+        const userId = decoded.sub;
 
-        res.json({
-            collection: collection
+        Collection.findOne({_id: req.body.collectionId, userId: userId}, (err, collection) => {
+            if (err) {
+                //Database error
+                return res.status(400).json({
+                    message: "The item you are searching for does not exist"
+                });
+            }
+
+            if (!collection) {
+                return res.status(404).json({
+                    message: "The item you are searching for does not exist"
+                });
+            }
+
+            res.json({
+                collection: collection
+            });
         });
     });
 });
@@ -332,7 +348,7 @@ router.post('/updateSave', (req, res) => {
 
         const userId = decoded.sub;
 
-        Collection.updateOne({_id: {$eq: req.body.collectionId}}, {
+        Collection.updateOne({_id: {$eq: req.body.collectionId}, userId: userId}, {
             $set: {
                 collectionName: req.body.collectionName,
                 collectionDescriptionRaw: req.body.collectionDescriptionRaw,
@@ -344,6 +360,13 @@ router.post('/updateSave', (req, res) => {
                     message: "Database error in /crud/updateSave while updating entry",
                     success: false
                 });
+            }
+
+            if (!collection){
+                return res.status(404).json({
+                    message: "Collection does not exist",
+                    success: false
+                })
             }
 
             //this is a non admin page, the owner ID can t be changed
@@ -390,7 +413,13 @@ router.post('/deleteShow', (req, res) => {
 
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
-        Collection.findOne({_id: req.body.collectionId}, (err, collection) => {
+        if (err) {
+            return res.status(401).end();
+        }
+
+        const userId = decoded.sub;
+
+        Collection.findOne({_id: req.body.collectionId, userId: userId}, (err, collection) => {
             if (err) {
                 //Database error
                 return res.status(400).json({
@@ -446,7 +475,7 @@ router.post('/deleteExecute', (req, res) => {
                 })
             }
 
-            CommentCollection.deleteMany({collectionId: req.body.collectionId}, (err) => {
+            CommentCollection.deleteMany({collectionId: req.body.collectionId, userId: userId}, (err) => {
                 if (err) {
                     return res.status(400).json({
                         message: "Database error"
@@ -454,7 +483,7 @@ router.post('/deleteExecute', (req, res) => {
                 }
             });
 
-            Collection.deleteOne({_id: req.body.collectionId}, (err, collection) => {
+            Collection.deleteOne({_id: req.body.collectionId, userId: userId}, (err, collection) => {
                 if (err) {
                     return res.status(400).json({
                         message: "Database error"

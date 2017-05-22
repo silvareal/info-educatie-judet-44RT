@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-import Auth from '../modules/Auth';
+import Auth from '../../modules/Auth';
 
-import AppBarPersonal from '../components/misc/AppBar.jsx';
+import AppBarPersonal from '../../components/MainApp Partials/AppBar.jsx';
 
 let runTime = 0;
 

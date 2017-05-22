@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import Auth from '../modules/Auth';
-import Login from '../components/Login.jsx';
+import Auth from '../../modules/Auth';
+import Login from '../../components/Authentication/Login.jsx';
 
 class LoginView extends Component {
     constructor(props, context) {

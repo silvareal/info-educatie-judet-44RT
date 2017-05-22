@@ -5,8 +5,8 @@ import {Card, RaisedButton} from 'material-ui';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
-import PictureRow from './PictureRow.jsx';
-import CommentList from './CommentList.jsx';
+import PictureRow from '../Partials Components/PictureRow.jsx';
+import CommentList from '../Partials Components/CommentList.jsx';
 
 class ReadOne extends Component {
 

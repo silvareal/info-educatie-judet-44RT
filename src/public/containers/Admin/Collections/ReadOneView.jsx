@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import ReadOne from '../../../components/Admin/Collections/ReadOne.jsx';
+import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 import Auth from '../../../modules/Auth.js';
 
 class ReadOneView extends Component {
@@ -9,7 +10,8 @@ class ReadOneView extends Component {
 
         this.state = {
             collection: '',
-            errorMessage: ''
+            errorMessage: '',
+            isAdmin: false
         };
     };
 
@@ -30,13 +32,24 @@ class ReadOneView extends Component {
             if (xhr.status === 200){
 
                 //Retrieve the data for a single collection
-                this.setState({
-                    errorMessage: '',
-                    collection: xhr.response.collection
-                })
+
+                if (xhr.response.message === "Not an admin"){
+                    this.setState({
+                        isAdmin: false
+                    })
+                }
+                else{
+                    this.setState({
+                        isAdmin: true,
+                        errorMessage: '',
+                        collection: xhr.response.collection
+                    })
+                }
+
             }
             else {
                 this.setState({
+                    isAdmin: false,
                     errorMessage: xhr.response.message
                 });
             }
@@ -51,12 +64,15 @@ class ReadOneView extends Component {
             document.title = this.state.collection.collectionName;
         else
             document.title = "404 not found";
-        return (
-            <ReadOne
-                errorMessage={this.state.errorMessage}
-                adminId={this.props.params._id}
-                collection={this.state.collection} />
-        );
+        if (this.state.isAdmin === true){
+            return (
+                <ReadOne
+                    errorMessage={this.state.errorMessage}
+                    adminId={this.props.params._id}
+                    collection={this.state.collection} />
+            );
+        }
+        else return <NotAuthorizedPage/>
     }
 }
 

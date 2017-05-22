@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 
-import SignUp from '../components/SignUp.jsx';
+import SignUp from '../../components/Authentication/SignUp.jsx';
 
 class SignUpView extends Component {
     constructor(props, context) {

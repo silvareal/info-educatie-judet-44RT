@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-import Home from '../components/Home.jsx';
-import Auth from '../modules/Auth.js'
+import Home from '../../components/Home/Home.jsx';
+import Auth from '../../modules/Auth.js'
 
 import {Card, CardMedia, CardTitle, CardActions, TextField, ListItem, List} from 'material-ui';
 import CommunicationMessage from 'material-ui/svg-icons/communication/message';
