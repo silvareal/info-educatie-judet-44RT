@@ -13,7 +13,7 @@ import UpdateView from './containers/Collections/UpdateView.jsx';
 
 import ProfileView from './containers/Profile/ProfileView.jsx';
 
-import AdminView from './containers/Admin/AdminView.jsx';
+import AdminView from './containers/Admin/Main Component/AdminView.jsx';
 import UsersView from './containers/Admin/Users/UsersView.jsx';
 import CreateViewNews from './containers/Admin/News/CreateView.jsx';
 import ReadAllViewNews from './containers/Admin/News/ReadAllView.jsx';
@@ -25,18 +25,23 @@ import ReadAllViewAdminControl from './containers/Admin/Collections/ReadAllView.
 import ReadOneViewAdminControl from './containers/Admin/Collections/ReadOneView.jsx';
 import UpdateViewAdminControl from './containers/Admin/Collections/UpdateView.jsx';
 import DeleteViewAdminControl from './containers/Admin/Collections/DeleteView.jsx';
-import LogsView from './containers/Admin/Logs/LogsView.jsx';
-import LogsLoginView from './containers/Admin/Logs/LogsLoginView.jsx';
-import LogsSignupView from './containers/Admin/Logs/LogsSignupView.jsx';
-import LogsNewsView from './containers/Admin/Logs/LogsNewsView.jsx';
-import LogsNewsCreateView from './containers/Admin/Logs/LogsNewsCreateView.jsx';
-import LogsNewsUpdateView from './containers/Admin/Logs/LogsNewsUpdateView.jsx';
-import LogsNewsDeleteView from './containers/Admin/Logs/LogsNewsDeleteView.jsx';
-import LogsCollectionsView from './containers/Admin/Logs/LogsCollectionsView.jsx';
-import LogsCollectionsCreateView from './containers/Admin/Logs/LogsCollectionsCreateView.jsx';
-import LogsCollectionsUpdateView from './containers/Admin/Logs/LogsCollectionsUpdateView.jsx';
-import LogsCollectionsDeleteView from './containers/Admin/Logs/LogsCollectionsDeleteView.jsx';
-import LogsProfileView from './containers/Admin/Logs/LogsProfileView.jsx';
+import LogsView from './containers/Admin/Logs/Main Component/LogsView.jsx';
+import LogsLoginView from './containers/Admin/Logs/Login/LogsLoginView.jsx';
+import LogsSignupView from './containers/Admin/Logs/Signup/LogsSignupView.jsx';
+import LogsNewsView from './containers/Admin/Logs/News/LogsNewsView.jsx';
+import LogsNewsCreateView from './containers/Admin/Logs/News/LogsNewsCreateView.jsx';
+import LogsNewsUpdateView from './containers/Admin/Logs/News/LogsNewsUpdateView.jsx';
+import LogsNewsDeleteView from './containers/Admin/Logs/News/LogsNewsDeleteView.jsx';
+import LogsCollectionsView from './containers/Admin/Logs/Collections/LogsCollectionsView.jsx';
+import LogsCollectionsCreateView from './containers/Admin/Logs/Collections/LogsCollectionsCreateView.jsx';
+import LogsCollectionsUpdateView from './containers/Admin/Logs/Collections/LogsCollectionsUpdateView.jsx';
+import LogsCollectionsDeleteView from './containers/Admin/Logs/Collections/LogsCollectionsDeleteView.jsx';
+import LogsProfileView from './containers/Admin/Logs/Profile/LogsProfileView.jsx';
+
+import ReadAllViewBrowseCollections from './containers/BrowseCollections/ReadAllView.jsx';
+import ReadOneViewBrowseCollections from './containers/BrowseCollections/ReadOneView.jsx';
+import ReadAllViewBrowseNews from './containers/BrowseNews/ReadAllView.jsx';
+import ReadOneViewBrowseNews from './containers/BrowseNews/ReadOneView.jsx';
 
 import NotFoundPage from './containers/Error/NotFoundView.jsx';
 
@@ -90,6 +95,26 @@ const routes = {
         },
 
         {
+            path: '/collections',
+            component: ReadAllViewBrowseCollections
+        },
+
+        {
+            path: '/collections/:_id',
+            component: ReadOneViewBrowseCollections
+        },
+        
+        {
+            path: '/news',
+            component: ReadAllViewBrowseNews
+        },
+
+        {
+            path:'/news/:_newsId',
+            component: ReadOneViewBrowseNews
+        },
+
+        {
             path: '/admin/:_id',
             getComponent: (location, callback) => {
                 if (Auth.isUserAuthenticated()) {
@@ -127,17 +152,6 @@ const routes = {
             getComponent: (location, callback) => {
                 if (Auth.isUserAuthenticated()) {
                     callback(null, ReadOneViewAdminControl);
-                } else {
-                    callback(null, LoginView);
-                }
-            }
-        },
-
-        {
-            path: '/collections/:_id',
-            getComponent: (location, callback) => {
-                if (Auth.isUserAuthenticated()) {
-                    callback(null, ReadOneView);
                 } else {
                     callback(null, LoginView);
                 }
@@ -188,6 +202,8 @@ const routes = {
             }
         },
 
+        //these 2 are the same, replace the links to use the latter
+
         {
             path: '/admin/:_id/news/readOne/:_newsId',
             getComponent: (location, callback) => {
@@ -209,6 +225,8 @@ const routes = {
                 }
             }
         },
+
+        //-----------------------------
 
         {
             path: '/admin/:_id/news/update/:_newsId',

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import ReadOne from '../../../components/Admin/Collections/ReadOne.jsx';
+import ReadOne from '../../../components/Admin/Collections/Main Components/ReadOne.jsx';
 import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 import Auth from '../../../modules/Auth.js';
 

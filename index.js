@@ -21,6 +21,7 @@ const profileRoutes = require('./resource/routes/profile');
 const homeRoutes = require('./resource/routes/home');
 const adminRoutes = require('./resource/routes/admin');
 const commentRoutes = require('./resource/routes/comment');
+const browseRoutes = require('./resource/routes/browse');
 
 const express = require('express');
 //tell the app to actually use the middleware
@@ -37,13 +38,16 @@ app.use(mongoSanitize());
 
 //Avoid writing useless code - more info in the path of this require ( in the file )
 const authenticationChecker = require('./resource/middleware/authentication-check');
-app.use('/home', authenticationChecker);
 app.use('/crud', authenticationChecker);
+
+const adminChecker = require('./resource/middleware/admin-check');
+app.use('/admin', adminChecker);
 
 app.use('/crud', crudRoutes);
 app.use('/profile', profileRoutes);
 app.use('/home', homeRoutes);
 app.use('/admin', adminRoutes);
+app.use('/browse', browseRoutes);
 
 app.use('/comment', commentRoutes);
 

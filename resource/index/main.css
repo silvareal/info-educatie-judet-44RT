@@ -1,8 +1,8 @@
 .profile-wrap {
   display: flex;
   justify-content: center;
-  min-width: 90%;
-  max-width: 90%;
+  min-width: 100%;
+  max-width: 100%;
   margin: 0 auto; }
 
 .profile-left {
@@ -69,6 +69,29 @@
   display: flex;
   justify-content: center; }
 
+.header {
+  display: flex;
+  flex: 1;
+  justify-content: ""; }
+  .header .right {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end; }
+
+.appBar {
+  position: fixed !important;
+  transition: top 6s;
+  top: 0;
+  left: 0; }
+
+.hidden {
+  transition: top 6s;
+  top: -300px; }
+
+.top-bar-spacing {
+  width: auto;
+  height: 128px; }
+
 body {
   margin: 0;
   font-size: 16px;
@@ -109,13 +132,6 @@ a {
 .actions {
   padding: 5px; }
 
-.container {
-  background-color: gray;
-  margin: 0 auto;
-  text-align: center;
-  width: 100%;
-  height: 100%; }
-
 .card-heading {
   padding: 16px; }
 
@@ -149,77 +165,72 @@ a {
   flex: 1;
   justify-content: center; }
 
-.header {
-  display: flex;
-  flex: 1;
-  justify-content: ""; }
-  .header .right {
-    display: flex;
-    flex: 1;
-    justify-content: flex-end; }
-
-.appBar {
-  position: fixed !important;
-  transition: top 6s;
-  top: 0;
-  left: 0; }
-
-.hidden {
-  transition: top 6s;
-  top: -300px; }
-
 body {
   margin: 0; }
 
 body, html, main {
   width: auto;
-  height: 100%;
-  background-image: url("images/home.jpg");
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: repeat;
-  background-size: cover; }
+  height: 100%; }
 
 .force-parallax {
   width: auto;
+  height: 100%; }
+  .force-parallax .footer {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    background: #3460f1;
+    padding: 20px   ;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+    .force-parallax .footer ul {
+      font:     20px  "Roboto", "sans-serif";
+      list-style: none; }
+      .force-parallax .footer ul li {
+        padding: 10px   ;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box; }
+        .force-parallax .footer ul li a {
+          color: #ffffff; }
+        .force-parallax .footer ul li :hover {
+          color: #454545; }
+
+.parallax-home {
+  width: auto;
   height: 100%;
   background-image: url("images/home.jpg");
   background-attachment: fixed;
   background-position: center;
   background-repeat: repeat;
   background-size: cover; }
-
-.parallax-spacing {
-  min-height: 10%; }
-
-.parallax {
-  width: auto;
-  height: 100%; }
-  .parallax .latest-news {
+  .parallax-home .section-title {
     font:   bold  60px  "Roboto", "sans-serif";
     padding: 30px   ;
     background: #3460f1;
     text-align: center;
     color: #ffffff; }
-  .parallax .news-container {
+  .parallax-home .container-home {
     padding: 50px   ;
     display: flex;
     flex: 1;
-    justify-content: center;
-    background: #ffffff; }
+    justify-content: center; }
     @media screen and (max-width: 1200px) {
-      .parallax .news-container {
+      .parallax-home .container-home {
         padding: 0   ; } }
-    .parallax .news-container .news-desktop {
+    .parallax-home .container-home .news-desktop {
       display: flex;
       flex: 1;
       justify-content: center; }
       @media screen and (max-width: 1200px) {
-        .parallax .news-container .news-desktop {
+        .parallax-home .container-home .news-desktop {
           display: none;
           flex: "";
           justify-content: ""; } }
-      .parallax .news-container .news-desktop ul {
+      .parallax-home .container-home .news-desktop ul {
         padding: 30px   ;
         display: flex;
         flex: "";
@@ -227,7 +238,7 @@ body, html, main {
         flex-direction: column;
         list-style: none;
         height: auto; }
-        .parallax .news-container .news-desktop ul .left-news {
+        .parallax-home .container-home .news-desktop ul .left-news {
           width: auto;
           height: 450px;
           display: flex;
@@ -236,9 +247,9 @@ body, html, main {
           flex-direction: column;
           box-sizing: border-box;
           max-width: 500px; }
-          .parallax .news-container .news-desktop ul .left-news img {
+          .parallax-home .container-home .news-desktop ul .left-news img {
             min-height: 350px; }
-        .parallax .news-container .news-desktop ul .right-news {
+        .parallax-home .container-home .news-desktop ul .right-news {
           width: auto;
           height: 450px;
           width: auto;
@@ -248,14 +259,14 @@ body, html, main {
           justify-content: center;
           flex-direction: column;
           max-width: 500px; }
-          .parallax .news-container .news-desktop ul .right-news img {
+          .parallax-home .container-home .news-desktop ul .right-news img {
             height: 350px; }
     @media screen and (min-width: 1200px) {
-      .parallax .news-container .news-mobile {
+      .parallax-home .container-home .news-mobile {
         display: none;
         flex: "";
         justify-content: ""; } }
-    .parallax .news-container .news-mobile ul {
+    .parallax-home .container-home .news-mobile ul {
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
@@ -267,41 +278,79 @@ body, html, main {
       height: auto;
       list-style: none;
       flex-direction: column; }
-      .parallax .news-container .news-mobile ul li {
+      .parallax-home .container-home .news-mobile ul li {
         width: 100%;
         height: auto;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
         padding: 10px   ; }
-        .parallax .news-container .news-mobile ul li img {
+        .parallax-home .container-home .news-mobile ul li img {
           width: auto;
           height: auto; }
-    .parallax .news-container .comments-cancel-padding {
+    .parallax-home .container-home .comments-cancel-padding {
       padding-top: 0;
       padding-bottom: 0; }
-  .parallax .footer {
+
+.container-collections {
+  padding: 64px 256px 64px 256px;
+  display: block;
+  flex: "";
+  justify-content: ""; }
+  @media screen and (max-width: 1200px) {
+    .container-collections {
+      padding: 1em   ;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; } }
+
+.parallax-collections {
+  width: auto;
+  height: 100%;
+  background-image: url("./images/art5.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover; }
+  .parallax-collections .section-title {
+    font:   bold  60px  "Roboto", "sans-serif";
+    padding: 30px   ;
+    background: #3460f1;
+    text-align: center;
+    color: #ffffff; }
+  .parallax-collections .top-actions {
     display: flex;
     flex: 1;
-    justify-content: center;
-    width: 100%;
-    height: auto;
-    background: #3460f1;
-    padding: 20px   ;
+    justify-content: space-between;
+    background: #ffffff;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    box-sizing: border-box; }
-    .parallax .footer ul {
-      font:     20px  "Roboto", "sans-serif";
-      list-style: none; }
-      .parallax .footer ul li {
-        padding: 10px   ;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box; }
-        .parallax .footer ul li a {
-          color: #ffffff; }
-        .parallax .footer ul li :hover {
-          color: #454545; }
+    box-sizing: border-box;
+    padding: 10px   ; }
+    @media screen and (max-width: 1200px) {
+      .parallax-collections .top-actions {
+        display: block;
+        flex: "";
+        justify-content: "";
+        text-align: center; } }
+    .parallax-collections .top-actions .capsules {
+      display: flex;
+      flex: 1;
+      justify-content: ""; }
+  .parallax-collections .view-table {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 50px 100px 100px 100px;
+    background: #ffffff; }
+    @media screen and (max-width: 1200px) {
+      .parallax-collections .view-table {
+        padding: 10px   ; }
+        .parallax-collections .view-table .view-row-picture {
+          min-width: 100%;
+          min-height: 200px; } }
+
+.picture-separator {
+  margin: 0 0 50px 0; }
 
 /*# sourceMappingURL=main.css.map */

@@ -76,7 +76,9 @@ class AppBarPersonal extends Component {
                                 targetOrigin={{horizontal: 'right', vertical: 'top'}}>
                                     <span onClick={this.props.handleCloseMenu}>
                                     <List>
-                                        <Link to={`/profile/${this.props.userName}`}>
+                                        <Link to={`/profile/${this.props.userName}`}
+                                                onClick={this.props.resetScroll}
+                                        >
                                             <ListItem primaryText="My profile"
                                                       leftAvatar={<Avatar
                                                           src="http://www.zooland.ro//data/articles/55/7212/hepta_279156-0n.jpg"/>}
@@ -85,12 +87,16 @@ class AppBarPersonal extends Component {
                                     </List>
                                         <Divider />
                                     <List>
-                                        <Link to={`/`}>
+                                        <Link to={`/`}
+                                              onClick={this.props.resetScroll}
+                                        >
                                             <ListItem primaryText="Home"
                                                       leftIcon={<ActionHome/>}
                                             />
                                         </Link>
-                                        <Link to={`/manage`}>
+                                        <Link to={`/manage`}
+                                              onClick={this.props.resetScroll}
+                                        >
                                             <ListItem primaryText="Manage collections"
                                                       leftIcon={<ImageCollections/>}
                                             />
@@ -100,12 +106,16 @@ class AppBarPersonal extends Component {
                                         {this.props.isAdmin === true ?
                                             <span>
                                                 <List>
-                                                    <Link to={`/admin/${this.props.userId}`}>
+                                                    <Link to={`/admin/${this.props.userId}`}
+                                                          onClick={this.props.resetScroll}
+                                                    >
                                                                 <ListItem primaryText="Admin Panel"
                                                                           leftIcon={<ActionSupervisorAccount/>}
                                                                 />
                                                     </Link>
-                                                    <Link to={`/admin/${this.props.userId}/news`}>
+                                                    <Link to={`/admin/${this.props.userId}/news`}
+                                                          onClick={this.props.resetScroll}
+                                                    >
                                                             <ListItem primaryText="Manage news"
                                                                       leftIcon={<ImageCollections/>}
                                                             />
@@ -115,7 +125,9 @@ class AppBarPersonal extends Component {
                                             </span> : null
                                         }
                                         <List>
-                                            <Link to={`/logout`}>
+                                            <Link to={`/logout`}
+                                                  onClick={this.props.resetScroll}
+                                            >
                                                             <ListItem primaryText="Logout"
                                                                       leftIcon={<ActionExitToApp/>}
                                                             />

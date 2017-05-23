@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-import Create from '../../../components/Admin/News/Create.jsx'
+import Create from '../../../components/Admin/News/Main Components/Create.jsx'
 import Auth from '../../../modules/Auth.js';
 import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 

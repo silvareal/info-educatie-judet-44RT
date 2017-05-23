@@ -5,6 +5,7 @@ const CollectionSchema = new mongoose.Schema({
     //pictureDescription is never used except for keeping track of data (in state) in the UI
 
     userId: String,
+    userName: String,
     collectionName: {
         type: String,
         index: {unique: true}

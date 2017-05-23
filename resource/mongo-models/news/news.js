@@ -20,7 +20,7 @@ const NewsSchema = new mongoose.Schema({
             }
         }
     ],
-    creationDate: { type: Date, default: Date.now },
+    time: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model('News', NewsSchema);

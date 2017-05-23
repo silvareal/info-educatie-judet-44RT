@@ -11,6 +11,9 @@ class ReadAllView extends Component {
         this.state = {
             errorMessage: '',
             collections: [],
+            collectionId: [],
+            collectionName: [],
+            pictureLink: [],
             loadAfter: 0,
             finished: false,
             searchErrorMessage: '',
@@ -63,13 +66,13 @@ class ReadAllView extends Component {
 
     onScroll = (e) => {
         if (this.state.finished === false && document.title === "Manage collections" && this.state.searching === false)
-            if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 200) {
+            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();
             }
     };
 
     componentDidMount() {
-        this.fetchAllCollections(this.state.collectionsToRender);
+        this.fetchAllCollections();
 
         //the load more event listener
         window.addEventListener('scroll', this.onScroll);
@@ -160,7 +163,7 @@ class ReadAllView extends Component {
                         }
                     }
               });
-
+              if (this.state.searchErrorMessage.length === 0)
               xhr.send(formData);
               this.setState({searching: true});
           }

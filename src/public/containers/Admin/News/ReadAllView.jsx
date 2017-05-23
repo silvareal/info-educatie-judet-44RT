@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import ReadAll from '../../../components/Admin/News/ReadAll.jsx';
+import ReadAll from '../../../components/Admin/News/Main Components/ReadAll.jsx';
 import Auth from '../../../modules/Auth.js';
 import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 

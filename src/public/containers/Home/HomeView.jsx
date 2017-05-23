@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-import Home from '../../components/Home/Home.jsx';
+import Home from '../../components/Home/Main Components/Home.jsx';
 import Auth from '../../modules/Auth.js'
 
 import {Card, CardMedia, CardTitle, CardActions, TextField, ListItem, List} from 'material-ui';
@@ -22,6 +22,8 @@ class HomeView extends Component {
             firstName: '',
             collectionId: "",
             newsId: "",
+            guest: null,
+            finished: null,
             //Due to concat not working or myself not using it correctly, I've manually set the initial state of this array
             comments: [
                 {
@@ -59,11 +61,21 @@ class HomeView extends Component {
         xhr.responseType = 'json';
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
-                this.setState({
-                    userName: xhr.response.userName,
-                    userId: xhr.response.userId,
-                    firstName: xhr.response.firstName
-                })
+
+                //Check for guest
+                xhr.response.guest ?
+                    this.setState({
+                        guest: xhr.response.guest,
+                        finished: true
+                    })
+                    :
+                    this.setState({
+                        finished: true,
+                        guest: xhr.response.guest,
+                        userName: xhr.response.userName,
+                        userId: xhr.response.userId,
+                        firstName: xhr.response.firstName
+                    })
             }
         });
         xhr.send();
@@ -127,7 +139,7 @@ class HomeView extends Component {
 
     onSave = (i) => () => {
 
-        if (i >=4 ) {
+        if (i >= 4) {
             const collectionId = encodeURIComponent(this.state.collectionId);
             const userName = encodeURIComponent(this.state.userName);
             const firstName = encodeURIComponent(this.state.firstName);
@@ -237,23 +249,27 @@ class HomeView extends Component {
                                     <img src={news[key].newsCoverLink}/>
                                 </CardMedia>
                             </Link>
-                            <CardActions>
-                                <List style={{paddingTop: 0, paddingBottom: 0}}>
-                                    <ListItem disabled={true}
-                                              leftIcon={<CommunicationMessage/>}
-                                              rightIcon={<ContentSend onClick={this.onSave(key)} hoverColor="green"/>}
-                                              style={{paddingTop: 0, paddingBottom: 0}}
-                                    >
-                                        <TextField name="commentNewsLeft"
-                                                   value={this.state.comments[key].value}
-                                                   onChange={this.onCommentChange(key)}
-                                                   style={{width: "100%"}}
-                                                   multiLine={true}
-                                                   rowsMax={2}
-                                        />
-                                    </ListItem>
-                                </List>
-                            </CardActions>
+                            {this.state.finished === true && this.state.guest === false ?
+                                <CardActions>
+                                    <List style={{paddingTop: 0, paddingBottom: 0}}>
+                                        <ListItem disabled={true}
+                                                  leftIcon={<CommunicationMessage/>}
+                                                  rightIcon={<ContentSend onClick={this.onSave(key)}
+                                                                          hoverColor="green"/>}
+                                                  style={{paddingTop: 0, paddingBottom: 0}}
+                                        >
+                                            <TextField name="commentNewsLeft"
+                                                       value={this.state.comments[key].value}
+                                                       onChange={this.onCommentChange(key)}
+                                                       style={{width: "100%"}}
+                                                       multiLine={true}
+                                                       rowsMax={2}
+                                            />
+                                        </ListItem>
+                                    </List>
+                                </CardActions>
+                                : null
+                            }
                         </Card>
                     </li>
                 )
@@ -273,23 +289,26 @@ class HomeView extends Component {
                                     <img src={news[key].newsCoverLink}/>
                                 </CardMedia>
                             </Link>
-                            <CardActions>
-                                <List style={{paddingTop: 0, paddingBottom: 0}}>
-                                    <ListItem disabled={true}
-                                              leftIcon={<CommunicationMessage/>}
-                                              rightIcon={<ContentSend onClick={this.onSave(key)} hoverColor="green"/>}
-                                              style={{paddingTop: 0, paddingBottom: 0}}
-                                    >
-                                        <TextField name="commentNewsRight"
-                                                   value={this.state.comments[key].value}
-                                                   onChange={this.onCommentChange(key)}
-                                                   style={{width: "100%"}}
-                                                   multiLine={true}
-                                                   rowsMax={2}
-                                        />
-                                    </ListItem>
-                                </List>
-                            </CardActions>
+                            {this.state.finished === true && this.state.guest === false ?
+                                <CardActions>
+                                    <List style={{paddingTop: 0, paddingBottom: 0}}>
+                                        <ListItem disabled={true}
+                                                  leftIcon={<CommunicationMessage/>}
+                                                  rightIcon={<ContentSend onClick={this.onSave(key)}
+                                                                          hoverColor="green"/>}
+                                                  style={{paddingTop: 0, paddingBottom: 0}}
+                                        >
+                                            <TextField name="commentNewsRight"
+                                                       value={this.state.comments[key].value}
+                                                       onChange={this.onCommentChange(key)}
+                                                       style={{width: "100%"}}
+                                                       multiLine={true}
+                                                       rowsMax={2}
+                                            />
+                                        </ListItem>
+                                    </List>
+                                </CardActions>
+                                : null}
                         </Card>
                     </li>
                 )
@@ -308,21 +327,24 @@ class HomeView extends Component {
                                     <img src={news[key].newsCoverLink}/>
                                 </CardMedia>
                             </Link>
-                            <CardActions>
-                                <List style={{paddingTop: 0, paddingBottom: 0}}>
-                                    <ListItem disabled={true}
-                                              rightIcon={<ContentSend onClick={this.onSave(key)} hoverColor="green"/>}
-                                              style={{paddingTop: 0, paddingBottom: 0}}
-                                    >
-                                        <TextField name="commentNewsMobile"
-                                                   value={this.state.comments[key].value}
-                                                   onChange={this.onCommentChange(key)}
-                                                   style={{width: "100%"}}
-                                                   multiLine={true}
-                                        />
-                                    </ListItem>
-                                </List>
-                            </CardActions>
+                            {this.state.finished === true && this.state.guest === false ?
+                                <CardActions>
+                                    <List style={{paddingTop: 0, paddingBottom: 0}}>
+                                        <ListItem disabled={true}
+                                                  rightIcon={<ContentSend onClick={this.onSave(key)}
+                                                                          hoverColor="green"/>}
+                                                  style={{paddingTop: 0, paddingBottom: 0}}
+                                        >
+                                            <TextField name="commentNewsMobile"
+                                                       value={this.state.comments[key].value}
+                                                       onChange={this.onCommentChange(key)}
+                                                       style={{width: "100%"}}
+                                                       multiLine={true}
+                                            />
+                                        </ListItem>
+                                    </List>
+                                </CardActions>
+                                : null}
                         </Card>
                     </li>
                 )
@@ -349,24 +371,26 @@ class HomeView extends Component {
                                     <img src={collections[key].picturesArray[0].pictureLink}/>
                                 </CardMedia>
                             </Link>
-                            <CardActions>
-                                <List style={{paddingTop: 0, paddingBottom: 0}}>
-                                    <ListItem disabled={true}
-                                              leftIcon={<CommunicationMessage/>}
-                                              rightIcon={<ContentSend onClick={this.onSave(key + 4)}
-                                                                      hoverColor="green"/>}
-                                              style={{paddingTop: 0, paddingBottom: 0}}
-                                    >
-                                        <TextField name="commentNewsLeft"
-                                                   value={this.state.comments[key + 4].value}
-                                                   onChange={this.onCommentChange(key + 4)}
-                                                   style={{width: "100%"}}
-                                                   multiLine={true}
-                                                   rowsMax={2}
-                                        />
-                                    </ListItem>
-                                </List>
-                            </CardActions>
+                            {this.state.finished === true && this.state.guest === false ?
+                                <CardActions>
+                                    <List style={{paddingTop: 0, paddingBottom: 0}}>
+                                        <ListItem disabled={true}
+                                                  leftIcon={<CommunicationMessage/>}
+                                                  rightIcon={<ContentSend onClick={this.onSave(key + 4)}
+                                                                          hoverColor="green"/>}
+                                                  style={{paddingTop: 0, paddingBottom: 0}}
+                                        >
+                                            <TextField name="commentNewsLeft"
+                                                       value={this.state.comments[key + 4].value}
+                                                       onChange={this.onCommentChange(key + 4)}
+                                                       style={{width: "100%"}}
+                                                       multiLine={true}
+                                                       rowsMax={2}
+                                            />
+                                        </ListItem>
+                                    </List>
+                                </CardActions>
+                                : null}
                         </Card>
                     </li>
                 )
@@ -386,24 +410,26 @@ class HomeView extends Component {
                                     <img src={collections[key].picturesArray[0].pictureLink}/>
                                 </CardMedia>
                             </Link>
-                            <CardActions>
-                                <List style={{paddingTop: 0, paddingBottom: 0}}>
-                                    <ListItem disabled={true}
-                                              leftIcon={<CommunicationMessage/>}
-                                              rightIcon={<ContentSend onClick={this.onSave(key + 4)}
-                                                                      hoverColor="green"/>}
-                                              style={{paddingTop: 0, paddingBottom: 0}}
-                                    >
-                                        <TextField name="commentNewsLeft"
-                                                   value={this.state.comments[key + 4].value}
-                                                   onChange={this.onCommentChange(key + 4)}
-                                                   style={{width: "100%"}}
-                                                   multiLine={true}
-                                                   rowsMax={2}
-                                        />
-                                    </ListItem>
-                                </List>
-                            </CardActions>
+                            {this.state.finished === true && this.state.guest === false ?
+                                <CardActions>
+                                    <List style={{paddingTop: 0, paddingBottom: 0}}>
+                                        <ListItem disabled={true}
+                                                  leftIcon={<CommunicationMessage/>}
+                                                  rightIcon={<ContentSend onClick={this.onSave(key + 4)}
+                                                                          hoverColor="green"/>}
+                                                  style={{paddingTop: 0, paddingBottom: 0}}
+                                        >
+                                            <TextField name="commentNewsLeft"
+                                                       value={this.state.comments[key + 4].value}
+                                                       onChange={this.onCommentChange(key + 4)}
+                                                       style={{width: "100%"}}
+                                                       multiLine={true}
+                                                       rowsMax={2}
+                                            />
+                                        </ListItem>
+                                    </List>
+                                </CardActions>
+                                : null}
                         </Card>
                     </li>
                 )
@@ -423,22 +449,24 @@ class HomeView extends Component {
                                     <img src={collections[key].picturesArray[0].pictureLink}/>
                                 </CardMedia>
                             </Link>
-                            <CardActions>
-                                <List style={{paddingTop: 0, paddingBottom: 0}}>
-                                    <ListItem disabled={true}
-                                              rightIcon={<ContentSend onClick={this.onSave(key + 4)}
-                                                                      hoverColor="green"/>}
-                                              style={{paddingTop: 0, paddingBottom: 0}}
-                                    >
-                                        <TextField name="commentNewsLeft"
-                                                   value={this.state.comments[key + 4].value}
-                                                   onChange={this.onCommentChange(key + 4)}
-                                                   style={{width: "100%"}}
-                                                   multiLine={true}
-                                        />
-                                    </ListItem>
-                                </List>
-                            </CardActions>
+                            {this.state.finished === true && this.state.guest === false ?
+                                <CardActions>
+                                    <List style={{paddingTop: 0, paddingBottom: 0}}>
+                                        <ListItem disabled={true}
+                                                  rightIcon={<ContentSend onClick={this.onSave(key + 4)}
+                                                                          hoverColor="green"/>}
+                                                  style={{paddingTop: 0, paddingBottom: 0}}
+                                        >
+                                            <TextField name="commentNewsLeft"
+                                                       value={this.state.comments[key + 4].value}
+                                                       onChange={this.onCommentChange(key + 4)}
+                                                       style={{width: "100%"}}
+                                                       multiLine={true}
+                                            />
+                                        </ListItem>
+                                    </List>
+                                </CardActions>
+                                : null}
                         </Card>
                     </li>
                 )

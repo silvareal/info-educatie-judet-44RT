@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-import Delete from '../../../components/Admin/Collections/Delete.jsx';
+import Delete from '../../../components/Admin/Collections/Main Components/Delete.jsx';
 import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 import Auth from '../../../modules/Auth.js';
 

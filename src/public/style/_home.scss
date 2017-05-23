@@ -1,4 +1,3 @@
-@import "./partials/appBar";
 @import "./constants/fonts";
 @import "./constants/functions";
 
@@ -9,24 +8,42 @@ body {
 //Force root document to have height 100% so that the parallax can be correctly rendered
 body, html, main {
   @include widthAndHeight("auto", 100%);
-  @include background-image("images/home.jpg", fixed, center, repeat, cover);
 }
 
 .force-parallax {
   @include widthAndHeight("auto", 100%);
-  @include background-image("images/home.jpg", fixed, center, repeat, cover);
+
+  .footer {
+    @include display(flex, 1, center);
+    @include widthAndHeight(100%, auto);
+    @include background-color(#3460f1);
+    @include padding(20px);
+    @include box-sizing(border-box);
+
+    ul {
+      @include font("", "", "", "", 20px, "", $Roboto, "");
+      list-style: none;
+      li {
+        @include padding(10px);
+        @include box-sizing(border-box);
+        a {
+          color: #ffffff;
+        }
+
+        :hover {
+          color: #454545;
+        }
+      }
+    }
+  }
 }
 
-.parallax-spacing {
-  min-height: 10%;
-}
-
-.parallax {
+.parallax-home {
   @include widthAndHeight("auto", 100%);
-
+  @include background-image("images/home.jpg", fixed, center, repeat, cover);
   //------------------
 
-  .latest-news {
+  .section-title {
     @include font("", "", bold, "", 60px, "", $Roboto, "");
     @include padding(30px);
     @include background-color(#3460f1);
@@ -34,13 +51,12 @@ body, html, main {
     color: #ffffff;
   }
 
-  .news-container {
+  .container-home {
     @include padding(50px);
     @media screen and (max-width: 1200px) {
       @include padding(0);
     }
     @include display(flex, 1, center);
-    @include background-color(#ffffff);
 
     .news-desktop {
       @include display(flex, 1, center);
@@ -104,33 +120,9 @@ body, html, main {
       }
     }
 
-    .comments-cancel-padding{
+    .comments-cancel-padding {
       padding-top: 0;
       padding-bottom: 0
-    }
-  }
-
-  .footer {
-    @include display(flex, 1, center);
-    @include widthAndHeight(100%, auto);
-    @include background-color(#3460f1);
-    @include padding(20px);
-    @include box-sizing(border-box);
-
-    ul {
-      @include font("", "", "", "", 20px, "", $Roboto, "");
-      list-style: none;
-      li {
-        @include padding(10px);
-        @include box-sizing(border-box);
-        a {
-          color: #ffffff;
-        }
-
-        :hover {
-          color: #454545;
-        }
-      }
     }
   }
 }

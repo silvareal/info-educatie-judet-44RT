@@ -15,28 +15,44 @@ const router = new express.Router();
 
 router.get('/credentials', (req, res) => {
 
-    if (!req.headers.authorization) {
-        return res.status(401);
-    }
+    if (req.headers.authorization.split(' ')[1] !== "null") {
 
-    const token = req.headers.authorization.split(' ')[1];
+        const token = req.headers.authorization.split(' ')[1];
 
-    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+        return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
-        const userId = decoded.sub;
+            if (err) {
+                return res.status(401).json({
+                    message: "Not authorized"
+                })
+            }
 
-        User.findOne({_id: userId}, (err, user) => {
-            return res.json({
-                userName: user.name,
-                userId: userId,
-                firstName: user.firstName
-            })
+            if (!decoded) {
+                return res.status(400).json({
+                    message: "Internal error"
+                })
+            }
+
+            const userId = decoded.sub;
+
+            User.findOne({_id: userId}, (err, user) => {
+                return res.json({
+                    guest: false,
+                    userName: user.name,
+                    userId: userId,
+                    firstName: user.firstName
+                })
+            });
         });
-    });
+    }
+    else {
+        return res.json({
+            guest: true
+        })
+    }
 });
 
 router.get('/news', (req, res) => {
-
     News.find({}, (err, news) => {
         if (err) {
             return res.status(400).json({

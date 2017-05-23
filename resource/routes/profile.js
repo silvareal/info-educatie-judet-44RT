@@ -95,7 +95,15 @@ router.post('/profile', (req, res) => {
         return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
             if (err) {
-                return res.status(401).end();
+                return res.status(401).json({
+                    message: "Not authorized"
+                })
+            }
+
+            if (!decoded) {
+                return res.status(400).json({
+                    message: "Internal error"
+                })
             }
 
             const userId = decoded.sub;
@@ -148,7 +156,15 @@ router.post('/profile-edit', (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const userId = decoded.sub;

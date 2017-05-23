@@ -1,3 +1,11 @@
+@import "./partials/appBar";
+@import './constants/functions';
+
+.top-bar-spacing {
+  @include widthAndHeight(auto, 128px);
+}
+
+
 body {
     margin: 0;
     font-size: 16px;
@@ -46,14 +54,6 @@ a {
 
 .actions {
     padding: 5px;
-}
-
-.container {
-    background-color: gray;
-    margin: 0 auto;
-    text-align: center;
-    width: 100%;
-    height: 100%;
 }
 
 .card-heading {

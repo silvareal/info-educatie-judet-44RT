@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 
-import ReadOne from '../../components/Home/ReadOne.jsx';
+import ReadOne from '../../components/Home/Main Components/ReadOne.jsx';
 import Auth from '../../modules/Auth.js';
 
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
 import {CircularProgress} from 'material-ui';
-import PictureRow from "../../components/Home/PictureRow.jsx";
+import PictureRow from "../../components/Home/Partials Components/PictureRow.jsx";
 
 let socket = io.connect();
 

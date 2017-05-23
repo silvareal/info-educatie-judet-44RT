@@ -35,6 +35,18 @@ router.post("/postCommentNews", (req, res) => {
 
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
         const userId = decoded.sub;
 
         if (validationResult.success) {
@@ -70,39 +82,51 @@ router.post("/postCommentNews", (req, res) => {
 
 router.get("/getUserCredentials", (req, res) => {
 
-    if (!req.headers.authorization) {
-        return res.status(401).end();
-    }
+    if (req.headers.authorization.split(' ')[1].toString() !== "null") {
 
-    const token = req.headers.authorization.split(' ')[1];
+        const token = req.headers.authorization.split(' ')[1];
 
-    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
-
-        const userId = decoded.sub;
-
-        User.findOne({_id: userId}, (err, user) => {
+        return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
             if (err) {
-                res.status(400).json({
-                    message: "Database error"
-                });
-            }
-
-            if (!user) {
-                res.status(404).json({
-                    message: "User not found"
+                return res.status(401).json({
+                    message: "Not authorized"
                 })
             }
 
-            res.json({
-                userName: user.name,
-                firstName: user.firstName,
-                userId: userId
+            if (!decoded) {
+                return res.status(400).json({
+                    message: "Internal error"
+                })
+            }
+
+            const userId = decoded.sub;
+
+            User.findOne({_id: userId}, (err, user) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!user) {
+                    res.status(404).json({
+                        message: "User not found"
+                    })
+                }
+
+                res.json({
+                    userName: user.name,
+                    firstName: user.firstName,
+                    userId: userId
+                });
+
             });
 
         });
-
-    });
+    }
+    else return res.json({guest: true})
 });
 
 router.post("/retrieveCollectionsComments", (req, res) => {
@@ -140,6 +164,18 @@ router.post("/postCommentCollections", (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
 
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
 
         const userId = decoded.sub;
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-import Update from '../../../components/Admin/News/Update.jsx';
+import Update from '../../../components/Admin/News/Main Components/Update.jsx';
 import Auth from '../../../modules/Auth.js';
 import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 

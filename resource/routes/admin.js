@@ -235,7 +235,13 @@ router.get('/adminAuthentication', (req, res) => {
         if (err) {
             return res.status(401).json({
                 message: "Not authorized"
-            });
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const userId = decoded.sub;
@@ -268,7 +274,15 @@ router.get("/showUsers", (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const userId = decoded.sub;
@@ -303,8 +317,17 @@ router.post('/makeModerators', (req, res) => {
     jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
         //here to be used for logs
         const userId = decoded.sub;
 
@@ -394,8 +417,17 @@ router.post("/create", (req, res) => {
     jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
         //here to be used for logs
         const userId = decoded.sub;
 
@@ -446,8 +478,17 @@ router.get("/readAll", (req, res) => {
     jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
         //here to be used for logs
         const userId = decoded.sub;
 
@@ -482,8 +523,17 @@ router.post("/readOne", (req, res) => {
     jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
         //here to be used for logs
         const userId = decoded.sub;
 
@@ -518,8 +568,17 @@ router.post('/updateShow', (req, res) => {
     jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
         //here to be used for logs
         const userId = decoded.sub;
 
@@ -564,7 +623,15 @@ router.post('/updateSave', (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         News.updateOne({_id: {$eq: req.body.newsId}}, {
@@ -628,7 +695,15 @@ router.post('/deleteShow', (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const userId = decoded.sub;
@@ -666,7 +741,15 @@ router.post('/delete', (req, res) => {
     jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const logData = {
@@ -722,7 +805,15 @@ router.post("/createCollection", (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const userId = decoded.sub;
@@ -778,29 +869,42 @@ router.get("/readAllCollections", (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const userId = decoded.sub;
+        const isAdmin = decoded.isAdmin;
 
-        //the admin can see all collections ever added
-        Collection.find({}, (err, collections) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Database error"
+        if (isAdmin === true){
+            //the admin can see all collections ever added
+            Collection.find({}, (err, collections) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (collections.length == 0) {
+                    return res.status(404).json({
+                        message: "Nothing has been addded yet"
+                    })
+                }
+
+                return res.json({
+                    collections: collections
                 });
-            }
+            }).sort({time: -1});
+        }
+        else return res.json({isAdmin: false})
 
-            if (collections.length == 0) {
-                return res.status(404).json({
-                    message: "Nothing has been addded yet"
-                })
-            }
-
-            return res.json({
-                collections: collections
-            });
-        }).sort({time: -1});
     });
 });
 
@@ -815,7 +919,15 @@ router.post("/readOneCollection", (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const userId = decoded.sub;
@@ -851,7 +963,15 @@ router.post('/updateShowCollections', (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const userId = decoded.sub;
@@ -897,7 +1017,15 @@ router.post('/updateSaveCollections', (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const userId = decoded.sub;
@@ -960,6 +1088,18 @@ router.post('/deleteShowCollection', (req, res) => {
 
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
         const userId = decoded.sub;
 
         User.findOne({_id: userId}, (err, user) => {
@@ -1008,7 +1148,15 @@ router.post("/deleteCollection", (req, res) => {
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            return res.status(401).end();
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
         const userId = decoded.sub;

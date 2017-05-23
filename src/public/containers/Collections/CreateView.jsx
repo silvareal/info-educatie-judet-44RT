@@ -11,7 +11,7 @@ class CreateView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userId: '',
+            userName: '',
             successCreation: '',
             collectionName: '',
             inputCount: 1,
@@ -30,6 +30,25 @@ class CreateView extends Component {
             collectionDescription: RichTextEditor.createEmptyValue(),
             __html: ''
         };
+    };
+
+    getCredentials = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/home/credentials');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                this.setState({
+                    userName: xhr.response.userName
+                })
+            }
+        });
+        xhr.send();
+    };
+
+    componentDidMount() {
+        this.getCredentials();
     };
 
     getHTML = () => {
@@ -112,8 +131,9 @@ class CreateView extends Component {
         const collectionName = encodeURIComponent(this.state.collectionName);
         const collectionDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
         const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
+        const userName = encodeURIComponent(this.state.userName);
 
-        const formData = `collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
+        const formData = `collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}&userName=${userName}`;
 
         //AJAX
         const xhr = new XMLHttpRequest();
