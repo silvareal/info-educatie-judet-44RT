@@ -90,23 +90,14 @@ class UpdateView extends Component {
                 for (let i = 0; i < pictures.length; i++) {
                     this.setRawValue(i);
                     this.setHTMLValue(i);
-                    if ( i === pictures.length -1 ){
+                    if (i === pictures.length - 1) {
                         this.setState({
                             fetched: true,
                         })
                     }
                 }
 
-            } else if (xhr.status == 404) {
-                //The user or collection does not exist
-                //We show the corresponding error message
-                this.setState({
-                    errorMessage: xhr.response.message,
-                    response: false
-                });
-            }
-            else {
-                //Database error to be handled only by an admin
+            } else {
                 this.setState({
                     errorMessage: xhr.response.message,
                     response: false
@@ -209,8 +200,14 @@ class UpdateView extends Component {
         });
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     onSave = () => {
         if (this.state.response === true) {
+
+            this.resetScroll();
 
             //converting collectionDescription to collectionDescriptionRaw
             let editorState = this.state.collectionDescription.getEditorState();
@@ -235,20 +232,17 @@ class UpdateView extends Component {
             xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
             xhr.responseType = 'json';
             xhr.addEventListener('load', () => {
-                if (xhr.status == 200) {
-                    //The collection was updated and we must show a confirmation
-                    //We will use state.errorMessage to do that
+                if (xhr.status === 200) {
                     this.setState({
                         errorMessage: "Your collection was successfully updated!"
                     });
                 }
-                else if (xhr.status == 404) {
-                    //Handle error in case the collection is missing
+                else if (xhr.status === 404) {
                     this.setState({
                         errorMessage: "The collection was not found. Maybe you deleted it?"
                     });
                 }
-                else if (xhr.status == 400) {
+                else if (xhr.status === 400) {
                     //Inserted data is not correct or database error
 
                     const errors = xhr.response.errors ? xhr.response.errors : {};
@@ -293,8 +287,7 @@ class UpdateView extends Component {
             document.title = "Update - " + this.state.collectionName;
         else
             document.title = "404 not found";
-        if (this.state.fetched === true)
-        {
+        if (this.state.fetched === true) {
             return (
                 <Update
                     collectionId={this.state.collectionId}
@@ -320,12 +313,8 @@ class UpdateView extends Component {
                 />
             );
         }
-        else {
-            return (
-                <CircularProgress/>
-            )
-        }
-        }
+        else return <CircularProgress/>
+    }
 }
 
 export default UpdateView

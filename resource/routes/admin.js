@@ -33,9 +33,9 @@ function validateCreateCollectionForm(payload) {
         errors.collectionName = "Please use a valid name for the collection"
     }
 
-    if (!payload.collectionDescription || typeof payload.collectionDescription !== 'string' || payload.collectionDescription.trim().length > 5000) {
+    if (!payload.collectionDescriptionRaw || typeof payload.collectionDescriptionRaw !== 'string' || payload.collectionDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
-        errors.collectionDescription = "Please use a valid description"
+        errors.collectionDescriptionRaw = "Please use a valid description"
     }
 
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
@@ -45,9 +45,9 @@ function validateCreateCollectionForm(payload) {
             isFormValid = false;
             errorsPicturesArray[key].pictureName = "Please use a valid name for this picture"
         }
-        if (!errorsPicturesArray[key].pictureDescription || typeof errorsPicturesArray[key].pictureDescription !== 'string' || errorsPicturesArray[key].pictureDescription.trim().length > 5000) {
+        if (!errorsPicturesArray[key].pictureDescriptionRaw || typeof errorsPicturesArray[key].pictureDescriptionRaw !== 'string' || errorsPicturesArray[key].pictureDescriptionRaw.trim().length > 5000) {
             isFormValid = false;
-            errorsPicturesArray[key].pictureDescription = "Please use a valid description for this picture"
+            errorsPicturesArray[key].pictureDescriptionRaw = "Please use a valid description for this picture"
         }
         if (!errorsPicturesArray[key].pictureLink || typeof errorsPicturesArray[key].pictureLink !== 'string') {
             isFormValid = false;
@@ -84,9 +84,9 @@ function validateUpdateCollectionsForm(payload) {
         errors.collectionName = "Please use a valid name for the collection"
     }
 
-    if (!payload.collectionDescription || typeof payload.collectionDescription !== 'string' || payload.collectionDescription.trim().length > 5000) {
+    if (!payload.collectionDescriptionRaw || typeof payload.collectionDescriptionRaw !== 'string' || payload.collectionDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
-        errors.collectionDescription = "Please use a valid description"
+        errors.collectionDescriptionRaw = "Please use a valid description"
     }
 
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
@@ -96,9 +96,9 @@ function validateUpdateCollectionsForm(payload) {
             isFormValid = false;
             errorsPicturesArray[key].pictureName = "Please use a valid name for this picture"
         }
-        if (!errorsPicturesArray[key].pictureDescription || typeof errorsPicturesArray[key].pictureDescription !== 'string' || errorsPicturesArray[key].pictureDescription.trim().length > 5000) {
+        if (!errorsPicturesArray[key].pictureDescriptionRaw || typeof errorsPicturesArray[key].pictureDescriptionRaw !== 'string' || errorsPicturesArray[key].pictureDescriptionRaw.trim().length > 5000) {
             isFormValid = false;
-            errorsPicturesArray[key].pictureDescription = "Please use a valid description for this picture"
+            errorsPicturesArray[key].pictureDescriptionRaw = "Please use a valid description for this picture"
         }
         if (!errorsPicturesArray[key].pictureLink || typeof errorsPicturesArray[key].pictureLink !== 'string') {
             isFormValid = false;
@@ -119,7 +119,7 @@ function validateUpdateCollectionsForm(payload) {
 }
 
 //retrieve the array from the ajax request and make a new array for database update query
-function validateMakeModeratorsForm(payload)  {
+function validateMakeModeratorsForm(payload) {
     let i = 0;
     let makeModerators = [];
     payload.moderators = JSON.parse(payload.moderators);
@@ -151,9 +151,9 @@ function validateCreateNewsForm(payload) {
         errors.newsCoverLink = "Please use a shorter link"
     }
 
-    if (!payload.newsDescription || typeof payload.newsDescription !== 'string' || payload.newsDescription.trim().length > 5000) {
+    if (!payload.newsDescriptionRaw || typeof payload.newsDescriptionRaw !== 'string' || payload.newsDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
-        errors.newsDescription = "Please use a shorter and valid description"
+        errors.newsDescriptionRaw = "Please use a valid description"
     }
 
     let errorsNewsPicturesArray = JSON.parse(payload.newsPictures);
@@ -194,9 +194,9 @@ function validateUpdateNewsForm(payload) {
         errors.newsCoverLink = "Please use a shorter link"
     }
 
-    if (!payload.newsDescription || typeof payload.newsDescription !== 'string' || payload.newsDescription.trim().length > 5000) {
+    if (!payload.newsDescriptionRaw || typeof payload.newsDescriptionRaw !== 'string' || payload.newsDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
-        errors.newsDescription = "Please use a shorter and valid description"
+        errors.newsDescriptionRaw = "Please use a shorter and valid description"
     }
 
     let errorsNewsPicturesArray = JSON.parse(payload.newsPictures);
@@ -224,43 +224,37 @@ router.get('/adminAuthentication', (req, res) => {
 
     //check if user is admin and retrieve the users list if so
 
-    if (!req.headers.authorization) {
-        return res.status(401);
+    if (req.headers.authorization && req.headers.authorization.split(' ')[1].toString() !== "null") {
+
+        const token = req.headers.authorization.split(' ')[1];
+
+        return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+            if (err) {
+                return res.status(401).end();
+            }
+
+            if (!decoded) {
+                return res.status(401).end();
+            }
+
+            const userId = decoded.sub;
+
+            User.findOne({_id: userId}, (err, user) => {
+
+                if (user.admin === true) {
+
+                    res.json({
+                        message: "Welcome admin"
+                    });
+                }
+                else {
+                    res.status(401).end();
+                }
+            })
+        });
     }
-
-    const token = req.headers.authorization.split(' ')[1];
-
-    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
-
-        if (err) {
-            return res.status(401).json({
-                message: "Not authorized"
-            })
-        }
-
-        if (!decoded) {
-            return res.status(400).json({
-                message: "Internal error"
-            })
-        }
-
-        const userId = decoded.sub;
-
-        User.findOne({_id: userId}, (err, user) => {
-
-            if (user.admin === true) {
-
-                res.json({
-                    message: "Welcome admin"
-                });
-            }
-            else {
-                res.status(401).json({
-                    message: "Not an admin"
-                });
-            }
-        })
-    });
+    else return res.status(401).end();
 });
 
 router.get("/showUsers", (req, res) => {
@@ -396,7 +390,7 @@ router.post('/makeModerators', (req, res) => {
     });
 });
 
-//the ones that don't specify the target are for the news CRUD
+//the ones that don't specify the target are for the NEWS CRUD
 router.post("/create", (req, res) => {
     const validationResult = validateCreateNewsForm(req.body);
     if (!validationResult.success) {
@@ -435,7 +429,7 @@ router.post("/create", (req, res) => {
             userId: userId,
             newsTitle: req.body.newsTitle,
             newsCoverLink: req.body.newsCoverLink,
-            newsDescription: req.body.newsDescription,
+            newsDescriptionRaw: req.body.newsDescriptionRaw,
             picturesArray: JSON.parse(req.body.newsPictures)
         };
 
@@ -489,9 +483,6 @@ router.get("/readAll", (req, res) => {
             })
         }
 
-        //here to be used for logs
-        const userId = decoded.sub;
-
         News.find({}, (err, news) => {
             if (err) {
                 return res.status(400).json({
@@ -508,8 +499,50 @@ router.get("/readAll", (req, res) => {
             return res.json({
                 news: news
             });
-        }).sort({time: -1});
+        }).sort({time: -1}).limit(10);
     });
+});
+
+router.post('/loadMoreNews', (req, res) => {
+    News.find({}, (err, news) => {
+
+        if (err) {
+            return res.status(400).json({
+                message: "Database error"
+            })
+        }
+
+        if (parseInt(news.length) === 0) {
+            return res.json({
+                message: "NoNews"
+            })
+        }
+
+        return res.json({
+            news: news
+        })
+    }).sort({time: -1}).limit(10).skip(parseInt(req.body.loadAfter));
+});
+
+router.post('/searchNews', (req, res) => {
+    News.find({newTitle: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, news) => {
+
+        if (err) {
+            return res.status(400).json({
+                message: "Database error"
+            })
+        }
+
+        if (!news) {
+            return res.status(404).json({
+                message: "NoRecordsError"
+            })
+        }
+
+        res.json({
+            news: news
+        })
+    }).sort({time: -1});
 });
 
 router.post("/readOne", (req, res) => {
@@ -637,6 +670,7 @@ router.post('/updateSave', (req, res) => {
         News.updateOne({_id: {$eq: req.body.newsId}}, {
             $set: {
                 newsTitle: req.body.newsTitle,
+                newsDescriptionRaw: req.body.newsDescriptionRaw,
                 newsCoverLink: req.body.newsCoverLink,
                 picturesArray: JSON.parse(req.body.newsPictures)
             }
@@ -659,10 +693,10 @@ router.post('/updateSave', (req, res) => {
                 newsId: req.body.newsId,
                 newsTitle: req.body.newsTitle,
                 newsCoverLink: req.body.newsCoverLink,
-                newsDescription: req.body.newsDescription,
+                newsDescriptionRaw: req.body.newsDescriptionRaw,
                 newsTitleOld: req.body.newsTitleOld,
                 newsCoverLinkOld: req.body.newsCoverLinkOld,
-                newsDescriptionOld: req.body.newsDescriptionOld,
+                newsDescriptionRawOld: req.body.newsDescriptionRawOld,
                 picturesArray: JSON.parse(req.body.newsPictures),
                 picturesArrayOld: JSON.parse(req.body.newsPicturesOld)
             };
@@ -824,7 +858,7 @@ router.post("/createCollection", (req, res) => {
         const collectionData = {
             userId: req.body.userId,
             collectionName: req.body.collectionName,
-            collectionDescription: req.body.collectionDescription,
+            collectionDescriptionRaw: req.body.collectionDescriptionRaw,
             picturesArray: JSON.parse(req.body.picturesArray)
         };
 
@@ -880,11 +914,10 @@ router.get("/readAllCollections", (req, res) => {
             })
         }
 
-        const userId = decoded.sub;
-        const isAdmin = decoded.isAdmin;
+        let isAdmin = decoded.isAdmin;
 
-        if (isAdmin === true){
-            //the admin can see all collections ever added
+        if (isAdmin === true)
+        {
             Collection.find({}, (err, collections) => {
                 if (err) {
                     return res.status(400).json({
@@ -901,11 +934,52 @@ router.get("/readAllCollections", (req, res) => {
                 return res.json({
                     collections: collections
                 });
-            }).sort({time: -1});
+            }).sort({time: -1}).limit(10);
         }
-        else return res.json({isAdmin: false})
-
+        else return res.status(401).end();
     });
+});
+
+router.post('/loadMoreCollections', (req, res) => {
+    Collection.find({}, (err, collections) => {
+
+        if (err) {
+            return res.status(400).json({
+                message: "Database error"
+            })
+        }
+
+        if (parseInt(collections.length) === 0) {
+            return res.json({
+                message: "NoCollections"
+            })
+        }
+
+        return res.json({
+            collections: collections
+        })
+    }).sort({time: -1}).limit(10).skip(parseInt(req.body.loadAfter));
+});
+
+router.post("/searchCollections", (req, res) => {
+    Collection.find({collectionName: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, collections) => {
+
+        if (err) {
+            return res.status(400).json({
+                message: "Database error"
+            })
+        }
+
+        if (!collections) {
+            return res.status(404).json({
+                message: "NoRecordsError"
+            })
+        }
+
+        res.json({
+            collections: collections
+        })
+    }).sort({time: -1});
 });
 
 router.post("/readOneCollection", (req, res) => {
@@ -1034,7 +1108,7 @@ router.post('/updateSaveCollections', (req, res) => {
             $set: {
                 userId: req.body.userId,
                 collectionName: req.body.collectionName,
-                collectionDescription: req.body.collectionDescription,
+                collectionDescriptionRaw: req.body.collectionDescriptionRaw,
                 picturesArray: JSON.parse(req.body.picturesArray)
             }
         }, (err, collection) => {
@@ -1057,10 +1131,10 @@ router.post('/updateSaveCollections', (req, res) => {
                 userId: req.body.userId,
                 userIdOld: req.body.userIdOld,
                 collectionName: req.body.collectionName,
-                collectionDescription: req.body.collectionDescription,
+                collectionDescriptionRaw: req.body.collectionDescriptionRaw,
                 picturesArray: JSON.parse(req.body.picturesArray),
                 collectionNameOld: req.body.collectionNameOld,
-                collectionDescriptionOld: req.body.collectionDescriptionOld,
+                collectionDescriptionRawOld: req.body.collectionDescriptionRawOld,
                 picturesArrayOld: JSON.parse(req.body.picturesArrayOld),
                 updatedByAdmin: true
             };
@@ -1203,25 +1277,25 @@ router.post("/deleteCollection", (req, res) => {
 });
 
 router.get("/logsLogin", (req, res) => {
-     LoginLogs.find({}, (err, logs) => {
+    LoginLogs.find({}, (err, logs) => {
 
-         if (err) {
-             res.status(400).json({
-                 message: "Database error"
-             });
-         }
+        if (err) {
+            res.status(400).json({
+                message: "Database error"
+            });
+        }
 
-         if (!logs) {
-             res.status(404).json({
-                 message: "No logs found"
-             });
-         }
+        if (!logs) {
+            res.status(404).json({
+                message: "No logs found"
+            });
+        }
 
-         res.json({
-             logs: logs
-         });
+        res.json({
+            logs: logs
+        });
 
-     }).sort({time: -1});
+    }).sort({time: -1});
 });
 
 router.get("/logsSignup", (req, res) => {

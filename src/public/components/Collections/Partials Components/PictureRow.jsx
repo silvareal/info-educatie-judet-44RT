@@ -10,7 +10,7 @@ class PictureRow extends Component {
         return (
             <div>
                 <div>
-                    Picture name: {this.props.pictureName}
+                    {this.props.pictureName}
                 </div>
                 <div>
                     <img src={this.props.pictureLink} />

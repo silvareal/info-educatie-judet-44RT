@@ -10,7 +10,7 @@ const NewsSchema = new mongoose.Schema({
     newsCoverLink: {
         type: String,
     },
-    newsDescription: {
+    newsDescriptionRaw: {
         type: String,
     },
     picturesArray: [

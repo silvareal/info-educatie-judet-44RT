@@ -1,8 +1,12 @@
 import React, {Component} from 'react'
 
-import Create from '../../../components/Admin/Collections/Main Components/Create.jsx'
-import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
+import RichTextEditor from 'react-rte';
+import {stateToHTML} from 'draft-js-export-html';
+import {convertToRaw} from 'draft-js';
+
+import Create from '../../../components/Admin/Collections/Main Components/Create.jsx';
 import Auth from '../../../modules/Auth.js';
+import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 
 class CreateView extends Component {
     constructor(props) {
@@ -11,7 +15,6 @@ class CreateView extends Component {
             userId:'',
             successCreation: '',
             collectionName: '',
-            collectionDescription: '',
             inputCount: 1,
             errorMessage: '',
             errors: {},
@@ -22,8 +25,11 @@ class CreateView extends Component {
             pictures: [{
                 pictureName: '',
                 pictureLink: '',
-                pictureDescription: ''
+                pictureDescription: RichTextEditor.createEmptyValue(),
+                pictureDescriptionRaw: '',
             }],
+            collectionDescription: RichTextEditor.createEmptyValue(),
+            __html: '',
             isAdmin: false
         };
     };
@@ -45,6 +51,14 @@ class CreateView extends Component {
         xhr.send();
     }
 
+    getHTML = () => {
+        let editorState = this.state.collectionDescription.getEditorState();
+        let contentState = editorState.getCurrentContent();
+        let __html = stateToHTML(contentState);
+        if (__html.search("/script") === -1 && __html.search("script") === -1)
+            return {__html: __html};
+    };
+
     onUserIdChange = (e) => {
         this.setState({userId: e.target.value});
     };
@@ -53,20 +67,8 @@ class CreateView extends Component {
         this.setState({collectionName: e.target.value});
     };
 
-    onCollectionDescriptionChange = (e) => {
-        this.setState({collectionDescription: e.target.value});
-    };
-
-    onPictureNameChange = (e) => {
-        this.setState({pictureName: e.target.value});
-    };
-
-    onPictureLinkChange = (e) => {
-        this.setState({pictureLink: e.target.value});
-    };
-
-    onPictureDescriptionChange = (e) => {
-        this.setState({pictureDescription: e.target.value});
+    onCollectionDescriptionChange = (value) => {
+        this.setState({collectionDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
     handlePicturesNameChange = (i) => (e) => {
@@ -85,10 +87,14 @@ class CreateView extends Component {
         this.setState({pictures: newPictures});
     };
 
-    handlePicturesDescriptionChange = (i) => (e) => {
+    handlePicturesDescriptionChange = (i) => (value) => {
         const newPictures = this.state.pictures.map((picture, j) => {
             if (i !== j) return picture;
-            return {...picture, pictureDescription: e.target.value};
+
+            let editorState = value.getEditorState();
+            let contentState = editorState.getCurrentContent();
+            let rawContentState = window.rawContentState = convertToRaw(contentState);
+            return {...picture, pictureDescription: value, pictureDescriptionRaw: JSON.stringify(rawContentState)};
         });
         this.setState({pictures: newPictures});
     };
@@ -100,7 +106,8 @@ class CreateView extends Component {
                 pictures: this.state.pictures.concat([{
                     pictureName: '',
                     pictureLink: '',
-                    pictureDescription: ''
+                    pictureDescription: RichTextEditor.createEmptyValue(),
+                    pictureDescriptionRaw: ''
                 }])
             });
         }
@@ -117,14 +124,26 @@ class CreateView extends Component {
         });
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     onSave = () => {
+
+        this.resetScroll();
+
+        //converting collectionDescription to collectionDescriptionRaw
+        let editorState = this.state.collectionDescription.getEditorState();
+        let contentState = editorState.getCurrentContent();
+        let rawContentState = window.rawContentState = convertToRaw(contentState);
+
         //The next few lines will define the HTTP body message
         const userId = encodeURIComponent(this.state.userId);
         const collectionName = encodeURIComponent(this.state.collectionName);
-        const collectionDescription = encodeURIComponent(this.state.collectionDescription);
+        const collectionDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
         const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
 
-        const formData = `userId=${userId}&collectionName=${collectionName}&collectionDescription=${collectionDescription}&picturesArray=${picturesArray}`;
+        const formData = `userId=${userId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
 
         //AJAX
         const xhr = new XMLHttpRequest();
@@ -143,7 +162,7 @@ class CreateView extends Component {
                     errorMessage: '',
                     userId: '',
                     collectionName: '',
-                    collectionDescription: '',
+                    collectionDescription: RichTextEditor.createEmptyValue(),
                     pictures: [
                         {
                             pictureName: '',
@@ -200,6 +219,8 @@ class CreateView extends Component {
             document.title = "Create collections - Admin Controlled";
             return (
                 <Create
+                    getHTML={this.getHTML}
+                    __html={this.state.__html}
                     userId={this.state.userId}
                     adminId={this.props.params._id}
                     onUserIdChange={this.onUserIdChange}
@@ -209,9 +230,6 @@ class CreateView extends Component {
                     onCollectionDescriptionChange={this.onCollectionDescriptionChange}
                     pictures={this.state.pictures}
                     errorMessage={this.state.errorMessage}
-                    onPictureNameChange={this.onPictureNameChange}
-                    onPictureLinkChange={this.onPictureLinkChange}
-                    onPictureDescriptionChange={this.onPictureDescriptionChange}
                     handlePicturesNameChange={this.handlePicturesNameChange}
                     handlePicturesLinkChange={this.handlePicturesLinkChange}
                     handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
@@ -225,7 +243,7 @@ class CreateView extends Component {
                     pictureLinkError={this.state.pictureLinkError}
                 />)
         }
-        else return <NotAuthorizedPage/>
+        else return <NotAuthorizedView/>
     }
 }
 

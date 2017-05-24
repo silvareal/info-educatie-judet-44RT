@@ -104,7 +104,7 @@ class ReadAllView extends Component {
             xhr.addEventListener('load', () => {
                 if (xhr.status === 200) {
 
-                    if (xhr.response.message === "NoCollections"){
+                    if (xhr.response.message === "NoCollections") {
                         this.setState({finished: true});
                     }
                     else {
@@ -124,11 +124,11 @@ class ReadAllView extends Component {
     };
 
     onQueryChange = (e) => {
-          if (e.target.value.length === 0) {
-              this.setState({searchQuery: e.target.value, searching: false, collections: this.state.collectionsPreSearch})
-          }
-          else
-              this.setState({searchQuery: e.target.value});
+        if (e.target.value.length === 0) {
+            this.setState({searchQuery: e.target.value, searching: false, collections: this.state.collectionsPreSearch})
+        }
+        else
+            this.setState({searchQuery: e.target.value});
     };
 
     handleKeyPress = (e) => {
@@ -139,52 +139,50 @@ class ReadAllView extends Component {
 
     onSearch = () => {
 
-          //if the search box is not empty
-          if (this.state.searchQuery){
+        //if the search box is not empty
+        if (this.state.searchQuery) {
 
-              const searchQuery = encodeURIComponent(this.state.searchQuery);
+            const searchQuery = encodeURIComponent(this.state.searchQuery);
 
-              const formData = `searchQuery=${searchQuery}`;
+            const formData = `searchQuery=${searchQuery}`;
 
-              const xhr = new XMLHttpRequest();
-              xhr.open('post', '/crud/searchCollections');
-              xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-              xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-              xhr.responseType = 'json';
-              xhr.addEventListener('load', () => {
-                    if (xhr.status === 200){
+            const xhr = new XMLHttpRequest();
+            xhr.open('post', '/crud/searchCollections');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+            xhr.responseType = 'json';
+            xhr.addEventListener('load', () => {
+                if (xhr.status === 200) {
 
-                        //no collections found
-                        if (xhr.response.errorMessage) {
-                            this.setState({searchErrorMessage: xhr.response.errorMessage, collections:[]});
-                        }
-                        else {
-                            this.setState({collections: xhr.response.collections})
-                        }
+                    //no collections found
+                    if (xhr.response.errorMessage) {
+                        this.setState({searchErrorMessage: xhr.response.errorMessage, collections: []});
                     }
-              });
-              if (this.state.searchErrorMessage.length === 0)
-              xhr.send(formData);
-              this.setState({searching: true});
-          }
-          else {
-              this.setState({collections: this.state.collectionsPreSearch});
-          }
+                    else {
+                        this.setState({collections: xhr.response.collections})
+                    }
+                }
+            });
+            if (this.state.searchErrorMessage.length === 0)
+                xhr.send(formData);
+            this.setState({searching: true});
+        }
+        else {
+            this.setState({collections: this.state.collectionsPreSearch});
+        }
     };
 
     render() {
         document.title = "Manage collections";
         return (
-            <div>
-                <ReadAll
-                    handleKeyPress={this.handleKeyPress}
-                    onQueryChange={this.onQueryChange}
-                    searchQuery={this.state.searchQuery}
-                    collections={this.state.collections}
-                    errorMessage={this.state.errorMessage}
-                    onSearch={this.onSearch}
-                />
-            </div>
+            <ReadAll
+                handleKeyPress={this.handleKeyPress}
+                onQueryChange={this.onQueryChange}
+                searchQuery={this.state.searchQuery}
+                collections={this.state.collections}
+                errorMessage={this.state.errorMessage}
+                onSearch={this.onSearch}
+            />
         );
     }
 }

@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from "react";
+import React, {Component} from "react";
 import {Link} from "react-router";
 
 import RichTextEditor from 'react-rte';
@@ -6,15 +6,24 @@ import PictureRow from '../Partials Components/PictureRow.jsx';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
-import {FlatButton, RaisedButton, Step, StepButton, Stepper, TextField} from "material-ui";
+import {
+    FlatButton,
+    RaisedButton,
+    Step,
+    StepButton,
+    Stepper,
+    TextField,
+    Card,
+    CardHeader,
+    CardTitle,
+    CardActions,
+    CardMedia
+} from "material-ui";
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
 
 class Create extends Component {
 
-    static propTypes = {
-        onChange: PropTypes.func
-    };
 
     constructor(props) {
         super(props);
@@ -29,6 +38,7 @@ class Create extends Component {
         if (stepIndex < 2) {
             this.setState({stepIndex: stepIndex + 1});
         }
+        this.resetScroll();
     };
 
     handlePrev = () => {
@@ -36,6 +46,7 @@ class Create extends Component {
         if (stepIndex > 0) {
             this.setState({stepIndex: stepIndex - 1});
         }
+        this.resetScroll();
     };
 
     handleKeyPress = (e) => {
@@ -68,6 +79,25 @@ class Create extends Component {
             });
         }
 
+        const toolbarConfig = {
+            // Optionally specify the groups to display (displayed in the order listed).
+            display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
+            INLINE_STYLE_BUTTONS: [
+                {label: 'Bold', style: 'BOLD'},
+                {label: 'Italic', style: 'ITALIC'},
+                {label: 'Underline', style: 'UNDERLINE'}
+            ],
+            BLOCK_TYPE_DROPDOWN: [
+                {label: 'Normal text', style: 'unstyled'},
+                {label: 'Medium text', style: 'header-two'},
+                {label: 'Large text', style: 'header-one'}
+            ],
+            BLOCK_TYPE_BUTTONS: [
+                {label: 'UL', style: 'unordered-list-item'},
+                {label: 'OL', style: 'ordered-list-item'}
+            ]
+        };
+
         switch (stepIndex) {
             case 0:
                 return (
@@ -78,12 +108,14 @@ class Create extends Component {
                                     Please use a name that is shorter than 100 characters
                                 </div> : null}
                             <TextField
-                                type="text" floatingLabelText="Name of the collection"
+                                hintText="Give your collection a cool title"
                                 value={this.props.collectionName}
                                 onChange={this.props.onCollectionChange}
                                 errorText={this.props.errors.collectionName}
                                 onKeyDown={this.handleKeyPress}
                                 autoFocus={true}
+                                multiLine={true}
+                                className="step-textfields"
                             />
                         </div>
                         <div>
@@ -92,11 +124,13 @@ class Create extends Component {
                                     Write less, keep it simple !
                                 </div> : null
                             }
-                            {this.props.errors.collectionDescriptionRaw ? <div style={{color: 'red'}}>{this.props.errors.collectionDescriptionRaw}</div> : null}
+                            {this.props.errors.collectionDescriptionRaw ?
+                                <div style={{color: 'red'}}>{this.props.errors.collectionDescriptionRaw}</div> : null}
                             <RichTextEditor
                                 value={this.props.collectionDescription}
                                 onChange={this.props.onCollectionDescriptionChange}
                                 placeholder="Collection description"
+                                toolbarConfig={toolbarConfig}
                             />
                         </div>
                     </div>
@@ -111,47 +145,57 @@ class Create extends Component {
                                         <div>
                                             Please use a name that is shorter than 100 characters
                                         </div> : null}
-                                    {this.props.pictureNameError[i] == "Please use a valid name for this picture" ?
-                                        <TextField type="text" floatingLabelText="Picture name"
+                                    {this.props.pictureNameError[i] === "Please use a valid name for this picture" ?
+                                        <TextField hintText="Give your pictures a cool name"
                                                    value={picture.pictureName}
                                                    onChange={this.props.handlePicturesNameChange(i)}
                                                    errorText={this.props.pictureNameError[i]}
                                                    onKeyDown={this.handleKeyPress}
                                                    autoFocus={true}
+                                                   multiLine={true}
+                                                   className="step-textfields"
                                         />
                                         :
-                                        <TextField type="text" floatingLabelText="Picture name"
+                                        <TextField hintText="Give your work of art a cool name"
                                                    value={picture.pictureName}
                                                    onChange={this.props.handlePicturesNameChange(i)}
                                                    onKeyDown={this.handleKeyPress}
                                                    autoFocus={true}
+                                                   multiLine={true}
+                                                   className="step-textfields"
                                         />
                                     }
                                 </div>
                                 <div className="input-field">
-                                    {this.props.pictureLinkError[i] == "Please use a link for the picture" ?
-                                        <TextField type="text" floatingLabelText="Picture link"
+                                    {this.props.pictureLinkError[i] === "Please use a link for the picture" ?
+                                        <TextField hintText="Give us the link of your work of art"
                                                    value={picture.pictureLink}
                                                    onChange={this.props.handlePicturesLinkChange(i)}
                                                    errorText={this.props.pictureLinkError[i]}
                                                    onKeyDown={this.handleKeyPress}
+                                                   multiLine={true}
+                                                   className="step-textfields"
                                         />
                                         :
-                                        <TextField type="text" floatingLabelText="Picture link"
+                                        <TextField hintText="Give us the link of your work of art"
                                                    value={picture.pictureLink}
                                                    onChange={this.props.handlePicturesLinkChange(i)}
                                                    onKeyDown={this.handleKeyPress}
+                                                   multiLine={true}
+                                                   className="step-textfields"
                                         />
                                     }
-                                    <img src={picture.pictureLink} style={{width: 100, height: 100}}/>
                                 </div>
+                                <CardMedia>
+                                    <img src={picture.pictureLink} className="step-picture"/>
+                                </CardMedia>
                                 <div className="input-field">
                                     {picture.pictureDescriptionRaw && picture.pictureDescriptionRaw.length > 5000 ?
                                         <div>
                                             Please use a description that is shorther than 5000 characters
                                         </div> : null
                                     }
-                                    {this.props.pictureDescriptionError[i] == "Please use a valid description for this picture" ?
+                                    {this.props.pictureDescriptionError[i] === "Please use a valid description for this picture" ?
 
                                         <div>
                                             {this.props.pictureDescriptionError[i]}
@@ -159,6 +203,7 @@ class Create extends Component {
                                                 value={picture.pictureDescription}
                                                 onChange={this.props.handlePicturesDescriptionChange(i)}
                                                 placeholder="Collection description"
+                                                toolbarConfig={toolbarConfig}
                                             />
                                         </div>
                                         :
@@ -167,16 +212,15 @@ class Create extends Component {
                                                 value={picture.pictureDescription}
                                                 onChange={this.props.handlePicturesDescriptionChange(i)}
                                                 placeholder="Collection description"
+                                                toolbarConfig={toolbarConfig}
                                             />
                                         </div>
                                     }
                                 </div>
-                                { (i === 0) ? (
-                                    <RaisedButton type="button" primary={true} label="+"
-                                                  onClick={this.props.handleAddPictures(i)}/>
-                                ) : null}
+                                <RaisedButton type="button" primary={true} label="+"
+                                              onClick={this.props.handleAddPictures(i)}/>
 
-                                { (i != 0) ? (
+                                { (i !== 0) ? (
                                     <RaisedButton type="button" secondary={true} label="-"
                                                   onClick={this.props.handleRemovePictures(i)}/>
                                 ) : null}
@@ -187,9 +231,10 @@ class Create extends Component {
                 );
             case 2:
                 return (
-                    <div>
-                        <div>Collecion name: {this.props.collectionName}</div>
-                        <div dangerouslySetInnerHTML={this.props.getHTML()} />
+                    <div className="preview">
+                        <div>The preview of what you wish to add is here</div>
+                        <div>{this.props.collectionName}</div>
+                        <div dangerouslySetInnerHTML={this.props.getHTML()}/>
                         {rows}
                     </div>
                 );
@@ -198,71 +243,98 @@ class Create extends Component {
         }
     }
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     render() {
 
         const {stepIndex} = this.state;
-        const contentStyle = {margin: '0 16px'};
 
         return (
-            <div style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
-                {this.props.successCreation === true ? <div className="alert alert-success">
-                    <Link to="/manage">
-                        Back
-                    </Link>
-                    Item was added</div> : null}
-                {this.props.errorMessage != '' ?
-                    <div>
-                        {this.props.errorMessage}
-                    </div> : null
-                }
-                {this.props.errors.summary ?
-                    <div>
-                        {this.props.errors.summary}
-                    </div> : null
-                }
-                <Stepper linear={false} activeStep={stepIndex}>
-                    <Step>
-                        <StepButton
-                            onClick={() => this.setState({stepIndex: 0})}
-                            icon={this.props.pictureLinkError[0] == "Please use a link for the picture" ?
-                                <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
-                                <FontIcon className="material-icons">mode_edit</FontIcon>}
-                        >
-                            Step 1
-                        </StepButton>
-                    </Step>
-                    <Step>
-                        <StepButton
-                            onClick={() => this.setState({stepIndex: 1})}
-                            icon={this.props.pictureLinkError[0] == "Please use a link for the picture" ?
-                                <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
-                                <FontIcon className="material-icons">add_a_photo</FontIcon>}
-                        >
-                            Step 2
-                        </StepButton>
-                    </Step>
-                    <Step>
-                        <StepButton onClick={() => this.setState({stepIndex: 2})}
-                                    icon={this.props.pictureLinkError[0] == "Please use a link for the picture" ?
-                                        <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
-                                        <FontIcon className="material-icons">done</FontIcon>}
-                        >
-                            Preview&Finish
-                        </StepButton>
-                    </Step>
-                </Stepper>
-                <div style={contentStyle}>
-                    <div>{this.getStepContent(stepIndex)}</div>
-                    <div style={{marginTop: 12}}>
-                        <FlatButton label="Back" disabled={stepIndex === 0} onTouchTap={this.handlePrev}
-                                    style={{marginRight: 12}}/>
-                        <RaisedButton label={stepIndex === 2 ? "Add collection" : "Next"} primary={true}
-                                      onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}/>
-                        <Link to="/manage">
-                            <RaisedButton label="Cancel and return" secondary={true}/>
-                        </Link>
-                    </div>
-                </div>
+            <div className="parallax-collections-create">
+                <div className="top-bar-spacing"/>
+                <Card className="container-collections" style={{backgroundColor: 'none'}}>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle
+                                title={
+                                    <div className="top-actions-create">
+                                        <Stepper linear={false} activeStep={stepIndex}>
+                                            <Step>
+                                                <StepButton
+                                                    onClick={() => this.setState({stepIndex: 0})}
+                                                    icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                        <FontIcon className="material-icons"
+                                                                  color={red500}>warning</FontIcon> :
+                                                        <FontIcon className="material-icons">mode_edit</FontIcon>}
+                                                >
+                                                </StepButton>
+                                            </Step>
+                                            <Step>
+                                                <StepButton
+                                                    onClick={() => this.setState({stepIndex: 1})}
+                                                    icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                        <FontIcon className="material-icons"
+                                                                  color={red500}>warning</FontIcon> :
+                                                        <FontIcon className="material-icons">add_a_photo</FontIcon>}
+                                                >
+                                                </StepButton>
+                                            </Step>
+                                            <Step>
+                                                <StepButton onClick={() => this.setState({stepIndex: 2})}
+                                                            icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                                <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
+                                                                <FontIcon className="material-icons">done</FontIcon>}
+                                                >
+                                                </StepButton>
+                                            </Step>
+                                        </Stepper>
+                                    </div>
+                                }/>
+                        </CardHeader>
+                        {this.props.successCreation === true ?
+                            <div className="success-collections-create">
+                                <div>Item was added</div>
+                                <Link to={`/manage`}>
+                                    <RaisedButton label="Return"
+                                                  primary={true}
+                                                  onTouchTap={this.resetScroll}
+                                    />
+                                </Link>
+                            </div> : null}
+                        {this.props.errorMessage !== '' ?
+                            <div className="errors-collections">
+                                {this.props.errorMessage}
+                            </div> : null
+                        }
+                        {this.props.errors.summary ?
+                            <div className="errors-collections">
+                                {this.props.errors.summary}
+                            </div> : null
+                        }
+                        <div className="step-style">{this.getStepContent(stepIndex)}</div>
+                        <CardActions className="step-actions">
+                            {stepIndex === 0 ?
+                                <Link to={`/manage`}>
+                                    <RaisedButton
+                                        label="Cancel"
+                                        secondary={true}/>
+                                </Link>
+                                :
+                                <FlatButton
+                                    label="Back"
+                                    disabled={stepIndex === 0}
+                                    onTouchTap={this.handlePrev}/>
+                            }
+
+                            <RaisedButton
+                                label={stepIndex === 2 ? "Add collection" : "Next"}
+                                primary={true}
+                                onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}/>
+                        </CardActions>
+                    </Card>
+                </Card>
             </div>
         )
     }

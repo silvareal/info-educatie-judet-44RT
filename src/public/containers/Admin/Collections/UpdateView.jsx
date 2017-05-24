@@ -1,8 +1,14 @@
 import React, {Component} from 'react'
 
+import RichTextEditor from 'react-rte';
+import {stateToHTML} from 'draft-js-export-html';
+import {convertToRaw, convertFromRaw} from 'draft-js';
+
+import {CircularProgress} from 'material-ui';
+
 import Update from '../../../components/Admin/Collections/Main Components/Update.jsx';
 import Auth from '../../../modules/Auth.js';
-import NotAuthorizedPage from "../../Error/NotAuthorizedView.jsx";
+import NotAuthorizedView from "../../Error/NotAuthorizedView.jsx";
 
 class UpdateView extends Component {
     constructor(props) {
@@ -13,8 +19,9 @@ class UpdateView extends Component {
             errorMessage: '',
             collectionId: '',
             collectionName: '',
-            collectionDescription: '',
-            inputToRender: 1,
+            collectionDescription: RichTextEditor.createEmptyValue(),
+            collectionDescriptionRaw: '',
+            inputCount: 1,
             errors: {},
             errorsPicturesArray: {},
             pictureNameError: [],
@@ -22,14 +29,17 @@ class UpdateView extends Component {
             pictureLinkError: [],
             pictures: [{
                 pictureName: '',
-                pictureDescription: '',
-                pictureLink: ''
+                pictureLink: '',
+                pictureDescription: RichTextEditor.createEmptyValue(),
+                pictureDescriptionRaw: ''
             }],
             //oldState
             userIdOld: '',
             collectionNameOld: '',
-            collectionDescriptionOld: '',
+            collectionDescriptionRawOld: '',
             picturesOld: [{}],
+            __html: '',
+            fetched: false,
             isAdmin: false
         };
     };
@@ -76,9 +86,9 @@ class UpdateView extends Component {
                     errorMessage: 'Fetched collection',
                     collectionId: xhr.response.collection._id,
                     collectionName: xhr.response.collection.collectionName,
-                    collectionDescription: xhr.response.collection.collectionDescription,
+                    collectionDescriptionRaw: xhr.response.collection.collectionDescriptionRaw,
                     pictures: xhr.response.collection.picturesArray,
-                    inputToRender: xhr.response.collection.picturesArray.length,
+                    inputCount: xhr.response.collection.picturesArray.length,
                     response: true,
                     userIdOld: xhr.response.collection.userId,
                     collectionNameOld: xhr.response.collection.collectionName,
@@ -86,16 +96,28 @@ class UpdateView extends Component {
                     picturesOld: xhr.response.collection.picturesArray
                 });
 
-            } else if (xhr.status == 404) {
-                //The user or collection does not exist
-                //We show the corresponding error message
-                this.setState({
-                    errorMessage: xhr.response.message,
-                    response: false
-                });
-            }
-            else {
-                //Database error to be handled only by an admin
+                const contentState = convertFromRaw(JSON.parse(this.state.collectionDescriptionRaw));
+                if (contentState) {
+                    const html = stateToHTML(contentState);
+                    this.setState({
+                        collectionDescription: this.state.collectionDescription.setContentFromString(html, 'html')
+                    })
+                }
+
+                //converting the pictureDescriptionRaw to pictureDescription - editorState
+                let pictures = this.state.pictures;
+
+                for (let i = 0; i < pictures.length; i++) {
+                    this.setRawValue(i);
+                    this.setHTMLValue(i);
+                    if ( i === pictures.length -1 ){
+                        this.setState({
+                            fetched: true,
+                        })
+                    }
+                }
+
+            } else {
                 this.setState({
                     errorMessage: xhr.response.message,
                     response: false
@@ -104,6 +126,38 @@ class UpdateView extends Component {
         });
 
         xhr.send(formData);
+    };
+
+    setRawValue = (i) => {
+        let pictures = this.state.pictures;
+        const newPictures = pictures.map((picture, j) => {
+            if (i !== j) return picture;
+
+            return {...picture, pictureDescription: RichTextEditor.createEmptyValue()}
+        });
+        this.setState({pictures: newPictures});
+    };
+
+    setHTMLValue = (i) => {
+        let pictures = this.state.pictures;
+        const newPictures = pictures.map((picture, j) => {
+            if (i !== j) return picture;
+
+            const contentState = convertFromRaw(JSON.parse(pictures[i].pictureDescriptionRaw));
+            const html = stateToHTML(contentState);
+            return {...picture, pictureDescription: pictures[i].pictureDescription.setContentFromString(html, 'html')}
+        });
+        this.setState({pictures: newPictures});
+    };
+
+    getHTML = () => {
+        if (this.state.collectionDescriptionRaw) {
+            let editorState = this.state.collectionDescription.getEditorState();
+            let contentState = editorState.getCurrentContent();
+            let __html = stateToHTML(contentState);
+            if (__html.search("/script") === -1 && __html.search("script") === -1)
+                return {__html: __html};
+        }
     };
 
     componentDidMount() {
@@ -119,8 +173,8 @@ class UpdateView extends Component {
         this.setState({collectionName: e.target.value});
     };
 
-    onCollectionDescriptionChange = (e) => {
-        this.setState({collectionDescription: e.target.value});
+    onCollectionDescriptionChange = (value) => {
+        this.setState({collectionDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
     handlePicturesNameChange = (i) => (e) => {
@@ -139,22 +193,27 @@ class UpdateView extends Component {
         this.setState({pictures: newPictures});
     };
 
-    handlePicturesDescriptionChange = (i) => (e) => {
+    handlePicturesDescriptionChange = (i) => (value) => {
         const newPictures = this.state.pictures.map((picture, j) => {
             if (i !== j) return picture;
-            return {...picture, pictureDescription: e.target.value};
+
+            let editorState = value.getEditorState();
+            let contentState = editorState.getCurrentContent();
+            let rawContentState = window.rawContentState = convertToRaw(contentState);
+            return {...picture, pictureDescription: value, pictureDescriptionRaw: JSON.stringify(rawContentState)};
         });
         this.setState({pictures: newPictures});
     };
 
     handleAddPictures = (i) => () => {
-        if (this.state.inputToRender < 4) {
+        if (this.state.inputCount < 4) {
             this.setState({
-                inputToRender: this.state.inputToRender + 1,
+                inputCount: this.state.inputCount + 1,
                 pictures: this.state.pictures.concat([{
                     pictureName: '',
                     pictureLink: '',
-                    pictureDescription: ''
+                    pictureDescription: RichTextEditor.createEmptyValue(),
+                    pictureDescriptionRaw: ''
                 }])
             });
         }
@@ -170,21 +229,33 @@ class UpdateView extends Component {
         });
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     onSave = () => {
         if (this.state.response === true) {
+
+            this.resetScroll();
+
+            //converting collectionDescription to collectionDescriptionRaw
+            let editorState = this.state.collectionDescription.getEditorState();
+            let contentState = editorState.getCurrentContent();
+            let rawContentState = window.rawContentState = convertToRaw(contentState);
+
             //The next few lines will define the HTTP body message
             const userId = encodeURIComponent(this.state.userId);
             const collectionId = encodeURIComponent(this.state.collectionId);
             const collectionName = encodeURIComponent(this.state.collectionName);
-            const collectionDescription = encodeURIComponent(this.state.collectionDescription);
+            const collectionDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
             const picturesArray = JSON.stringify(this.state.pictures);
 
             const userIdOld = encodeURIComponent(this.state.userIdOld);
             const collectionNameOld = encodeURIComponent(this.state.collectionNameOld);
-            const collectionDescriptionOld = encodeURIComponent(this.state.collectionDescriptionOld);
+            const collectionDescriptionRawOld = encodeURIComponent(this.state.collectionDescriptionRawOld);
             const picturesArrayOld = JSON.stringify(this.state.picturesOld);
 
-            const formData = `userIdOld=${userIdOld}&collectionNameOld=${collectionNameOld}&collectionDescriptionOld=${collectionDescriptionOld}&picturesArrayOld=${picturesArrayOld}&userId=${userId}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescription=${collectionDescription}&picturesArray=${picturesArray}`;
+            const formData = `userIdOld=${userIdOld}&collectionNameOld=${collectionNameOld}&collectionDescriptionRawOld=${collectionDescriptionRawOld}&picturesArrayOld=${picturesArrayOld}&userId=${userId}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
 
             const xhr = new XMLHttpRequest();
             xhr.open('post', '/admin/updateSaveCollections');
@@ -192,25 +263,22 @@ class UpdateView extends Component {
             xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
             xhr.responseType = 'json';
             xhr.addEventListener('load', () => {
-                if (xhr.status == 200) {
-                    //The collection was updated and we must show a confirmation
-                    //We will use state.errorMessage to do that
+                if (xhr.status === 200) {
                     this.setState({
                         errorMessage: "Your collection was successfully updated!"
                     });
                 }
-                else if (xhr.status == 404) {
-                    //Handle error in case the collection is missing
+                else if (xhr.status === 404) {
                     this.setState({
                         errorMessage: "The collection was not found. Maybe you deleted it?"
                     });
                 }
-                else if (xhr.status == 400) {
-                        //Inserted data is not correct or database error
+                else if (xhr.status === 400) {
+                    //Inserted data is not correct or database error
 
-                        const errors = xhr.response.errors ? xhr.response.errors : {};
-                        errors.summary = xhr.response.message;
-                        const errorsPicturesArray = xhr.response.errorsPicturesArray ? xhr.response.errorsPicturesArray : {};
+                    const errors = xhr.response.errors ? xhr.response.errors : {};
+                    errors.summary = xhr.response.message;
+                    const errorsPicturesArray = xhr.response.errorsPicturesArray ? xhr.response.errorsPicturesArray : {};
 
                         this.setState({
                             successUpdate: false,
@@ -253,6 +321,9 @@ class UpdateView extends Component {
         {
             return (
                 <Update
+                    collectionDescriptionRaw={this.state.collectionDescriptionRaw}
+                    getHTML={this.getHTML}
+                    __html={this.state.__html}
                     adminId={this.props.params._id}
                     userId={this.state.userId}
                     onUserIdChange={this.onUserIdChange}
@@ -276,7 +347,7 @@ class UpdateView extends Component {
                 />
             )
         }
-        else return <NotAuthorizedPage/>
+        else return <NotAuthorizedView/>
     }
 }
 

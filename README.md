@@ -29,7 +29,10 @@
         Notes: Must add style to comment section
         }
         
-        -add the text editor to admin panel
+        -add the text editor to admin panel{
+        Status: 1/2 Complete,
+        Notes: Must also add it to news management and finish both pages for news
+        }
         
         -make a placeholder for the contact page for v0.0.4
         

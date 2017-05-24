@@ -23,6 +23,30 @@ function validateCommentForm(payload) {
     };
 }
 
+router.post("/retrieveNewsComments", (req, res) => {
+    CommentNews.find({newsId: req.body.newsId}, (err, comments) => {
+
+        if (err) {
+            res.status(400).json({
+                message: "Database error"
+            });
+        }
+
+        if (!comments) {
+            //send status 200 and display in the comment section a message stating that there are no comments added yet
+            res.json({
+                message: "No comments found"
+            });
+        }
+
+        res.json({
+            message: "Retrieved comments",
+            comments: comments
+        });
+
+    }).sort({time: -1});
+});
+
 router.post("/postCommentNews", (req, res) => {
 
     const validationResult = validateCommentForm(req.body);

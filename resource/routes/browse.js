@@ -110,7 +110,8 @@ router.post('/loadMoreNews', (req, res) => {
 });
 
 router.post('/searchNews', (req, res) => {
-    News.find({newTitle: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, news) => {
+    News.find({newsTitle: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, news) => {
+
 
         if (err) {
             return res.status(400).json({

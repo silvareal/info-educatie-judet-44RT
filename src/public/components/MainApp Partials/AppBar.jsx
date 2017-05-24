@@ -103,6 +103,23 @@ class AppBarPersonal extends Component {
                                         </Link>
                                     </List>
                                         <Divider/>
+                                        <List>
+                                            <Link to={`/collections`}
+                                                  onClick={this.props.resetScroll}
+                                            >
+                                            <ListItem primaryText="Browse all collections"
+                                                      leftIcon={<ImageCollections/>}
+                                            />
+                                        </Link>
+                                            <Link to={`/news`}
+                                                  onClick={this.props.resetScroll}
+                                            >
+                                            <ListItem primaryText="Browse all news articles"
+                                                      leftIcon={<ImageCollections/>}
+                                            />
+                                        </Link>
+                                        </List>
+                                        <Divider/>
                                         {this.props.isAdmin === true ?
                                             <span>
                                                 <List>
@@ -117,6 +134,27 @@ class AppBarPersonal extends Component {
                                                           onClick={this.props.resetScroll}
                                                     >
                                                             <ListItem primaryText="Manage news"
+                                                                      leftIcon={<ImageCollections/>}
+                                                            />
+                                                    </Link>
+                                                    <Link to={`/admin/${this.props.userId}/collections`}
+                                                          onClick={this.props.resetScroll}
+                                                    >
+                                                            <ListItem primaryText="Manage all collections"
+                                                                      leftIcon={<ImageCollections/>}
+                                                            />
+                                                    </Link>
+                                                    <Link to={`/admin/${this.props.userId}/logs`}
+                                                          onClick={this.props.resetScroll}
+                                                    >
+                                                            <ListItem primaryText="Action logs"
+                                                                      leftIcon={<ImageCollections/>}
+                                                            />
+                                                    </Link>
+                                                    <Link to={`/admin/${this.props.userId}/users`}
+                                                          onClick={this.props.resetScroll}
+                                                    >
+                                                            <ListItem primaryText="Manage users"
                                                                       leftIcon={<ImageCollections/>}
                                                             />
                                                     </Link>

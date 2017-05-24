@@ -40,9 +40,6 @@ app.use(mongoSanitize());
 const authenticationChecker = require('./resource/middleware/authentication-check');
 app.use('/crud', authenticationChecker);
 
-const adminChecker = require('./resource/middleware/admin-check');
-app.use('/admin', adminChecker);
-
 app.use('/crud', crudRoutes);
 app.use('/profile', profileRoutes);
 app.use('/home', homeRoutes);

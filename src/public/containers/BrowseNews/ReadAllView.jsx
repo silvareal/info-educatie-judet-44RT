@@ -30,7 +30,8 @@ class ReadAllView extends Component {
             if (xhr.status === 200) {
                 this.setState({
                     errorMessage: 'Fetched news',
-                    news: xhr.response.news
+                    news: xhr.response.news,
+                    newsPreSearch: xhr.response.news
                 });
             }
             else if (xhr.status === 404) {

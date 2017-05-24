@@ -73,8 +73,15 @@ class DeleteView extends Component {
         this.getCollection();
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     onDelete = () => {
         if (this.state.response === true) {
+
+            this.resetScroll();
+
             const ownerId = encodeURIComponent(this.state.ownerId);
             const collectionName = encodeURIComponent(this.state.collectionName);
             const collectionDescription = encodeURIComponent(this.state.collectionDescription);

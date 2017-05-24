@@ -22,7 +22,6 @@ class ViewRow extends Component {
                         primary={true}
                     />
                 </CardActions>
-
             </Card>
         );
     }

@@ -292,17 +292,155 @@ body, html, main {
       padding-top: 0;
       padding-bottom: 0; }
 
-.container-collections {
-  padding: 64px 256px 64px 256px;
-  display: block;
-  flex: "";
-  justify-content: ""; }
+.public-DraftEditor-content {
+  min-height: 300px; }
   @media screen and (max-width: 1200px) {
-    .container-collections {
-      padding: 1em   ;
+    .public-DraftEditor-content {
+      min-height: 150px; } }
+
+.container-collections-delete {
+  min-height: 800px; }
+  @media screen and (max-width: 1200px) {
+    .container-collections-delete {
+      min-height: 400px; } }
+  .container-collections-delete .delete-header {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    font-size: 3em; }
+    @media screen and (max-width: 1200px) {
+      .container-collections-delete .delete-header {
+        font-size: 2em; } }
+  .container-collections-delete .delete-header-success {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    font-size: 1em; }
+  .container-collections-delete .delete-actions {
+    display: flex;
+    flex: 1;
+    justify-content: center; }
+
+.parallax-collections-delete {
+  width: auto;
+  height: 100%;
+  background-image: url("./images/art1.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover; }
+
+.parallax-collections-create {
+  width: auto;
+  height: 100%;
+  background-image: url("./images/art.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover; }
+  .parallax-collections-create .container-collections {
+    padding: 64px 256px 64px 256px;
+    display: block;
+    flex: "";
+    justify-content: ""; }
+    @media screen and (max-width: 1200px) {
+      .parallax-collections-create .container-collections {
+        padding: 1em   ;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box; } }
+    .parallax-collections-create .container-collections .errors-collections {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      color: #ff0000; }
+    .parallax-collections-create .container-collections .success-collections {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      color: #32cd32; }
+    .parallax-collections-create .container-collections .success-collections-create {
+      text-align: center;
+      display: block;
+      flex: "";
+      justify-content: "";
+      color: #32cd32; }
+    .parallax-collections-create .container-collections .top-actions-create {
+      background: #ffffff; }
+    .parallax-collections-create .container-collections .step-style {
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
-      box-sizing: border-box; } }
+      box-sizing: border-box;
+      padding: 50px   ;
+      text-align: center; }
+      @media screen and (max-width: 1200px) {
+        .parallax-collections-create .container-collections .step-style {
+          padding: 20px   ; } }
+      .parallax-collections-create .container-collections .step-style .step-picture {
+        min-height: 300px; }
+      .parallax-collections-create .container-collections .step-style .step-textfields {
+        width: 70% !important;
+        height: auto; }
+        @media screen and (max-width: 1200px) {
+          .parallax-collections-create .container-collections .step-style .step-textfields {
+            width: 100% !important;
+            height: auto; } }
+      .parallax-collections-create .container-collections .step-style .preview {
+        min-height: 400px;
+        text-align: center; }
+    .parallax-collections-create .container-collections .step-actions {
+      display: flex;
+      flex: 1;
+      justify-content: space-between;
+      padding: auto 50px auto 50px !important   ; }
+      @media screen and (max-width: 1200px) {
+        .parallax-collections-create .container-collections .step-actions {
+          display: block;
+          flex: "";
+          justify-content: "";
+          text-align: center;
+          padding: 20px !important   ; } }
+      .parallax-collections-create .container-collections .step-actions .right-actions {
+        display: flex;
+        flex: 1;
+        justify-content: flex-end; }
+  .parallax-collections-create .section-title {
+    font:   bold  60px  "Roboto", "sans-serif";
+    padding: 30px   ;
+    background: #3460f1;
+    text-align: center;
+    color: #ffffff; }
+  .parallax-collections-create .top-actions {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    background: #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px   ; }
+    @media screen and (max-width: 1200px) {
+      .parallax-collections-create .top-actions {
+        display: block;
+        flex: "";
+        justify-content: "";
+        text-align: center; } }
+    .parallax-collections-create .top-actions .capsules {
+      display: flex;
+      flex: 1;
+      justify-content: ""; }
+  .parallax-collections-create .view-table {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 50px 100px 100px 100px;
+    background: #ffffff; }
+    @media screen and (max-width: 1200px) {
+      .parallax-collections-create .view-table {
+        padding: 10px   ; }
+        .parallax-collections-create .view-table .view-row-picture {
+          min-width: 100%;
+          min-height: 200px; } }
 
 .parallax-collections {
   width: auto;
@@ -312,6 +450,17 @@ body, html, main {
   background-position: center;
   background-repeat: repeat;
   background-size: cover; }
+  .parallax-collections .container-collections {
+    padding: 64px 256px 64px 256px;
+    display: block;
+    flex: "";
+    justify-content: ""; }
+    @media screen and (max-width: 1200px) {
+      .parallax-collections .container-collections {
+        padding: 1em   ;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box; } }
   .parallax-collections .section-title {
     font:   bold  60px  "Roboto", "sans-serif";
     padding: 30px   ;

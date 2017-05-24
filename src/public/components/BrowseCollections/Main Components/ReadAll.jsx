@@ -10,7 +10,7 @@ class ReadAll extends Component {
         return (
             <div className="parallax-collections">
                 <div className="top-bar-spacing"/>
-                <div className="section-title">Manage collections</div>
+                <div className="section-title">Browse collections</div>
                 <Card className="container-collections" style={{backgroundColor: 'none'}}>
                     <TopActions
                         handleKeyPress={this.props.handleKeyPress}

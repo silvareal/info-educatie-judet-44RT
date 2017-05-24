@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import ReadAll from '../../../components/Admin/Collections/Main Components/ReadAll.jsx';
-import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
+import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 import Auth from '../../../modules/Auth.js';
 
 class ReadAllView extends Component {
@@ -12,7 +12,16 @@ class ReadAllView extends Component {
         this.state = {
             errorMessage: '',
             collections: [],
-            isAdmin: false
+            isAdmin: false,
+            collectionId: [],
+            collectionName: [],
+            pictureLink: [],
+            loadAfter: 0,
+            finished: false,
+            searchErrorMessage: '',
+            collectionsPreSearch: [],
+            searchQuery: '',
+            searching: false
         };
     };
 
@@ -28,31 +37,33 @@ class ReadAllView extends Component {
                         isAdmin: true
                     })
             }
-            else this.setState({isAdmin: false})
+            else {
+                this.state= {};
+            }
         });
         xhr.send();
     };
 
-    getCollections = () => {
+    fetchAllCollections = () => {
         //errorMessage name might confuse, it is also used to tell when to show a loading component
         //all comparisons can be found in ViewTable.jsx
         this.setState({
             errorMessage: 'Fetching'
         });
 
-        //The next few lines will define the HTTP body message
-
         //AJAX for checking identity and retrieving all collections that belong to the user with the _id specified
         const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/readAllCollections');
+        xhr.open('get', '/crud/readAll');
         xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
         xhr.responseType = 'json';
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
+                //The user is who he says he is
                 //We store our results for further safe data management in state
                 this.setState({
                     errorMessage: 'Fetched collections',
-                    collections: xhr.response.collections
+                    collections: xhr.response.collections,
+                    collectionsPreSearch: xhr.response.collections
                 });
             }
             else if (xhr.status === 404) {
@@ -74,9 +85,113 @@ class ReadAllView extends Component {
         xhr.send();
     };
 
+    onScroll = (e) => {
+        if (this.state.finished === false && document.title === "Manage collections - Admin Controlled" && this.state.searching === false)
+            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
+                this.loadMore();
+            }
+    };
+
     componentDidMount() {
         this.adminAuth();
-        this.getCollections();
+        this.fetchAllCollections();
+
+        //the load more event listener
+        window.addEventListener('scroll', this.onScroll);
+    };
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.onScroll);
+    }
+
+    loadMore = () => {
+        if (this.state.finished === false) {
+            this.loadAndAppendCollections(this.state.loadAfter + 10);
+            this.setState({loadAfter: this.state.loadAfter + 10})
+        }
+    };
+
+    loadAndAppendCollections = (loadAfter) => {
+
+        if (this.state.finished === false) {
+            const loadAfterParam = encodeURIComponent(loadAfter);
+
+            const formData = `loadAfter=${loadAfterParam}`;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('post', '/admin/loadMoreCollections');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+            xhr.responseType = 'json';
+            xhr.addEventListener('load', () => {
+                if (xhr.status === 200) {
+
+                    if (xhr.response.message === "NoCollections") {
+                        this.setState({finished: true});
+                    }
+                    else {
+                        //Do this to not mutate state
+                        let newCollections = this.state.collections;
+
+                        Object.keys(xhr.response.collections).map((key) => {
+                            newCollections.push(xhr.response.collections[key]);
+                        });
+
+                        this.setState({collections: newCollections, collectionsPreSearch: newCollections});
+                    }
+                }
+            });
+            xhr.send(formData);
+        }
+    };
+
+    onQueryChange = (e) => {
+        if (e.target.value.length === 0) {
+            this.setState({searchQuery: e.target.value, searching: false, collections: this.state.collectionsPreSearch})
+        }
+        else
+            this.setState({searchQuery: e.target.value});
+    };
+
+    handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            this.onSearch();
+        }
+    };
+
+    onSearch = () => {
+
+        //if the search box is not empty
+        if (this.state.searchQuery) {
+
+            const searchQuery = encodeURIComponent(this.state.searchQuery);
+
+            const formData = `searchQuery=${searchQuery}`;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('post', '/admin/searchCollections');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+            xhr.responseType = 'json';
+            xhr.addEventListener('load', () => {
+                if (xhr.status === 200) {
+
+                    //no collections found
+                    if (xhr.response.errorMessage) {
+                        this.setState({searchErrorMessage: xhr.response.errorMessage, collections: []});
+                    }
+                    else {
+                        this.setState({collections: xhr.response.collections})
+                    }
+                }
+            });
+            if (this.state.searchErrorMessage.length === 0)
+                xhr.send(formData);
+            this.setState({searching: true});
+        }
+        else {
+            this.setState({collections: this.state.collectionsPreSearch});
+        }
     };
 
     render() {
@@ -88,11 +203,15 @@ class ReadAllView extends Component {
                     adminId={this.props.params._id}
                     collections={this.state.collections}
                     errorMessage={this.state.errorMessage}
+                    handleKeyPress={this.handleKeyPress}
+                    onQueryChange={this.onQueryChange}
+                    searchQuery={this.state.searchQuery}
+                    onSearch={this.onSearch}
                 />
             </div>
         );
         else return (
-            <NotAuthorizedPage/>
+            <NotAuthorizedView/>
         )
     }
 }

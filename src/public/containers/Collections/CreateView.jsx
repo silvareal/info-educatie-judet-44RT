@@ -120,7 +120,13 @@ class CreateView extends Component {
         });
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     onSave = () => {
+
+        this.resetScroll();
 
         //converting collectionDescription to collectionDescriptionRaw
         let editorState = this.state.collectionDescription.getEditorState();
@@ -152,7 +158,6 @@ class CreateView extends Component {
                     errorMessage: '',
                     collectionName: '',
                     collectionDescription: RichTextEditor.createEmptyValue(),
-                    collectionDescriptionRender: '',
                     pictures: [
                         {
                             pictureName: '',
@@ -216,9 +221,6 @@ class CreateView extends Component {
                 onCollectionDescriptionChange={this.onCollectionDescriptionChange}
                 pictures={this.state.pictures}
                 errorMessage={this.state.errorMessage}
-                onPictureNameChange={this.onPictureNameChange}
-                onPictureLinkChange={this.onPictureLinkChange}
-                onPictureDescriptionChange={this.onPictureDescriptionChange}
                 handlePicturesNameChange={this.handlePicturesNameChange}
                 handlePicturesLinkChange={this.handlePicturesLinkChange}
                 handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}

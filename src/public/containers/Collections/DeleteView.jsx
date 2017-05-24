@@ -39,18 +39,21 @@ class DeleteView extends Component {
                 });
             }
             else {
-                //Collection or user doesn't exist
-                this.setState({
-                    message: xhr.response.message,
-                    response: false
-                })
+                this.state = {}
             }
         });
         xhr.send(formData)
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     onDelete = () => {
         if (this.state.response === true) {
+
+            this.resetScroll();
+
             const collectionName = encodeURIComponent(this.state.collectionName);
             const collectionDescriptionRaw = encodeURIComponent(this.state.collectionDescriptionRaw);
             const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
