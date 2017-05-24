@@ -16,6 +16,10 @@ import ActionSupervisorAccount from 'material-ui/svg-icons/action/supervisor-acc
 import ActionHome from 'material-ui/svg-icons/action/home';
 import ActionExitToApp from 'material-ui/svg-icons/action/exit-to-app';
 import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert'
+import AVLibraryBooks from 'material-ui/svg-icons/av/library-books';
+import ActionAnnouncement from 'material-ui/svg-icons/action/announcement';
+import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
+import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact-calendar';
 
 import Auth from '../../modules/Auth';
 
@@ -44,11 +48,11 @@ class AppBarPersonal extends Component {
 
     };
 
-    componentDidMount(){
+    componentDidMount() {
         window.addEventListener('scroll', this.hideAppBar);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         window.removeEventListener('scroll', this.hideAppBar)
     }
 
@@ -58,7 +62,7 @@ class AppBarPersonal extends Component {
 
         return (
             <AppBar
-                className={"appBar "+hide}
+                className={"appBar " + hide}
                 style={{backgroundColor: "#3460f1"}}
                 title={<Link to={`/`} style={{color: "white"}}>4Art</Link>}
                 showMenuIconButton={false}
@@ -77,24 +81,31 @@ class AppBarPersonal extends Component {
                                     <span onClick={this.props.handleCloseMenu}>
                                     <List>
                                         <Link to={`/profile/${this.props.userName}`}
-                                                onClick={this.props.resetScroll}
+                                              onClick={this.props.resetScroll}
                                         >
-                                            <ListItem primaryText="My profile"
-                                                      leftAvatar={<Avatar
-                                                          src="http://www.zooland.ro//data/articles/55/7212/hepta_279156-0n.jpg"/>}
-                                            />
+                                            {this.props.profilePictureLink ?
+                                                <ListItem primaryText="My profile"
+                                                          leftAvatar={<Avatar
+                                                              src={this.props.profilePictureLink}/>}
+                                                />
+                                                :
+                                                <ListItem primaryText="My profile"
+                                                          leftIcon={<ActionAccountCircle/>}/>}
                                             </Link>
                                     </List>
                                         <Divider />
                                     <List>
                                         <Link to={`/`}
+                                              activeClassName="active-link-classname"
                                               onClick={this.props.resetScroll}
                                         >
-                                            <ListItem primaryText="Home"
-                                                      leftIcon={<ActionHome/>}
+                                            <ListItem
+                                                primaryText="Home"
+                                                leftIcon={<ActionHome/>}
                                             />
                                         </Link>
                                         <Link to={`/manage`}
+                                              activeClassName="active-link-classname"
                                               onClick={this.props.resetScroll}
                                         >
                                             <ListItem primaryText="Manage collections"
@@ -105,6 +116,7 @@ class AppBarPersonal extends Component {
                                         <Divider/>
                                         <List>
                                             <Link to={`/collections`}
+                                                  activeClassName="active-link-classname"
                                                   onClick={this.props.resetScroll}
                                             >
                                             <ListItem primaryText="Browse all collections"
@@ -112,10 +124,11 @@ class AppBarPersonal extends Component {
                                             />
                                         </Link>
                                             <Link to={`/news`}
+                                                  activeClassName="active-link-classname"
                                                   onClick={this.props.resetScroll}
                                             >
                                             <ListItem primaryText="Browse all news articles"
-                                                      leftIcon={<ImageCollections/>}
+                                                      leftIcon={<ActionAnnouncement/>}
                                             />
                                         </Link>
                                         </List>
@@ -124,38 +137,43 @@ class AppBarPersonal extends Component {
                                             <span>
                                                 <List>
                                                     <Link to={`/admin/${this.props.userId}`}
+                                                          activeClassName="active-link-classname"
                                                           onClick={this.props.resetScroll}
                                                     >
                                                                 <ListItem primaryText="Admin Panel"
                                                                           leftIcon={<ActionSupervisorAccount/>}
                                                                 />
                                                     </Link>
-                                                    <Link to={`/admin/${this.props.userId}/news`}
-                                                          onClick={this.props.resetScroll}
-                                                    >
-                                                            <ListItem primaryText="Manage news"
-                                                                      leftIcon={<ImageCollections/>}
-                                                            />
-                                                    </Link>
                                                     <Link to={`/admin/${this.props.userId}/collections`}
+                                                          activeClassName="active-link-classname"
                                                           onClick={this.props.resetScroll}
                                                     >
                                                             <ListItem primaryText="Manage all collections"
                                                                       leftIcon={<ImageCollections/>}
                                                             />
                                                     </Link>
+                                                    <Link to={`/admin/${this.props.userId}/news`}
+                                                          activeClassName="active-link-classname"
+                                                          onClick={this.props.resetScroll}
+                                                    >
+                                                            <ListItem primaryText="Manage news"
+                                                                      leftIcon={<ActionAnnouncement/>}
+                                                            />
+                                                    </Link>
                                                     <Link to={`/admin/${this.props.userId}/logs`}
+                                                          activeClassName="active-link-classname"
                                                           onClick={this.props.resetScroll}
                                                     >
                                                             <ListItem primaryText="Action logs"
-                                                                      leftIcon={<ImageCollections/>}
+                                                                      leftIcon={<AVLibraryBooks/>}
                                                             />
                                                     </Link>
                                                     <Link to={`/admin/${this.props.userId}/users`}
+                                                          activeClassName="active-link-classname"
                                                           onClick={this.props.resetScroll}
                                                     >
                                                             <ListItem primaryText="Manage users"
-                                                                      leftIcon={<ImageCollections/>}
+                                                                      leftIcon={<ActionPermContactCalendar/>}
                                                             />
                                                     </Link>
                                                 </List>

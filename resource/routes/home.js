@@ -40,7 +40,8 @@ router.get('/credentials', (req, res) => {
                     guest: false,
                     userName: user.name,
                     userId: userId,
-                    firstName: user.firstName
+                    firstName: user.firstName,
+                    profilePictureLink: user.profilePictureLink
                 })
             });
         });

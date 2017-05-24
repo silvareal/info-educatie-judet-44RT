@@ -13,11 +13,16 @@ body {
 }
 
 a {
-    color: dodgerblue;
     text-decoration: none;
     transition: color 0.4s;
     :hover {
         color: white;
+    }
+}
+
+.active-link-classname {
+    span {
+        background-color: lightblue !important;
     }
 }
 

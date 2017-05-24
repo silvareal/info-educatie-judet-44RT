@@ -66,6 +66,13 @@
         Notes: Regarding 'load' event listeners, we will replace XML requests with Axios, a dependency that also includes the Promise API in version 0.0.4
         }
         
+        -add active link style to popover that bring up the menu{
+        Status: Complete,
+        Notes: -
+        }
+        
+        -add nested pages to the menu
+        
         -write for us button should lead to a way of applying as a mod{
         Status: REMOVED
         }

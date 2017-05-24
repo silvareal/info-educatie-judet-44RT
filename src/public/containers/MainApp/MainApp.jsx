@@ -15,7 +15,8 @@ class MainApp extends Component {
             userName: '',
             userId: '',
             isAdmin: false,
-            openMenu: false
+            openMenu: false,
+            profilePictureLink: ''
         }
     }
 
@@ -40,7 +41,8 @@ class MainApp extends Component {
             if (xhr.status === 200) {
                 this.setState({
                     userName: xhr.response.userName,
-                    userId: xhr.response.userId
+                    userId: xhr.response.userId,
+                    profilePictureLink: xhr.response.profilePictureLink
                 })
             }
         });
@@ -86,6 +88,7 @@ class MainApp extends Component {
         return (
             <div className="force-parallax">
                 <AppBarPersonal
+                    profilePictureLink={this.state.profilePictureLink}
                     userId={this.state.userId}
                     userName={this.state.userName}
                     isAdmin={this.state.isAdmin}

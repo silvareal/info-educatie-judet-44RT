@@ -98,11 +98,13 @@ body {
   font-family: Roboto,'sans-serif'; }
 
 a {
-  color: dodgerblue;
   text-decoration: none;
   transition: color 0.4s; }
   a :hover {
     color: white; }
+
+.active-link-classname span {
+  background-color: lightblue !important; }
 
 .error-message {
   display: flex;
