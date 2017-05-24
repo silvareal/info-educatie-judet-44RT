@@ -56,25 +56,18 @@ class Update extends Component {
 
     getStepContent(stepIndex) {
 
-        let pictures = this.props.pictures;
-
-        let contentState;
+        let newsPictures = this.props.newsPictures;
 
         let rows;
 
-        if (pictures) {
-            rows = Object.keys(pictures).map((key) => {
-                if (pictures[key].pictureDescriptionRaw) {
-                    contentState = convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw));
-                    return (
-                        <PictureRow
-                            key={key}
-                            pictureName={pictures[key].pictureName}
-                            pictureLink={pictures[key].pictureLink}
-                            pictureDescription={stateToHTML(contentState)}
-                        />
-                    )
-                }
+        if (newsPictures) {
+            rows = Object.keys(newsPictures).map((key) => {
+                return (
+                    <PictureRow
+                        key={key}
+                        pictureLink={newsPictures[key].pictureLink}
+                    />
+                )
             });
         }
 
@@ -102,17 +95,26 @@ class Update extends Component {
                 return (
                     <div>
                         <div>
-                            {this.props.collectionName.length > 100 ?
+                            {this.props.newsTitle.length > 100 ?
                                 <div>
                                     Please use a name that is shorter than 100 characters
                                 </div> : null}
                             <TextField
-                                hintText="Give your collection a cool title"
-                                value={this.props.collectionName}
-                                onChange={this.props.onCollectionChange}
-                                errorText={this.props.errors.collectionName}
+                                hintText="Article title"
+                                value={this.props.newsTitle}
+                                onChange={this.props.onNewsTitleChange}
+                                errorText={this.props.errors.newsTitle}
                                 onKeyDown={this.handleKeyPress}
                                 autoFocus={true}
+                                multiLine={true}
+                                className="step-textfields"
+                            />
+                            <TextField
+                                hintText="Cover photo link"
+                                value={this.props.newsCoverLink}
+                                onChange={this.props.onNewsCoverLinkChange}
+                                errorText={this.props.errors.newsCoverLink}
+                                onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
                             />
@@ -123,12 +125,12 @@ class Update extends Component {
                                     Write less, keep it simple !
                                 </div> : null
                             }
-                            {this.props.errors.collectionDescriptionRaw ?
-                                <div style={{color: 'red'}}>{this.props.errors.collectionDescriptionRaw}</div> : null}
+                            {this.props.errors.newsDescriptionRaw ?
+                                <div style={{color: 'red'}}>{this.props.errors.newsDescriptionRaw}</div> : null}
                             <RichTextEditor
-                                value={this.props.collectionDescription}
-                                onChange={this.props.onCollectionDescriptionChange}
-                                placeholder="Collection description"
+                                value={this.props.newsDescription}
+                                onChange={this.props.onNewsDescriptionChange}
+                                placeholder="Article's description"
                                 toolbarConfig={toolbarConfig}
                             />
                         </div>
@@ -137,48 +139,23 @@ class Update extends Component {
             case 1:
                 return (
                     <div>
-                        {this.props.pictures.map((picture, i) => (
+                        {this.props.newsPictures.map((newsPicture, i) => (
                             <div key={i}>
                                 <div className="input-field">
-                                    {picture.pictureName.length > 100 ?
-                                        <div>
-                                            Please use a name that is shorter than 100 characters
-                                        </div> : null}
-                                    {this.props.pictureNameError[i] === "Please use a valid name for this picture" ?
-                                        <TextField hintText="Give your pictures a cool name"
-                                                   value={picture.pictureName}
-                                                   onChange={this.props.handlePicturesNameChange(i)}
-                                                   errorText={this.props.pictureNameError[i]}
+                                    {this.props.newsPictureLinkError[i] === "Please use a link for the picture" ?
+                                        <TextField hintText="Link here additional photos"
+                                                   value={newsPicture.newsPictureLink}
+                                                   onChange={this.props.handleNewsPicturesLinkChange(i)}
+                                                   errorText={this.props.newsPictureLinkError[i]}
                                                    onKeyDown={this.handleKeyPress}
                                                    autoFocus={true}
                                                    multiLine={true}
                                                    className="step-textfields"
                                         />
                                         :
-                                        <TextField hintText="Give your work of art a cool name"
-                                                   value={picture.pictureName}
-                                                   onChange={this.props.handlePicturesNameChange(i)}
-                                                   onKeyDown={this.handleKeyPress}
-                                                   autoFocus={true}
-                                                   multiLine={true}
-                                                   className="step-textfields"
-                                        />
-                                    }
-                                </div>
-                                <div className="input-field">
-                                    {this.props.pictureLinkError[i] === "Please use a link for the picture" ?
-                                        <TextField hintText="Give us the link of your work of art"
-                                                   value={picture.pictureLink}
-                                                   onChange={this.props.handlePicturesLinkChange(i)}
-                                                   errorText={this.props.pictureLinkError[i]}
-                                                   onKeyDown={this.handleKeyPress}
-                                                   multiLine={true}
-                                                   className="step-textfields"
-                                        />
-                                        :
-                                        <TextField hintText="Give us the link of your work of art"
-                                                   value={picture.pictureLink}
-                                                   onChange={this.props.handlePicturesLinkChange(i)}
+                                        <TextField hintText="Link here additional photos"
+                                                   value={newsPicture.newsPictureLink}
+                                                   onChange={this.props.handleNewsPicturesLinkChange(i)}
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
@@ -186,42 +163,14 @@ class Update extends Component {
                                     }
                                 </div>
                                 <CardMedia>
-                                    <img src={picture.pictureLink} className="step-picture"/>
+                                    <img src={newsPicture.pictureLink} className="step-picture"/>
                                 </CardMedia>
-                                <div className="input-field">
-                                    {picture.pictureDescriptionRaw && picture.pictureDescriptionRaw.length > 5000 ?
-                                        <div>
-                                            Please use a description that is shorther than 5000 characters
-                                        </div> : null
-                                    }
-                                    {this.props.pictureDescriptionError[i] === "Please use a valid description for this picture" ?
-
-                                        <div>
-                                            {this.props.pictureDescriptionError[i]}
-                                            <RichTextEditor
-                                                value={picture.pictureDescription}
-                                                onChange={this.props.handlePicturesDescriptionChange(i)}
-                                                placeholder="Collection description"
-                                                toolbarConfig={toolbarConfig}
-                                            />
-                                        </div>
-                                        :
-                                        <div>
-                                            <RichTextEditor
-                                                value={picture.pictureDescription}
-                                                onChange={this.props.handlePicturesDescriptionChange(i)}
-                                                placeholder="Collection description"
-                                                toolbarConfig={toolbarConfig}
-                                            />
-                                        </div>
-                                    }
-                                </div>
                                 <RaisedButton type="button" primary={true} label="+"
-                                              onClick={this.props.handleAddPictures(i)}/>
+                                              onClick={this.props.handleAddNewsPictures(i)}/>
 
                                 { (i !== 0) ? (
                                     <RaisedButton type="button" secondary={true} label="-"
-                                                  onClick={this.props.handleRemovePictures(i)}/>
+                                                  onClick={this.props.handleRemoveNewsPictures(i)}/>
                                 ) : null}
 
                             </div>
@@ -232,7 +181,7 @@ class Update extends Component {
                 return (
                     <div className="preview">
                         <div>The preview of what you wish to add is here</div>
-                        <div>{this.props.collectionName}</div>
+                        <div>{this.props.newsTitle}</div>
                         <div dangerouslySetInnerHTML={this.props.getHTML()}/>
                         {rows}
                     </div>
@@ -332,7 +281,7 @@ class Update extends Component {
                             }
 
                             <RaisedButton
-                                label={stepIndex === 2 ? "Add collection" : "Next"}
+                                label={stepIndex === 2 ? "Save" : "Next"}
                                 primary={true}
                                 onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}/>
                         </CardActions>

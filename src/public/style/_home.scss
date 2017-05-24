@@ -67,6 +67,7 @@ body, html, main {
       ul {
         @include padding(30px);
         @include display(flex, "", "");
+        @include background-color(#ffffff);
         flex-direction: column;
         list-style: none;
         height: auto;
@@ -84,7 +85,6 @@ body, html, main {
         }
 
         .right-news {
-          @include widthAndHeight("auto", 450px);
           @include widthAndHeight("auto", 450px);
           @include display(flex, 1, center);
           flex-direction: column;
@@ -113,8 +113,10 @@ body, html, main {
           @include widthAndHeight(100%, "auto");
           @include box-sizing(border-box);
           @include padding(10px);
+          @include background-color(#ffffff);
           img {
             @include widthAndHeight("auto", "auto");
+            min-height: 180px;
           }
         }
       }

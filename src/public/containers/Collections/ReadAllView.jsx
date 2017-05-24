@@ -19,7 +19,8 @@ class ReadAllView extends Component {
             searchErrorMessage: '',
             collectionsPreSearch: [],
             searchQuery: '',
-            searching: false
+            searching: false,
+            floodProtection: false
         };
     };
 
@@ -154,6 +155,8 @@ class ReadAllView extends Component {
             xhr.addEventListener('load', () => {
                 if (xhr.status === 200) {
 
+                    this.setState({floodProtection: true});
+
                     //no collections found
                     if (xhr.response.errorMessage) {
                         this.setState({searchErrorMessage: xhr.response.errorMessage, collections: []});
@@ -163,7 +166,6 @@ class ReadAllView extends Component {
                     }
                 }
             });
-            if (this.state.searchErrorMessage.length === 0)
                 xhr.send(formData);
             this.setState({searching: true});
         }

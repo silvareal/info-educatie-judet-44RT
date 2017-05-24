@@ -4,8 +4,6 @@ import RichTextEditor from 'react-rte';
 import {stateToHTML} from 'draft-js-export-html';
 import {convertToRaw, convertFromRaw} from 'draft-js';
 
-import {CircularProgress} from 'material-ui';
-
 import Update from '../../../components/Admin/Collections/Main Components/Update.jsx';
 import Auth from '../../../modules/Auth.js';
 import NotAuthorizedView from "../../Error/NotAuthorizedView.jsx";

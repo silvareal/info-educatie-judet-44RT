@@ -44,7 +44,9 @@
 
   .container-collections {
     @include padding(64px, 256px, 64px, 256px);
+    min-height: 800px;
     @media screen and (max-width: 1200px) {
+      min-height: 400px;
       @include padding(1em);
       @include box-sizing(border-box);
     }
@@ -157,7 +159,9 @@
 
   .container-collections {
     @include padding(64px, 256px, 64px, 256px);
+    min-height: 800px;
     @media screen and (max-width: 1200px) {
+      min-height: 400px;
       @include padding(1em);
       @include box-sizing(border-box);
     }

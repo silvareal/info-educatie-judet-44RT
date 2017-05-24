@@ -1,26 +1,32 @@
 import React, {Component} from 'react'
 
+import RichTextEditor from 'react-rte';
+import {stateToHTML} from 'draft-js-export-html';
+import {convertToRaw} from 'draft-js';
+
 import Create from '../../../components/Admin/News/Main Components/Create.jsx'
 import Auth from '../../../modules/Auth.js';
-import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
+import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 
 class CreateView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             userId: '',
+            successCreation: '',
+            inputCount: 1,
+            errorMessage: '',
+            errors: {},
+            errorsNewsPicturesArray: {},
             newsTitle: '',
             newsCoverLink: '',
-            newsDescription: '',
+            newsDescription: RichTextEditor.createEmptyValue(),
             newsPictures: [{
                 newsPictureLink: ''
             }],
-            successCreation: '',
-            errors: {},
-            errorMessage: '',
-            errorsNewsPicturesArray: {},
             newsPictureLinkError: '',
-            isAdmin: false
+            isAdmin: false,
+            __html: ''
         };
     };
 
@@ -41,6 +47,14 @@ class CreateView extends Component {
         xhr.send();
     }
 
+    getHTML = () => {
+        let editorState = this.state.newsDescription.getEditorState();
+        let contentState = editorState.getCurrentContent();
+        let __html = stateToHTML(contentState);
+        if (__html.search("/script") === -1 && __html.search("script") === -1)
+            return {__html: __html};
+    };
+
     onNewsTitleChange = (e) => {
         this.setState({newsTitle: e.target.value});
     };
@@ -49,12 +63,8 @@ class CreateView extends Component {
         this.setState({newsCoverLink: e.target.value});
     };
 
-    onNewsDescriptionChange = (e) => {
-        this.setState({newsDescription: e.target.value});
-    };
-
-    onNewsPictureLinkChange = (e) => {
-        this.setState({newsPictureLink: e.target.value});
+    onNewsDescriptionChange = (value) => {
+        this.setState({newsDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
     handleNewsPicturesLinkChange = (i) => (e) => {
@@ -80,14 +90,26 @@ class CreateView extends Component {
         });
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     onSave = () => {
+
+        this.resetScroll();
+
+        //converting collectionDescription to collectionDescriptionRaw
+        let editorState = this.state.newsDescription.getEditorState();
+        let contentState = editorState.getCurrentContent();
+        let rawContentState = window.rawContentState = convertToRaw(contentState);
+
         //The next few lines will define the HTTP body message
         const newsTitle = encodeURIComponent(this.state.newsTitle);
         const newsCoverLink = encodeURIComponent(this.state.newsCoverLink);
-        const newsDescription = encodeURIComponent(this.state.newsDescription);
+        const newsDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
         const newsPictures = encodeURIComponent(JSON.stringify(this.state.newsPictures));
 
-        const formData = `newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescription=${newsDescription}&newsPictures=${newsPictures}`;
+        const formData = `newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescriptionRaw=${newsDescriptionRaw}&newsPictures=${newsPictures}`;
 
         //AJAX
         const xhr = new XMLHttpRequest();
@@ -108,7 +130,7 @@ class CreateView extends Component {
                     errorMessage: '',
                     newsTitle : '',
                     newsCoverLink: '',
-                    newsDescription: '',
+                    newsDescription: RichTextEditor.createEmptyValue(),
                     newsPictures : [{
                         newsPictureLink: ''
                     }]
@@ -148,7 +170,9 @@ class CreateView extends Component {
         {
             return (
                 <Create
-                    userId={this.props.params._id}
+                    getHTML={this.getHTML}
+                    __html={this.state.__html}
+                    adminId={this.props.params._id}
                     newsTitle={this.state.newsTitle}
                     newsCoverLink={this.state.newsCoverLink}
                     newsDescription={this.state.newsDescription}
@@ -167,7 +191,7 @@ class CreateView extends Component {
                     newsPictureLinkError={this.state.newsPictureLinkError}
                 />)
         }
-        else return <NotAuthorizedPage/>
+        else return <NotAuthorizedView/>
     }
 }
 

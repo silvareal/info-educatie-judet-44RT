@@ -4,6 +4,18 @@ const News = require('mongoose').model('News');
 
 const router = new express.Router();
 
+function validateSearchForm(payload) {
+    let isFormValid = true;
+
+    if (!payload.searchQuery || typeof payload.searchQuery !== 'string' || payload.searchQuery.trim().length > 100) {
+        isFormValid = false
+    }
+
+    return {
+        success: isFormValid
+    }
+}
+
 router.get('/readAllCollections', (req, res) => {
     Collection.find({}, (err, collections) => {
 
@@ -48,6 +60,14 @@ router.post('/loadMoreCollections', (req, res) => {
 });
 
 router.post("/searchCollections", (req, res) => {
+
+    const validationResult = validateSearchForm(req.body);
+    if (!validationResult.success) {
+        return res.status(400).json({
+            success: false
+        });
+    }
+
     Collection.find({collectionName: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, collections) => {
 
         if (err) {
@@ -110,6 +130,14 @@ router.post('/loadMoreNews', (req, res) => {
 });
 
 router.post('/searchNews', (req, res) => {
+
+    const validationResult = validateSearchForm(req.body);
+    if (!validationResult.success) {
+        return res.status(400).json({
+            success: false
+        });
+    }
+
     News.find({newsTitle: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, news) => {
 
 

@@ -8,13 +8,24 @@ class TopActions extends Component {
             <div className="top-actions">
                 <div className="capsules"/>
                 <div className="capsules" style={{justifyContent: "flex-end"}}>
-                    <TextField
-                        type="text"
-                        hintText="Search..."
-                        value={this.props.searchQuery}
-                        onChange={this.props.onQueryChange}
-                        onKeyDown={this.props.handleKeyPress}
-                    />
+                    {this.props.searchQuery.length > 100 ?
+                        <TextField
+                            type="text"
+                            hintText="Search..."
+                            value={this.props.searchQuery}
+                            onChange={this.props.onQueryChange}
+                            onKeyDown={this.props.handleKeyPress}
+                            errorText="Search term too long"
+                        />
+                        :
+                        <TextField
+                            type="text"
+                            hintText="Search..."
+                            value={this.props.searchQuery}
+                            onChange={this.props.onQueryChange}
+                            onKeyDown={this.props.handleKeyPress}
+                        />
+                    }
                     <IconButton onTouchTap={this.props.onSearch}>
                         <ActionSearch/>
                     </IconButton>

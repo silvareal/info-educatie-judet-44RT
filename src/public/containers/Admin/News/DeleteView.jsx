@@ -74,9 +74,16 @@ class DeleteView extends Component {
         this.getCollection();
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     //We don t need to verify the identity in the componentDidMount lifecycle
     //We will simply check it once the one that requests the delete presses the DELETE button or variations of it
     onDelete = () => {
+
+        this.resetScroll();
+
         const newsId = encodeURIComponent(this.props.params._newsId);
         const newsTitle = encodeURIComponent(this.state.newsTitle);
         const newsCoverLink = encodeURIComponent(this.state.newsCoverLink);
@@ -116,7 +123,7 @@ class DeleteView extends Component {
         {
             return (
                 <Delete
-                    userId={this.props.params._id}
+                    adminId={this.props.params._id}
                     message={this.state.message}
                     onDelete={this.onDelete}/>
             )

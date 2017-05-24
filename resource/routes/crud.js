@@ -10,6 +10,18 @@ const config = require('../../config');
 
 const router = new express.Router();
 
+function validateSearchForm(payload) {
+    let isFormValid = true;
+
+    if (!payload.searchQuery || typeof payload.searchQuery !== 'string' || payload.searchQuery.trim().length > 100) {
+        isFormValid = false
+    }
+
+    return {
+        success: isFormValid
+    }
+}
+
 function validateCreateForm(payload) {
     const errors = {};
     let isFormValid = true;
@@ -261,6 +273,14 @@ router.post('/loadMore', (req, res) => {
 });
 
 router.post("/searchCollections", (req, res) => {
+
+    const validationResult = validateSearchForm(req.body);
+    if (!validationResult.success) {
+        return res.status(400).json({
+            success: false
+        });
+    }
+
     if (!req.headers.authorization) {
         return res.status(401).end();
     }

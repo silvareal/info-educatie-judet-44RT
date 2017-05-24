@@ -16,6 +16,18 @@ const jwt = require('jsonwebtoken');
 
 const router = new express.Router();
 
+function validateSearchForm(payload) {
+    let isFormValid = true;
+
+    if (!payload.searchQuery || typeof payload.searchQuery !== 'string' || payload.searchQuery.trim().length > 100) {
+        isFormValid = false
+    }
+
+    return {
+        success: isFormValid
+    }
+}
+
 function validateCreateCollectionForm(payload) {
     const errors = {};
     let isFormValid = true;
@@ -280,23 +292,28 @@ router.get("/showUsers", (req, res) => {
         }
 
         const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
 
-        User.findOne({_id: userId}, (err, user) => {
+        if (isAdmin === true) {
 
-            if (user.admin === true) {
+            User.findOne({_id: userId}, (err, user) => {
 
-                User.find({admin: false}, (err, users) => {
-                    res.json({
-                        data: users
-                    })
-                });
-            }
-            else {
-                res.status(401).json({
-                    message: "Not an admin"
-                });
-            }
-        })
+                if (user.admin === true) {
+
+                    User.find({admin: false}, (err, users) => {
+                        res.json({
+                            data: users
+                        })
+                    });
+                }
+                else {
+                    res.status(401).json({
+                        message: "Not an admin"
+                    });
+                }
+            })
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -324,47 +341,32 @@ router.post('/makeModerators', (req, res) => {
 
         //here to be used for logs
         const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
 
         const validationResult = validateMakeModeratorsForm(req.body);
 
-        //f1
-        for (let i = 0; i < validationResult.makeModerators.length; i++) {
-            if (validationResult.makeModerators[i] !== null) {
-                User.findOne({_id: validationResult.makeModerators[i]}, (err, user) => {
+        if (isAdmin === true) {
+            for (let i = 0; i < validationResult.makeModerators.length; i++) {
+                if (validationResult.makeModerators[i] !== null) {
+                    User.findOne({_id: validationResult.makeModerators[i]}, (err, user) => {
 
-                        if (err) {
-                            return res.status(400).json({
-                                message: "User not found"
-                            });
-                        }
+                            if (err) {
+                                return res.status(400).json({
+                                    message: "User not found"
+                                });
+                            }
 
-                        if (!user) {
-                            return res.status(404).json({
-                                message: "User not found"
-                            });
-                        }
+                            if (!user) {
+                                return res.status(404).json({
+                                    message: "User not found"
+                                });
+                            }
 
-                        //if the user by id is not a moderator yet
-                        if (user.moderator === false) {
-                            User.updateOne({_id: {$eq: validationResult.makeModerators[i]}}, {
-                                $set: {
-                                    moderator: true
-                                }
-                            }, (err, user) => {
-                                if (err) {
-                                    console.log("error 1");
-                                }
-
-                                if (!user) {
-                                    console.log("error 2");
-                                }
-                            })
-                        }
-                        else {
-                            if (user.moderator === true) {
+                            //if the user by id is not a moderator yet
+                            if (user.moderator === false) {
                                 User.updateOne({_id: {$eq: validationResult.makeModerators[i]}}, {
                                     $set: {
-                                        moderator: false
+                                        moderator: true
                                     }
                                 }, (err, user) => {
                                     if (err) {
@@ -374,19 +376,37 @@ router.post('/makeModerators', (req, res) => {
                                     if (!user) {
                                         console.log("error 2");
                                     }
-                                });
+                                })
                             }
-                        }
+                            else {
+                                if (user.moderator === true) {
+                                    User.updateOne({_id: {$eq: validationResult.makeModerators[i]}}, {
+                                        $set: {
+                                            moderator: false
+                                        }
+                                    }, (err, user) => {
+                                        if (err) {
+                                            console.log("error 1");
+                                        }
 
-                    }
-                );
-            }
-            if (i === validationResult.makeModerators.length - 1) {
-                res.json({
-                    message: "All okay"
-                });
+                                        if (!user) {
+                                            console.log("error 2");
+                                        }
+                                    });
+                                }
+                            }
+
+                        }
+                    );
+                }
+                if (i === validationResult.makeModerators.length - 1) {
+                    res.json({
+                        message: "All okay"
+                    });
+                }
             }
         }
+        else return res.status(401).end();
     });
 });
 
@@ -424,40 +444,44 @@ router.post("/create", (req, res) => {
 
         //here to be used for logs
         const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
 
-        const newsData = {
-            userId: userId,
-            newsTitle: req.body.newsTitle,
-            newsCoverLink: req.body.newsCoverLink,
-            newsDescriptionRaw: req.body.newsDescriptionRaw,
-            picturesArray: JSON.parse(req.body.newsPictures)
-        };
+        if (isAdmin === true) {
+            const newsData = {
+                userId: userId,
+                newsTitle: req.body.newsTitle,
+                newsCoverLink: req.body.newsCoverLink,
+                newsDescriptionRaw: req.body.newsDescriptionRaw,
+                picturesArray: JSON.parse(req.body.newsPictures)
+            };
 
-        const logData = {
-            newsTitle: req.body.newsTitle
-        };
+            const logData = {
+                newsTitle: req.body.newsTitle
+            };
 
-        const newLog = new CreateNewsLogs(logData);
-        newLog.save((err) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Error while logging"
-                })
-            }
-        });
-
-        const newNews = new News(newsData);
-        newNews.save((err) => {
-            if (err) {
-                return res.status(400).json({
-                    success: false
-                })
-            }
-
-            return res.json({
-                success: true
+            const newLog = new CreateNewsLogs(logData);
+            newLog.save((err) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Error while logging"
+                    })
+                }
             });
-        });
+
+            const newNews = new News(newsData);
+            newNews.save((err) => {
+                if (err) {
+                    return res.status(400).json({
+                        success: false
+                    })
+                }
+
+                return res.json({
+                    success: true
+                });
+            });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -483,23 +507,29 @@ router.get("/readAll", (req, res) => {
             })
         }
 
-        News.find({}, (err, news) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Database error"
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+
+            News.find({}, (err, news) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (news.length === 0) {
+                    return res.status(404).json({
+                        message: "No news added so far"
+                    })
+                }
+
+                return res.json({
+                    news: news
                 });
-            }
-
-            if (news.length == 0) {
-                return res.status(404).json({
-                    message: "No news added so far"
-                })
-            }
-
-            return res.json({
-                news: news
-            });
-        }).sort({time: -1}).limit(10);
+            }).sort({time: -1}).limit(10);
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -525,6 +555,14 @@ router.post('/loadMoreNews', (req, res) => {
 });
 
 router.post('/searchNews', (req, res) => {
+
+    const validationResult = validateSearchForm(req.body);
+    if (!validationResult.success) {
+        return res.status(400).json({
+            success: false
+        });
+    }
+
     News.find({newTitle: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, news) => {
 
         if (err) {
@@ -569,24 +607,29 @@ router.post("/readOne", (req, res) => {
 
         //here to be used for logs
         const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
 
-        News.findOne({_id: req.body.newsId}, (err, news) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Database error"
+        if (isAdmin === true) {
+
+            News.findOne({_id: req.body.newsId}, (err, news) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!news) {
+                    return res.status(404).json({
+                        message: "The item you are searching for does not exist"
+                    });
+                }
+
+                res.json({
+                    news: news
                 });
-            }
-
-            if (!news) {
-                return res.status(404).json({
-                    message: "The item you are searching for does not exist"
-                });
-            }
-
-            res.json({
-                news: news
             });
-        });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -614,25 +657,30 @@ router.post('/updateShow', (req, res) => {
 
         //here to be used for logs
         const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
 
-        News.findOne({_id: req.body.newsId}, (err, news) => {
-            if (err) {
-                //Database error
-                return res.status(400).json({
-                    message: "Database Error"
+        if (isAdmin === true) {
+
+            News.findOne({_id: req.body.newsId}, (err, news) => {
+                if (err) {
+                    //Database error
+                    return res.status(400).json({
+                        message: "Database Error"
+                    });
+                }
+
+                if (!news) {
+                    return res.status(404).json({
+                        message: "The item you are searching for does not exist"
+                    });
+                }
+
+                res.json({
+                    news: news
                 });
-            }
-
-            if (!news) {
-                return res.status(404).json({
-                    message: "The item you are searching for does not exist"
-                });
-            }
-
-            res.json({
-                news: news
             });
-        });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -667,54 +715,60 @@ router.post('/updateSave', (req, res) => {
             })
         }
 
-        News.updateOne({_id: {$eq: req.body.newsId}}, {
-            $set: {
-                newsTitle: req.body.newsTitle,
-                newsDescriptionRaw: req.body.newsDescriptionRaw,
-                newsCoverLink: req.body.newsCoverLink,
-                picturesArray: JSON.parse(req.body.newsPictures)
-            }
-        }, (err, news) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Database error",
-                    success: false
-                });
-            }
+        let isAdmin = decoded.isAdmin;
 
-            if (!news) {
-                return res.status(404).json({
-                    message: "The item you are searching for does not exist",
-                    success: false
-                })
-            }
+        if (isAdmin === true) {
 
-            const logData = {
-                newsId: req.body.newsId,
-                newsTitle: req.body.newsTitle,
-                newsCoverLink: req.body.newsCoverLink,
-                newsDescriptionRaw: req.body.newsDescriptionRaw,
-                newsTitleOld: req.body.newsTitleOld,
-                newsCoverLinkOld: req.body.newsCoverLinkOld,
-                newsDescriptionRawOld: req.body.newsDescriptionRawOld,
-                picturesArray: JSON.parse(req.body.newsPictures),
-                picturesArrayOld: JSON.parse(req.body.newsPicturesOld)
-            };
-
-            const newLog = new UpdateNewsLogs(logData);
-            newLog.save((err) => {
+            News.updateOne({_id: {$eq: req.body.newsId}}, {
+                $set: {
+                    newsTitle: req.body.newsTitle,
+                    newsDescriptionRaw: req.body.newsDescriptionRaw,
+                    newsCoverLink: req.body.newsCoverLink,
+                    picturesArray: JSON.parse(req.body.newsPictures)
+                }
+            }, (err, news) => {
                 if (err) {
                     return res.status(400).json({
-                        message: "Error while logging"
+                        message: "Database error",
+                        success: false
+                    });
+                }
+
+                if (!news) {
+                    return res.status(404).json({
+                        message: "The item you are searching for does not exist",
+                        success: false
                     })
                 }
-            });
 
-            return res.json({
-                message: "News successfully updated",
-                success: true
-            })
-        });
+                const logData = {
+                    newsId: req.body.newsId,
+                    newsTitle: req.body.newsTitle,
+                    newsCoverLink: req.body.newsCoverLink,
+                    newsDescriptionRaw: req.body.newsDescriptionRaw,
+                    newsTitleOld: req.body.newsTitleOld,
+                    newsCoverLinkOld: req.body.newsCoverLinkOld,
+                    newsDescriptionRawOld: req.body.newsDescriptionRawOld,
+                    picturesArray: JSON.parse(req.body.newsPictures),
+                    picturesArrayOld: JSON.parse(req.body.newsPicturesOld)
+                };
+
+                const newLog = new UpdateNewsLogs(logData);
+                newLog.save((err) => {
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Error while logging"
+                        })
+                    }
+                });
+
+                return res.json({
+                    message: "News successfully updated",
+                    success: true
+                })
+            });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -741,26 +795,31 @@ router.post('/deleteShow', (req, res) => {
         }
 
         const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
 
-        News.findOne({_id: req.body.newsId}, (err, news) => {
-            if (err) {
-                //Database error
-                return res.status(400).json({
-                    message: "The item you are searching for does not exist"
+        if (isAdmin === true) {
+
+            News.findOne({_id: req.body.newsId}, (err, news) => {
+                if (err) {
+                    //Database error
+                    return res.status(400).json({
+                        message: "The item you are searching for does not exist"
+                    });
+                }
+
+                if (!news) {
+                    return res.status(404).json({
+                        message: "The item you are searching for does not exist"
+                    });
+                }
+
+                res.json({
+                    message: "Collection exists",
+                    news: news
                 });
-            }
-
-            if (!news) {
-                return res.status(404).json({
-                    message: "The item you are searching for does not exist"
-                });
-            }
-
-            res.json({
-                message: "Collection exists",
-                news: news
             });
-        });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -786,40 +845,46 @@ router.post('/delete', (req, res) => {
             })
         }
 
-        const logData = {
-            newsId: req.body.newsId,
-            newsTitle: req.body.newsTitle,
-            newsDescription: req.body.newsDescription,
-            newsCoverLink: req.body.newsCoverLink,
-            picturesArray: JSON.parse(req.body.newsPictures)
-        };
+        let isAdmin = decoded.isAdmin;
 
-        const newLog = new DeleteNewsLogs(logData);
-        newLog.save((err) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Error while logging"
-                })
-            }
-        });
+        if (isAdmin === true) {
 
-        News.deleteOne({_id: req.body.newsId}, (err, news) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Database error"
-                })
-            }
+            const logData = {
+                newsId: req.body.newsId,
+                newsTitle: req.body.newsTitle,
+                newsDescription: req.body.newsDescription,
+                newsCoverLink: req.body.newsCoverLink,
+                picturesArray: JSON.parse(req.body.newsPictures)
+            };
 
-            if (!news) {
-                return res.status(404).json({
-                    message: "The item you are searching for does not exist"
-                })
-            }
-
-            return res.json({
-                message: "News article deleted"
+            const newLog = new DeleteNewsLogs(logData);
+            newLog.save((err) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Error while logging"
+                    })
+                }
             });
-        });
+
+            News.deleteOne({_id: req.body.newsId}, (err, news) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
+                    })
+                }
+
+                if (!news) {
+                    return res.status(404).json({
+                        message: "The item you are searching for does not exist"
+                    })
+                }
+
+                return res.json({
+                    message: "News article deleted"
+                });
+            });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -852,43 +917,46 @@ router.post("/createCollection", (req, res) => {
 
         const userId = decoded.sub;
 
-        //this part of the application is used to add collections for other users
-        //in case they accidentally deleted it, we can retrieve from the old array the logs and personally restore it for them
-        //userId is an input since we add the collection for the user with the userId
-        const collectionData = {
-            userId: req.body.userId,
-            collectionName: req.body.collectionName,
-            collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-            picturesArray: JSON.parse(req.body.picturesArray)
-        };
+        let isAdmin = decoded.isAdmin;
 
-        const logData = {
-            userId: userId,
-            collectionName: req.body.collectionName,
-            createdByAdmin: true
-        };
+        if (isAdmin === true) {
 
-        const newLog = new CreateCollectionLogs(logData);
-        newLog.save((err) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Error while logging"
-                })
-            }
-        });
+            const collectionData = {
+                userId: req.body.userId,
+                collectionName: req.body.collectionName,
+                collectionDescriptionRaw: req.body.collectionDescriptionRaw,
+                picturesArray: JSON.parse(req.body.picturesArray)
+            };
 
-        const newCollection = new Collection(collectionData);
-        newCollection.save((err) => {
-            if (err) {
-                return res.status(400).json({
-                    success: false
-                })
-            }
+            const logData = {
+                userId: userId,
+                collectionName: req.body.collectionName,
+                createdByAdmin: true
+            };
 
-            return res.json({
-                success: true
+            const newLog = new CreateCollectionLogs(logData);
+            newLog.save((err) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Error while logging"
+                    })
+                }
             });
-        });
+
+            const newCollection = new Collection(collectionData);
+            newCollection.save((err) => {
+                if (err) {
+                    return res.status(400).json({
+                        success: false
+                    })
+                }
+
+                return res.json({
+                    success: true
+                });
+            });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -916,8 +984,7 @@ router.get("/readAllCollections", (req, res) => {
 
         let isAdmin = decoded.isAdmin;
 
-        if (isAdmin === true)
-        {
+        if (isAdmin === true) {
             Collection.find({}, (err, collections) => {
                 if (err) {
                     return res.status(400).json({
@@ -925,7 +992,7 @@ router.get("/readAllCollections", (req, res) => {
                     });
                 }
 
-                if (collections.length == 0) {
+                if (collections.length === 0) {
                     return res.status(404).json({
                         message: "Nothing has been addded yet"
                     })
@@ -962,6 +1029,14 @@ router.post('/loadMoreCollections', (req, res) => {
 });
 
 router.post("/searchCollections", (req, res) => {
+
+    const validationResult = validateSearchForm(req.body);
+    if (!validationResult.success) {
+        return res.status(400).json({
+            success: false
+        });
+    }
+
     Collection.find({collectionName: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, collections) => {
 
         if (err) {
@@ -1004,25 +1079,29 @@ router.post("/readOneCollection", (req, res) => {
             })
         }
 
-        const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
 
-        Collection.findOne({_id: req.body.collectionId}, (err, collection) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Database error"
+        if (isAdmin === true) {
+
+            Collection.findOne({_id: req.body.collectionId}, (err, collection) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!collection) {
+                    return res.status(404).json({
+                        message: "The item you are searching for does not exist"
+                    });
+                }
+
+                res.json({
+                    collection: collection
                 });
-            }
-
-            if (!collection) {
-                return res.status(404).json({
-                    message: "The item you are searching for does not exist"
-                });
-            }
-
-            res.json({
-                collection: collection
             });
-        });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -1048,26 +1127,30 @@ router.post('/updateShowCollections', (req, res) => {
             })
         }
 
-        const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
 
-        Collection.findOne({_id: req.body.collectionId}, (err, collection) => {
-            if (err) {
-                //Database error
-                return res.status(400).json({
-                    message: "The item you are searching for does not exist"
+        if (isAdmin === true) {
+
+            Collection.findOne({_id: req.body.collectionId}, (err, collection) => {
+                if (err) {
+                    //Database error
+                    return res.status(400).json({
+                        message: "The item you are searching for does not exist"
+                    });
+                }
+
+                if (!collection) {
+                    return res.status(404).json({
+                        message: "The item you are searching for does not exist"
+                    });
+                }
+
+                res.json({
+                    collection: collection
                 });
-            }
-
-            if (!collection) {
-                return res.status(404).json({
-                    message: "The item you are searching for does not exist"
-                });
-            }
-
-            res.json({
-                collection: collection
             });
-        });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -1102,57 +1185,61 @@ router.post('/updateSaveCollections', (req, res) => {
             })
         }
 
-        const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
 
-        Collection.updateOne({_id: {$eq: req.body.collectionId}}, {
-            $set: {
-                userId: req.body.userId,
-                collectionName: req.body.collectionName,
-                collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-                picturesArray: JSON.parse(req.body.picturesArray)
-            }
-        }, (err, collection) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Database error in /crud/updateSave while updating entry",
-                    success: false
-                });
-            }
+        if (isAdmin === true) {
 
-            if (!collection) {
-                return res.status(404).json({
-                    message: "The item you are searching for does not exist",
-                    success: false
-                })
-            }
-
-            const logData = {
-                collectionId: req.body.collectionId,
-                userId: req.body.userId,
-                userIdOld: req.body.userIdOld,
-                collectionName: req.body.collectionName,
-                collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-                picturesArray: JSON.parse(req.body.picturesArray),
-                collectionNameOld: req.body.collectionNameOld,
-                collectionDescriptionRawOld: req.body.collectionDescriptionRawOld,
-                picturesArrayOld: JSON.parse(req.body.picturesArrayOld),
-                updatedByAdmin: true
-            };
-
-            const newLog = new UpdateCollectionLogs(logData);
-            newLog.save((err) => {
+            Collection.updateOne({_id: {$eq: req.body.collectionId}}, {
+                $set: {
+                    userId: req.body.userId,
+                    collectionName: req.body.collectionName,
+                    collectionDescriptionRaw: req.body.collectionDescriptionRaw,
+                    picturesArray: JSON.parse(req.body.picturesArray)
+                }
+            }, (err, collection) => {
                 if (err) {
                     return res.status(400).json({
-                        message: "Error while logging"
+                        message: "Database error in /crud/updateSave while updating entry",
+                        success: false
+                    });
+                }
+
+                if (!collection) {
+                    return res.status(404).json({
+                        message: "The item you are searching for does not exist",
+                        success: false
                     })
                 }
-            });
 
-            return res.json({
-                message: "Collection successfully updated",
-                success: true
-            })
-        });
+                const logData = {
+                    collectionId: req.body.collectionId,
+                    userId: req.body.userId,
+                    userIdOld: req.body.userIdOld,
+                    collectionName: req.body.collectionName,
+                    collectionDescriptionRaw: req.body.collectionDescriptionRaw,
+                    picturesArray: JSON.parse(req.body.picturesArray),
+                    collectionNameOld: req.body.collectionNameOld,
+                    collectionDescriptionRawOld: req.body.collectionDescriptionRawOld,
+                    picturesArrayOld: JSON.parse(req.body.picturesArrayOld),
+                    updatedByAdmin: true
+                };
+
+                const newLog = new UpdateCollectionLogs(logData);
+                newLog.save((err) => {
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Error while logging"
+                        })
+                    }
+                });
+
+                return res.json({
+                    message: "Collection successfully updated",
+                    success: true
+                })
+            });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -1176,38 +1263,44 @@ router.post('/deleteShowCollection', (req, res) => {
 
         const userId = decoded.sub;
 
-        User.findOne({_id: userId}, (err, user) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Database error in User.findOne from /crud/delete"
-                });
-            }
+        let isAdmin = decoded.isAdmin;
 
-            if (!user) {
-                return res.status(404).json({
-                    message: "User not found"
-                });
-            }
-            Collection.findOne({_id: req.body.collectionId}, (err, collection) => {
+        if (isAdmin === true) {
+
+            User.findOne({_id: userId}, (err, user) => {
                 if (err) {
-                    //Database error
                     return res.status(400).json({
-                        message: "The item you are searching for does not exist"
+                        message: "Database error in User.findOne from /crud/delete"
                     });
                 }
 
-                if (!collection) {
+                if (!user) {
                     return res.status(404).json({
-                        message: "The item you are searching for does not exist"
+                        message: "User not found"
                     });
                 }
+                Collection.findOne({_id: req.body.collectionId}, (err, collection) => {
+                    if (err) {
+                        //Database error
+                        return res.status(400).json({
+                            message: "The item you are searching for does not exist"
+                        });
+                    }
 
-                res.json({
-                    message: "Collection exists",
-                    collection: collection
+                    if (!collection) {
+                        return res.status(404).json({
+                            message: "The item you are searching for does not exist"
+                        });
+                    }
+
+                    res.json({
+                        message: "Collection exists",
+                        collection: collection
+                    });
                 });
             });
-        });
+        }
+        else return res.status(401).end();
     });
 });
 
@@ -1234,237 +1327,483 @@ router.post("/deleteCollection", (req, res) => {
         }
 
         const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
 
-        //ownerId - the id of the owner
-        //userId - the id of the admin that deletes the collection
-        const logData = {
-            ownerId: req.body.ownerId,
-            userId: userId,
-            collectionId: req.body.collectionId,
-            collectionName: req.body.collectionName,
-            collectionDescription: req.body.collectionDescription,
-            picturesArray: JSON.parse(req.body.picturesArray),
-            deletedByAdmin: true
-        };
+        if (isAdmin === true) {
 
-        const newLog = new DeleteCollectionLogs(logData);
-        newLog.save((err) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Error while logging"
-                })
-            }
+            //ownerId - the id of the owner
+            //userId - the id of the admin that deletes the collection
+            const logData = {
+                ownerId: req.body.ownerId,
+                userId: userId,
+                collectionId: req.body.collectionId,
+                collectionName: req.body.collectionName,
+                collectionDescription: req.body.collectionDescription,
+                picturesArray: JSON.parse(req.body.picturesArray),
+                deletedByAdmin: true
+            };
 
-            Collection.deleteOne({_id: req.body.collectionId}, (err, collection) => {
+            const newLog = new DeleteCollectionLogs(logData);
+            newLog.save((err) => {
                 if (err) {
                     return res.status(400).json({
-                        message: "The item you are searching for does not exist"
+                        message: "Error while logging"
                     })
                 }
 
-                if (!collection) {
-                    return res.status(404).json({
-                        message: "The item you are searching for does not exist"
-                    })
-                }
+                Collection.deleteOne({_id: req.body.collectionId}, (err, collection) => {
+                    if (err) {
+                        return res.status(400).json({
+                            message: "The item you are searching for does not exist"
+                        })
+                    }
 
-                return res.json({
-                    message: "Collection was successfully deleted"
+                    if (!collection) {
+                        return res.status(404).json({
+                            message: "The item you are searching for does not exist"
+                        })
+                    }
+
+                    return res.json({
+                        message: "Collection was successfully deleted"
+                    });
                 });
             });
-        });
+        }
+        else return res.status(401).end();
     });
 });
 
 router.get("/logsLogin", (req, res) => {
-    LoginLogs.find({}, (err, logs) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            res.status(400).json({
-                message: "Database error"
-            });
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
 
-        if (!logs) {
-            res.status(404).json({
-                message: "No logs found"
-            });
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
-        res.json({
-            logs: logs
-        });
+        let isAdmin = decoded.isAdmin;
 
-    }).sort({time: -1});
+        if (isAdmin === true) {
+            LoginLogs.find({}, (err, logs) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!logs) {
+                    res.status(404).json({
+                        message: "No logs found"
+                    });
+                }
+
+                res.json({
+                    logs: logs
+                });
+
+            }).sort({time: -1});
+        }
+        else return res.status(401).end();
+    });
 });
 
 router.get("/logsSignup", (req, res) => {
-    SignupLogs.find({}, (err, logs) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            res.status(400).json({
-                message: "Database error"
-            });
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
 
-        if (!logs) {
-            res.status(404).json({
-                message: "No logs found"
-            });
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
-        res.json({
-            logs: logs
-        });
+        let isAdmin = decoded.isAdmin;
 
-    }).sort({time: -1});
+        if (isAdmin === true) {
+            SignupLogs.find({}, (err, logs) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!logs) {
+                    res.status(404).json({
+                        message: "No logs found"
+                    });
+                }
+
+                res.json({
+                    logs: logs
+                });
+
+            }).sort({time: -1});
+        }
+        else return res.status(401).end();
+    });
 });
 
 router.get("/logsCollectionsCreate", (req, res) => {
-    CreateCollectionLogs.find({}, (err, logs) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            res.status(400).json({
-                message: "Database error"
-            });
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
 
-        if (!logs) {
-            res.status(404).json({
-                message: "No logs found"
-            });
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
-        res.json({
-            logs: logs
-        });
-    }).sort({time: -1});
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            CreateCollectionLogs.find({}, (err, logs) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!logs) {
+                    res.status(404).json({
+                        message: "No logs found"
+                    });
+                }
+
+                res.json({
+                    logs: logs
+                });
+            }).sort({time: -1});
+        }
+        else return res.status(401).end();
+    });
 });
 
 router.get("/logsCollectionsDelete", (req, res) => {
-    DeleteCollectionLogs.find({}, (err, logs) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            res.status(400).json({
-                message: "Database error"
-            });
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
 
-        if (!logs) {
-            res.status(404).json({
-                message: "No logs found"
-            });
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
-        res.json({
-            logs: logs
-        });
-    }).sort({time: -1});
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            DeleteCollectionLogs.find({}, (err, logs) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!logs) {
+                    res.status(404).json({
+                        message: "No logs found"
+                    });
+                }
+
+                res.json({
+                    logs: logs
+                });
+            }).sort({time: -1});
+        }
+        else return res.status(401).end();
+    });
 });
 
 router.get("/logsCollectionsUpdate", (req, res) => {
-    UpdateCollectionLogs.find({}, (err, logs) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            res.status(400).json({
-                message: "Database error"
-            });
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
 
-        if (!logs) {
-            res.status(404).json({
-                message: "No logs found"
-            });
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
-        res.json({
-            logs: logs
-        });
-    }).sort({time: -1});
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            UpdateCollectionLogs.find({}, (err, logs) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!logs) {
+                    res.status(404).json({
+                        message: "No logs found"
+                    });
+                }
+
+                res.json({
+                    logs: logs
+                });
+            }).sort({time: -1});
+        }
+        else return res.status(401).end();
+    });
 });
 
 router.get("/logsNewsUpdate", (req, res) => {
-    UpdateNewsLogs.find({}, (err, logs) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            res.status(400).json({
-                message: "Database error"
-            });
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
 
-        if (!logs) {
-            res.status(404).json({
-                message: "No logs found"
-            });
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
-        res.json({
-            logs: logs
-        });
-    }).sort({time: -1});
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            UpdateNewsLogs.find({}, (err, logs) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!logs) {
+                    res.status(404).json({
+                        message: "No logs found"
+                    });
+                }
+
+                res.json({
+                    logs: logs
+                });
+            }).sort({time: -1});
+        }
+        else return res.status(401).end();
+    });
 });
 
 router.get("/logsNewsCreate", (req, res) => {
-    CreateNewsLogs.find({}, (err, logs) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            res.status(400).json({
-                message: "Database error"
-            });
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
 
-        if (!logs) {
-            res.status(404).json({
-                message: "No logs found"
-            });
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
-        res.json({
-            logs: logs
-        });
-    }).sort({time: -1});
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            CreateNewsLogs.find({}, (err, logs) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!logs) {
+                    res.status(404).json({
+                        message: "No logs found"
+                    });
+                }
+
+                res.json({
+                    logs: logs
+                });
+            }).sort({time: -1});
+        }
+        else return res.status(401).end();
+    });
 });
 
 router.get("/logsNewsDelete", (req, res) => {
-    DeleteNewsLogs.find({}, (err, logs) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            res.status(400).json({
-                message: "Database error"
-            });
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
 
-        if (!logs) {
-            res.status(404).json({
-                message: "No logs found"
-            });
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
-        res.json({
-            logs: logs
-        });
-    }).sort({time: -1});
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            DeleteNewsLogs.find({}, (err, logs) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!logs) {
+                    res.status(404).json({
+                        message: "No logs found"
+                    });
+                }
+
+                res.json({
+                    logs: logs
+                });
+            }).sort({time: -1});
+        }
+    });
 });
 
 router.get("/logsProfile", (req, res) => {
-    UpdateProfileLogs.find({}, (err, logs) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
         if (err) {
-            res.status(400).json({
-                message: "Database error"
-            });
+            return res.status(401).json({
+                message: "Not authorized"
+            })
         }
 
-        if (!logs) {
-            res.status(404).json({
-                message: "No logs found"
-            });
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
         }
 
-        res.json({
-            logs: logs
-        });
-    }).sort({time: -1});
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            UpdateProfileLogs.find({}, (err, logs) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!logs) {
+                    res.status(404).json({
+                        message: "No logs found"
+                    });
+                }
+
+                res.json({
+                    logs: logs
+                });
+            }).sort({time: -1});
+        }
+    });
 });
 
 module.exports = router;

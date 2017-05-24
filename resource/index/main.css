@@ -86,7 +86,7 @@
 
 .hidden {
   transition: top 6s;
-  top: -300px; }
+  top: -64px; }
 
 .top-bar-spacing {
   width: auto;
@@ -235,6 +235,7 @@ body, html, main {
         display: flex;
         flex: "";
         justify-content: "";
+        background: #ffffff;
         flex-direction: column;
         list-style: none;
         height: auto; }
@@ -250,8 +251,6 @@ body, html, main {
           .parallax-home .container-home .news-desktop ul .left-news img {
             min-height: 350px; }
         .parallax-home .container-home .news-desktop ul .right-news {
-          width: auto;
-          height: 450px;
           width: auto;
           height: 450px;
           display: flex;
@@ -284,10 +283,12 @@ body, html, main {
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        padding: 10px   ; }
+        padding: 10px   ;
+        background: #ffffff; }
         .parallax-home .container-home .news-mobile ul li img {
           width: auto;
-          height: auto; }
+          height: auto;
+          min-height: 180px; }
     .parallax-home .container-home .comments-cancel-padding {
       padding-top: 0;
       padding-bottom: 0; }
@@ -340,11 +341,13 @@ body, html, main {
   background-size: cover; }
   .parallax-collections-create .container-collections {
     padding: 64px 256px 64px 256px;
+    min-height: 800px;
     display: block;
     flex: "";
     justify-content: ""; }
     @media screen and (max-width: 1200px) {
       .parallax-collections-create .container-collections {
+        min-height: 400px;
         padding: 1em   ;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
@@ -452,11 +455,13 @@ body, html, main {
   background-size: cover; }
   .parallax-collections .container-collections {
     padding: 64px 256px 64px 256px;
+    min-height: 800px;
     display: block;
     flex: "";
     justify-content: ""; }
     @media screen and (max-width: 1200px) {
       .parallax-collections .container-collections {
+        min-height: 400px;
         padding: 1em   ;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;

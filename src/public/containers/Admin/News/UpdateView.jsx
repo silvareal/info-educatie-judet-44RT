@@ -1,8 +1,12 @@
 import React, {Component} from 'react'
 
+import RichTextEditor from 'react-rte';
+import {stateToHTML} from 'draft-js-export-html';
+import {convertToRaw, convertFromRaw} from 'draft-js';
+
 import Update from '../../../components/Admin/News/Main Components/Update.jsx';
 import Auth from '../../../modules/Auth.js';
-import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
+import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 
 class UpdateView extends Component {
     constructor(props) {
@@ -12,18 +16,22 @@ class UpdateView extends Component {
             errorMessage: '',
             newsTitle: '',
             newsCoverLink: '',
-            newsDescription: '',
+            newsDescription: RichTextEditor.createEmptyValue(),
+            newsDescriptionRaw: '',
             newsPictures: [{
                 newsPictureLink: ''
             }],
-            inputToRender: 1,
+            inputCount: 1,
             errors: {},
             errorsNewsPicturesArray: {},
             newsPictureLinkError: [],
             newsTitleOld: '',
             newsDescriptionOld: '',
+            newsDescriptionRawOld: '',
             newsCoverLinkOld: '',
             newsPicturesOld:[{}],
+            __html: '',
+            fetched: false,
             isAdmin: false
         };
     };
@@ -69,25 +77,24 @@ class UpdateView extends Component {
                     errorMessage: 'Fetched news',
                     newsTitle: xhr.response.news.newsTitle,
                     newsCoverLink: xhr.response.news.newsCoverLink,
-                    newsDescription: xhr.response.news.newsDescription,
+                    newsDescriptionRaw: xhr.response.news.newsDescriptionRaw,
                     newsPictures: xhr.response.news.picturesArray,
                     response: true,
                     newsTitleOld: xhr.response.news.newsTitle,
                     newsCoverLinkOld: xhr.response.news.newsCoverLink,
-                    newsDescriptionOld: xhr.response.news.newsDescription,
+                    newsDescriptionRawOld: xhr.response.news.newsDescriptionRaw,
                     newsPicturesOld: xhr.response.news.picturesArray
                 });
 
-            } else if (xhr.status == 404) {
-                //The user or collection does not exist
-                //We show the corresponding error message
-                this.setState({
-                    errorMessage: xhr.response.message,
-                    response: false
-                });
-            }
-            else {
-                //Database error to be handled only by an admin
+                const contentState = convertFromRaw(JSON.parse(this.state.newsDescriptionRaw));
+                if (contentState) {
+                    const html = stateToHTML(contentState);
+                    this.setState({
+                        newsDescription: this.state.newsDescription.setContentFromString(html, 'html')
+                    })
+                }
+
+            } else {
                 this.setState({
                     errorMessage: xhr.response.message,
                     response: false
@@ -96,6 +103,16 @@ class UpdateView extends Component {
         });
 
         xhr.send(formData);
+    };
+
+    getHTML = () => {
+        if (this.state.newsDescriptionRaw) {
+            let editorState = this.state.newsDescription.getEditorState();
+            let contentState = editorState.getCurrentContent();
+            let __html = stateToHTML(contentState);
+            if (__html.search("/script") === -1 && __html.search("script") === -1)
+                return {__html: __html};
+        }
     };
 
     componentDidMount() {
@@ -111,12 +128,8 @@ class UpdateView extends Component {
         this.setState({newsCoverLink: e.target.value});
     };
 
-    onNewsDescriptionChange = (e) => {
-        this.setState({newsDescription: e.target.value});
-    };
-
-    onNewsPictureLinkChange = (e) => {
-        this.setState({newsPictureLink: e.target.value});
+    onNewsDescriptionChange = (value) => {
+        this.setState({newsDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
     handleNewsPicturesLinkChange = (i) => (e) => {
@@ -142,21 +155,33 @@ class UpdateView extends Component {
         });
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     onSave = () => {
         if (this.state.response === true) {
+
+            this.resetScroll();
+
+            //converting collectionDescription to collectionDescriptionRaw
+            let editorState = this.state.newsDescription.getEditorState();
+            let contentState = editorState.getCurrentContent();
+            let rawContentState = window.rawContentState = convertToRaw(contentState);
+
             //The next few lines will define the HTTP body message
             const newsId = encodeURIComponent(this.props.params._newsId);
             const newsTitle = encodeURIComponent(this.state.newsTitle);
             const newsCoverLink = encodeURIComponent(this.state.newsCoverLink);
-            const newsDescription = encodeURIComponent(this.state.newsDescription);
+            const newsDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
             const newsPictures = encodeURIComponent(JSON.stringify(this.state.newsPictures));
 
             const newsTitleOld = encodeURIComponent(this.state.newsTitleOld);
             const newsCoverLinkOld = encodeURIComponent(this.state.newsCoverLinkOld);
-            const newsDescriptionOld = encodeURIComponent(this.state.newsDescriptionOld);
+            const newsDescriptionRawOld = encodeURIComponent(this.state.newsDescriptionRawOld);
             const newsPicturesOld = encodeURIComponent(JSON.stringify(this.state.newsPicturesOld));
 
-            const formData = `newsTitleOld=${newsTitleOld}&newsCoverLinkOld=${newsCoverLinkOld}&newsDescriptionOld=${newsDescriptionOld}&newsPicturesOld=${newsPicturesOld}&newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescription=${newsDescription}&newsPictures=${newsPictures}&newsId=${newsId}`;
+            const formData = `newsTitleOld=${newsTitleOld}&newsCoverLinkOld=${newsCoverLinkOld}&newsDescriptionRawOld=${newsDescriptionRawOld}&newsPicturesOld=${newsPicturesOld}&newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescriptionRaw=${newsDescriptionRaw}&newsPictures=${newsPictures}&newsId=${newsId}`;
 
             //AJAX
             const xhr = new XMLHttpRequest();
@@ -166,21 +191,8 @@ class UpdateView extends Component {
             xhr.responseType = 'json';
             xhr.addEventListener('load', () => {
                 if (xhr.status === 200) {
-
-                    //We will display a Success! message if the entry was added to the DB
-                    //We will also reset the fields
                     this.setState({
-                        errors: {},
-                        errorsNewsPicturesArray: {},
-                        newsPictureLinkError: [],
-                        successCreation: true,
                         errorMessage: 'The news article has been successfully updated',
-                        newsTitle : '',
-                        newsCoverLink: '',
-                        newsDescription: '',
-                        newsPictures : [{
-                            newsPictureLink: ''
-                        }]
                     });
                 }
                 else if (xhr.status === 400) {
@@ -215,6 +227,7 @@ class UpdateView extends Component {
     //Finish showing errors on update fields and then look into trying to update non-existent collections
 
     render() {
+
         if (this.state.newsTitle)
         document.title = "Update News - " + this.state.newsTitle;
         else
@@ -223,7 +236,10 @@ class UpdateView extends Component {
         {
             return (
                 <Update
-                    userId={this.props.params._id}
+                    newsDescriptionRaw={this.state.newsDescriptionRaw}
+                    getHTML={this.getHTML}
+                    __html={this.state.__html}
+                    adminId={this.props.params._id}
                     newsTitle={this.state.newsTitle}
                     newsCoverLink={this.state.newsCoverLink}
                     newsDescription={this.state.newsDescription}
@@ -231,7 +247,6 @@ class UpdateView extends Component {
                     onNewsCoverLinkChange={this.onNewsCoverLinkChange}
                     onNewsDescriptionChange={this.onNewsDescriptionChange}
                     newsPictures={this.state.newsPictures}
-                    onNewsPictureLinkChange={this.onNewsPictureLinkChange}
                     handleNewsPicturesLinkChange={this.handleNewsPicturesLinkChange}
                     handleAddNewsPictures={this.handleAddNewsPictures}
                     handleRemoveNewsPictures={this.handleRemoveNewsPictures}
@@ -243,7 +258,7 @@ class UpdateView extends Component {
                 />
             )
         }
-        else return <NotAuthorizedPage/>
+        else return <NotAuthorizedView/>
     }
 }
 

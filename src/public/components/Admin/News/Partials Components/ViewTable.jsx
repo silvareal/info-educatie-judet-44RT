@@ -1,31 +1,32 @@
 import React, {Component} from 'react';
-import {Card, CircularProgress} from 'material-ui';
+import {CircularProgress} from 'material-ui';
+import {NO_RECORDS_ERROR} from '../../../../constants/errors.js';
 
 import ViewRow from './ViewRow.jsx';
 
 class ViewTable extends Component {
     render() {
         let rows = this.props.news
-            .map(function (newNews, i) {
+            .map(function (news, i) {
                 return (
                     <ViewRow
                         key={i}
-                        news={newNews}
-                        userId={this.props.userId}
+                        news={news}
+                        adminId={this.props.adminId}
                     />
                 )
             }.bind(this));
         return (
-            <div>
-                {(this.props.errorMessage == 'You have not added anything yet' || this.props.errorMessage == 'Please contact an administrator') ?
-                 <div>{this.props.errorMessage}</div> : null
-                }
-                {this.props.errorMessage == 'Fetched news' ? <div>
-                    <Card className="container">
+            <div className="view-table">
+                {this.props.errorMessage.toString() === 'Fetched news' && this.props.news.length !== 0 ?
+                    <div>
                         {rows}
-                    </Card>
-                </div> : null}
-                {this.props.errorMessage == 'Fetching' ? <CircularProgress/> : null}
+                    </div>
+                    :
+                    <div>
+                        {NO_RECORDS_ERROR}
+                    </div>}
+                {this.props.errorMessage.toString() === 'Fetching' ? <CircularProgress/> : null}
             </div>
         );
     }
