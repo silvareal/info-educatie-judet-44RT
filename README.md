@@ -32,8 +32,8 @@
         }
         
         -readOne news&collections with authorization rules for commenting {
-        Status: In-progress,
-  
+        Status: Complete,
+        Notes: All done
         }
         
         -add the text editor to admin panel{
@@ -56,9 +56,10 @@
         -create specific actions for moderators
         
         -finish readAll, readOne, create, delete, update pages{
-        Status: In-progress,
+        Status: Complete,
         Notes: Finished ALL readAll, create, delete, update
         TODO: finish readOne
+        Notes: Finished
         }
         
         -remove event listeners{
@@ -83,4 +84,9 @@
         -make efficient functions and use them where necessary
         -rework the hierarchy and split jobs between parents and children
         */
+        
+        -update the logging of the site
+        
+        profile page,and error handling for qrLink
+        and from admin panel collections userName and link  ( only when missing )
 </p>

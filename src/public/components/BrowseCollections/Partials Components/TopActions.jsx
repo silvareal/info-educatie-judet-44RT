@@ -7,6 +7,7 @@ class TopActions extends Component {
         return (
             <div className="top-actions">
                 <div className="capsules"/>
+                <div className="capsules"/>
                 <div className="capsules" style={{justifyContent: "flex-end"}}>
                     {this.props.searchQuery.length > 100 ?
                         <TextField

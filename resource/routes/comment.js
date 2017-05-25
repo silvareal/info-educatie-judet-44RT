@@ -11,6 +11,11 @@ function validateCommentForm(payload) {
     let isFormValid = true;
     let message = '';
 
+    if (!payload.newsId && !payload.collectionId) {
+        isFormValid = false;
+        message = "No id received"
+    }
+
     //limit the comment length to 1000 characters
     if (!payload.comment || typeof payload.comment !== 'string' || payload.comment.trim().length > 1000) {
         isFormValid = false;
@@ -44,7 +49,47 @@ router.post("/retrieveNewsComments", (req, res) => {
             comments: comments
         });
 
-    }).sort({time: -1});
+    }).sort({time: -1}).limit(10);
+});
+
+router.post("/loadMoreCommentsNews", (req, res) => {
+    CommentNews.find({newsId: req.body.newsId}, (err, comments) => {
+        if (err) {
+            return res.status(400).json({
+                message: "Database error"
+            })
+        }
+
+        if (parseInt(comments.length) === 0) {
+            return res.json({
+                message: "NoComments"
+            })
+        }
+
+        return res.json({
+            comments: comments
+        })
+    }).sort({time: -1}).limit(10).skip(parseInt(req.body.loadAfter));
+});
+
+router.post("/commentsCountNews", (req, res) => {
+    CommentNews.find({newsId: req.body.newsId}, (err, comments) => {
+        if (err) {
+            return res.status(400).json({
+                message: "Database error"
+            })
+        }
+
+        if (parseInt(comments.length) === 0) {
+            return res.json({
+                message: "NoComments"
+            })
+        }
+
+        return res.json({
+            commentsCount: comments.length
+        })
+    });
 });
 
 router.post("/postCommentNews", (req, res) => {
@@ -79,7 +124,8 @@ router.post("/postCommentNews", (req, res) => {
                 userId: userId,
                 userName: req.body.userName,
                 firstName: req.body.firstName,
-                comment: req.body.comment
+                comment: req.body.comment,
+                profilePictureLink: req.body.profilePictureLink
             };
 
             const newComment = new CommentNews(commentData);
@@ -143,7 +189,8 @@ router.get("/getUserCredentials", (req, res) => {
                 res.json({
                     userName: user.name,
                     firstName: user.firstName,
-                    userId: userId
+                    userId: userId,
+                    profilePictureLink: user.profilePictureLink
                 });
 
             });
@@ -174,7 +221,47 @@ router.post("/retrieveCollectionsComments", (req, res) => {
             comments: comments
         });
 
-    }).sort({time: -1});
+    }).sort({time: -1}).limit(10);
+});
+
+router.post("/loadMoreCommentsCollections", (req, res) => {
+    CommentCollection.find({collectionId: req.body.collectionId}, (err, comments) => {
+        if (err) {
+            return res.status(400).json({
+                message: "Database error"
+            })
+        }
+
+        if (parseInt(comments.length) === 0) {
+            return res.json({
+                message: "NoComments"
+            })
+        }
+
+        return res.json({
+            comments: comments
+        })
+    }).sort({time: -1}).limit(10).skip(parseInt(req.body.loadAfter));
+});
+
+router.post("/commentsCount", (req, res) => {
+    CommentCollection.find({collectionId: req.body.collectionId}, (err, comments) => {
+        if (err) {
+            return res.status(400).json({
+                message: "Database error"
+            })
+        }
+
+        if (parseInt(comments.length) === 0) {
+            return res.json({
+                message: "NoComments"
+            })
+        }
+
+        return res.json({
+            commentsCount: comments.length
+        })
+    });
 });
 
 router.post("/postCommentCollections", (req, res) => {
@@ -209,7 +296,8 @@ router.post("/postCommentCollections", (req, res) => {
                 userId: userId,
                 userName: req.body.userName,
                 firstName: req.body.firstName,
-                comment: req.body.comment
+                comment: req.body.comment,
+                profilePictureLink: req.body.profilePictureLink
             };
 
             const newComment = new CommentCollection(commentData);

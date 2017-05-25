@@ -20,7 +20,8 @@ class ReadAllView extends Component {
             collectionsPreSearch: [],
             searchQuery: '',
             searching: false,
-            floodProtection: false
+            floodProtection: false,
+            requesting: false
         };
     };
 
@@ -84,13 +85,17 @@ class ReadAllView extends Component {
     }
 
     loadMore = () => {
-        if (this.state.finished === false) {
+        if (this.state.finished === false && this.state.requesting === false) {
             this.loadAndAppendCollections(this.state.loadAfter + 10);
             this.setState({loadAfter: this.state.loadAfter + 10})
         }
     };
 
     loadAndAppendCollections = (loadAfter) => {
+
+        this.setState({
+            requesting: true
+        });
 
         if (this.state.finished === false) {
             const loadAfterParam = encodeURIComponent(loadAfter);
@@ -106,7 +111,7 @@ class ReadAllView extends Component {
                 if (xhr.status === 200) {
 
                     if (xhr.response.message === "NoCollections") {
-                        this.setState({finished: true});
+                        this.setState({finished: true, requesting: false});
                     }
                     else {
                         //Do this to not mutate state
@@ -116,7 +121,7 @@ class ReadAllView extends Component {
                             newCollections.push(xhr.response.collections[key]);
                         });
 
-                        this.setState({collections: newCollections, collectionsPreSearch: newCollections});
+                        this.setState({collections: newCollections, collectionsPreSearch: newCollections, requesting: false});
                     }
                 }
             });

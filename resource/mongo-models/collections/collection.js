@@ -10,6 +10,8 @@ const CollectionSchema = new mongoose.Schema({
         type: String,
         index: {unique: true}
     },
+    qrLink: String,
+    profilePictureLink: String,
     collectionDescriptionRaw: {
         type: String,
     },

@@ -13,7 +13,7 @@ class ViewRow extends Component {
                         overlay={<CardTitle title={this.props.news.newsTitle}
                                             subtitle={"by " + this.props.news.userName}/>}
                     >
-                        <img src={this.props.news.picturesArray[0].pictureLink}/>
+                        <img src={this.props.news.newsCoverLink}/>
                     </CardMedia>
                 </Link>
                 <CardActions>

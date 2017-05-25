@@ -3,8 +3,6 @@ import {Link} from "react-router";
 
 import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
-import {convertFromRaw} from 'draft-js';
-import {stateToHTML} from 'draft-js-export-html';
 
 import {
     FlatButton,

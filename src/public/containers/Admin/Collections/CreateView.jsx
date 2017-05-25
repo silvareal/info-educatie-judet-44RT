@@ -30,7 +30,10 @@ class CreateView extends Component {
             }],
             collectionDescription: RichTextEditor.createEmptyValue(),
             __html: '',
-            isAdmin: false
+            isAdmin: false,
+            qrLink: '',
+            userNameToAdd: '',
+            userProfilePictureLink: ''
         };
     };
 
@@ -69,6 +72,18 @@ class CreateView extends Component {
 
     onCollectionDescriptionChange = (value) => {
         this.setState({collectionDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
+    };
+
+    onQRLinkChange = (e) => {
+        this.setState({qrLink: e.target.value})
+    };
+
+    onUserNameToAddChange = (e) => {
+        this.setState({userNameToAdd: e.target.value})
+    };
+
+    onUserProfilePictureLinkChange = (e) => {
+        this.setState({userProfilePictureLink: e.target.value})
     };
 
     handlePicturesNameChange = (i) => (e) => {
@@ -142,8 +157,11 @@ class CreateView extends Component {
         const collectionName = encodeURIComponent(this.state.collectionName);
         const collectionDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
         const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
+        const qrLink = encodeURIComponent(this.state.qrLink);
+        const userNameToAdd = encodeURIComponent(this.state.userNameToAdd);
+        const userProfilePictureLink = encodeURIComponent(this.state.userProfilePictureLink);
 
-        const formData = `userId=${userId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
+        const formData = `userProfilePictureLink=${userProfilePictureLink}&userNameToAdd=${userNameToAdd}&qrLink=${qrLink}&userId=${userId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
 
         //AJAX
         const xhr = new XMLHttpRequest();
@@ -172,7 +190,10 @@ class CreateView extends Component {
                     ],
                     pictureNameError: '',
                     pictureDescriptionError: '',
-                    pictureLinkError: ''
+                    pictureLinkError: '',
+                    userNameToAdd: '',
+                    userProfilePictureLink: '',
+                    qrLink: ''
                 });
             }
             else if (xhr.status === 400) {
@@ -219,6 +240,12 @@ class CreateView extends Component {
             document.title = "Create collections - Admin Controlled";
             return (
                 <Create
+                    onQRLinkChange={this.onQRLinkChange}
+                    qrLink={this.state.qrLink}
+                    onUserNameToAddChange={this.onUserNameToAddChange}
+                    userNameToAdd={this.state.userNameToAdd}
+                    onUserProfilePictureLinkChange={this.onUserProfilePictureLinkChange}
+                    userProfilePictureLink={this.state.userProfilePictureLink}
                     getHTML={this.getHTML}
                     __html={this.state.__html}
                     userId={this.state.userId}

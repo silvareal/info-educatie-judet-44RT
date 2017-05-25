@@ -33,8 +33,12 @@
   padding: unquote($top-or-all) unquote($right) unquote($bottom) unquote($left);
 }
 
-@mixin margin($top-or-all: 0, $right-or-auto: 0, $bottom: 0, $left: 0) {
-  margin: $top-or-all $right-or-auto $bottom $left;
+@mixin margin($top-or-all: "", $right-or-auto: "", $bottom: "", $left: "") {
+  margin: $top-or-all;
+  margin-right: $right-or-auto;
+  margin-top: $top-or-all;
+  margin-bottom: $bottom;
+  margin-left: $left;
 }
 
 @mixin box-sizing($box-sizing) {

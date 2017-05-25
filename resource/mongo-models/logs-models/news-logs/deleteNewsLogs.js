@@ -5,7 +5,7 @@ const DeleteNewsLogsSchema = new mongoose.Schema({
     newsId: String,
     newsTitle: String,
     newsCoverLink: String,
-    newsDescription: String,
+    newsDescriptionRaw: String,
     picturesArray: [
         {
             newsPictureLink: {

@@ -1,31 +1,62 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router';
+
+import {Card, List, ListItem, Avatar} from 'material-ui';
+
+import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 
 class Comment extends Component {
-
     render() {
-        return(
-            <div style={{border: "2px solid black", padding: 5}}>
-                <div>
-                    Comment: {this.props.comment}
-                </div>
-                <div>
-                    Added on: {this.props.date}
-                </div>
-                <div>
-                    By: {this.props.firstName !== "undefined" ?
-                    <div>
-                        {this.props.firstName} @ {this.props.userName}
-                    </div>
-                    :
-                    <div>
-                        {this.props.userName}
-                    </div>
-                }
-                </div>
-            </div>
+        return (
+            <List>
+                <Card style={{marginBottom: "14px", padding: 20}}>
+                    {this.props.profilePictureLink ?
+                        <ListItem disabled={true}
+                                  leftAvatar={<Link to={`/profile/${this.props.userName}`}><Avatar
+                                      src={this.props.profilePictureLink}
+                                  /></Link>}>
+                            {this.props.firstName !== "undefined" ?
+                                <div>
+                                    <Link
+                                        to={`/profile/${this.props.userName}`}>{this.props.firstName}@{this.props.userName}
+                                    </Link>
+                                    <div>{this.props.date}</div>
+                                </div>
+
+                                :
+                                <Link to={`/profile/${this.props.userName}`}>{this.props.userName}</Link>
+                            }
+                        </ListItem>
+                        :
+                        <ListItem disabled={true}
+                                  leftIcon={
+                                      <Link to={`/profile/${this.props.userName}`}>
+                                          <ActionAccountCircle style={{width: 48, height: 48}}/>
+                                      </Link>}>
+                            {this.props.firstName !== "undefined" ?
+                                <div>
+                                    <Link
+                                        to={`/profile/${this.props.userName}`}>{this.props.firstName}@{this.props.userName}
+                                    </Link>
+                                    <div>{this.props.date}</div>
+                                </div>
+
+                                :
+                                <div>
+                                    <Link to={`/profile/${this.props.userName}`}>{this.props.userName}</Link>
+                                    <div>{this.props.date}</div>
+                                </div>
+                            }
+                        </ListItem>
+                    }
+
+                    <ListItem disabled={true}>
+                        {this.props.comment}
+                    </ListItem>
+                </Card>
+            </List>
         )
     }
-
 }
 
 export default Comment;

@@ -28,7 +28,9 @@ class CreateView extends Component {
                 pictureDescriptionRaw: '',
             }],
             collectionDescription: RichTextEditor.createEmptyValue(),
-            __html: ''
+            __html: '',
+            qrLink: '',
+            profilePictureLink: ''
         };
     };
 
@@ -40,7 +42,8 @@ class CreateView extends Component {
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
                 this.setState({
-                    userName: xhr.response.userName
+                    userName: xhr.response.userName,
+                    profilePictureLink: xhr.response.profilePictureLink
                 })
             }
         });
@@ -65,6 +68,10 @@ class CreateView extends Component {
 
     onCollectionDescriptionChange = (value) => {
         this.setState({collectionDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
+    };
+
+    onQRLinkChange = (e) => {
+        this.setState({qrLink: e.target.value})
     };
 
     handlePicturesNameChange = (i) => (e) => {
@@ -138,8 +145,10 @@ class CreateView extends Component {
         const collectionDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
         const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
         const userName = encodeURIComponent(this.state.userName);
+        const qrLink = encodeURIComponent(this.state.qrLink);
+        const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
 
-        const formData = `collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}&userName=${userName}`;
+        const formData = `profilePictureLink=${profilePictureLink}&qrLink=${qrLink}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}&userName=${userName}`;
 
         //AJAX
         const xhr = new XMLHttpRequest();
@@ -167,7 +176,8 @@ class CreateView extends Component {
                     ],
                     pictureNameError: '',
                     pictureDescriptionError: '',
-                    pictureLinkError: ''
+                    pictureLinkError: '',
+                    qrLink: ''
                 });
             }
             else if (xhr.status === 400) {
@@ -213,6 +223,8 @@ class CreateView extends Component {
         document.title = "Add collection";
         return (
             <Create
+                onQRLinkChange={this.onQRLinkChange}
+                qrLink={this.state.qrLink}
                 collectionName={this.state.collectionName}
                 onCollectionChange={this.onCollectionChange}
                 collectionDescription={this.state.collectionDescription}

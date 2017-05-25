@@ -6,6 +6,7 @@ module.exports = function (socket) {
             userName: data.userName,
             firstName: data.firstName,
             userId: data.userId,
+            profilePictureLink: data.profilePictureLink
         });
     });
     socket.on('send:commentNews', function (data) {
@@ -15,6 +16,7 @@ module.exports = function (socket) {
             userName: data.userName,
             firstName: data.firstName,
             userId: data.userId,
+            profilePictureLink: data.profilePictureLink
         });
     });
 };

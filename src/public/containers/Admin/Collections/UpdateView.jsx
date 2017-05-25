@@ -38,7 +38,13 @@ class UpdateView extends Component {
             picturesOld: [{}],
             __html: '',
             fetched: false,
-            isAdmin: false
+            isAdmin: false,
+            qrLink: '',
+            userNameToAdd: '',
+            userProfilePictureLink: '',
+            qrLinkOld: '',
+            userNameToAddOld: '',
+            userProfilePictureLinkOld: ''
         };
     };
 
@@ -90,8 +96,14 @@ class UpdateView extends Component {
                     response: true,
                     userIdOld: xhr.response.collection.userId,
                     collectionNameOld: xhr.response.collection.collectionName,
-                    collectionDescriptionOld: xhr.response.collection.collectionDescription,
-                    picturesOld: xhr.response.collection.picturesArray
+                    collectionDescriptionOld: xhr.response.collection.collectionDescriptionRaw,
+                    picturesOld: xhr.response.collection.picturesArray,
+                    qrLink: xhr.response.collection.qrLink,
+                    userNameToAdd: xhr.response.collection.userName,
+                    userProfilePictureLink: xhr.response.collection.profilePictureLink,
+                    qrLinkOld: xhr.response.collection.qrLink,
+                    userNameToAddOld: xhr.response.collection.userName,
+                    userProfilePictureLinkOld: xhr.response.collection.profilePictureLink
                 });
 
                 const contentState = convertFromRaw(JSON.parse(this.state.collectionDescriptionRaw));
@@ -175,6 +187,18 @@ class UpdateView extends Component {
         this.setState({collectionDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
+    onQRLinkChange = (e) => {
+        this.setState({qrLink: e.target.value})
+    };
+
+    onUserNameToAddChange = (e) => {
+        this.setState({userNameToAdd: e.target.value})
+    };
+
+    onUserProfilePictureLinkChange = (e) => {
+        this.setState({userProfilePictureLink: e.target.value})
+    };
+
     handlePicturesNameChange = (i) => (e) => {
         const newPictures = this.state.pictures.map((picture, j) => {
             if (i !== j) return picture;
@@ -234,6 +258,18 @@ class UpdateView extends Component {
     onSave = () => {
         if (this.state.response === true) {
 
+            for (let i = 0 ; i < this.state.pictures.length; i++) {
+                const newPictures = this.state.pictures.map((picture, j) => {
+                    if (i !== j) return picture;
+
+                    let editorState = this.state.pictures[i].pictureDescription.getEditorState();
+                    let contentState = editorState.getCurrentContent();
+                    let rawContentState = window.rawContentState = convertToRaw(contentState);
+                    return {...picture, pictureDescriptionRaw: JSON.stringify(rawContentState)};
+                });
+                this.setState({pictures: newPictures});
+            }
+
             this.resetScroll();
 
             //converting collectionDescription to collectionDescriptionRaw
@@ -246,14 +282,20 @@ class UpdateView extends Component {
             const collectionId = encodeURIComponent(this.state.collectionId);
             const collectionName = encodeURIComponent(this.state.collectionName);
             const collectionDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
-            const picturesArray = JSON.stringify(this.state.pictures);
+            const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
+            const qrLink = encodeURIComponent(this.state.qrLink);
+            const userNameToAdd = encodeURIComponent(this.state.userNameToAdd);
+            const userProfilePictureLink = encodeURIComponent(this.state.userProfilePictureLink);
 
             const userIdOld = encodeURIComponent(this.state.userIdOld);
             const collectionNameOld = encodeURIComponent(this.state.collectionNameOld);
             const collectionDescriptionRawOld = encodeURIComponent(this.state.collectionDescriptionRawOld);
-            const picturesArrayOld = JSON.stringify(this.state.picturesOld);
+            const picturesArrayOld = encodeURIComponent(JSON.stringify(this.state.picturesOld));
+            const qrLinkOld = encodeURIComponent(this.state.qrLinkOld);
+            const userNameToAddOld = encodeURIComponent(this.state.userNameToAddOld);
+            const userProfilePictureLinkOld = encodeURIComponent(this.state.userProfilePictureLinkOld);
 
-            const formData = `userIdOld=${userIdOld}&collectionNameOld=${collectionNameOld}&collectionDescriptionRawOld=${collectionDescriptionRawOld}&picturesArrayOld=${picturesArrayOld}&userId=${userId}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
+            const formData = `userProfilePictureLinkOld=${userProfilePictureLinkOld}&userNameToAddOld=${userNameToAddOld}&qrLinkOld=${qrLinkOld}&userProfilePictureLink=${userProfilePictureLink}&userNameToAdd=${userNameToAdd}&qrLink=${qrLink}&userIdOld=${userIdOld}&collectionNameOld=${collectionNameOld}&collectionDescriptionRawOld=${collectionDescriptionRawOld}&picturesArrayOld=${picturesArrayOld}&userId=${userId}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
 
             const xhr = new XMLHttpRequest();
             xhr.open('post', '/admin/updateSaveCollections');
@@ -319,6 +361,12 @@ class UpdateView extends Component {
         {
             return (
                 <Update
+                    onQRLinkChange={this.onQRLinkChange}
+                    qrLink={this.state.qrLink}
+                    onUserNameToAddChange={this.onUserNameToAddChange}
+                    userNameToAdd={this.state.userNameToAdd}
+                    onUserProfilePictureLinkChange={this.onUserProfilePictureLinkChange}
+                    userProfilePictureLink={this.state.userProfilePictureLink}
                     collectionDescriptionRaw={this.state.collectionDescriptionRaw}
                     getHTML={this.getHTML}
                     __html={this.state.__html}

@@ -7,7 +7,7 @@ import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
 import {CircularProgress} from 'material-ui';
-import PictureRow from "../../components/Home/Partials Components/PictureRow.jsx";
+import Comment from '../../components/BrowseNews/Partials Components/Comment.jsx';
 
 let socket = io.connect();
 
@@ -24,13 +24,24 @@ class ReadOneView extends Component {
             firstName: '',
             comment: '',
             comments: [],
-            commentAdded : null,
+            commentAdded: null,
             fetched: false,
-            pictureDescriptionRaw: '',
             newsDescriptionRaw: '',
-            rows: ''
+            rows: '',
+            profilePictureLink: '',
+            pictures: [],
+            commentsRows: '',
+            loadAfter: 0,
+            finished: false,
+            commentsCount: 0,
+            requesting: false,
+            guest: false
         };
     }
+
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
 
     getUser = () => {
         const xhr = new XMLHttpRequest();
@@ -39,14 +50,18 @@ class ReadOneView extends Component {
         xhr.responseType = 'json';
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
-                this.setState({
-                    userName: xhr.response.userName,
-                    firstName: xhr.response.firstName,
-                    userId: xhr.response.userId
-                });
+                if (xhr.response.guest !== true)
+                    this.setState({
+                        userName: xhr.response.userName,
+                        firstName: xhr.response.firstName,
+                        userId: xhr.response.userId,
+                        profilePictureLink: xhr.response.profilePictureLink
+                    });
+                else this.setState({
+                    guest: true
+                })
             }
         });
-
         xhr.send();
     };
 
@@ -64,29 +79,13 @@ class ReadOneView extends Component {
         xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
         xhr.responseType = 'json';
         xhr.addEventListener('load', () => {
-            if (xhr.status === 200){
-
+            if (xhr.status === 200) {
                 //Retrieve the data for a single news
                 this.setState({
                     errorMessage: '',
                     news: xhr.response.news,
                     newsDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(xhr.response.news.newsDescriptionRaw))),
                     fetched: true
-                });
-
-                let pictures = this.state.news.picturesArray;
-
-                this.setState({
-                    rows: Object.keys(pictures).map((key) => {
-                        return (
-                            <PictureRow
-                                key={key}
-                                pictureName={pictures[key].pictureName}
-                                pictureLink={pictures[key].pictureLink}
-                                pictureDescription={stateToHTML(convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw)))}
-                            />
-                        )
-                    })
                 });
             }
             else {
@@ -100,9 +99,61 @@ class ReadOneView extends Component {
         xhr.send(formData);
     };
 
+    onScroll = (e) => {
+        if (this.state.finished === false && document.title === this.state.news.newsTitle)
+            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
+                this.loadMore();
+            }
+    };
+
+    loadMore = () => {
+        if (this.state.finished === false && this.state.requesting === false) {
+            this.loadAndAppendComments(this.state.loadAfter + 10);
+            this.setState({loadAfter: this.state.loadAfter + 10})
+        }
+    };
+
+    loadAndAppendComments = (loadAfter) => {
+
+        this.setState({requesting: true});
+
+        if (this.state.finished === false) {
+            const loadAfterParam = encodeURIComponent(loadAfter);
+            const newsId = encodeURIComponent(this.state.news._id);
+
+            const formData = `loadAfter=${loadAfterParam}&newsId=${newsId}`;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('post', '/comment/loadMoreCommentsNews');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+            xhr.responseType = 'json';
+            xhr.addEventListener('load', () => {
+                if (xhr.status === 200) {
+
+                    if (xhr.response.message === "NoComments") {
+                        this.setState({finished: true, requesting: false});
+                    }
+                    else {
+                        //Do this to not mutate state
+                        let newComments = this.state.comments;
+
+                        Object.keys(xhr.response.comments).map((key) => {
+                            newComments.push(xhr.response.comments[key]);
+                        });
+
+                        this.setState({comments: newComments, requesting: false});
+                        this.mapComments();
+                    }
+                }
+            });
+            xhr.send(formData);
+        }
+    };
+
     getComments = () => {
 
-        const newsId = encodeURIComponent(this.props.params._id);
+        const newsId = encodeURIComponent(this.props.params._newsId);
 
         const formData = `newsId=${newsId}`;
 
@@ -117,12 +168,62 @@ class ReadOneView extends Component {
                 this.setState({
                     comments: xhr.response.comments
                 });
-            }
-            else if(xhr.status === 401) {
-                //user is not logged in -- only used if we will allow un-logged users to see this page
+                this.mapComments();
+                this.getCommentsOverallCount();
             }
         });
         xhr.send(formData);
+    };
+
+    getCommentsOverallCount = () => {
+        const newsId = encodeURIComponent(this.props.params._newsId);
+
+        const formData = `newsId=${newsId}`;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("post", "/comment/commentsCountNews");
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //retrieved comments
+                this.setState({
+                    commentsCount: xhr.response.commentsCount
+                });
+            }
+        });
+        xhr.send(formData);
+    };
+
+    mapComments = () => {
+        let comments = this.state.comments;
+
+        let commentsRows;
+
+        if (comments) {
+            commentsRows = Object.keys(comments).map((key) => {
+
+                const date = new Date(comments[key].time);
+
+                const formattedDate =
+                    <div style={{fontSize: 14}}>
+                        {date.getHours().toString() + ":" + date.getMinutes().toString() + " " + date.getDate().toString() + '.' + (date.getMonth() + 1).toString() + '.' + date.getFullYear().toString()}
+                    </div>;
+
+                return (
+                    <Comment
+                        key={key}
+                        comment={comments[key].comment}
+                        date={formattedDate}
+                        firstName={comments[key].firstName}
+                        userName={comments[key].userName}
+                        profilePictureLink={comments[key].profilePictureLink}
+                    />
+                )
+            })
+        }
+        this.setState({commentsRows});
     };
 
     componentDidMount() {
@@ -133,23 +234,34 @@ class ReadOneView extends Component {
         this.getNews();
         //retrieve all comments for this specific news
         this.getComments();
+        //get the number of comments for this collection
+        this.getCommentsOverallCount();
 
-        socket.on('send:comment', this.getComments);
+        this.resetScroll();
+
+        //the load more event listener
+        window.addEventListener('scroll', this.onScroll);
+
+        socket.on('send:commentNews', this.getComments);
     };
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.onScroll);
+    }
 
     onCommentChange = (e) => {
         this.setState({comment: e.target.value});
     };
 
-    //for the comment section
     onSave = () => {
-        if (Auth.isUserAuthenticated()){
-            const newsId = encodeURIComponent(this.props.params._id);
+        if (Auth.isUserAuthenticated()) {
+            const newsId = encodeURIComponent(this.props.params._newsId);
             const userName = encodeURIComponent(this.state.userName);
             const firstName = encodeURIComponent(this.state.firstName);
             const comment = encodeURIComponent(this.state.comment);
+            const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
 
-            const formData = `newsId=${newsId}&userName=${userName}&firstName=${firstName}&comment=${comment}`;
+            const formData = `profilePictureLink=${profilePictureLink}&newsId=${newsId}&userName=${userName}&firstName=${firstName}&comment=${comment}`;
 
             const xhr = new XMLHttpRequest();
             xhr.open("post", "/comment/postCommentNews");
@@ -175,12 +287,13 @@ class ReadOneView extends Component {
 
             this.getComments();
 
-            socket.emit('send:comment', {
+            socket.emit('send:commentNews', {
                 comment: this.state.comment,
-                newsId: this.props.params._id,
+                newsId: this.props.params._newsId,
                 userName: this.state.userName,
                 firstName: this.state.firstName,
-                userId: this.state.userId
+                userId: this.state.userId,
+                profilePictureLink: this.state.profilePictureLink
             });
         }
     };
@@ -193,9 +306,15 @@ class ReadOneView extends Component {
         if (this.state.fetched === true) {
             return (
                 <ReadOne
-                    rows={this.state.rows}
-                    newsnDescriptionRaw={this.state.newsDescriptionRaw}
+                    guest={this.state.guest}
+                    commentsCount={this.state.commentsCount}
+                    commentsRows={this.state.commentsRows}
                     comments={this.state.comments}
+                    pictures={this.state.pictures}
+                    profilePictureLink={this.state.profilePictureLink}
+                    userName={this.state.userName}
+                    rows={this.state.rows}
+                    newsDescriptionRaw={this.state.newsDescriptionRaw}
                     commentAdded={this.state.commentAdded}
                     news={this.state.news}
                     comment={this.state.comment}

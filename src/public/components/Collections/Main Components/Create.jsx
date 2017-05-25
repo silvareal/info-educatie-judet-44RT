@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
+import QRCode from 'qrcode.react';
 
 import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
@@ -138,6 +139,23 @@ class Create extends Component {
             case 1:
                 return (
                     <div>
+                        <div>
+                            <TextField hintText="Link embeded in QR code"
+                                       value={this.props.qrLink}
+                                       onChange={this.props.onQRLinkChange}
+                                       errorText={this.props.errors.qrLink}
+                                       onKeyDown={this.handleKeyPress}
+                                       autoFocus={true}
+                                       multiLine={true}
+                                       className="step-textfields"
+                            />
+                            <div className="qr-restrict-desktop">
+                                <QRCode value={this.props.qrLink} size={512}/>
+                            </div>
+                            <div className="qr-allow-mobile">
+                                <QRCode value={this.props.qrLink} size={128}/>
+                            </div>
+                        </div>
                         {this.props.pictures.map((picture, i) => (
                             <div key={i}>
                                 <div className="input-field">
@@ -151,7 +169,6 @@ class Create extends Component {
                                                    onChange={this.props.handlePicturesNameChange(i)}
                                                    errorText={this.props.pictureNameError[i]}
                                                    onKeyDown={this.handleKeyPress}
-                                                   autoFocus={true}
                                                    multiLine={true}
                                                    className="step-textfields"
                                         />
@@ -160,7 +177,6 @@ class Create extends Component {
                                                    value={picture.pictureName}
                                                    onChange={this.props.handlePicturesNameChange(i)}
                                                    onKeyDown={this.handleKeyPress}
-                                                   autoFocus={true}
                                                    multiLine={true}
                                                    className="step-textfields"
                                         />

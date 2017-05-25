@@ -5,7 +5,7 @@ const UpdateNewsLogsSchema = new mongoose.Schema({
     //newState
     newsTitle: String,
     newsCoverLink: String,
-    newsDescription: String,
+    newsDescriptionRaw: String,
     picturesArray: [
         {
             newsPictureLink: {
@@ -16,7 +16,7 @@ const UpdateNewsLogsSchema = new mongoose.Schema({
     //oldState
     newsTitleOld: String,
     newsCoverLinkOld: String,
-    newsDescriptionOld: String,
+    newsDescriptionRawOld: String,
     picturesArrayOld: [
         {
             newsPictureLink: {

@@ -1,29 +1,66 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router';
+
+import ContentSend from 'material-ui/svg-icons/content/send';
+import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 
 import {
     TextField,
-    RaisedButton
+    Avatar,
+    Card,
+    List,
+    ListItem
 } from 'material-ui';
 
 class CommentForm extends Component {
 
     render() {
-        return(
-            <div>
-                {this.props.commentAdded === false ? "Comments can only have 1000 characters and they cannot be empty" : null}
-                <TextField
-                    floatingLabelText="Post comment"
-                    value={this.props.comment}
-                    onChange={this.props.onCommentChange}
-                    errorText={this.props.commentAdded === false ? "Comment not valid" : null}
-                    onKeyDown={this.props.handleKeyPress}
-                />
-                <RaisedButton
-                    label="Post comment"
-                    primary={true}
-                    onTouchTap={this.props.onSave}
-                />
-            </div>
+        return (
+            <List>
+                <Card style={{margin: "0 auto 20px auto"}}>
+                    {this.props.profilePictureLink ?
+                        <ListItem disabled={true}
+                                  leftAvatar={
+                                      <Link to={`/profile/${this.props.userName}`}>
+                                          <Avatar
+                                              src={this.props.profilePictureLink }/>
+                                      </Link>}
+                                  rightIcon={<ContentSend onClick={this.props.onSave}/>}
+                        >
+                            {this.props.commentAdded === false ? "Comments can only have 1000 characters and they cannot be empty" : null}
+                            <TextField
+                                style={{width: "100%"}}
+                                hintText="Add comment..."
+                                value={this.props.comment}
+                                onChange={this.props.onCommentChange}
+                                errorText={this.props.commentAdded === false ? "Comment not valid" : null}
+                                onKeyDown={this.props.handleKeyPress}
+                                multiLine={true}
+                                rowsMax={2}
+                            />
+                        </ListItem>
+                        :
+                        <ListItem disabled={true}
+                                  leftIcon={<Link to={`/profile/${this.props.userName}`}>
+                                      <ActionAccountCircle style={{width: 48, height: 48}}/>
+                                  </Link>}
+                                  rightIcon={<ContentSend onClick={this.props.onSave}/>}
+                        >
+                            {this.props.commentAdded === false ? "Comments can only have 1000 characters and they cannot be empty" : null}
+                            <TextField
+                                style={{width: "100%"}}
+                                hintText="Add comment..."
+                                value={this.props.comment}
+                                onChange={this.props.onCommentChange}
+                                errorText={this.props.commentAdded === false ? "Comment not valid" : null}
+                                onKeyDown={this.props.handleKeyPress}
+                                multiLine={true}
+                                rowsMax={2}
+                            />
+                        </ListItem>
+                    }
+                </Card>
+            </List>
         )
     }
 

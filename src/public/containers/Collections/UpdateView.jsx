@@ -37,7 +37,8 @@ class UpdateView extends Component {
             collectionDescriptionRawOld: '',
             picturesOld: [{}],
             __html: '',
-            fetched: false
+            fetched: false,
+            qrLink: ''
         };
     };
 
@@ -73,7 +74,8 @@ class UpdateView extends Component {
                     response: true,
                     collectionNameOld: xhr.response.collection.collectionName,
                     collectionDescriptionRawOld: xhr.response.collection.collectionDescriptionRaw,
-                    picturesOld: xhr.response.collection.picturesArray
+                    picturesOld: xhr.response.collection.picturesArray,
+                    qrLink: xhr.response.collection.qrLink
                 });
 
                 const contentState = convertFromRaw(JSON.parse(this.state.collectionDescriptionRaw));
@@ -106,6 +108,10 @@ class UpdateView extends Component {
         });
 
         xhr.send(formData);
+    };
+
+    onQRLinkChange = (e) => {
+        this.setState({qrLink: e.target.value})
     };
 
     setRawValue = (i) => {
@@ -205,7 +211,20 @@ class UpdateView extends Component {
     };
 
     onSave = () => {
+
         if (this.state.response === true) {
+
+            for (let i = 0 ; i < this.state.pictures.length; i++) {
+                const newPictures = this.state.pictures.map((picture, j) => {
+                    if (i !== j) return picture;
+
+                    let editorState = this.state.pictures[i].pictureDescription.getEditorState();
+                    let contentState = editorState.getCurrentContent();
+                    let rawContentState = window.rawContentState = convertToRaw(contentState);
+                    return {...picture, pictureDescriptionRaw: JSON.stringify(rawContentState)};
+                });
+                this.setState({pictures: newPictures});
+            }
 
             this.resetScroll();
 
@@ -218,13 +237,14 @@ class UpdateView extends Component {
             const collectionId = encodeURIComponent(this.state.collectionId);
             const collectionName = encodeURIComponent(this.state.collectionName);
             const collectionDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
-            const picturesArray = JSON.stringify(this.state.pictures);
+            const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
+            const qrLink = encodeURIComponent(this.state.qrLink);
 
             const collectionNameOld = encodeURIComponent(this.state.collectionNameOld);
             const collectionDescriptionRawOld = encodeURIComponent(this.state.collectionDescriptionRawOld);
-            const picturesArrayOld = JSON.stringify(this.state.picturesOld);
+            const picturesArrayOld = encodeURIComponent(JSON.stringify(this.state.picturesOld));
 
-            const formData = `collectionNameOld=${collectionNameOld}&collectionDescriptionRawOld=${collectionDescriptionRawOld}&picturesArrayOld=${picturesArrayOld}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
+            const formData = `qrLink=${qrLink}&collectionNameOld=${collectionNameOld}&collectionDescriptionRawOld=${collectionDescriptionRawOld}&picturesArrayOld=${picturesArrayOld}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
 
             const xhr = new XMLHttpRequest();
             xhr.open('post', '/crud/updateSave');
@@ -290,6 +310,8 @@ class UpdateView extends Component {
         if (this.state.fetched === true) {
             return (
                 <Update
+                    qrLink={this.state.qrLink}
+                    onQRLinkChange={this.onQRLinkChange}
                     collectionId={this.state.collectionId}
                     collectionName={this.state.collectionName}
                     onCollectionChange={this.onCollectionChange}

@@ -7,6 +7,8 @@ const NewsSchema = new mongoose.Schema({
         type: String,
         index: {unique: true}
     },
+    userName: String,
+    profilePictureLink: String,
     newsCoverLink: {
         type: String,
     },

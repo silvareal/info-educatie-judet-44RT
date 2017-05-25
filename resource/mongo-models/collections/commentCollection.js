@@ -5,6 +5,7 @@ const CommentCollectionSchema = new mongoose.Schema({
     collectionId: String,
     userId: String,
     userName: String,
+    profilePictureLink: String,
     firstName: {
         type: String,
         default: ""

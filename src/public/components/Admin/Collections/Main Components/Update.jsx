@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
+import QRCode from 'qrcode.react'
 
 import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
@@ -56,18 +57,25 @@ class Update extends Component {
 
     getStepContent(stepIndex) {
 
-        let newsPictures = this.props.newsPictures;
+        let pictures = this.props.pictures;
+
+        let contentState;
 
         let rows;
 
-        if (newsPictures) {
-            rows = Object.keys(newsPictures).map((key) => {
-                return (
-                    <PictureRow
-                        key={key}
-                        pictureLink={newsPictures[key].pictureLink}
-                    />
-                )
+        if (pictures) {
+            rows = Object.keys(pictures).map((key) => {
+                if (pictures[key].pictureDescriptionRaw) {
+                    contentState = convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw));
+                    return (
+                        <PictureRow
+                            key={key}
+                            pictureName={pictures[key].pictureName}
+                            pictureLink={pictures[key].pictureLink}
+                            pictureDescription={stateToHTML(contentState)}
+                        />
+                    )
+                }
             });
         }
 
@@ -95,25 +103,45 @@ class Update extends Component {
                 return (
                     <div>
                         <div>
-                            {this.props.newsTitle.length > 100 ?
+                            {this.props.collectionName.length > 100 ?
                                 <div>
                                     Please use a name that is shorter than 100 characters
                                 </div> : null}
                             <TextField
-                                hintText="Article title"
-                                value={this.props.newsTitle}
-                                onChange={this.props.onNewsTitleChange}
-                                errorText={this.props.errors.newsTitle}
+                                hintText="Owner id"
+                                value={this.props.userId}
+                                onChange={this.props.onUserIdChange}
+                                errorText={this.props.errors.userId}
                                 onKeyDown={this.handleKeyPress}
                                 autoFocus={true}
                                 multiLine={true}
                                 className="step-textfields"
                             />
+
                             <TextField
-                                hintText="Cover photo link"
-                                value={this.props.newsCoverLink}
-                                onChange={this.props.onNewsCoverLinkChange}
-                                errorText={this.props.errors.newsCoverLink}
+                                hintText="Owner's userName"
+                                value={this.props.userNameToAdd}
+                                onChange={this.props.onUserNameToAddChange}
+                                errorText={this.props.errors.userNameToAdd}
+                                onKeyDown={this.handleKeyPress}
+                                multiLine={true}
+                                className="step-textfields"
+                            />
+
+                            <TextField
+                                hintText="Owner's profile picture"
+                                value={this.props.userProfilePictureLink}
+                                onChange={this.props.onUserProfilePictureLinkChange}
+                                errorText={this.props.errors.userProfilePictureLink}
+                                onKeyDown={this.handleKeyPress}
+                                multiLine={true}
+                                className="step-textfields"
+                            />
+                            <TextField
+                                hintText="Give your collection a cool title"
+                                value={this.props.collectionName}
+                                onChange={this.props.onCollectionChange}
+                                errorText={this.props.errors.collectionName}
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
@@ -125,12 +153,12 @@ class Update extends Component {
                                     Write less, keep it simple !
                                 </div> : null
                             }
-                            {this.props.errors.newsDescriptionRaw ?
-                                <div style={{color: 'red'}}>{this.props.errors.newsDescriptionRaw}</div> : null}
+                            {this.props.errors.collectionDescriptionRaw ?
+                                <div style={{color: 'red'}}>{this.props.errors.collectionDescriptionRaw}</div> : null}
                             <RichTextEditor
-                                value={this.props.newsDescription}
-                                onChange={this.props.onNewsDescriptionChange}
-                                placeholder="Article's description"
+                                value={this.props.collectionDescription}
+                                onChange={this.props.onCollectionDescriptionChange}
+                                placeholder="Collection description"
                                 toolbarConfig={toolbarConfig}
                             />
                         </div>
@@ -139,23 +167,63 @@ class Update extends Component {
             case 1:
                 return (
                     <div>
-                        {this.props.newsPictures.map((newsPicture, i) => (
+                        <div>
+                            <TextField hintText="Link embeded in QR code"
+                                       value={this.props.qrLink}
+                                       onChange={this.props.onQRLinkChange}
+                                       errorText={this.props.errors.qrLink}
+                                       onKeyDown={this.handleKeyPress}
+                                       autoFocus={true}
+                                       multiLine={true}
+                                       className="step-textfields"
+                            />
+                            <div className="qr-restrict-desktop">
+                                <QRCode value={this.props.qrLink} size={512}/>
+                            </div>
+                            <div className="qr-allow-mobile">
+                                <QRCode value={this.props.qrLink} size={128}/>
+                            </div>
+                        </div>
+                        {this.props.pictures.map((picture, i) => (
                             <div key={i}>
                                 <div className="input-field">
-                                    {this.props.newsPictureLinkError[i] === "Please use a link for the picture" ?
-                                        <TextField hintText="Link here additional photos"
-                                                   value={newsPicture.newsPictureLink}
-                                                   onChange={this.props.handleNewsPicturesLinkChange(i)}
-                                                   errorText={this.props.newsPictureLinkError[i]}
+                                    {picture.pictureName.length > 100 ?
+                                        <div>
+                                            Please use a name that is shorter than 100 characters
+                                        </div> : null}
+                                    {this.props.pictureNameError[i] === "Please use a valid name for this picture" ?
+                                        <TextField hintText="Give your pictures a cool name"
+                                                   value={picture.pictureName}
+                                                   onChange={this.props.handlePicturesNameChange(i)}
+                                                   errorText={this.props.pictureNameError[i]}
                                                    onKeyDown={this.handleKeyPress}
-                                                   autoFocus={true}
                                                    multiLine={true}
                                                    className="step-textfields"
                                         />
                                         :
-                                        <TextField hintText="Link here additional photos"
-                                                   value={newsPicture.newsPictureLink}
-                                                   onChange={this.props.handleNewsPicturesLinkChange(i)}
+                                        <TextField hintText="Give your work of art a cool name"
+                                                   value={picture.pictureName}
+                                                   onChange={this.props.handlePicturesNameChange(i)}
+                                                   onKeyDown={this.handleKeyPress}
+                                                   multiLine={true}
+                                                   className="step-textfields"
+                                        />
+                                    }
+                                </div>
+                                <div className="input-field">
+                                    {this.props.pictureLinkError[i] === "Please use a link for the picture" ?
+                                        <TextField hintText="Give us the link of your work of art"
+                                                   value={picture.pictureLink}
+                                                   onChange={this.props.handlePicturesLinkChange(i)}
+                                                   errorText={this.props.pictureLinkError[i]}
+                                                   onKeyDown={this.handleKeyPress}
+                                                   multiLine={true}
+                                                   className="step-textfields"
+                                        />
+                                        :
+                                        <TextField hintText="Give us the link of your work of art"
+                                                   value={picture.pictureLink}
+                                                   onChange={this.props.handlePicturesLinkChange(i)}
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
@@ -163,14 +231,42 @@ class Update extends Component {
                                     }
                                 </div>
                                 <CardMedia>
-                                    <img src={newsPicture.pictureLink} className="step-picture"/>
+                                    <img src={picture.pictureLink} className="step-picture"/>
                                 </CardMedia>
+                                <div className="input-field">
+                                    {picture.pictureDescriptionRaw && picture.pictureDescriptionRaw.length > 5000 ?
+                                        <div>
+                                            Please use a description that is shorther than 5000 characters
+                                        </div> : null
+                                    }
+                                    {this.props.pictureDescriptionError[i] === "Please use a valid description for this picture" ?
+
+                                        <div>
+                                            {this.props.pictureDescriptionError[i]}
+                                            <RichTextEditor
+                                                value={picture.pictureDescription}
+                                                onChange={this.props.handlePicturesDescriptionChange(i)}
+                                                placeholder="Collection description"
+                                                toolbarConfig={toolbarConfig}
+                                            />
+                                        </div>
+                                        :
+                                        <div>
+                                            <RichTextEditor
+                                                value={picture.pictureDescription}
+                                                onChange={this.props.handlePicturesDescriptionChange(i)}
+                                                placeholder="Collection description"
+                                                toolbarConfig={toolbarConfig}
+                                            />
+                                        </div>
+                                    }
+                                </div>
                                 <RaisedButton type="button" primary={true} label="+"
-                                              onClick={this.props.handleAddNewsPictures(i)}/>
+                                              onClick={this.props.handleAddPictures(i)}/>
 
                                 { (i !== 0) ? (
                                     <RaisedButton type="button" secondary={true} label="-"
-                                                  onClick={this.props.handleRemoveNewsPictures(i)}/>
+                                                  onClick={this.props.handleRemovePictures(i)}/>
                                 ) : null}
 
                             </div>
@@ -181,7 +277,7 @@ class Update extends Component {
                 return (
                     <div className="preview">
                         <div>The preview of what you wish to add is here</div>
-                        <div>{this.props.newsTitle}</div>
+                        <div>{this.props.collectionName}</div>
                         <div dangerouslySetInnerHTML={this.props.getHTML()}/>
                         {rows}
                     </div>
@@ -263,7 +359,7 @@ class Update extends Component {
                                         onTouchTap={this.resetScroll}
                                     />
                                 </Link>
-                            </div>: null
+                            </div> : null
                         }
                         <div className="step-style">{this.getStepContent(stepIndex)}</div>
                         <CardActions className="step-actions">

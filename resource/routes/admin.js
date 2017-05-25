@@ -11,6 +11,8 @@ const DeleteNewsLogs = require('mongoose').model('DeleteNewsLogs');
 const LoginLogs = require('mongoose').model('LoginLogs');
 const SignupLogs = require('mongoose').model('SignupLogs');
 const UpdateProfileLogs = require('mongoose').model('UpdateProfileLogs');
+const CommentCollection = require('mongoose').model("CommentCollection");
+const CommentNews = require('mongoose').model("CommentNews");
 const config = require('../../config');
 const jwt = require('jsonwebtoken');
 
@@ -261,7 +263,9 @@ router.get('/adminAuthentication', (req, res) => {
                     });
                 }
                 else {
-                    res.status(401).end();
+                    res.json({
+                        message: "Not an admin"
+                    })
                 }
             })
         });
@@ -452,7 +456,9 @@ router.post("/create", (req, res) => {
                 newsTitle: req.body.newsTitle,
                 newsCoverLink: req.body.newsCoverLink,
                 newsDescriptionRaw: req.body.newsDescriptionRaw,
-                picturesArray: JSON.parse(req.body.newsPictures)
+                picturesArray: JSON.parse(req.body.newsPictures),
+                userName: req.body.userName,
+                profilePictureLink: req.body.profilePictureLink
             };
 
             const logData = {
@@ -585,51 +591,22 @@ router.post('/searchNews', (req, res) => {
 
 router.post("/readOne", (req, res) => {
 
-    if (!req.headers.authorization) {
-        return res.status(401).end();
-    }
-
-    const token = req.headers.authorization.split(' ')[1];
-
-    jwt.verify(token, config.jwtSecret, (err, decoded) => {
-
+    News.findOne({_id: req.body.newsId}, (err, news) => {
         if (err) {
-            return res.status(401).json({
-                message: "Not authorized"
-            })
-        }
-
-        if (!decoded) {
             return res.status(400).json({
-                message: "Internal error"
-            })
-        }
-
-        //here to be used for logs
-        const userId = decoded.sub;
-        let isAdmin = decoded.isAdmin;
-
-        if (isAdmin === true) {
-
-            News.findOne({_id: req.body.newsId}, (err, news) => {
-                if (err) {
-                    return res.status(400).json({
-                        message: "Database error"
-                    });
-                }
-
-                if (!news) {
-                    return res.status(404).json({
-                        message: "The item you are searching for does not exist"
-                    });
-                }
-
-                res.json({
-                    news: news
-                });
+                message: "Database error"
             });
         }
-        else return res.status(401).end();
+
+        if (!news) {
+            return res.status(404).json({
+                message: "The item you are searching for does not exist"
+            });
+        }
+
+        res.json({
+            news: news
+        });
     });
 });
 
@@ -883,6 +860,15 @@ router.post('/delete', (req, res) => {
                     message: "News article deleted"
                 });
             });
+
+            CommentNews.deleteMany({newsId: req.body.newsId}, (err) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
+                    })
+                }
+            });
+
         }
         else return res.status(401).end();
     });
@@ -925,7 +911,10 @@ router.post("/createCollection", (req, res) => {
                 userId: req.body.userId,
                 collectionName: req.body.collectionName,
                 collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-                picturesArray: JSON.parse(req.body.picturesArray)
+                picturesArray: JSON.parse(req.body.picturesArray),
+                qrLink: req.body.qrLink,
+                profilePictureLink: req.body.userProfilePictureLink,
+                userName: req.body.userNameToAdd
             };
 
             const logData = {
@@ -1194,7 +1183,10 @@ router.post('/updateSaveCollections', (req, res) => {
                     userId: req.body.userId,
                     collectionName: req.body.collectionName,
                     collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-                    picturesArray: JSON.parse(req.body.picturesArray)
+                    picturesArray: JSON.parse(req.body.picturesArray),
+                    userName: req.body.userNameToAdd,
+                    qrLink: req.body.qrLink,
+                    profilePictureLink: req.body.userProfilePictureLink
                 }
             }, (err, collection) => {
                 if (err) {
@@ -1270,7 +1262,7 @@ router.post('/deleteShowCollection', (req, res) => {
             User.findOne({_id: userId}, (err, user) => {
                 if (err) {
                     return res.status(400).json({
-                        message: "Database error in User.findOne from /crud/delete"
+                        message: "Database error"
                     });
                 }
 
@@ -1368,6 +1360,15 @@ router.post("/deleteCollection", (req, res) => {
                         message: "Collection was successfully deleted"
                     });
                 });
+
+                CommentCollection.deleteMany({collectionId: req.body.collectionId}, (err) => {
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Database error"
+                        })
+                    }
+                });
+
             });
         }
         else return res.status(401).end();

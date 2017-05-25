@@ -33,7 +33,7 @@ class AppBarPersonal extends Component {
         }
     }
 
-    hideAppBar = () => {
+    hideAppBar = (e) => {
         let {isVisible} = this.state;
 
         window.scrollY > this.scroll ?

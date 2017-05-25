@@ -33,87 +33,203 @@
 
 }
 
+.mobile-header {
+  div {
+    @include padding(0 !important);
+  }
+  @include display(flex, 1, flex-start);
+  .collection-header {
+    @include textAlign(center);
+    @include display(flex, 1, flex-start);
+    font-size: 2em !important;
+    word-break: break-all;
+  }
+}
+
+.top-actions {
+  @include display(flex, 1, space-between);
+  @include background-color(#ffffff);
+  @include box-sizing(border-box);
+  @include padding(10px);
+  @media screen and(max-width: 1200px) {
+    @include display(block);
+    @include textAlign(center);
+  }
+
+  .capsules {
+    @include display(flex, 1, center);
+    @include padding(30px 0 0 0);
+
+    @media screen and(max-width: 1200px) {
+      @include padding(10px 0 0 0);
+    }
+  }
+}
+
 .parallax-collections-delete {
   @include widthAndHeight("auto", 100%);
   @include background-image("./images/art1.jpg", fixed, center, repeat, cover);
 }
 
-.parallax-collections-create {
+.parallax-collections-readOne {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/art.jpg", fixed, center, repeat, cover);
+  @include background-image("./images/art6.jpg", fixed, center, repeat, cover);
+}
 
-  .container-collections {
-    @include padding(64px, 256px, 64px, 256px);
-    min-height: 800px;
-    @media screen and (max-width: 1200px) {
-      min-height: 400px;
-      @include padding(1em);
-      @include box-sizing(border-box);
+.pictures {
+  @include display(flex, 1, space-around);
+}
+
+.collections-content-readOne-mobile {
+  @media screen and(min-width: 1200px) {
+    @include display(none);
+  }
+  .force-image-height {
+    min-height: 200px;
+    @include box-sizing(border-box);
+    @include margin(0 0 20px 0);
+    img {
+      min-height: 200px;
     }
+  }
+}
 
-    .errors-collections {
-      @include display(flex, 1, center);
-      color: #ff0000
-    }
+.qr-restrict-desktop {
+  @media screen and(max-width: 1200px) {
+    @include display(none);
+  }
+}
 
-    .success-collections {
-      @include display(flex, 1, center);
-      color: #32cd32
-    }
+.qr-allow-mobile {
+  @media screen and(min-width: 1200px) {
+    @include display(none);
+  }
+}
 
-    .success-collections-create {
-      @include textAlign(center);
-      @include display(block);
-      color: #32cd32
-    }
+.collections-content-readOne-desktop {
+  @include display(flex, 1, space-around);
+  @include background-color(whitesmoke);
+  @include margin(0 0 64px 0);
 
+  @media screen and(max-width: 1200px) {
     @include display(block);
+  }
 
-    .top-actions-create {
-      @include background-color(#ffffff)
+  ul {
+    list-style: none;
+    @include display(block, 1, space-around);
+
+    .collection-description {
+      @include padding(30px);
+      font-size: 16px !important;
     }
 
-    .step-style {
-      @include box-sizing(border-box);
-      @include padding(50px);
-      @include textAlign(center);
-      @media screen and(max-width: 1200px) {
+    .list-spacing-readOne {
+      @include padding(30px);
+
+      .force-image-height {
+        min-height: 280px;
+        min-width: 400px;
         @include padding(20px);
-      }
 
-      .step-picture {
-        min-height: 300px;
-      }
-
-      .step-textfields {
-        @include widthAndHeight(70% !important, auto);
-        @media screen and(max-width: 1200px) {
-          @include widthAndHeight(100% !important, auto);
+        img {
+          min-height: 280px;
+          min-width: 400px;
         }
-      }
-
-      .preview {
-        min-height: 400px;
-        //modify before final product
-        @include textAlign(center);
-      }
-
-    }
-
-    .step-actions {
-      @include display(flex, 1, space-between);
-      @include padding(auto 50px auto 50px !important);
-      @media screen and(max-width: 1200px) {
-        @include display(block);
-        @include textAlign(center);
-        @include padding(20px !important);
-      }
-
-      .right-actions {
-        @include display(flex, 1, flex-end)
       }
     }
   }
+  @media screen and (max-width: 1200px) {
+    @include display(none);
+  }
+}
+
+.container-collections-readOne {
+  @include padding(64px, 0, 64px, 0);
+  min-height: 800px;
+  @media screen and (max-width: 1200px) {
+    min-height: 400px;
+    @include padding(1em);
+    @include box-sizing(border-box);
+  }
+}
+
+.container-collections {
+  @include padding(64px, 256px, 64px, 256px);
+  min-height: 800px;
+  @media screen and (max-width: 1200px) {
+    min-height: 400px;
+    @include padding(1em);
+    @include box-sizing(border-box);
+  }
+
+  .errors-collections {
+    @include display(flex, 1, center);
+    color: #ff0000
+  }
+
+  .success-collections {
+    @include display(flex, 1, center);
+    color: #32cd32
+  }
+
+  .success-collections-create {
+    @include textAlign(center);
+    @include display(block);
+    color: #32cd32
+  }
+
+  @include display(block);
+
+  .top-actions-create {
+    @include background-color(#ffffff)
+  }
+
+  .step-style {
+    @include box-sizing(border-box);
+    @include padding(50px);
+    @include textAlign(center);
+    @media screen and(max-width: 1200px) {
+      @include padding(20px);
+    }
+
+    .step-picture {
+      min-height: 300px;
+    }
+
+    .step-textfields {
+      @include widthAndHeight(70% !important, auto);
+      @media screen and(max-width: 1200px) {
+        @include widthAndHeight(100% !important, auto);
+      }
+    }
+
+    .preview {
+      min-height: 400px;
+      //modify before final product
+      @include textAlign(center);
+    }
+
+  }
+
+  .step-actions {
+    @include display(flex, 1, space-between);
+    @include padding(auto 50px auto 50px !important);
+    @media screen and(max-width: 1200px) {
+      @include display(block);
+      @include textAlign(center);
+      @include padding(20px !important);
+    }
+
+    .right-actions {
+      @include display(flex, 1, flex-end)
+    }
+  }
+}
+
+.parallax-collections-create {
+  @include widthAndHeight("auto", 100%);
+  @include background-image("./images/art.jpg", fixed, center, repeat, cover);
 
   .section-title {
     @include font("", "", bold, "", 60px, "", $Roboto, "");
@@ -121,21 +237,6 @@
     @include background-color(#3460f1);
     @include textAlign(center);
     color: #ffffff;
-  }
-
-  .top-actions {
-    @include display(flex, 1, space-between);
-    @include background-color(#ffffff);
-    @include box-sizing(border-box);
-    @include padding(10px);
-    @media screen and(max-width: 1200px) {
-      @include display(block);
-      @include textAlign(center);
-    }
-
-    .capsules {
-      @include display(flex, 1);
-    }
   }
 
   .view-table {

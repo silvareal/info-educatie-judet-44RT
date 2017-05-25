@@ -38,6 +38,12 @@ body, html, main {
   }
 }
 
+.avatar-cells-home {
+  img {
+    min-height: 40px !important;
+  }
+}
+
 .parallax-home {
   @include widthAndHeight("auto", 100%);
   @include background-image("images/home.jpg", fixed, center, repeat, cover);
@@ -97,34 +103,34 @@ body, html, main {
       }
     }
 
-    .news-mobile {
-      @media screen and (min-width: 1200px) {
-        @include display(none);
-      }
-      ul {
-        @include box-sizing(border-box);
-        @include display(flex, "", center);
-        @include padding(30px);
-        @include widthAndHeight(100%, "auto");
-        list-style: none;
-        flex-direction: column;
-
-        li {
-          @include widthAndHeight(100%, "auto");
-          @include box-sizing(border-box);
-          @include padding(10px);
-          @include background-color(#ffffff);
-          img {
-            @include widthAndHeight("auto", "auto");
-            min-height: 180px;
-          }
-        }
-      }
-    }
-
     .comments-cancel-padding {
       padding-top: 0;
       padding-bottom: 0
     }
   }
-}
+}.news-mobile {
+   @media screen and (min-width: 1200px) {
+     @include display(none);
+   }
+  display: block;
+  @include widthAndHeight(100%, 100%);
+   ul {
+     @include box-sizing(border-box);
+     @include display(flex, "", center);
+     @include padding(30px);
+     @include widthAndHeight(100%, "auto");
+     list-style: none;
+     flex-direction: column;
+
+     li {
+       @include widthAndHeight(100%, "auto");
+       @include box-sizing(border-box);
+       @include padding(10px);
+       @include background-color(#ffffff);
+       img {
+         @include widthAndHeight("auto", "auto");
+         min-height: 180px;
+       }
+     }
+   }
+ }

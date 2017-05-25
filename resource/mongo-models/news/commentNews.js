@@ -5,6 +5,7 @@ const CommentNewsSchema = new mongoose.Schema({
     newsId: String,
     userId: String,
     userName: String,
+    profilePictureLink: String,
     firstName: {
         type: String,
         default: ""

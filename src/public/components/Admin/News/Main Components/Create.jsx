@@ -3,8 +3,6 @@ import {Link} from 'react-router';
 
 import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
-import {convertFromRaw} from 'draft-js';
-import {stateToHTML} from 'draft-js-export-html';
 
 import {
     FlatButton,
@@ -264,7 +262,7 @@ class Create extends Component {
                         <div className="step-style">{this.getStepContent(stepIndex)}</div>
                         <CardActions className="step-actions">
                             {stepIndex === 0 ?
-                                <Link to={`/manage/${this.props.adminId}/news`}>
+                                <Link to={`/admin/${this.props.adminId}/news`}>
                                     <RaisedButton
                                         label="Cancel"
                                         secondary={true}/>

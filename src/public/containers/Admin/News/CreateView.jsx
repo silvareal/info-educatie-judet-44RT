@@ -26,11 +26,34 @@ class CreateView extends Component {
             }],
             newsPictureLinkError: '',
             isAdmin: false,
-            __html: ''
+            __html: '',
+            userName: '',
+            profilePictureLink: ''
         };
     };
 
-    componentDidMount() {
+    getUser = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("get", "/comment/getUserCredentials");
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                if (xhr.response.guest !== true)
+                    this.setState({
+                        userName: xhr.response.userName,
+                        userId: xhr.response.userId,
+                        profilePictureLink: xhr.response.profilePictureLink
+                    });
+                else this.setState({
+                    guest: true
+                })
+            }
+        });
+        xhr.send();
+    };
+
+    adminAuth = () => {
         const xhr = new XMLHttpRequest();
         xhr.open('get', '/admin/adminAuthentication');
         xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
@@ -45,6 +68,11 @@ class CreateView extends Component {
             else this.setState({isAdmin: false})
         });
         xhr.send();
+    };
+
+    componentDidMount() {
+        this.adminAuth();
+        this.getUser();
     }
 
     getHTML = () => {
@@ -108,8 +136,10 @@ class CreateView extends Component {
         const newsCoverLink = encodeURIComponent(this.state.newsCoverLink);
         const newsDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
         const newsPictures = encodeURIComponent(JSON.stringify(this.state.newsPictures));
+        const userName = encodeURIComponent(this.state.userName);
+        const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
 
-        const formData = `newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescriptionRaw=${newsDescriptionRaw}&newsPictures=${newsPictures}`;
+        const formData = `profilePictureLink=${profilePictureLink}&userName=${userName}&newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescriptionRaw=${newsDescriptionRaw}&newsPictures=${newsPictures}`;
 
         //AJAX
         const xhr = new XMLHttpRequest();

@@ -6,6 +6,8 @@ import PictureRow from '../Partials Components/PictureRow.jsx';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
+import QRCode from 'qrcode.react';
+
 import {
     FlatButton,
     RaisedButton,
@@ -118,12 +120,31 @@ class Create extends Component {
                             />
 
                             <TextField
+                                hintText="Owner's userName"
+                                value={this.props.userNameToAdd}
+                                onChange={this.props.onUserNameToAddChange}
+                                errorText={this.props.errors.userNameToAdd}
+                                onKeyDown={this.handleKeyPress}
+                                multiLine={true}
+                                className="step-textfields"
+                            />
+
+                            <TextField
+                                hintText="Owner's profile picture"
+                                value={this.props.userProfilePictureLink}
+                                onChange={this.props.onUserProfilePictureLinkChange}
+                                errorText={this.props.errors.userProfilePictureLink}
+                                onKeyDown={this.handleKeyPress}
+                                multiLine={true}
+                                className="step-textfields"
+                            />
+
+                            <TextField
                                 hintText="Give your collection a cool title"
                                 value={this.props.collectionName}
                                 onChange={this.props.onCollectionChange}
                                 errorText={this.props.errors.collectionName}
                                 onKeyDown={this.handleKeyPress}
-                                autoFocus={true}
                                 multiLine={true}
                                 className="step-textfields"
                             />
@@ -148,6 +169,23 @@ class Create extends Component {
             case 1:
                 return (
                     <div>
+                        <div>
+                            <TextField hintText="Link embeded in QR code"
+                                       value={this.props.qrLink}
+                                       onChange={this.props.onQRLinkChange}
+                                       errorText={this.props.errors.qrLink}
+                                       onKeyDown={this.handleKeyPress}
+                                       autoFocus={true}
+                                       multiLine={true}
+                                       className="step-textfields"
+                            />
+                            <div className="qr-restrict-desktop">
+                            <QRCode value={this.props.qrLink} size={512}/>
+                            </div>
+                            <div className="qr-allow-mobile">
+                                <QRCode value={this.props.qrLink} size={128}/>
+                            </div>
+                        </div>
                         {this.props.pictures.map((picture, i) => (
                             <div key={i}>
                                 <div className="input-field">
@@ -161,7 +199,6 @@ class Create extends Component {
                                                    onChange={this.props.handlePicturesNameChange(i)}
                                                    errorText={this.props.pictureNameError[i]}
                                                    onKeyDown={this.handleKeyPress}
-                                                   autoFocus={true}
                                                    multiLine={true}
                                                    className="step-textfields"
                                         />
@@ -170,7 +207,6 @@ class Create extends Component {
                                                    value={picture.pictureName}
                                                    onChange={this.props.handlePicturesNameChange(i)}
                                                    onKeyDown={this.handleKeyPress}
-                                                   autoFocus={true}
                                                    multiLine={true}
                                                    className="step-textfields"
                                         />
@@ -326,7 +362,7 @@ class Create extends Component {
                         <div className="step-style">{this.getStepContent(stepIndex)}</div>
                         <CardActions className="step-actions">
                             {stepIndex === 0 ?
-                                <Link to={`/manage/${this.props.adminId}/collections`}>
+                                <Link to={`/admin/${this.props.adminId}/collections`}>
                                     <RaisedButton
                                         label="Cancel"
                                         secondary={true}/>

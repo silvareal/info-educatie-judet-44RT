@@ -85,6 +85,8 @@ function validateUpdateForm(payload) {
         errors.collectionDescriptionRaw = "Please use a valid description"
     }
 
+    console.log(payload.picturesArray);
+
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
 
     Object.keys(errorsPicturesArray).map((key) => {
@@ -152,7 +154,9 @@ router.post('/create', (req, res) => {
             userName: req.body.userName,
             collectionName: req.body.collectionName,
             collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-            picturesArray: JSON.parse(req.body.picturesArray)
+            picturesArray: JSON.parse(req.body.picturesArray),
+            qrLink: req.body.qrLink,
+            profilePictureLink: req.body.profilePictureLink
         };
 
         const logData = {
@@ -216,7 +220,7 @@ router.get('/readAll', (req, res) => {
                 });
             }
 
-            if (collections.length == 0) {
+            if (collections.length === 0) {
                 return res.status(404).json({
                     message: "You have not added anything yet"
                 })
@@ -466,7 +470,8 @@ router.post('/updateSave', (req, res) => {
             $set: {
                 collectionName: req.body.collectionName,
                 collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-                picturesArray: JSON.parse(req.body.picturesArray)
+                picturesArray: JSON.parse(req.body.picturesArray),
+                qrLink: req.body.qrLink
             }
         }, (err, collection) => {
             if (err) {
