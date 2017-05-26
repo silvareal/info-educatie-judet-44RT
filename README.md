@@ -72,7 +72,16 @@
         Notes: -
         }
         
-        -add nested pages to the menu
+        -add nested pages to the menu {
+        Status: REMOVED,
+        Notes: Material UI can't allow that in a non-buggy way and creating our own components would require us to create: lists, avatars, icons, waves for buttons, list items that can have icons on the left and right.
+        The way the navigator is now is perfectly fine.
+        }
+        
+        -add the loading indicator on all pages {
+        Status: In-progress,
+        Notes: Only added on home page for now
+        }
         
         -write for us button should lead to a way of applying as a mod{
         Status: REMOVED

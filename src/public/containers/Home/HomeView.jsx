@@ -25,6 +25,8 @@ class HomeView extends Component {
             newsId: "",
             guest: null,
             finished: null,
+            fetchedNews: false,
+            fetchedCollections: false,
             profilePictureLink: '',
             //Due to concat not working or myself not using it correctly, I've manually set the initial state of this array
             comments: [
@@ -92,7 +94,8 @@ class HomeView extends Component {
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
                 this.setState({
-                    news: xhr.response.news
+                    news: xhr.response.news,
+                    fetchedNews: true
                 })
             }
         });
@@ -107,7 +110,8 @@ class HomeView extends Component {
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
                 this.setState({
-                    collections: xhr.response.collections
+                    collections: xhr.response.collections,
+                    fetchedCollections: true
                 })
             }
         });
@@ -596,6 +600,8 @@ class HomeView extends Component {
         document.title = "4Art";
         return (
             <Home
+                fetchedNews={this.state.fetchedNews}
+                fetchedCollections={this.state.fetchedNews}
                 userName={this.state.userName}
                 userId={this.state.userId}
                 rowsNews1={rowsNews1}

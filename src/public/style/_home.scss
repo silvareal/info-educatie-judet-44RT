@@ -38,6 +38,15 @@ body, html, main {
   }
 }
 
+.sk-wave {
+  width: 18.750em !important;
+  height: 18.750em !important;
+  position: relative !important;
+  div {
+    width: 3.750em !important;
+  }
+}
+
 .avatar-cells-home {
   img {
     min-height: 40px !important;
@@ -108,29 +117,31 @@ body, html, main {
       padding-bottom: 0
     }
   }
-}.news-mobile {
-   @media screen and (min-width: 1200px) {
-     @include display(none);
-   }
+}
+
+.news-mobile {
+  @media screen and (min-width: 1200px) {
+    @include display(none);
+  }
   display: block;
   @include widthAndHeight(100%, 100%);
-   ul {
-     @include box-sizing(border-box);
-     @include display(flex, "", center);
-     @include padding(30px);
-     @include widthAndHeight(100%, "auto");
-     list-style: none;
-     flex-direction: column;
+  ul {
+    @include box-sizing(border-box);
+    @include display(flex, "", center);
+    @include padding(30px);
+    @include widthAndHeight(100%, "auto");
+    list-style: none;
+    flex-direction: column;
 
-     li {
-       @include widthAndHeight(100%, "auto");
-       @include box-sizing(border-box);
-       @include padding(10px);
-       @include background-color(#ffffff);
-       img {
-         @include widthAndHeight("auto", "auto");
-         min-height: 180px;
-       }
-     }
-   }
- }
+    li {
+      @include widthAndHeight(100%, "auto");
+      @include box-sizing(border-box);
+      @include padding(10px);
+      @include background-color(#ffffff);
+      img {
+        @include widthAndHeight("auto", "auto");
+        min-height: 180px;
+      }
+    }
+  }
+}

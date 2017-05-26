@@ -20,6 +20,14 @@ a {
     }
 }
 
+.loading-style {
+    @include display(flex, 1, center);
+    @include padding(50px);
+    @media screen and (max-width: 1200px) {
+        @include padding(30px);
+    }
+}
+
 .active-link-classname {
     span {
         background-color: lightblue !important;
