@@ -1,97 +1,164 @@
 @import "./constants/functions";
 @import "./constants/fonts";
+
+.parallax-profile {
+  @include widthAndHeight("auto", 100%);
+  @include background-image("./images/art2.jpg", fixed, center, repeat, cover);
+
+  .container-profile {
+    @include padding(0, 256px, 64px, 256px);
+    min-height: 800px;
+    @media screen and (max-width: 1200px) {
+      min-height: 400px;
+      @include padding(1em);
+      @include box-sizing(border-box);
+    }
+
+    .cover-container {
+      @include padding(16px, 24px, 16px, 24px);
+      @media screen and (max-width: 1200px) {
+        min-height: 400px;
+        @include padding(0);
+      }
+    }
+  }
+}
+
+.profile-header {
+  @include padding(5px);
+  @include display(flex, 1, center);
+  @include textAlign(center);
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.profile-latest-collection {
+  @include display(flex, 1, center);
+  @include padding(20px 0 0 0);
+}
+
+.force-no-overlay-background {
+  div {
+    background: transparent !important;
+    max-height: 720px !important;
+  }
+  img {
+    max-height: 720px !important;
+  }
+}
+
+.mobile-whitespace-fill-profile {
+  @media screen and (min-width: 1200px) {
+    display: none;
+  }
+}
+
+.force-profile-picture-width {
+  div {
+    @include textAlign(center);
+    max-width: 40% !important;
+    max-height: 40% !important;
+    margin: 0 auto !important;
+  }
+  img {
+    @include box-sizing(border-box);
+    @include padding(5px 5px 0 5px);
+    @include background-color(#ffffff);
+  }
+}
+
 .profile-wrap {
-    @include display-flex(flex,center);
-    min-width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
+  @include display-flex(flex, center);
+  min-width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .profile-left {
-    margin: 0;
-    min-width: 20%;
-    max-width: 20%;
-    padding: 2em;
+  margin: 0;
+  min-width: 20%;
+  max-width: 20%;
+  padding: 2em;
 
-    img:hover {
-        opacity: 0.7;
-    }
+  img:hover {
+    opacity: 0.7;
+  }
 
-    img:active {
-        opacity: 0.9;
-    }
+  img:active {
+    opacity: 0.9;
+  }
 
-    .profile-picture-wrap {
-        height: 12em;
-    }
+  .profile-picture-wrap {
+    height: 12em;
+  }
 
-    .user-name-wrap {
+  .user-name-wrap {
 
-        @include display-flex(flex, center);
-        background-color: whitesmoke;
-        cursor: default;
-        padding: 1em;
-        border: 1px solid antiquewhite;
-    }
+    @include display-flex(flex, center);
+    background-color: whitesmoke;
+    cursor: default;
+    padding: 1em;
+    border: 1px solid antiquewhite;
+  }
 }
 
 .latest-post {
-    margin-top: 3em;
-    flex: 1;
+  margin-top: 3em;
+  flex: 1;
 
-    :hover {
-        opacity: 0.8;
-    }
+  :hover {
+    opacity: 0.8;
+  }
 
-    :active {
-        opacity: 0.9;
-    }
+  :active {
+    opacity: 0.9;
+  }
 
-    header {
-        @include display-flex(flex, center);
-        background-color: whitesmoke;
-        padding: 1em;
-        border: 1px solid antiquewhite;
-        cursor: pointer;
-    }
+  header {
+    @include display-flex(flex, center);
+    background-color: whitesmoke;
+    padding: 1em;
+    border: 1px solid antiquewhite;
+    cursor: pointer;
+  }
 
-    img {
-        width: 100%;
-        height: 100%;
-    }
+  img {
+    width: 100%;
+    height: 100%;
+  }
 
-    collectionName {
-        @include display-flex(flex, center);
-        background: rgb(0, 188, 212);
-        color: white;
-    }
+  collectionName {
+    @include display-flex(flex, center);
+    background: rgb(0, 188, 212);
+    color: white;
+  }
 }
 
 .profile-right {
-    text-align: center;
-    max-width: 70%;
-    min-width: 70%;
+  text-align: center;
+  max-width: 70%;
+  min-width: 70%;
 
-    img:hover {
-        opacity: 0.5;
-    }
+  img:hover {
+    opacity: 0.5;
+  }
 
-    img:active {
-        opacity: 0.9;
-    }
+  img:active {
+    opacity: 0.9;
+  }
 
-    .cover-wrap {
-        @include box-sizing(border-box);
-        width: 100%;
-        height: 12em;
-    }
+  .cover-wrap {
+    @include box-sizing(border-box);
+    width: 100%;
+    height: 12em;
+  }
 
-    .content-wrap {
-        width: 100%;
-        padding: 0 2em 2em 2em;
-    }
+  .content-wrap {
+    width: 100%;
+    padding: 0 2em 2em 2em;
+  }
 }
 
 .tabs {
-    @include display-flex(flex, center);
+  @include display-flex(flex, center);
 }

@@ -1,3 +1,65 @@
+.parallax-profile {
+  width: auto;
+  height: 100%;
+  background-image: url("./images/art2.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover; }
+  .parallax-profile .container-profile {
+    padding: 0 256px 64px 256px;
+    min-height: 800px; }
+    @media screen and (max-width: 1200px) {
+      .parallax-profile .container-profile {
+        min-height: 400px;
+        padding: 1em   ;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box; } }
+    .parallax-profile .container-profile .cover-container {
+      padding: 16px 24px 16px 24px; }
+      @media screen and (max-width: 1200px) {
+        .parallax-profile .container-profile .cover-container {
+          min-height: 400px;
+          padding: 0   ; } }
+
+.profile-header {
+  padding: 5px   ;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+  font-size: 24px; }
+
+.profile-latest-collection {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding: 20px 0 0 0   ; }
+
+.force-no-overlay-background div {
+  background: transparent !important;
+  max-height: 720px !important; }
+.force-no-overlay-background img {
+  max-height: 720px !important; }
+
+@media screen and (min-width: 1200px) {
+  .mobile-whitespace-fill-profile {
+    display: none; } }
+
+.force-profile-picture-width div {
+  text-align: center;
+  max-width: 40% !important;
+  max-height: 40% !important;
+  margin: 0 auto !important; }
+.force-profile-picture-width img {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 5px 5px 0 5px   ;
+  background: #ffffff; }
+
 .profile-wrap {
   display: flex;
   justify-content: center;

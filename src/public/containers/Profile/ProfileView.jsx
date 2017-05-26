@@ -1,4 +1,7 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router';
+
+import {CardMedia, CardTitle} from 'material-ui';
 
 import Profile from '../../components/Profile/Profile.jsx';
 import NotFoundPage from '../Error/NotFoundView.jsx';
@@ -46,11 +49,30 @@ class ProfileView extends Component {
             cityOld: '',
             countryOld: '',
             professionOld: '',
-            companyNameOld: ''
+            companyNameOld: '',
+            openSnackbar: false,
+            rows: '',
+            rows2: '',
+            viewerId: ''
         };
     };
 
-    componentDidMount() {
+    getCredentials = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/home/credentials');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                this.setState({
+                    viewerId: xhr.response.userId
+                })
+            }
+        });
+        xhr.send();
+    };
+
+    getProfile = () => {
         const userName = encodeURIComponent(this.props.params.userName);
         const formData = `userName=${userName}`;
 
@@ -86,6 +108,51 @@ class ProfileView extends Component {
                     professionOld: xhr.response.user.profession,
                     companyNameOld: xhr.response.user.companyName
                 });
+
+                const pictures = this.state.latestCollection;
+
+                const rows = Object.keys(pictures).map((key) => {
+                    if (key < 2) {
+                        return (
+                            <div className="profile-latest-collection" key={key}>
+                                <Link to={`/manage/readOne/${pictures[key]._id}`}>
+                                    <CardMedia
+                                        style={{maxWidth: 640, maxHeight: "auto"}}
+                                        overlay={<CardTitle
+                                            title={pictures[key].collectionName}
+                                            subtitle={`By ` + pictures[key].userName}/>}>
+                                        <img
+                                            src={pictures[key].picturesArray[0].pictureLink}
+                                        />
+                                    </CardMedia>
+                                </Link>
+                            </div>
+                        )
+                    }
+                });
+
+                const rows2 = Object.keys(pictures).map((key) => {
+                    if (key > 1) {
+                        return (
+                            <div className="profile-latest-collection" key={key}>
+                                <Link to={`/manage/readOne/${pictures[key]._id}`} key={key}>
+                                    <CardMedia
+                                        style={{maxWidth: 640, maxHeight: "auto"}}
+                                        overlay={<CardTitle
+                                            title={pictures[key].collectionName}
+                                            subtitle={`By ` + pictures[key].userName}/>}>
+                                        <img
+                                            src={pictures[key].picturesArray[0].pictureLink}
+                                        />
+                                    </CardMedia>
+                                </Link>
+                            </div>
+                        )
+                    }
+                });
+
+                this.setState({rows: rows, rows2: rows2})
+
             } else {
                 const errors = xhr.response.errors ? xhr.response.errors : {};
                 errors.summary = xhr.response.message;
@@ -96,6 +163,11 @@ class ProfileView extends Component {
             }
         });
         xhr.send(formData);
+    };
+
+    componentDidMount() {
+        this.getCredentials();
+        this.getProfile();
     };
 
     onFirstNameChange = (e) => {
@@ -155,8 +227,16 @@ class ProfileView extends Component {
         });
     };
 
+    handleRequestCloseSnackBar = () => {
+        this.setState({
+            successUpdate: null
+        });
+    };
+
     onSave = () => {
         //newState
+        const viewerId = encodeURIComponent(this.state.viewerId);
+        const userId = encodeURIComponent(this.state.userId);
         const firstName = encodeURIComponent(this.state.firstName);
         const lastName = encodeURIComponent(this.state.lastName);
         const birthDate = encodeURIComponent(this.state.birthDate);
@@ -178,7 +258,7 @@ class ProfileView extends Component {
         const profilePictureLinkOld = encodeURIComponent(this.state.profilePictureLinkOld);
         const profileCoverOld = encodeURIComponent(this.state.profileCoverOld);
 
-        const formData = `firstName=${firstName}&lastName=${lastName}&birthDate=${birthDate}&city=${city}&country=${country}&profession=${profession}&companyName=${companyName}&profilePictureLink=${profilePictureLink}&profileCover=${profileCover}&firstNameOld=${firstNameOld}&lastNameOld=${lastNameOld}&birthDateOld=${birthDateOld}&cityOld=${cityOld}&countryOld=${countryOld}&professionOld=${professionOld}&companyNameOld=${companyNameOld}&profilePictureLinkOld=${profilePictureLinkOld}&profileCoverOld=${profileCoverOld}`;
+        const formData = `userId=${userId}&viewerId=${viewerId}&firstName=${firstName}&lastName=${lastName}&birthDate=${birthDate}&city=${city}&country=${country}&profession=${profession}&companyName=${companyName}&profilePictureLink=${profilePictureLink}&profileCover=${profileCover}&firstNameOld=${firstNameOld}&lastNameOld=${lastNameOld}&birthDateOld=${birthDateOld}&cityOld=${cityOld}&countryOld=${countryOld}&professionOld=${professionOld}&companyNameOld=${companyNameOld}&profilePictureLinkOld=${profilePictureLinkOld}&profileCoverOld=${profileCoverOld}`;
 
         const xhr = new XMLHttpRequest();
         xhr.open('post', '/profile/profile-edit');
@@ -191,13 +271,25 @@ class ProfileView extends Component {
                     errors: {},
                     successUpdate: xhr.response.successStatus
                 });
+
+                setTimeout(
+                    () => this.setState({
+                        successUpdate: null
+                    }), 4000);
+
             } else {
                 const errors = xhr.response.errors ? xhr.response.errors : {};
                 errors.summary = xhr.response.message;
 
                 this.setState({
-                    errors
+                    errors,
+                    successUpdate: false
                 });
+
+                setTimeout(
+                    () => this.setState({
+                        successUpdate: null
+                    }), 4000)
             }
         });
         xhr.send(formData);
@@ -216,7 +308,7 @@ class ProfileView extends Component {
     };
 
     render() {
-        if (this.state.errors.summary == "User is not a member") {
+        if (this.state.errors.summary === "User is not a member") {
             document.title = "404 not found";
             return (
                 <NotFoundPage />
@@ -226,6 +318,10 @@ class ProfileView extends Component {
             document.title = this.state.userName + ' - Profile';
             return (
                 <Profile
+                    rows={this.state.rows}
+                    rows2={this.state.rows2}
+                    openSnackbar={this.state.openSnackbar}
+                    handleRequestCloseSnackBar={this.handleRequestCloseSnackBar}
                     latestCollection={this.state.latestCollection}
                     city={this.state.city}
                     companyName={this.state.companyName}

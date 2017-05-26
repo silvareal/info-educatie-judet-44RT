@@ -3,20 +3,22 @@ import {
     Tabs,
     Tab,
     Card,
-    Table,
-    TableBody,
-    TableHeader,
-    TableHeaderColumn,
-    TableRow,
-    TableRowColumn,
+    ListItem,
+    List,
     Dialog,
     RaisedButton,
     TextField,
-    DatePicker
+    DatePicker,
+    CardMedia,
+    CardTitle,
+    CardText,
+    Snackbar
 } from 'material-ui';
+import SwipeableViews from 'react-swipeable-views';
 
-import {Link} from 'react-router';
-
+import ImageCameraRoll from 'material-ui/svg-icons/image/camera-roll';
+import ActionAccountBox from 'material-ui/svg-icons/action/account-box';
+import ActionSettings from 'material-ui/svg-icons/action/settings';
 
 class Profile extends Component {
     constructor(props) {
@@ -24,7 +26,10 @@ class Profile extends Component {
 
         this.state = {
             open1: false,
-            open2: false
+            open2: false,
+            //initial index in the one containing credentials
+            slideIndex: 1,
+            openSnackbar: false
         };
     }
 
@@ -44,9 +49,16 @@ class Profile extends Component {
         this.setState({open2: false});
     };
 
+    handleChange = (value) => {
+        this.setState({
+            slideIndex: value,
+        });
+    };
+
     //combine saving to localStorage of backup credentials with the modal open effect.
     //when canceled, the component must have the same state as before and we set it with the data stored in localStorage before the edit attempt.
-    combineOpenFunctions1 = () => {
+    combineOpenFunctions1 = (e) => {
+        e.stopPropagation();
         this.props.onEdit();
         this.handleOpen1();
     };
@@ -99,296 +111,252 @@ class Profile extends Component {
 
         const DateTimeFormat = global.Intl.DateTimeFormat;
 
-        if (this.props.ownUser == true) {
-            return (
-                <div className="profile-wrap">
-                    <Card className="profile-left">
-                        <div className="profile-picture-wrap">
-                            <img
-                                src={this.props.profilePictureLink}
-                                alt=""
-                                style={{width: 100 + '%', height: 100 + '%'}}
-                                onClick={this.combineOpenFunctions1}
-                            />
-                        </div>
-                        <Dialog
-                            title="Change profile picture"
-                            actions={actions1}
-                            modal={false}
-                            open={this.state.open1}
-                            onRequestClose={this.combineCloseFunctions1}
-                        >
-                            <TextField
-                                type="text"
-                                floatingLabelText="Profile picture link"
-                                value={this.props.profilePictureLink}
-                                onChange={this.props.onProfilePictureLinkChange}
-                            />
-                        </Dialog>
-                        <div className="user-name-wrap">{this.props.userName}</div>
+        const date = new Date(this.props.birthDate);
 
-                        <div className="latest-post">
-                            {this.props.latestCollection[0] ?
-                                <Link to={`/manage/readOne/${this.props.latestCollection[0]._id}`}>
-                                    <header>Latest post</header>
+        const formattedDate =
+            <div>
+                {date.getDate().toString() + '.' + (date.getMonth() + 1).toString() + '.' + date.getFullYear().toString()}
+            </div>;
+
+        return (
+            <div className="parallax-profile">
+                <div className="top-bar-spacing"/>
+                <Card className="container-profile" style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
+                    <Card className="cover-container">
+                        <CardMedia
+                            onClick={this.props.ownUser ? this.combineOpenFunctions2 : null}
+                            className="force-no-overlay-background"
+                            overlay=
+                                {
+                                    <Card style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
+                                        <CardMedia className="force-profile-picture-width">
+                                            <img
+                                                onClick={this.props.ownUser ? this.combineOpenFunctions1 : null}
+                                                style={{borderRadius: "50%"}}
+                                                src={this.props.profilePictureLink ? this.props.profilePictureLink : "https://www.petfinder.com/wp-content/uploads/2012/11/91615172-find-a-lump-on-cats-skin-632x475.jpg"}/>
+                                            <Dialog
+                                                title="Change profile picture"
+                                                actions={actions1}
+                                                modal={false}
+                                                open={this.state.open1}
+                                                onRequestClose={this.combineCloseFunctions1}
+                                                autoScrollBodyContent={true}
+                                            >
+                                                <CardMedia>
+                                                    <img
+                                                        style={{borderRadius: "50%"}}
+                                                        src={this.props.profilePictureLink ? this.props.profilePictureLink : "https://www.petfinder.com/wp-content/uploads/2012/11/91615172-find-a-lump-on-cats-skin-632x475.jpg"}/>
+                                                </CardMedia>
+                                                <TextField
+                                                    floatingLabelText="Profile picture link"
+                                                    value={this.props.profilePictureLink}
+                                                    onChange={this.props.ownUser ? this.props.onProfilePictureLinkChange : null}
+                                                    style={{width: "100%"}}
+                                                />
+                                            </Dialog>
+                                        </CardMedia>
+                                    </Card>
+                                }>
+                            <img
+                                src={this.props.profileCover ? this.props.profileCover : "https://www.petfinder.com/wp-content/uploads/2012/11/91615172-find-a-lump-on-cats-skin-632x475.jpg"}
+                                alt=""/>
+                            <Dialog
+                                title="Change cover picture"
+                                actions={actions2}
+                                modal={false}
+                                open={this.state.open2}
+                                onRequestClose={this.combineCloseFunctions2}
+                                autoScrollBodyContent={true}
+                            >
+                                <CardMedia>
                                     <img
-                                        src={this.props.latestCollection[0].picturesArray[0].pictureLink}
-                                        alt={this.props.latestCollection[0].collectionName}
-                                    />
-                                </Link> : null
-                            }
-                        </div>
-                    </Card>
-                    <Card className="profile-right">
-                        <div className="cover-wrap">
-                            <img
-                                src={this.props.profileCover}
-                                alt=""
-                                style={{width: 100 + '%', height: 100 + '%'}}
-                                onClick={this.combineOpenFunctions2}
-                            />
-                        </div>
-                        <Dialog
-                            title="Change cover picture"
-                            actions={actions2}
-                            modal={false}
-                            open={this.state.open2}
-                            onRequestClose={this.combineCloseFunctions2}
-                        >
-                            <TextField
-                                type="text"
-                                floatingLabelText="Cover pictue link"
-                                value={this.props.profileCover}
-                                onChange={this.props.onProfileCoverChange}
-                            />
-                        </Dialog>
-                        <Tabs>
-                            <Tab label="Overview"
-                                 onClick={this.props.onCancelEdit}>
-                                <div className="content-wrap">
-                                    <Table
-                                        selectable={false}>
-                                        <TableHeader displaySelectAll={false}>
-                                            <TableRow>
-                                                <TableHeaderColumn>Details about
-                                                    : {this.props.userName}: </TableHeaderColumn>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody displayRowCheckbox={false}>
-                                            <TableRow>
-                                                <TableRowColumn>First name</TableRowColumn>
-                                                <TableRowColumn>{this.props.firstName}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>Last name</TableRowColumn>
-                                                <TableRowColumn>{this.props.lastName}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>Birthday</TableRowColumn>
-                                                <TableRowColumn>{this.props.birthDate}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>City</TableRowColumn>
-                                                <TableRowColumn>{this.props.city}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>Country</TableRowColumn>
-                                                <TableRowColumn>{this.props.country}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>Profession</TableRowColumn>
-                                                <TableRowColumn>{this.props.profession}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>Company name</TableRowColumn>
-                                                <TableRowColumn>{this.props.companyName}</TableRowColumn>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                            </Tab>
-                            <Tab label="Edit profile"
-                                 onClick={this.props.onEdit}>
-                                <div className="content-wrap">
-                                    <Table selectable={false}>
-                                        <TableHeader displaySelectAll={false}>
-                                            <TableRow>
-                                                <TableHeaderColumn>Editing profile</TableHeaderColumn>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody displayRowCheckbox={false}>
-                                            <TableRow>
-                                                <TableRowColumn>
-                                                    <TextField type="text"
-                                                               floatingLabelText="First name"
-                                                               value={this.props.firstName}
-                                                               onChange={this.props.onFirstNameChange}
-                                                               errorText={this.props.errors.firstName}
-                                                    />
-                                                </TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>
-                                                    <TextField type="text"
-                                                               floatingLabelText="Last name"
-                                                               value={this.props.lastName}
-                                                               onChange={this.props.onLastNameChange}
-                                                               errorText={this.props.errors.lastName}
-                                                    />
-                                                </TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>
-                                                    <DatePicker
-                                                        autoOk={true}
-                                                        hintText="Your birthdate"
-                                                        firstDayOfWeek={0}
-                                                        formatDate={new DateTimeFormat('en-US', {
-                                                            day: 'numeric',
-                                                            month: 'long',
-                                                            year: 'numeric',
-                                                        }).format}
-                                                        onChange={this.props.onBirthDateChange}
-                                                    />
-                                                </TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>
-                                                    <TextField type="text"
-                                                               floatingLabelText="City"
-                                                               value={this.props.city}
-                                                               onChange={this.props.onCityChange}
-                                                               errorText={this.props.errors.city}
-                                                    />
-                                                </TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>
-                                                    <TextField type="text"
-                                                               floatingLabelText="Country"
-                                                               value={this.props.country}
-                                                               onChange={this.props.onCountryChange}
-                                                               errorText={this.props.errors.country}
-                                                    />
-                                                </TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>
-                                                    <TextField type="text"
-                                                               floatingLabelText="Profession"
-                                                               value={this.props.profession}
-                                                               onChange={this.props.onProfessionChange}
-                                                               errorText={this.props.errors.profession}
-                                                    />
-                                                </TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>
-                                                    <TextField type="text"
-                                                               floatingLabelText="Company name"
-                                                               value={this.props.companyName}
-                                                               onChange={this.props.onCompanyNameChange}
-                                                               errorText={this.props.errors.companyName}
-                                                    />
-                                                </TableRowColumn>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                    <RaisedButton
-                                        label="Save changes"
-                                        primary={true}
-                                        onClick={this.props.onSave}/>
-                                </div>
-                            </Tab>
-                        </Tabs>
-                    </Card>
-                </div>
-            );
-        }
-        else {
-            //the user is not the one visiting this profile
-            return (
-                <div className="profile-wrap">
-                    <Card className="profile-left">
-                        <div className="profile-picture-wrap">
-                            <img
-                                src={this.props.profilePictureLink}
-                                alt=""
-                                style={{width: 100 + '%', height: 100 + '%'}}
-                            />
-                        </div>
-
-                        <div className="user-name-wrap">{this.props.userName}</div>
-
-                        <div className="latest-post">
-                            {this.props.latestCollection[0] ?
-                                <Link to={`/manage/readOne/${this.props.latestCollection[0]._id}`}>
-                                    <header>Latest post</header>
-                                    <img src={this.props.latestCollection[0].picturesArray[0].pictureLink}
-                                         alt={this.props.latestCollection[0].collectionName}/>
-                                </Link> : null
-                            }
-                        </div>
-                    </Card>
-                    <Card className="profile-right">
-                        <div className="cover-wrap">
-                            <img
-                                src={this.props.profileCover}
-                                alt=""
-                                style={{width: 100 + '%', height: 100 + '%'}}
-                            />
-                        </div>
-                        <Tabs>
-                            <Tab label="Overview"
-                                 onClick={this.props.onCancelEdit}>
-                                <div className="content-wrap">
-                                    <Table
-                                        selectable={false}
+                                        style={{borderRadius: "50%"}}
+                                        src={this.props.profileCover ? this.props.profileCover : "https://www.petfinder.com/wp-content/uploads/2012/11/91615172-find-a-lump-on-cats-skin-632x475.jpg"}/>
+                                </CardMedia>
+                                <TextField
+                                    type="text"
+                                    floatingLabelText="Cover pictue link"
+                                    value={this.props.profileCover}
+                                    onChange={this.props.ownUser ? this.props.onProfileCoverChange : null}
+                                    style={{width: "100%"}}
+                                />
+                            </Dialog>
+                        </CardMedia>
+                        <Card style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
+                            <CardTitle>
+                                {this.props.firstName ?
+                                    <div className="profile-header">
+                                        {this.props.firstName}
+                                        <br/> {"@" + this.props.userName}</div>
+                                    :
+                                    <div className="profile-header">{this.props.userName}</div>}
+                            </CardTitle>
+                            <CardText>
+                                <Tabs onChange={this.handleChange}
+                                      value={this.state.slideIndex}>
+                                    <Tab icon={<ImageCameraRoll/>} value={0} onClick={this.props.onCancelEdit}/>
+                                    <Tab icon={<ActionAccountBox/>} value={1} onClick={this.props.onCancelEdit}/>
+                                    {this.props.ownUser ?
+                                        <Tab icon={<ActionSettings/>} value={2} onClick={this.props.onEdit}/>
+                                        :
+                                        null
+                                    }
+                                </Tabs>
+                                {this.props.ownUser ?
+                                    <SwipeableViews index={this.state.slideIndex}
+                                                    onChangeIndex={this.handleChange}
+                                                    animateHeight={true}
                                     >
-                                        <TableHeader displaySelectAll={false}>
-                                            <TableRow>
-                                                <TableHeaderColumn>Details about
-                                                    : {this.props.userName}: </TableHeaderColumn>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody displayRowCheckbox={false}>
-                                            <TableRow>
-                                                <TableRowColumn>First name</TableRowColumn>
-                                                <TableRowColumn>{this.props.firstName}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>Last name</TableRowColumn>
-                                                <TableRowColumn>{this.props.lastName}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>Birthday</TableRowColumn>
-                                                <TableRowColumn>{this.props.birthDate}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>City</TableRowColumn>
-                                                <TableRowColumn>{this.props.city}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>Country</TableRowColumn>
-                                                <TableRowColumn>{this.props.country}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>Profession</TableRowColumn>
-                                                <TableRowColumn>{this.props.profession}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableRowColumn>Company name</TableRowColumn>
-                                                <TableRowColumn>{this.props.companyName}</TableRowColumn>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                            </Tab>
-                        </Tabs>
+                                        <div>
+                                            <div>
+                                                {this.props.rows ? this.props.rows : null}
+                                            </div>
+                                            <div className="mobile-whitespace-fill-profile">
+                                                {this.props.rows2 ? this.props.rows2 : null}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <List>
+                                                <ListItem disabled={true} primaryText={this.props.firstName}
+                                                          secondaryText="First name"/>
+                                                <ListItem disabled={true} primaryText={this.props.lastName}
+                                                          secondaryText="Last name"/>
+                                                <ListItem disabled={true} primaryText={formattedDate}
+                                                          secondaryText="Birthday"/>
+                                                <ListItem disabled={true} primaryText={this.props.profession}
+                                                          secondaryText="Job"/>
+                                                <ListItem disabled={true} primaryText={this.props.companyName}
+                                                          secondaryText="Company name"/>
+                                                <ListItem disabled={true} primaryText={this.props.city}
+                                                          secondaryText="Lives in"/>
+                                                <ListItem disabled={true} primaryText={this.props.country}
+                                                          secondaryText="Located in"/>
+                                            </List>
+                                        </div>
+                                            <div>
+                                                <List>
+                                                    <ListItem disabled={true}
+                                                              primaryText={
+                                                                  <TextField floatingLabelText="First name"
+                                                                             value={this.props.firstName}
+                                                                             onChange={this.props.onFirstNameChange}
+                                                                             errorText={this.props.errors.firstName}/>}
+                                                    />
+                                                    <ListItem disabled={true}
+                                                              primaryText={
+                                                                  <TextField floatingLabelText="Last name"
+                                                                             value={this.props.lastName}
+                                                                             onChange={this.props.onLastNameChange}
+                                                                             errorText={this.props.errors.lastName}/>}
+                                                    />
+                                                    <ListItem disabled={true}
+                                                              primaryText={
+                                                                  <DatePicker
+                                                                      autoOk={true}
+                                                                      hintText={formattedDate ? formattedDate : "Your birthday"}
+                                                                      firstDayOfWeek={0}
+                                                                      formatDate={new DateTimeFormat('en-US', {
+                                                                          day: 'numeric',
+                                                                          month: 'long',
+                                                                          year: 'numeric',
+                                                                      }).format}
+                                                                      onChange={this.props.onBirthDateChange}/>}
+                                                    />
+                                                    <ListItem disabled={true}
+                                                              primaryText={
+                                                                  <TextField floatingLabelText="Job"
+                                                                             value={this.props.profession}
+                                                                             onChange={this.props.onProfessionChange}
+                                                                             errorText={this.props.errors.profession}/>}
+                                                    />
+                                                    <ListItem disabled={true}
+                                                              primaryText={
+                                                                  <TextField floatingLabelText="Company name"
+                                                                             value={this.props.companyName}
+                                                                             onChange={this.props.onCompanyNameChange}
+                                                                             errorText={this.props.errors.companyName}/>}
+                                                    />
+                                                    <ListItem disabled={true}
+                                                              primaryText={
+                                                                  <TextField floatingLabelText="City"
+                                                                             value={this.props.city}
+                                                                             onChange={this.props.onCityChange}
+                                                                             errorText={this.props.errors.city}/>}
+                                                    />
+                                                    <ListItem disabled={true}
+                                                              primaryText={
+                                                                  <TextField floatingLabelText="Country"
+                                                                             value={this.props.country}
+                                                                             onChange={this.props.onCountryChange}
+                                                                             errorText={this.props.errors.country}/>}
+                                                    />
+                                                    <ListItem disabled={true}
+                                                              primaryText={
+                                                                  <RaisedButton
+                                                                      label="Save changes"
+                                                                      primary={true}
+                                                                      onClick={this.props.onSave}/>}
+                                                    />
+                                                </List>
+                                            </div>
+                                    </SwipeableViews>
+                                    :
+                                    <SwipeableViews index={this.state.slideIndex}
+                                                    onChangeIndex={this.handleChange}
+                                                    animateHeight={true}
+                                    >
+                                        <div>
+                                            <div>
+                                                {this.props.rows ? this.props.rows : null}
+                                            </div>
+                                            <div className="mobile-whitespace-fill-profile">
+                                                {this.props.rows2 ? this.props.rows2 : null}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <List>
+                                                <ListItem disabled={true} primaryText={this.props.firstName}
+                                                          secondaryText="First name"/>
+                                                <ListItem disabled={true} primaryText={this.props.lastName}
+                                                          secondaryText="Last name"/>
+                                                <ListItem disabled={true} primaryText={formattedDate}
+                                                          secondaryText="Birthday"/>
+                                                <ListItem disabled={true} primaryText={this.props.profession}
+                                                          secondaryText="Job"/>
+                                                <ListItem disabled={true} primaryText={this.props.companyName}
+                                                          secondaryText="Company name"/>
+                                                <ListItem disabled={true} primaryText={this.props.city}
+                                                          secondaryText="Lives in"/>
+                                                <ListItem disabled={true} primaryText={this.props.country}
+                                                          secondaryText="Located in"/>
+                                            </List>
+                                        </div>
+                                    </SwipeableViews>
+                                }
+                            </CardText>
+                        </Card>
                     </Card>
-                </div>
-            )
-        }
+                </Card>
+                {this.props.successUpdate && this.props.successUpdate.toString() === "false" && this.props.ownUser ?
+                    <Snackbar
+                        open={true}
+                        message="An error occurred"
+                        onRequestClose={this.props.handleRequestClose}
+                    />
+                    :
+                    null
+                }
+                {this.props.successUpdate && this.props.successUpdate.toString() === "true" && this.props.ownUser ?
+                    <Snackbar
+                        open={true}
+                        message="Profile successfully updated!"
+                        onRequestClose={this.props.handleRequestClose}
+                    />
+                    :
+                    null
+                }
+            </div>
+        );
     }
 }
 

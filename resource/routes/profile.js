@@ -110,7 +110,20 @@ router.post('/profile', (req, res) => {
 
             let boole = (parseInt(userId) === parseInt(user._id));
 
-            Collection.find({userId: user._id}, (err, collection) => {
+            Collection.find({userId: user._id}, (err, collections) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error"
+                    })
+                }
+
+                if (!collections) {
+                    res.json({
+                        message: "NoCollections"
+                    })
+                }
+
                 const data = {
                     name: user.name,
                     userId: userId,
@@ -124,20 +137,20 @@ router.post('/profile', (req, res) => {
                     profilePictureLink: user.profilePictureLink,
                     profileCover: user.profileCover,
                     ownUser: boole,
-                    latestCollection: collection
+                    latestCollection: collections
                 };
 
                 return res.json({
                     message: 'Successfully fetched profile',
                     user: data
                 });
-
-            }).sort({time: -1}).limit(1);
+            }).sort({time: -1}).limit(4);
         })
     });
 });
 
 router.post('/profile-edit', (req, res) => {
+
     const validationResult = validateProfileForm(req.body);
     if (!validationResult.success) {
         return res.status(400).json({
@@ -169,67 +182,73 @@ router.post('/profile-edit', (req, res) => {
 
         const userId = decoded.sub;
 
-        User.updateOne({_id: {$eq: userId}}, {
-            $set: {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                birthDate: req.body.birthDate,
-                city: req.body.city,
-                country: req.body.country,
-                profession: req.body.profession,
-                companyName: req.body.companyName,
-                profilePictureLink: req.body.profilePictureLink,
-                profileCover: req.body.profileCover
-            }
-        }, (err, user) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "User not found"
-                });
-            }
+        if (userId === req.body.userId && userId === req.body.viewerId)
+        {
+            //if anybody tries to hack somebody else's profile, they will end up "hacking" their own profile :P
 
-            if (!user) {
-                return res.status(404).json({
-                    message: "User not found"
-                });
-            }
-
-            const logData = {
-                userId: userId,
-                profilePictureLink: req.body.profilePictureLink,
-                profileCover: req.body.profileCover,
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                birthDate: req.body.birthDate,
-                city: req.body.city,
-                country: req.body.country,
-                profession: req.body.profession,
-                companyName: req.body.companyName,
-                profilePictureLinkOld: req.body.profilePictureLinkOld,
-                profileCoverOld: req.body.profileCoverOld,
-                firstNameOld: req.body.firstNameOld,
-                lastNameOld: req.body.lastNameOld,
-                birthDateOld: req.body.birthDateOld,
-                cityOld: req.body.cityOld,
-                countryOld: req.body.countryOld,
-                professionOld: req.body.professionOld,
-                companyNameOld: req.body.companyNameOld
-            };
-
-            const newLog = new UpdateProfileLogs(logData);
-            newLog.save((err) => {
+            User.updateOne({_id: {$eq: userId}}, {
+                $set: {
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    birthDate: req.body.birthDate,
+                    city: req.body.city,
+                    country: req.body.country,
+                    profession: req.body.profession,
+                    companyName: req.body.companyName,
+                    profilePictureLink: req.body.profilePictureLink,
+                    profileCover: req.body.profileCover
+                }
+            }, (err, user) => {
                 if (err) {
                     return res.status(400).json({
-                        message: "Error while logging"
-                    })
+                        message: "User not found"
+                    });
                 }
-            });
 
-            return res.json({
-                message: 'Successfully updated profile',
-                successStatus: true
+                if (!user) {
+                    return res.status(404).json({
+                        message: "User not found"
+                    });
+                }
+
+                const logData = {
+                    userId: userId,
+                    profilePictureLink: req.body.profilePictureLink,
+                    profileCover: req.body.profileCover,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    birthDate: req.body.birthDate,
+                    city: req.body.city,
+                    country: req.body.country,
+                    profession: req.body.profession,
+                    companyName: req.body.companyName,
+                    profilePictureLinkOld: req.body.profilePictureLinkOld,
+                    profileCoverOld: req.body.profileCoverOld,
+                    firstNameOld: req.body.firstNameOld,
+                    lastNameOld: req.body.lastNameOld,
+                    birthDateOld: req.body.birthDateOld,
+                    cityOld: req.body.cityOld,
+                    countryOld: req.body.countryOld,
+                    professionOld: req.body.professionOld,
+                    companyNameOld: req.body.companyNameOld
+                };
+
+                const newLog = new UpdateProfileLogs(logData);
+                newLog.save((err) => {
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Error while logging"
+                        })
+                    }
+                });
+
+                return res.json({
+                    message: 'Successfully updated profile',
+                    successStatus: true
+                });
             });
-        });
+        }
+        else return res.status(401).end;
     });
 });
 

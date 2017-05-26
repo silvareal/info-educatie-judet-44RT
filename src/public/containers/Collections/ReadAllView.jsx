@@ -20,7 +20,6 @@ class ReadAllView extends Component {
             collectionsPreSearch: [],
             searchQuery: '',
             searching: false,
-            floodProtection: false,
             requesting: false
         };
     };
@@ -159,8 +158,6 @@ class ReadAllView extends Component {
             xhr.responseType = 'json';
             xhr.addEventListener('load', () => {
                 if (xhr.status === 200) {
-
-                    this.setState({floodProtection: true});
 
                     //no collections found
                     if (xhr.response.errorMessage) {

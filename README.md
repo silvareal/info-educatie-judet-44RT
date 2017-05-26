@@ -78,6 +78,8 @@
         Status: REMOVED
         }
         
+        -remove adding more pictures on news ( update and delete )
+        
         -that being said, make the application for mod page
 
         -unless there's anything left,clean up the code, remove futile variables and state
@@ -87,6 +89,6 @@
         
         -update the logging of the site
         
-        profile page,and error handling for qrLink
+        and error handling for qrLink
         and from admin panel collections userName and link  ( only when missing )
 </p>
