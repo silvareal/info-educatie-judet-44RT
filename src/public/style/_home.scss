@@ -12,6 +12,7 @@ body, html, main {
 
 .force-parallax {
   @include widthAndHeight("auto", 100%);
+  min-height: 100%;
 
   .footer {
     @include display(flex, 1, center);

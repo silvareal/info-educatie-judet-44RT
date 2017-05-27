@@ -5,77 +5,71 @@
   @include widthAndHeight(auto, 128px);
 }
 
-
 body {
-    margin: 0;
-    font-size: 16px;
-    font-family: Roboto,'sans-serif';
+  margin: 0;
+  font-size: 16px;
+  font-family: Roboto, 'sans-serif';
 }
 
 a {
-    text-decoration: none;
-    transition: color 0.4s;
-    :hover {
-        color: white;
-    }
+  text-decoration: none;
+  color: black;
+  transition: color 0.4s;
+  :hover {
+    color: white;
+  }
 }
 
 .loading-style {
-    @include display(flex, 1, center);
-    @include padding(50px);
-    @media screen and (max-width: 1200px) {
-        @include padding(30px);
-    }
+  @include display(flex, 1, center);
+  @include padding(50px);
+  @media screen and (max-width: 1200px) {
+    @include padding(30px);
+  }
 }
 
 .active-link-classname {
-    span {
-        background-color: lightblue !important;
-    }
+  span {
+    background-color: lightblue !important;
+  }
 }
 
 .error-message {
-    display: flex;
-    justify-content: center;
-    color: red;
+  display: flex;
+  justify-content: center;
+  color: red;
 }
 
 .success-message {
-    padding: 0 16px;
-    color: deepskyblue;
+  padding: 0 16px;
+  color: deepskyblue;
 }
 
 .text-center {
-    text-align: center;
+  text-align: center;
 }
 
 .top-bar {
-    display: flex;
-    flex: 1;
-    background: #2d2d2d;
-    justify-content: space-between;
-    margin-bottom: 30px;
-    a,
-    .nav a {
-        margin: 0 8px;
-    }
+  display: flex;
+  flex: 1;
+  background: #2d2d2d;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  a,
+  .nav a {
+    margin: 0 8px;
+  }
 }
 
 .logo {
-    padding: 5px;
+  padding: 5px;
 }
 
 .actions {
-    padding: 5px;
+  padding: 5px;
 }
 
 .card-heading {
-    padding: 16px;
+  padding: 16px;
 }
 
-.button-login-signup {
-    padding: 16px;
-    display: flex;
-    flex: 1;
-    justify-content:center;
-}

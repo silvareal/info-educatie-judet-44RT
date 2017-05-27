@@ -53,7 +53,8 @@ class ProfileView extends Component {
             openSnackbar: false,
             rows: '',
             rows2: '',
-            viewerId: ''
+            viewerId: '',
+            fetchedProfile: false
         };
     };
 
@@ -106,7 +107,8 @@ class ProfileView extends Component {
                     cityOld: xhr.response.user.city,
                     countryOld: xhr.response.user.country,
                     professionOld: xhr.response.user.profession,
-                    companyNameOld: xhr.response.user.companyName
+                    companyNameOld: xhr.response.user.companyName,
+                    fetchedProfile: true
                 });
 
                 const pictures = this.state.latestCollection;
@@ -308,6 +310,12 @@ class ProfileView extends Component {
     };
 
     render() {
+
+        //force fetch credentials
+        if (this.state.fetchedProfile === true && this.props.params.userName !== this.state.userName) {
+            this.componentDidMount();
+        }
+
         if (this.state.errors.summary === "User is not a member") {
             document.title = "404 not found";
             return (
@@ -318,6 +326,7 @@ class ProfileView extends Component {
             document.title = this.state.userName + ' - Profile';
             return (
                 <Profile
+                    fetchedProfile={this.state.fetchedProfile}
                     rows={this.state.rows}
                     rows2={this.state.rows2}
                     openSnackbar={this.state.openSnackbar}

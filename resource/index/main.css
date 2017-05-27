@@ -157,10 +157,11 @@
 body {
   margin: 0;
   font-size: 16px;
-  font-family: Roboto,'sans-serif'; }
+  font-family: Roboto, 'sans-serif'; }
 
 a {
   text-decoration: none;
+  color: black;
   transition: color 0.4s; }
   a :hover {
     color: white; }
@@ -208,11 +209,53 @@ a {
 .card-heading {
   padding: 16px; }
 
-.button-login-signup {
-  padding: 16px;
+.parallax-login {
+  width: auto;
+  height: 100%;
+  background-image: url("./images/art4.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover; }
+
+.container-login {
+  padding: 0 256px 64px 256px;
   display: flex;
   flex: 1;
-  justify-content: center; }
+  justify-content: center;
+  min-height: 720px; }
+  @media screen and (max-width: 1200px) {
+    .container-login {
+      min-height: 400px;
+      padding: 1em   ;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; } }
+
+.button-login-signup {
+  padding: 10px 0 0 0;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  min-width: 100%; }
+
+.content-login {
+  padding: 20px   ;
+  margin: auto;
+  margin-right: "";
+  margin-top: auto;
+  margin-bottom: "";
+  margin-left: "";
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  flex-direction: column;
+  background: rgba(0, 0, 255, 0.8); }
 
 .login-header {
   display: flex;
@@ -220,6 +263,54 @@ a {
   text-align: center;
   font-family: Roboto, 'sans-serif';
   font-size: 2em; }
+
+.parallax-signup {
+  width: auto;
+  height: 100%;
+  background-image: url("./images/art5.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover; }
+
+.container-signup {
+  padding: 0 256px 64px 256px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  min-height: 720px; }
+  @media screen and (max-width: 1200px) {
+    .container-signup {
+      min-height: 400px;
+      padding: 1em   ;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; } }
+
+.button-login-signup {
+  padding: 10px 0 0 0;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  min-width: 100%; }
+
+.content-signup {
+  padding: 20px   ;
+  margin: auto;
+  margin-right: "";
+  margin-top: auto;
+  margin-bottom: "";
+  margin-left: "";
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  flex-direction: column;
+  background: rgba(0, 0, 255, 0.8); }
 
 .signup-header {
   display: flex;
@@ -247,7 +338,8 @@ body, html, main {
 
 .force-parallax {
   width: auto;
-  height: 100%; }
+  height: 100%;
+  min-height: 100%; }
   .force-parallax .footer {
     display: flex;
     flex: 1;
@@ -729,5 +821,47 @@ body, html, main {
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box; } }
+
+.container-manage-users {
+  padding: 0 256px 64px 256px;
+  min-height: 800px; }
+  @media screen and (max-width: 1200px) {
+    .container-manage-users {
+      min-height: 400px;
+      padding: 1em   ;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; } }
+
+@media screen and (max-width: 1200px) {
+  .manage-users-desktop {
+    display: none;
+    flex: "";
+    justify-content: ""; } }
+
+.center-users-mobile {
+  display: flex;
+  flex: 1;
+  justify-content: center; }
+  @media screen and (min-width: 1200px) {
+    .center-users-mobile .manage-users-mobile {
+      display: none;
+      flex: "";
+      justify-content: ""; } }
+
+.mobile-header-users {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start; }
+  .mobile-header-users div {
+    padding: 0 !important   ; }
+  .mobile-header-users .user-header {
+    word-break: break-all; }
+
+.action-buttons-users {
+  padding: 10px   ; }
+
+.dialog-break-word {
+  word-break: break-all; }
 
 /*# sourceMappingURL=main.css.map */

@@ -7,49 +7,59 @@ class Login extends Component {
 
         const styles = {
             button: {
-                width: '256px',
+                width: '100%',
             }
         };
 
         return (
-            <Card className="container">
-                <form action="/" onSubmit={this.props.onSubmit}>
-                    <div className="login-header">Login</div>
+            <div className="parallax-login">
+                <div className="top-bar-spacing"/>
+                <Card className="container-login" style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
+                    <div className="content-login">
+                        <form action="/" onSubmit={this.props.onSubmit}>
+                            <div className="login-header">Login</div>
 
-                    {this.props.successMessage && <div className="success-message">{this.props.successMessage}</div>}
-                    {this.props.errors.summary && <div className="error-message">{this.props.errors.summary}</div>}
-                    <div>
-                        <div className="input-field">
-                            <TextField
-                                floatingLabelText="Email"
-                                name="email"
-                                value={this.props.user.email}
-                                onChange={this.props.onChange}
-                                errorText={this.props.errors.email}
-                            />
-                        </div>
+                            {this.props.successMessage &&
+                            <div className="success-message">{this.props.successMessage}</div>}
+                            {this.props.errors.summary &&
+                            <div className="error-message">{this.props.errors.summary}</div>}
+                            <div>
+                                <div className="input-field">
+                                    <TextField
+                                        floatingLabelText="Email"
+                                        name="email"
+                                        value={this.props.user.email}
+                                        onChange={this.props.onChange}
+                                        errorText={this.props.errors.email}
+                                        autoFocus={true}
+                                        style={{minWidth: "100%"}}
+                                    />
+                                </div>
 
-                        <div className="input-field">
-                            <TextField
-                                floatingLabelText="Password"
-                                type="password"
-                                name="password"
-                                value={this.props.user.password}
-                                onChange={this.props.onChange}
-                                errorText={this.props.errors.password}
-                            />
-                        </div>
+                                <div className="input-field">
+                                    <TextField
+                                        floatingLabelText="Password"
+                                        type="password"
+                                        name="password"
+                                        value={this.props.user.password}
+                                        onChange={this.props.onChange}
+                                        errorText={this.props.errors.password}
+                                        style={{minWidth: "100%"}}
+                                    />
+                                </div>
 
-                        <div className="button-login-signup">
-                            <RaisedButton
-                                style={styles.button}
-                                type="submit" label="Log in" primary/>
-                        </div>
+                                <div className="button-login-signup">
+                                    <RaisedButton
+                                        style={styles.button}
+                                        type="submit" label="Log in" primary/>
+                                </div>
 
-                        <CardText>Don t have an account? <Link to='/signup'>Create one</Link>.</CardText>
+                                <CardText>Don t have an account? <Link to='/signup'>Create one</Link>.</CardText>
+                            </div>
+                        </form>
                     </div>
-                </form>
-            </Card>
+                </Card>
+            </div>
         )
     }
 }

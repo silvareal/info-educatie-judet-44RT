@@ -1,7 +1,42 @@
+@import "./constants/fonts";
+@import "./constants/functions";
+
+.parallax-login {
+  @include widthAndHeight("auto", 100%);
+  @include background-image("./images/art4.jpg", fixed, center, repeat, cover);
+}
+
+.container-login {
+  @include padding(0, 256px, 64px, 256px);
+  @include display(flex, 1, center);
+  min-height: 720px;
+  @media screen and (max-width: 1200px) {
+    min-height: 400px;
+    @include padding(1em);
+    @include box-sizing(border-box);
+  }
+}
+
+.button-login-signup {
+  @include padding(10px, 0, 0, 0);
+  @include display(flex, 1, center);
+  min-width: 100%;
+}
+
+.content-login {
+  @include padding(20px);
+  @include margin(auto);
+  @include display(flex, 1, center);
+  @include widthAndHeight(100%, 100%);
+  @include box-sizing(border-box);
+  flex-direction: column;
+  @include background-color(rgba(0,0,255, 0.8));
+}
+
 .login-header {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    font-family: Roboto, 'sans-serif';
-    font-size: 2em;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-family: Roboto, 'sans-serif';
+  font-size: 2em;
 }

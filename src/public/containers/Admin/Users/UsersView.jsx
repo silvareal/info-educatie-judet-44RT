@@ -1,8 +1,11 @@
 import React, {Component} from 'react'
 
-import UsersPage from '../../../components/Admin/Users/UsersPage.jsx';
-import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
+import Users from '../../../components/Admin/Users/Main Components/Users.jsx';
+import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
+import UsersRowsMobile from '../../../components/Admin/Users/Partials Components/UsersRowsMobile.jsx';
 import Auth from '../../../modules/Auth.js';
+
+import {TableRow, TableRowColumn} from 'material-ui';
 
 let selectedUserId = [];
 let clicked = [];
@@ -14,7 +17,12 @@ class UsersView extends Component {
         this.state = {
             isAdmin: false,
             users: {},
-            message: ''
+            message: '',
+            fetchedUsers: false,
+            rows1: '',
+            rows2: '',
+            searchQuery: '',
+            searched: ''
         };
     }
 
@@ -53,7 +61,17 @@ class UsersView extends Component {
         selectedUserId[rowNumber] = undefined;
     };
 
+    mobileAddModerators = (i) => () => {
+        selectedUserId[0] = this.state.users[i]._id;
+        this.onSaveModerators();
+        this.showAddedModerators();
+    };
+
     onSaveModerators = () => {
+
+        this.setState({
+            fetchedUsers: false
+        });
 
         const selectedUserIdInsert = encodeURIComponent(JSON.stringify(selectedUserId));
         const formData = `moderators=${selectedUserIdInsert}`;
@@ -83,6 +101,61 @@ class UsersView extends Component {
         clicked.length = 0;
     };
 
+    onSearchQueryChange = (e) => {
+        this.setState({
+            searchQuery: e.target.value
+        })
+    };
+
+    handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            this.onSearchUser();
+        }
+    };
+
+    onSearchUser = () => {
+        let users = this.state.users;
+
+        if (this.state.searchQuery)
+            this.setState({
+                searched: true
+            });
+        else this.setState({
+            searched: false
+        });
+
+        let j = 0;
+
+        let rows1 = Object.keys(users).map((i) => {
+            if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery) || users[i]._id === this.state.searchQuery) {
+                j++;
+                return (
+                    <TableRow key={i}>
+                        <TableRowColumn>{users[i].email}</TableRowColumn>
+                        <TableRowColumn>{users[i].moderator === true ? "Y" : "N"}</TableRowColumn>
+                    </TableRow>
+                )
+            }
+        });
+
+        j = 0;
+
+        let rows2 = Object.keys(users).map((i) => {
+            if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery)) {
+                j++;
+                return (
+                    <UsersRowsMobile key={j}
+                                     index={i}
+                                     user={users[i]}
+                                     mobileAddModerators={this.mobileAddModerators}/>
+                )
+            }
+        });
+        this.setState({
+            rows1, rows2
+        })
+    };
+
     showAddedModerators = () => {
         const xhr = new XMLHttpRequest();
         xhr.open('get', '/admin/showUsers');
@@ -92,12 +165,70 @@ class UsersView extends Component {
             if (xhr.status === 200) {
                 //User is an admin
                 this.setState({
-                    users: xhr.response.data
-                })
+                    users: xhr.response.data,
+                    fetchedUsers: true
+                });
+
+                let users = this.state.users;
+
+                if (!this.state.searchQuery) {
+
+                    let rows1 = Object.keys(users).map((i) => (
+                        <TableRow key={i}>
+                            <TableRowColumn>{users[i].email}</TableRowColumn>
+                            <TableRowColumn>{users[i].moderator === true ? "Y" : "N"}</TableRowColumn>
+                        </TableRow>
+                    ));
+
+                    let rows2 = Object.keys(users).map((i) => (
+                        <UsersRowsMobile key={i}
+                                         index={i}
+                                         user={users[i]}
+                                         mobileAddModerators={this.mobileAddModerators}/>
+                    ));
+                    this.setState({
+                        rows1, rows2
+                    })
+                }
+
+                else {
+
+                    let j = 0;
+
+                    let rows1 = Object.keys(users).map((i) => {
+                        if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery) || users[i]._id === this.state.searchQuery) {
+                            j++;
+                            return (
+                                <TableRow key={i}>
+                                    <TableRowColumn>{users[i].email}</TableRowColumn>
+                                    <TableRowColumn>{users[i].moderator === true ? "Y" : "N"}</TableRowColumn>
+                                </TableRow>
+                            )
+                        }
+                    });
+
+                    j = 0;
+
+                    let rows2 = Object.keys(users).map((i) => {
+                        if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery)) {
+                            j++;
+                            return (
+                                <UsersRowsMobile key={j}
+                                                 index={i}
+                                                 user={users[i]}
+                                                 mobileAddModerators={this.mobileAddModerators}/>
+                            )
+                        }
+                    });
+                    this.setState({
+                        rows1, rows2
+                    });
+                }
             }
             else {
                 this.setState({
-                    message: xhr.response.message
+                    message: xhr.response.message,
+                    fetchedUsers: true
                 })
             }
         });
@@ -111,24 +242,29 @@ class UsersView extends Component {
 
     render() {
         document.title = "User management";
-        if (this.state.isAdmin === true)
-        {
+        if (this.state.isAdmin === true) {
             return (
-                <div>
-                    {this.state.isAdmin ?
-                        <UsersPage
-                            userId={this.props.params._id}
-                            users={this.state.users}
-                            message={this.state.message}
-                            clicked={clicked}
-                            cellClick={this.cellClick}
-                            cellDeclick={this.cellDeclick}
-                            addModerators={this.addModerators}
-                        /> : null}
-                </div>
+                <Users
+                    searched={this.state.searched}
+                    handleKeyPress={this.handleKeyPress}
+                    onSearchUser={this.onSearchUser}
+                    searchQuery={this.state.searchQuery}
+                    onSearchQueryChange={this.onSearchQueryChange}
+                    rows1={this.state.rows1}
+                    rows2={this.state.rows2}
+                    mobileAddModerators={this.mobileAddModerators}
+                    fetchedUsers={this.state.fetchedUsers}
+                    userId={this.props.params._id}
+                    users={this.state.users}
+                    message={this.state.message}
+                    clicked={clicked}
+                    cellClick={this.cellClick}
+                    cellDeclick={this.cellDeclick}
+                    addModerators={this.addModerators}
+                />
             )
         }
-        else return <NotAuthorizedPage/>
+        else return <NotAuthorizedView/>
     }
 }
 export default UsersView;

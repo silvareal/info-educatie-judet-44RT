@@ -3,6 +3,7 @@ import {Link} from 'react-router';
 
 import {RaisedButton} from 'material-ui';
 import Spinner from 'react-spinkit'
+import LoadingIndicator from '../../../components/Loading Indicator/LoadingIndicator.jsx';
 
 class Home extends Component {
     render() {
@@ -33,9 +34,7 @@ class Home extends Component {
                         </div>
                     </div>
                     :
-                    <div className="loading-style">
-                        <Spinner name="wave" color="#3460f1"/>
-                    </div>
+                    <LoadingIndicator/>
                 }
 
                 {/*
@@ -64,9 +63,7 @@ class Home extends Component {
                         </div>
                     </div>
                     :
-                    <div className="loading-style">
-                        <Spinner name="wave" color="#3460f1"/>
-                    </div>
+                    <LoadingIndicator/>
                 }
 
             </div>

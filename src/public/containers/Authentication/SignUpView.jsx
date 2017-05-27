@@ -13,6 +13,7 @@ class SignUpView extends Component {
                 email: '',
                 name: '',
                 password: '',
+                confirmPassword: ''
             }
         };
     }
@@ -34,7 +35,9 @@ class SignUpView extends Component {
         const name = encodeURIComponent(this.state.user.name);
         const email = encodeURIComponent(this.state.user.email);
         const password = encodeURIComponent(this.state.user.password);
-        const formData = `name=${name}&email=${email}&password=${password}`;
+        const confirmPassword = encodeURIComponent(this.state.user.confirmPassword);
+
+        const formData = `name=${name}&email=${email}&password=${password}&confirmPassword=${confirmPassword}`;
 
         //AJAX
         const xhr = new XMLHttpRequest();

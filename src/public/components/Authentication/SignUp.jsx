@@ -7,59 +7,81 @@ class SignUp extends Component {
 
         const styles = {
             button: {
-                width: '256px',
+                width: '100%',
             }
         };
 
         return (
-            <Card className="container">
-                <form action="/" onSubmit={this.props.onSubmit}>
-                    <div className="signup-header">Sign Up</div>
+            <div className="parallax-signup">
+                <div className="top-bar-spacing"/>
+                <Card className="container-signup" style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
+                    <div className="content-signup">
+                        <form action="/" onSubmit={this.props.onSubmit}>
+                            <div className="signup-header">Sign Up</div>
 
-                    {this.props.errors.summary && <div className="error-message">{this.props.errors.summary}</div>}
+                            {this.props.errors.summary &&
+                            <div className="error-message">{this.props.errors.summary}</div>}
 
-                    <div>
-                        <div className="input-field">
-                            <TextField
-                                floatingLabelText="Username"
-                                name="name"
-                                value={this.props.user.name}
-                                onChange={this.props.onChange}
-                                errorText={this.props.errors.name}
-                            />
-                        </div>
+                            <div>
+                                <div className="input-field">
+                                    <TextField
+                                        floatingLabelText="Username"
+                                        name="name"
+                                        value={this.props.user.name}
+                                        onChange={this.props.onChange}
+                                        errorText={this.props.errors.name}
+                                        autoFocus={true}
+                                        style={{minWidth: "100%"}}
+                                    />
+                                </div>
 
-                        <div className="input-field">
-                            <TextField
-                                floatingLabelText="Email"
-                                name="email"
-                                value={this.props.user.email}
-                                onChange={this.props.onChange}
-                                errorText={this.props.errors.email}
-                            />
-                        </div>
+                                <div className="input-field">
+                                    <TextField
+                                        floatingLabelText="Email"
+                                        name="email"
+                                        value={this.props.user.email}
+                                        onChange={this.props.onChange}
+                                        errorText={this.props.errors.email}
+                                        style={{minWidth: "100%"}}
+                                    />
+                                </div>
 
-                        <div className="input-field">
-                            <TextField
-                                floatingLabelText="Password"
-                                type="password"
-                                name="password"
-                                value={this.props.user.password}
-                                onChange={this.props.onChange}
-                                errorText={this.props.errors.password}
-                            />
-                        </div>
+                                <div className="input-field">
+                                    <TextField
+                                        floatingLabelText="Password"
+                                        type="password"
+                                        name="password"
+                                        value={this.props.user.password}
+                                        onChange={this.props.onChange}
+                                        errorText={this.props.errors.password}
+                                        style={{minWidth: "100%"}}
+                                    />
+                                </div>
 
-                        <div className="button-line">
-                            <RaisedButton
-                                style={styles.button}
-                                type="submit" label="Create New Account" primary/>
-                        </div>
+                                <div className="input-field">
+                                    <TextField
+                                        floatingLabelText="Confirm password"
+                                        type="password"
+                                        name="confirmPassword"
+                                        value={this.props.user.confirmPassword}
+                                        onChange={this.props.onChange}
+                                        errorText={this.props.errors.confirmPassword}
+                                        style={{minWidth: "100%"}}
+                                    />
+                                </div>
 
-                        <CardText>Already a member? <Link to='/login'>Log in</Link></CardText>
+                                <div className="button-line">
+                                    <RaisedButton
+                                        style={styles.button}
+                                        type="submit" label="Create New Account" primary/>
+                                </div>
+
+                                <CardText>Already a member? <Link to='/login'>Log in</Link></CardText>
+                            </div>
+                        </form>
                     </div>
-                </form>
-            </Card>
+                </Card>
+            </div>
         );
     }
 }
