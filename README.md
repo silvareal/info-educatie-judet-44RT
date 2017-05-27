@@ -51,8 +51,15 @@
         Notes: Further development of the interface might require us to reorganize again
         }
         
-        -think of a design for the logs page ( should be simple )
-        -on users management, have the make moderators on the AppBar and create ALL the rules for banning users
+        -think of a design for the logs page ( should be simple ){
+        Status: In-progress
+        }
+        
+        -on users management, have the make moderators on the AppBar and create ALL the rules for banning users {
+        Status: In-progress,
+        Notes: Added the button on snackbar and rethinked the design of the manage users page
+        }
+        
         -create specific actions for moderators
         
         -finish readAll, readOne, create, delete, update pages{
@@ -79,7 +86,7 @@
         }
         
         -add the loading indicator on all pages {
-        Status: In-progress,
+        Status: Complete,
         Notes: Only added on home page for now
         }
         
@@ -87,7 +94,10 @@
         Status: REMOVED
         }
         
-        -remove adding more pictures on news ( update and delete )
+        -remove adding more pictures on news ( update and delete ){
+        Status: Complete,
+        Notes: Removed it
+        }
         
         -that being said, make the application for mod page
 
@@ -96,8 +106,9 @@
         -rework the hierarchy and split jobs between parents and children
         */
         
-        -update the logging of the site
+        -update the logging of the site{
+        Status: Complete,
+        Notes: Updated all the logging
+        }
         
-        and error handling for qrLink
-        and from admin panel collections userName and link  ( only when missing )
 </p>

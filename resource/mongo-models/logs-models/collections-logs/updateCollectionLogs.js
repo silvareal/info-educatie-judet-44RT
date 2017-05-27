@@ -4,8 +4,11 @@ const UpdateCollectionLogsSchema = new mongoose.Schema({
 
     //newState
     userId: String,
+    userName: String,
     collectionName: String,
     collectionDescriptionRaw: String,
+    profilePictureLink: String,
+    qrLink: String,
     picturesArray: [
         {
             pictureName: {
@@ -21,6 +24,9 @@ const UpdateCollectionLogsSchema = new mongoose.Schema({
     ],
     //oldState
     userIdOld: String,
+    profilePictureLinkOld: String,
+    userNameOld: String,
+    qrLinkOld: String,
     collectionNameOld: String,
     collectionDescriptionRawOld: String,
     picturesArrayOld: [

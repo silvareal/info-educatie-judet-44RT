@@ -15,9 +15,11 @@ class DeleteView extends Component {
             response: false,
             newsTitle: '',
             newsCoverLink: '',
-            newsDescription: '',
+            newsDescriptionRaw: '',
             newsPictures: [{}],
-            isAdmin: false
+            isAdmin: false,
+            userName: '',
+            profilePictureLink: ''
         };
     };
 
@@ -56,7 +58,7 @@ class DeleteView extends Component {
                     response: true,
                     newsTitle: xhr.response.news.newsTitle,
                     newsCoverLink: xhr.response.news.newsCoverLink,
-                    newsDescription: xhr.response.news.newsDescription,
+                    newsDescriptionRaw: xhr.response.news.newsDescriptionRaw,
                     newsPictures: xhr.response.news.picturesArray
                 });
             }
@@ -71,9 +73,30 @@ class DeleteView extends Component {
         xhr.send(formData);
     };
 
+    getUser = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("get", "/comment/getUserCredentials");
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                if (xhr.response.guest !== true)
+                    this.setState({
+                        userName: xhr.response.userName,
+                        profilePictureLink: xhr.response.profilePictureLink
+                    });
+                else this.setState({
+                    guest: true
+                })
+            }
+        });
+        xhr.send();
+    };
+
     componentDidMount() {
         this.adminAuth();
         this.getCollection();
+        this.getUser();
     };
 
     resetScroll = () => {
@@ -89,10 +112,12 @@ class DeleteView extends Component {
         const newsId = encodeURIComponent(this.props.params._newsId);
         const newsTitle = encodeURIComponent(this.state.newsTitle);
         const newsCoverLink = encodeURIComponent(this.state.newsCoverLink);
-        const newsDescription = encodeURIComponent(this.state.newsDescription);
+        const newsDescriptionRaw = encodeURIComponent(this.state.newsDescriptionRaw);
         const newsPictures = encodeURIComponent(JSON.stringify(this.state.newsPictures));
+        const userName = encodeURIComponent(this.state.userName);
+        const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
 
-        const formData = `newsId=${newsId}&newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescription=${newsDescription}&newsPictures=${newsPictures}`;
+        const formData = `profilePictureLink=${profilePictureLink}&userName=${userName}&newsId=${newsId}&newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescriptionRaw=${newsDescriptionRaw}&newsPictures=${newsPictures}`;
 
         const xhr = new XMLHttpRequest();
         xhr.open('post', '/admin/delete');

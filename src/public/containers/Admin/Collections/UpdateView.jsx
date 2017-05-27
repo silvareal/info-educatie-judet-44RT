@@ -98,7 +98,7 @@ class UpdateView extends Component {
                     response: true,
                     userIdOld: xhr.response.collection.userId,
                     collectionNameOld: xhr.response.collection.collectionName,
-                    collectionDescriptionOld: xhr.response.collection.collectionDescriptionRaw,
+                    collectionDescriptionRawOld: xhr.response.collection.collectionDescriptionRaw,
                     picturesOld: xhr.response.collection.picturesArray,
                     qrLink: xhr.response.collection.qrLink,
                     userNameToAdd: xhr.response.collection.userName,

@@ -14,8 +14,7 @@ import {
     Card,
     CardHeader,
     CardTitle,
-    CardActions,
-    CardMedia
+    CardActions
 } from "material-ui";
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
@@ -138,47 +137,6 @@ class Update extends Component {
                 );
             case 1:
                 return (
-                    <div>
-                        {this.props.newsPictures.map((newsPicture, i) => (
-                            <div key={i}>
-                                <div className="input-field">
-                                    {this.props.newsPictureLinkError[i] === "Please use a link for the picture" ?
-                                        <TextField hintText="Link here additional photos"
-                                                   value={newsPicture.newsPictureLink}
-                                                   onChange={this.props.handleNewsPicturesLinkChange(i)}
-                                                   errorText={this.props.newsPictureLinkError[i]}
-                                                   onKeyDown={this.handleKeyPress}
-                                                   autoFocus={true}
-                                                   multiLine={true}
-                                                   className="step-textfields"
-                                        />
-                                        :
-                                        <TextField hintText="Link here additional photos"
-                                                   value={newsPicture.newsPictureLink}
-                                                   onChange={this.props.handleNewsPicturesLinkChange(i)}
-                                                   onKeyDown={this.handleKeyPress}
-                                                   multiLine={true}
-                                                   className="step-textfields"
-                                        />
-                                    }
-                                </div>
-                                <CardMedia>
-                                    <img src={newsPicture.pictureLink} className="step-picture"/>
-                                </CardMedia>
-                                <RaisedButton type="button" primary={true} label="+"
-                                              onClick={this.props.handleAddNewsPictures(i)}/>
-
-                                { (i !== 0) ? (
-                                    <RaisedButton type="button" secondary={true} label="-"
-                                                  onClick={this.props.handleRemoveNewsPictures(i)}/>
-                                ) : null}
-
-                            </div>
-                        ))}
-                    </div>
-                );
-            case 2:
-                return (
                     <div className="preview">
                         <div>The preview of what you wish to add is here</div>
                         <div>{this.props.newsTitle}</div>
@@ -235,7 +193,7 @@ class Update extends Component {
                                                     <Step>
                                                         <StepButton
                                                             onClick={() => this.setState({stepIndex: 0})}
-                                                            icon={this.props.newsPictureLinkError[0] === "Please use a link for the picture" ?
+                                                            icon={this.props.errors.newsTitle || this.props.errors.newsCoverLink || this.props.errors.newsDescriptionRaw ?
                                                                 <FontIcon className="material-icons"
                                                                           color={red500}>warning</FontIcon> :
                                                                 <FontIcon className="material-icons">mode_edit</FontIcon>}
@@ -243,18 +201,8 @@ class Update extends Component {
                                                         </StepButton>
                                                     </Step>
                                                     <Step>
-                                                        <StepButton
-                                                            onClick={() => this.setState({stepIndex: 1})}
-                                                            icon={this.props.newsPictureLinkError[0] === "Please use a link for the picture" ?
-                                                                <FontIcon className="material-icons"
-                                                                          color={red500}>warning</FontIcon> :
-                                                                <FontIcon className="material-icons">add_a_photo</FontIcon>}
-                                                        >
-                                                        </StepButton>
-                                                    </Step>
-                                                    <Step>
-                                                        <StepButton onClick={() => this.setState({stepIndex: 2})}
-                                                                    icon={this.props.newsPictureLinkError[0] === "Please use a link for the picture" ?
+                                                        <StepButton onClick={() => this.setState({stepIndex: 1})}
+                                                                    icon={this.props.errors.newsTitle || this.props.errors.newsCoverLink || this.props.errors.newsDescriptionRaw ?
                                                                         <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
                                                                         <FontIcon
                                                                             className="material-icons">done</FontIcon>}
@@ -305,9 +253,9 @@ class Update extends Component {
                                     }
 
                                     <RaisedButton
-                                        label={stepIndex === 2 ? "Save" : "Next"}
+                                        label={stepIndex === 1 ? "Save" : "Next"}
                                         primary={true}
-                                        onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}/>
+                                        onTouchTap={stepIndex === 1 ? this.props.onSave : this.handleNext}/>
                                 </CardActions>
                             </Card>
                         </Card>

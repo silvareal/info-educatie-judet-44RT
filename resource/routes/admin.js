@@ -42,6 +42,18 @@ function validateCreateCollectionForm(payload) {
         errors.userId = "The userId needs to be 24 characters long"
     }
 
+    if (!payload.userName || typeof payload.userName !== 'string' || payload.userName.trim().length === 0) {
+        isFormValid = false;
+        errors.userName = "Missing user name"
+    }
+
+    if (payload.profilePictureLink) {
+        if (payload.profilePictureLink.trim().length > 10000) {
+            isFormValid = false;
+            errors.profilePictureLink = "Please use a shorter link for the profile picture"
+        }
+    }
+
     if (!payload.collectionName || typeof payload.collectionName !== 'string' || payload.collectionName.trim().length > 100) {
         isFormValid = false;
         errors.collectionName = "Please use a valid name for the collection"
@@ -50,6 +62,11 @@ function validateCreateCollectionForm(payload) {
     if (!payload.collectionDescriptionRaw || typeof payload.collectionDescriptionRaw !== 'string' || payload.collectionDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
         errors.collectionDescriptionRaw = "Please use a valid description"
+    }
+
+    if (!payload.qrLink || typeof payload.qrLink !== 'string' || payload.qrLink.trim().length > 10000) {
+        isFormValid = false;
+        errors.qrLink = "Link missing or too long"
     }
 
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
@@ -93,6 +110,18 @@ function validateUpdateCollectionsForm(payload) {
         errors.userId = "The userId needs to be 24 characters long"
     }
 
+    if (!payload.userName || typeof payload.userName !== 'string' || payload.userName.trim().length === 0) {
+        isFormValid = false;
+        errors.userName = "Missing user name"
+    }
+
+    if (payload.profilePictureLink) {
+        if (payload.profilePictureLink.trim().length > 10000) {
+            isFormValid = false;
+            errors.profilePictureLink = "Please use a shorter link for the profile picture"
+        }
+    }
+
     if (!payload.collectionName || typeof payload.collectionName !== 'string' || payload.collectionName.trim().length > 100) {
         isFormValid = false;
         errors.collectionName = "Please use a valid name for the collection"
@@ -101,6 +130,11 @@ function validateUpdateCollectionsForm(payload) {
     if (!payload.collectionDescriptionRaw || typeof payload.collectionDescriptionRaw !== 'string' || payload.collectionDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
         errors.collectionDescriptionRaw = "Please use a valid description"
+    }
+
+    if (!payload.qrLink || typeof payload.qrLink !== 'string' || payload.qrLink.trim().length > 10000) {
+        isFormValid = false;
+        errors.qrLink = "Please use a shorter link"
     }
 
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
@@ -170,15 +204,6 @@ function validateCreateNewsForm(payload) {
         errors.newsDescriptionRaw = "Please use a valid description"
     }
 
-    let errorsNewsPicturesArray = JSON.parse(payload.newsPictures);
-
-    Object.keys(errorsNewsPicturesArray).map((key) => {
-        if (!errorsNewsPicturesArray[key].newsPictureLink || typeof errorsNewsPicturesArray[key].newsPictureLink !== 'string' || errorsNewsPicturesArray[key].newsPictureLink.trim().length > 10000) {
-            isFormValid = false;
-            errorsNewsPicturesArray[key].newsPictureLink = "Please use a shorter link"
-        }
-    });
-
     if (!isFormValid) {
         message = "Check the specified fields for errors";
     }
@@ -186,8 +211,7 @@ function validateCreateNewsForm(payload) {
     return {
         success: isFormValid,
         message,
-        errors,
-        errorsNewsPicturesArray
+        errors
     };
 }
 
@@ -213,15 +237,6 @@ function validateUpdateNewsForm(payload) {
         errors.newsDescriptionRaw = "Please use a shorter and valid description"
     }
 
-    let errorsNewsPicturesArray = JSON.parse(payload.newsPictures);
-
-    Object.keys(errorsNewsPicturesArray).map((key) => {
-        if (!errorsNewsPicturesArray[key].newsPictureLink || typeof errorsNewsPicturesArray[key].newsPictureLink !== 'string' || errorsNewsPicturesArray[key].newsPictureLink.trim().length > 10000) {
-            isFormValid = false;
-            errorsNewsPicturesArray[key].newsPictureLink = "Please use a shorter link"
-        }
-    });
-
     if (!isFormValid) {
         message = "Check the specified fields for errors";
     }
@@ -229,8 +244,7 @@ function validateUpdateNewsForm(payload) {
     return {
         success: isFormValid,
         message,
-        errors,
-        errorsNewsPicturesArray
+        errors
     };
 }
 
@@ -421,8 +435,7 @@ router.post("/create", (req, res) => {
         return res.status(400).json({
             success: false,
             message: validationResult.message,
-            errors: validationResult.errors,
-            errorsNewsPicturesArray: validationResult.errorsNewsPicturesArray
+            errors: validationResult.errors
         });
     }
 
@@ -456,7 +469,6 @@ router.post("/create", (req, res) => {
                 newsTitle: req.body.newsTitle,
                 newsCoverLink: req.body.newsCoverLink,
                 newsDescriptionRaw: req.body.newsDescriptionRaw,
-                picturesArray: JSON.parse(req.body.newsPictures),
                 userName: req.body.userName,
                 profilePictureLink: req.body.profilePictureLink
             };
@@ -633,7 +645,6 @@ router.post('/updateShow', (req, res) => {
         }
 
         //here to be used for logs
-        const userId = decoded.sub;
         let isAdmin = decoded.isAdmin;
 
         if (isAdmin === true) {
@@ -700,8 +711,7 @@ router.post('/updateSave', (req, res) => {
                 $set: {
                     newsTitle: req.body.newsTitle,
                     newsDescriptionRaw: req.body.newsDescriptionRaw,
-                    newsCoverLink: req.body.newsCoverLink,
-                    picturesArray: JSON.parse(req.body.newsPictures)
+                    newsCoverLink: req.body.newsCoverLink
                 }
             }, (err, news) => {
                 if (err) {
@@ -726,8 +736,8 @@ router.post('/updateSave', (req, res) => {
                     newsTitleOld: req.body.newsTitleOld,
                     newsCoverLinkOld: req.body.newsCoverLinkOld,
                     newsDescriptionRawOld: req.body.newsDescriptionRawOld,
-                    picturesArray: JSON.parse(req.body.newsPictures),
-                    picturesArrayOld: JSON.parse(req.body.newsPicturesOld)
+                    userName: req.body.userName,
+                    profilePictureLink: req.body.profilePictureLink
                 };
 
                 const newLog = new UpdateNewsLogs(logData);
@@ -829,7 +839,9 @@ router.post('/delete', (req, res) => {
             const logData = {
                 newsId: req.body.newsId,
                 newsTitle: req.body.newsTitle,
-                newsDescription: req.body.newsDescription,
+                userName: req.body.userName,
+                profilePictureLink: req.body.profilePictureLink,
+                newsDescriptionRaw: req.body.newsDescriptionRaw,
                 newsCoverLink: req.body.newsCoverLink,
                 picturesArray: JSON.parse(req.body.newsPictures)
             };
@@ -1213,6 +1225,12 @@ router.post('/updateSaveCollections', (req, res) => {
                     collectionNameOld: req.body.collectionNameOld,
                     collectionDescriptionRawOld: req.body.collectionDescriptionRawOld,
                     picturesArrayOld: JSON.parse(req.body.picturesArrayOld),
+                    userName: req.body.userNameToAdd,
+                    userNameOld: req.body.userNameToAddOld,
+                    profilePictureLink: req.body.userProfilePictureLink,
+                    profilePictureLinkOld: req.body.userProfilePictureLinkOld,
+                    qrLink: req.body.qrLink,
+                    qrLinkOld: req.body.qrLinkOld,
                     updatedByAdmin: true
                 };
 
@@ -1332,6 +1350,9 @@ router.post("/deleteCollection", (req, res) => {
                 collectionName: req.body.collectionName,
                 collectionDescription: req.body.collectionDescription,
                 picturesArray: JSON.parse(req.body.picturesArray),
+                userName: req.body.userName,
+                profilePictureLink: req.body.profilePictureLink,
+                qrLink: req.body.qrLink,
                 deletedByAdmin: true
             };
 

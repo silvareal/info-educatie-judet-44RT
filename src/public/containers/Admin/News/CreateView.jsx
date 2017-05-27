@@ -17,13 +17,9 @@ class CreateView extends Component {
             inputCount: 1,
             errorMessage: '',
             errors: {},
-            errorsNewsPicturesArray: {},
             newsTitle: '',
             newsCoverLink: '',
             newsDescription: RichTextEditor.createEmptyValue(),
-            newsPictures: [{
-                newsPictureLink: ''
-            }],
             newsPictureLinkError: '',
             isAdmin: false,
             __html: '',
@@ -95,29 +91,6 @@ class CreateView extends Component {
         this.setState({newsDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
-    handleNewsPicturesLinkChange = (i) => (e) => {
-        const newNewsPictures = this.state.newsPictures.map((picture, j) => {
-            if (i !== j) return picture;
-            return {...picture, newsPictureLink: e.target.value};
-        });
-        this.setState({newsPictures: newNewsPictures});
-    };
-
-    //we don't limit the number of pictures we can add here
-    handleAddNewsPictures = (i) => () => {
-            this.setState({
-                newsPictures: this.state.newsPictures.concat([{
-                    newsPictureLink: ''
-                }])
-            });
-    };
-
-    handleRemoveNewsPictures = (i) => () => {
-        this.setState({
-            newsPictures: this.state.newsPictures.filter((s, j) => i !== j),
-        });
-    };
-
     resetScroll = () => {
         window.scrollTo(0, 0);
     };
@@ -135,11 +108,10 @@ class CreateView extends Component {
         const newsTitle = encodeURIComponent(this.state.newsTitle);
         const newsCoverLink = encodeURIComponent(this.state.newsCoverLink);
         const newsDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
-        const newsPictures = encodeURIComponent(JSON.stringify(this.state.newsPictures));
         const userName = encodeURIComponent(this.state.userName);
         const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
 
-        const formData = `profilePictureLink=${profilePictureLink}&userName=${userName}&newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescriptionRaw=${newsDescriptionRaw}&newsPictures=${newsPictures}`;
+        const formData = `profilePictureLink=${profilePictureLink}&userName=${userName}&newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescriptionRaw=${newsDescriptionRaw}`;
 
         //AJAX
         const xhr = new XMLHttpRequest();
@@ -154,39 +126,22 @@ class CreateView extends Component {
                 //We will also reset the fields
                 this.setState({
                     errors: {},
-                    errorsNewsPicturesArray: {},
-                    newsPictureLinkError: [],
                     successCreation: true,
                     errorMessage: '',
                     newsTitle : '',
                     newsCoverLink: '',
                     newsDescription: RichTextEditor.createEmptyValue(),
-                    newsPictures : [{
-                        newsPictureLink: ''
-                    }]
                 });
             }
             else if (xhr.status === 400) {
 
                 const errors = xhr.response.errors ? xhr.response.errors : {};
                 errors.summary = xhr.response.message;
-                const errorsNewsPicturesArray = xhr.response.errorsNewsPicturesArray ? xhr.response.errorsNewsPicturesArray : {};
 
                 this.setState({
                     successCreation: false,
-                    errors,
-                    errorsNewsPicturesArray
+                    errors
                 });
-
-                let newsPictureLinkError;
-
-                newsPictureLinkError = this.state.errorsNewsPicturesArray.map((a) => {
-                    return a.newsPictureLink;
-                });
-
-                this.setState({
-                    newsPictureLinkError: newsPictureLinkError
-                })
             }
         });
 
@@ -209,16 +164,10 @@ class CreateView extends Component {
                     onNewsTitleChange={this.onNewsTitleChange}
                     onNewsCoverLinkChange={this.onNewsCoverLinkChange}
                     onNewsDescriptionChange={this.onNewsDescriptionChange}
-                    newsPictures={this.state.newsPictures}
                     errorMessage={this.state.errorMessage}
-                    onNewsPictureLinkChange={this.onNewsPictureLinkChange}
-                    handleNewsPicturesLinkChange={this.handleNewsPicturesLinkChange}
-                    handleAddNewsPictures={this.handleAddNewsPictures}
-                    handleRemoveNewsPictures={this.handleRemoveNewsPictures}
                     onSave={this.onSave}
                     successCreation={this.state.successCreation}
                     errors={this.state.errors}
-                    newsPictureLinkError={this.state.newsPictureLinkError}
                 />)
         }
         else return <NotAuthorizedView/>

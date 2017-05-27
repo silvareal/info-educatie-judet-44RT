@@ -3,9 +3,11 @@ const mongoose = require('mongoose');
 const DeleteNewsLogsSchema = new mongoose.Schema({
 
     newsId: String,
+    userName: String,
     newsTitle: String,
     newsCoverLink: String,
     newsDescriptionRaw: String,
+    profilePictureLink: String,
     picturesArray: [
         {
             newsPictureLink: {

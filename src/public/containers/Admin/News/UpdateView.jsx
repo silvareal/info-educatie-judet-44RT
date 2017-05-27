@@ -20,21 +20,17 @@ class UpdateView extends Component {
             newsCoverLink: '',
             newsDescription: RichTextEditor.createEmptyValue(),
             newsDescriptionRaw: '',
-            newsPictures: [{
-                newsPictureLink: ''
-            }],
             inputCount: 1,
             errors: {},
-            errorsNewsPicturesArray: {},
-            newsPictureLinkError: [],
             newsTitleOld: '',
             newsDescriptionOld: '',
             newsDescriptionRawOld: '',
             newsCoverLinkOld: '',
-            newsPicturesOld:[{}],
             __html: '',
             fetched: false,
-            isAdmin: false
+            isAdmin: false,
+            userName: '',
+            profilePictureLink: ''
         };
     };
 
@@ -80,12 +76,12 @@ class UpdateView extends Component {
                     newsTitle: xhr.response.news.newsTitle,
                     newsCoverLink: xhr.response.news.newsCoverLink,
                     newsDescriptionRaw: xhr.response.news.newsDescriptionRaw,
-                    newsPictures: xhr.response.news.picturesArray,
                     response: true,
                     newsTitleOld: xhr.response.news.newsTitle,
                     newsCoverLinkOld: xhr.response.news.newsCoverLink,
                     newsDescriptionRawOld: xhr.response.news.newsDescriptionRaw,
-                    newsPicturesOld: xhr.response.news.picturesArray
+                    userName: xhr.response.news.userName,
+                    profilePictureLink: xhr.response.news.profilePictureLink
                 });
 
                 const contentState = convertFromRaw(JSON.parse(this.state.newsDescriptionRaw));
@@ -136,29 +132,6 @@ class UpdateView extends Component {
         this.setState({newsDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
-    handleNewsPicturesLinkChange = (i) => (e) => {
-        const newNewsPictures = this.state.newsPictures.map((picture, j) => {
-            if (i !== j) return picture;
-            return {...picture, newsPictureLink: e.target.value};
-        });
-        this.setState({newsPictures: newNewsPictures});
-    };
-
-    //we don't limit the number of pictures we can add here
-    handleAddNewsPictures = (i) => () => {
-        this.setState({
-            newsPictures: this.state.newsPictures.concat([{
-                newsPictureLink: ''
-            }])
-        });
-    };
-
-    handleRemoveNewsPictures = (i) => () => {
-        this.setState({
-            newsPictures: this.state.newsPictures.filter((s, j) => i !== j),
-        });
-    };
-
     resetScroll = () => {
         window.scrollTo(0, 0);
     };
@@ -178,14 +151,14 @@ class UpdateView extends Component {
             const newsTitle = encodeURIComponent(this.state.newsTitle);
             const newsCoverLink = encodeURIComponent(this.state.newsCoverLink);
             const newsDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
-            const newsPictures = encodeURIComponent(JSON.stringify(this.state.newsPictures));
+            const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
+            const userName = encodeURIComponent(this.state.userName);
 
             const newsTitleOld = encodeURIComponent(this.state.newsTitleOld);
             const newsCoverLinkOld = encodeURIComponent(this.state.newsCoverLinkOld);
             const newsDescriptionRawOld = encodeURIComponent(this.state.newsDescriptionRawOld);
-            const newsPicturesOld = encodeURIComponent(JSON.stringify(this.state.newsPicturesOld));
 
-            const formData = `newsTitleOld=${newsTitleOld}&newsCoverLinkOld=${newsCoverLinkOld}&newsDescriptionRawOld=${newsDescriptionRawOld}&newsPicturesOld=${newsPicturesOld}&newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescriptionRaw=${newsDescriptionRaw}&newsPictures=${newsPictures}&newsId=${newsId}`;
+            const formData = `userName=${userName}&profilePictureLink=${profilePictureLink}&newsTitleOld=${newsTitleOld}&newsCoverLinkOld=${newsCoverLinkOld}&newsDescriptionRawOld=${newsDescriptionRawOld}&newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescriptionRaw=${newsDescriptionRaw}&newsId=${newsId}`;
 
             //AJAX
             const xhr = new XMLHttpRequest();

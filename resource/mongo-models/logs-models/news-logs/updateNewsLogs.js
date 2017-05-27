@@ -17,6 +17,8 @@ const UpdateNewsLogsSchema = new mongoose.Schema({
     newsTitleOld: String,
     newsCoverLinkOld: String,
     newsDescriptionRawOld: String,
+    userName: String,
+    profilePictureLink: String,
     picturesArrayOld: [
         {
             newsPictureLink: {

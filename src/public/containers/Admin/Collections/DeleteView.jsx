@@ -17,6 +17,9 @@ class DeleteView extends Component {
             collectionName: '',
             collectionDescription: '',
             pictures:[{}],
+            userName: '',
+            profilePictureLink: '',
+            qrLink: '',
             isAdmin: false
         };
     };
@@ -56,7 +59,10 @@ class DeleteView extends Component {
                         collectionName: xhr.response.collection.collectionName,
                         collectionDescription: xhr.response.collection.collectionDescription,
                         pictures: xhr.response.collection.picturesArray,
-                        ownerId: xhr.response.collection.userId
+                        ownerId: xhr.response.collection.userId,
+                        userName: xhr.response.collection.userName,
+                        qrLink: xhr.response.collection.qrLink,
+                        profilePictureLink: xhr.response.collection.profilePictureLink
                     });
             }
             else {
@@ -90,8 +96,11 @@ class DeleteView extends Component {
             const collectionDescription = encodeURIComponent(this.state.collectionDescription);
             const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
             const collectionId = encodeURIComponent(this.props.params._collectionId);
+            const userName = encodeURIComponent(this.state.userName);
+            const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
+            const qrLink = encodeURIComponent(this.state.qrLink);
 
-            const formData = `ownerId=${ownerId}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescription=${collectionDescription}&picturesArray=${picturesArray}`;
+            const formData = `qrLink=${qrLink}&profilePictureLink=${profilePictureLink}&userName=${userName}&ownerId=${ownerId}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescription=${collectionDescription}&picturesArray=${picturesArray}`;
 
             const xhr = new XMLHttpRequest();
             xhr.open('post', '/admin/deleteCollection');

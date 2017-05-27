@@ -123,7 +123,7 @@ class Create extends Component {
                                 hintText="Owner's userName"
                                 value={this.props.userNameToAdd}
                                 onChange={this.props.onUserNameToAddChange}
-                                errorText={this.props.errors.userNameToAdd}
+                                errorText={this.props.errors.userName}
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
@@ -133,7 +133,7 @@ class Create extends Component {
                                 hintText="Owner's profile picture"
                                 value={this.props.userProfilePictureLink}
                                 onChange={this.props.onUserProfilePictureLinkChange}
-                                errorText={this.props.errors.userProfilePictureLink}
+                                errorText={this.props.errors.profilePictureLink}
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"

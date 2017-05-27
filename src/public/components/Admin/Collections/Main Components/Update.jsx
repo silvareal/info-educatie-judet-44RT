@@ -124,7 +124,7 @@ class Update extends Component {
                                 hintText="Owner's userName"
                                 value={this.props.userNameToAdd}
                                 onChange={this.props.onUserNameToAddChange}
-                                errorText={this.props.errors.userNameToAdd}
+                                errorText={this.props.errors.userName}
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
@@ -134,7 +134,7 @@ class Update extends Component {
                                 hintText="Owner's profile picture"
                                 value={this.props.userProfilePictureLink}
                                 onChange={this.props.onUserProfilePictureLinkChange}
-                                errorText={this.props.errors.userProfilePictureLink}
+                                errorText={this.props.errors.profilePictureLink}
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
@@ -170,7 +170,7 @@ class Update extends Component {
                 return (
                     <div>
                         <div>
-                            <TextField hintText="Link embeded in QR code"
+                            <TextField hintText="Link embedded in QR code"
                                        value={this.props.qrLink}
                                        onChange={this.props.onQRLinkChange}
                                        errorText={this.props.errors.qrLink}
