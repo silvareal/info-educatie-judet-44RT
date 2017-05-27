@@ -7,7 +7,8 @@ class ViewRow extends Component {
         return (
             <Card className="picture-separator">
                 <Link
-                    to={`/news/${this.props.news._id}`}>
+                    to={`/news/${this.props.news._id}`}
+                    target="_blank">
                     <CardMedia
                         mediaStyle={{minHeight: 300}}
                         overlay={<CardTitle title={this.props.news.newsTitle}

@@ -7,7 +7,8 @@ class ViewRow extends Component {
         return (
             <Card className="picture-separator">
                 <Link
-                    to={`/admin/${this.props.adminId}/news/readOne/${this.props.news._id}`}>
+                    to={`/admin/${this.props.adminId}/news/readOne/${this.props.news._id}`}
+                    target="_blank">
                     <CardMedia
                         mediaStyle={{minHeight: 300}}
                         overlay={<CardTitle title={this.props.news.newsTitle}
@@ -17,14 +18,16 @@ class ViewRow extends Component {
                     </CardMedia>
                 </Link>
                 <CardActions>
-                    <Link to={`/admin/${this.props.adminId}/news/update/${this.props.news._id}`}>
+                    <Link to={`/admin/${this.props.adminId}/news/update/${this.props.news._id}`}
+                          target="_blank">
                         <RaisedButton
                             type="button"
                             primary={true}
                             label="Update"
                         />
                     </Link>
-                    <Link to={`/admin/${this.props.adminId}/news/delete/${this.props.news._id}`}>
+                    <Link to={`/admin/${this.props.adminId}/news/delete/${this.props.news._id}`}
+                          target="_blank">
                         <RaisedButton
                             type="button"
                             secondary={true}

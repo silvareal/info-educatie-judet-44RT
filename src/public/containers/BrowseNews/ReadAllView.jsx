@@ -15,7 +15,8 @@ class ReadAllView extends Component {
             searchErrorMessage: '',
             newsPreSearch: [],
             searchQuery: '',
-            searching: false
+            searching: false,
+            fetchedNews: false
         };
     };
 
@@ -31,7 +32,8 @@ class ReadAllView extends Component {
                 this.setState({
                     errorMessage: 'Fetched news',
                     news: xhr.response.news,
-                    newsPreSearch: xhr.response.news
+                    newsPreSearch: xhr.response.news,
+                    fetchedNews: true
                 });
             }
             else if (xhr.status === 404) {
@@ -161,6 +163,7 @@ class ReadAllView extends Component {
         return (
             <div>
                 <ReadAll
+                    fetchedNews={this.state.fetchedNews}
                     userId={this.props.params._id}
                     news={this.state.news}
                     errorMessage={this.state.errorMessage}

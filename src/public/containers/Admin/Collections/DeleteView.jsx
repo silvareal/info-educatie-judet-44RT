@@ -69,6 +69,7 @@ class DeleteView extends Component {
     };
 
     componentDidMount() {
+        this.resetScroll();
         this.adminAuth();
         this.getCollection();
     };
@@ -121,6 +122,7 @@ class DeleteView extends Component {
         {
             return (
                 <Delete
+                    response={this.state.response}
                     adminId={this.props.params._id}
                     message={this.state.message}
                     onDelete={this.onDelete}/>

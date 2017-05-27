@@ -25,7 +25,8 @@ class ReadOneView extends Component {
             comment: '',
             comments: [],
             commentAdded: null,
-            fetched: false,
+            fetchedNews: false,
+            fetchedComments: false,
             newsDescriptionRaw: '',
             rows: '',
             profilePictureLink: '',
@@ -85,7 +86,7 @@ class ReadOneView extends Component {
                     errorMessage: '',
                     news: xhr.response.news,
                     newsDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(xhr.response.news.newsDescriptionRaw))),
-                    fetched: true
+                    fetchedNews: true
                 });
             }
             else {
@@ -166,7 +167,8 @@ class ReadOneView extends Component {
             if (xhr.status === 200) {
                 //retrieved comments
                 this.setState({
-                    comments: xhr.response.comments
+                    comments: xhr.response.comments,
+                    fetchedComments: true
                 });
                 this.mapComments();
                 this.getCommentsOverallCount();
@@ -303,9 +305,10 @@ class ReadOneView extends Component {
         if (this.state.news.newsTitle)
             document.title = this.state.news.newsTitle;
         else document.title = "404 not found";
-        if (this.state.fetched === true) {
             return (
                 <ReadOne
+                    fetchedNews={this.state.fetchedNews}
+                    fetchedComments={this.state.fetchedComments}
                     guest={this.state.guest}
                     commentsCount={this.state.commentsCount}
                     commentsRows={this.state.commentsRows}
@@ -322,8 +325,6 @@ class ReadOneView extends Component {
                     onSave={this.onSave}
                 />
             );
-        }
-        else return <CircularProgress/>
     }
 }
 

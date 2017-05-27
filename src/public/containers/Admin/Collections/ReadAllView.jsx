@@ -21,7 +21,8 @@ class ReadAllView extends Component {
             searchErrorMessage: '',
             collectionsPreSearch: [],
             searchQuery: '',
-            searching: false
+            searching: false,
+            fetchedCollections: false
         };
     };
 
@@ -33,12 +34,12 @@ class ReadAllView extends Component {
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
                 //User is an admin
-                    this.setState({
-                        isAdmin: true
-                    })
+                this.setState({
+                    isAdmin: true
+                })
             }
             else {
-                this.state= {};
+                this.state = {};
             }
         });
         xhr.send();
@@ -63,7 +64,8 @@ class ReadAllView extends Component {
                 this.setState({
                     errorMessage: 'Fetched collections',
                     collections: xhr.response.collections,
-                    collectionsPreSearch: xhr.response.collections
+                    collectionsPreSearch: xhr.response.collections,
+                    fetchedCollections: true
                 });
             }
             else if (xhr.status === 404) {
@@ -85,14 +87,19 @@ class ReadAllView extends Component {
         xhr.send();
     };
 
-    onScroll = (e) => {
+    onScroll = () => {
         if (this.state.finished === false && document.title === "Manage collections - Admin Controlled" && this.state.searching === false)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();
             }
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     componentDidMount() {
+        this.resetScroll();
         this.adminAuth();
         this.fetchAllCollections();
 
@@ -162,7 +169,7 @@ class ReadAllView extends Component {
     onSearch = () => {
 
         //if the search box is not empty
-        if (this.state.searchQuery) {
+        if (this.state.searchQuery && this.state.fetchedCollections) {
 
             const searchQuery = encodeURIComponent(this.state.searchQuery);
 
@@ -197,19 +204,20 @@ class ReadAllView extends Component {
     render() {
         document.title = "Manage collections - Admin Controlled";
         if (this.state.isAdmin === true)
-        return (
-            <div>
-                <ReadAll
-                    adminId={this.props.params._id}
-                    collections={this.state.collections}
-                    errorMessage={this.state.errorMessage}
-                    handleKeyPress={this.handleKeyPress}
-                    onQueryChange={this.onQueryChange}
-                    searchQuery={this.state.searchQuery}
-                    onSearch={this.onSearch}
-                />
-            </div>
-        );
+            return (
+                <div>
+                    <ReadAll
+                        fetchedCollections={this.state.fetchedCollections}
+                        adminId={this.props.params._id}
+                        collections={this.state.collections}
+                        errorMessage={this.state.errorMessage}
+                        handleKeyPress={this.handleKeyPress}
+                        onQueryChange={this.onQueryChange}
+                        searchQuery={this.state.searchQuery}
+                        onSearch={this.onSearch}
+                    />
+                </div>
+            );
         else return (
             <NotAuthorizedView/>
         )

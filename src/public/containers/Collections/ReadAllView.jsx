@@ -20,7 +20,8 @@ class ReadAllView extends Component {
             collectionsPreSearch: [],
             searchQuery: '',
             searching: false,
-            requesting: false
+            requesting: false,
+            fetchedCollections: false
         };
     };
 
@@ -43,7 +44,8 @@ class ReadAllView extends Component {
                 this.setState({
                     errorMessage: 'Fetched collections',
                     collections: xhr.response.collections,
-                    collectionsPreSearch: xhr.response.collections
+                    collectionsPreSearch: xhr.response.collections,
+                    fetchedCollections: true
                 });
             }
             else if (xhr.status === 404) {
@@ -180,6 +182,7 @@ class ReadAllView extends Component {
         document.title = "Manage collections";
         return (
             <ReadAll
+                fetchedCollections={this.state.fetchedCollections}
                 handleKeyPress={this.handleKeyPress}
                 onQueryChange={this.onQueryChange}
                 searchQuery={this.state.searchQuery}

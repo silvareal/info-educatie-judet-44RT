@@ -214,7 +214,7 @@ class UpdateView extends Component {
 
         if (this.state.response === true) {
 
-            for (let i = 0 ; i < this.state.pictures.length; i++) {
+            for (let i = 0; i < this.state.pictures.length; i++) {
                 const newPictures = this.state.pictures.map((picture, j) => {
                     if (i !== j) return picture;
 
@@ -307,35 +307,32 @@ class UpdateView extends Component {
             document.title = "Update - " + this.state.collectionName;
         else
             document.title = "404 not found";
-        if (this.state.fetched === true) {
-            return (
-                <Update
-                    qrLink={this.state.qrLink}
-                    onQRLinkChange={this.onQRLinkChange}
-                    collectionId={this.state.collectionId}
-                    collectionName={this.state.collectionName}
-                    onCollectionChange={this.onCollectionChange}
-                    collectionDescription={this.state.collectionDescription}
-                    onCollectionDescriptionChange={this.onCollectionDescriptionChange}
-                    collectionDescriptionRaw={this.state.collectionDescriptionRaw}
-                    getHTML={this.getHTML}
-                    __html={this.state.__html}
-                    errorMessage={this.state.errorMessage}
-                    errors={this.state.errors}
-                    pictureNameError={this.state.pictureNameError}
-                    pictureDescriptionError={this.state.pictureDescriptionError}
-                    pictureLinkError={this.state.pictureLinkError}
-                    pictures={this.state.pictures}
-                    handlePicturesNameChange={this.handlePicturesNameChange}
-                    handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
-                    handlePicturesLinkChange={this.handlePicturesLinkChange}
-                    handleAddPictures={this.handleAddPictures}
-                    handleRemovePictures={this.handleRemovePictures}
-                    onSave={this.onSave}
-                />
-            );
-        }
-        else return <CircularProgress/>
+        return (
+            <Update
+                qrLink={this.state.qrLink}
+                onQRLinkChange={this.onQRLinkChange}
+                collectionId={this.state.collectionId}
+                collectionName={this.state.collectionName}
+                onCollectionChange={this.onCollectionChange}
+                collectionDescription={this.state.collectionDescription}
+                onCollectionDescriptionChange={this.onCollectionDescriptionChange}
+                collectionDescriptionRaw={this.state.collectionDescriptionRaw}
+                getHTML={this.getHTML}
+                __html={this.state.__html}
+                errorMessage={this.state.errorMessage}
+                errors={this.state.errors}
+                pictureNameError={this.state.pictureNameError}
+                pictureDescriptionError={this.state.pictureDescriptionError}
+                pictureLinkError={this.state.pictureLinkError}
+                pictures={this.state.pictures}
+                handlePicturesNameChange={this.handlePicturesNameChange}
+                handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
+                handlePicturesLinkChange={this.handlePicturesLinkChange}
+                handleAddPictures={this.handleAddPictures}
+                handleRemovePictures={this.handleRemovePictures}
+                onSave={this.onSave}
+            />
+        );
     }
 }
 

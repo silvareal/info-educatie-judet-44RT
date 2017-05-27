@@ -26,7 +26,8 @@ class ReadOneView extends Component {
             comment: '',
             comments: [],
             commentAdded: null,
-            fetched: false,
+            fetchedCollection: false,
+            fetchedComments: false,
             pictureDescriptionRaw: '',
             collectionDescriptionRaw: '',
             rows1: '',
@@ -86,7 +87,7 @@ class ReadOneView extends Component {
                     errorMessage: '',
                     collection: xhr.response.collection,
                     collectionDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(xhr.response.collection.collectionDescriptionRaw))),
-                    fetched: true
+                    fetchedCollection: true
                 });
 
                 let pictures = this.state.collection.picturesArray;
@@ -134,7 +135,8 @@ class ReadOneView extends Component {
             }
             else {
                 this.setState({
-                    errorMessage: xhr.response.message
+                    errorMessage: xhr.response.message,
+                    fetchedCollection: 'Error'
                 });
             }
         });
@@ -210,7 +212,8 @@ class ReadOneView extends Component {
             if (xhr.status === 200) {
                 //retrieved comments
                 this.setState({
-                    comments: xhr.response.comments
+                    comments: xhr.response.comments,
+                    fetchedComments: true
                 });
                 this.mapComments();
             }
@@ -346,28 +349,27 @@ class ReadOneView extends Component {
         if (this.state.collection.collectionName)
             document.title = this.state.collection.collectionName;
         else document.title = "404 not found";
-        if (this.state.fetched === true) {
-            return (
-                <ReadOne
-                    commentsCount={this.state.commentsCount}
-                    commentsRows={this.state.commentsRows}
-                    comments={this.state.comments}
-                    pictures={this.state.pictures}
-                    profilePictureLink={this.state.profilePictureLink}
-                    userName={this.state.userName}
-                    rows1={this.state.rows1}
-                    rows2={this.state.rows2}
-                    rows3={this.state.rows3}
-                    collectionDescriptionRaw={this.state.collectionDescriptionRaw}
-                    commentAdded={this.state.commentAdded}
-                    collection={this.state.collection}
-                    comment={this.state.comment}
-                    onCommentChange={this.onCommentChange}
-                    onSave={this.onSave}
-                />
-            );
-        }
-        else return <CircularProgress/>
+        return (
+            <ReadOne
+                fetchedCollection={this.state.fetchedCollection}
+                fetchedComments={this.state.fetchedComments}
+                commentsCount={this.state.commentsCount}
+                commentsRows={this.state.commentsRows}
+                comments={this.state.comments}
+                pictures={this.state.pictures}
+                profilePictureLink={this.state.profilePictureLink}
+                userName={this.state.userName}
+                rows1={this.state.rows1}
+                rows2={this.state.rows2}
+                rows3={this.state.rows3}
+                collectionDescriptionRaw={this.state.collectionDescriptionRaw}
+                commentAdded={this.state.commentAdded}
+                collection={this.state.collection}
+                comment={this.state.comment}
+                onCommentChange={this.onCommentChange}
+                onSave={this.onSave}
+            />
+        );
     }
 }
 

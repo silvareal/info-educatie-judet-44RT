@@ -15,7 +15,8 @@ class ReadAllView extends Component {
             searchErrorMessage: '',
             collectionsPreSearch: [],
             searchQuery: '',
-            searching: false
+            searching: false,
+            fetchedCollections: false
         };
     };
 
@@ -37,7 +38,8 @@ class ReadAllView extends Component {
                 this.setState({
                     errorMessage: 'Fetched collections',
                     collections: xhr.response.collections,
-                    collectionsPreSearch: xhr.response.collections
+                    collectionsPreSearch: xhr.response.collections,
+                    fetchedCollections: true
                 });
             }
             else if (xhr.status === 404) {
@@ -171,6 +173,7 @@ class ReadAllView extends Component {
         return (
             <div>
                 <ReadAll
+                    fetchedCollections={this.state.fetchedCollections}
                     handleKeyPress={this.handleKeyPress}
                     onQueryChange={this.onQueryChange}
                     searchQuery={this.state.searchQuery}

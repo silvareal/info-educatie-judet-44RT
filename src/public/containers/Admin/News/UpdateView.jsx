@@ -90,7 +90,8 @@ class UpdateView extends Component {
                 if (contentState) {
                     const html = stateToHTML(contentState);
                     this.setState({
-                        newsDescription: this.state.newsDescription.setContentFromString(html, 'html')
+                        newsDescription: this.state.newsDescription.setContentFromString(html, 'html'),
+                        fetched: true
                     })
                 }
 
@@ -236,6 +237,7 @@ class UpdateView extends Component {
         {
             return (
                 <Update
+                    fetched={this.state.fetched}
                     newsDescriptionRaw={this.state.newsDescriptionRaw}
                     getHTML={this.getHTML}
                     __html={this.state.__html}

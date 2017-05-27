@@ -38,6 +38,7 @@ class CreateView extends Component {
     };
 
     componentDidMount() {
+        this.resetScroll();
         const xhr = new XMLHttpRequest();
         xhr.open('get', '/admin/adminAuthentication');
         xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);

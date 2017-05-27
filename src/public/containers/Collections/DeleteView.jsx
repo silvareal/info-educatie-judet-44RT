@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 
 import Delete from '../../components/Collections/Main Components/Delete.jsx';
 import Auth from '../../modules/Auth.js';
+import NotFoundView from "../Error/NotFoundView.jsx";
 
 class DeleteView extends Component {
     constructor(props) {
@@ -39,7 +40,9 @@ class DeleteView extends Component {
                 });
             }
             else {
-                this.state = {}
+                this.setState({
+                    response: "Error"
+                })
             }
         });
         xhr.send(formData)
@@ -88,8 +91,11 @@ class DeleteView extends Component {
         if (this.state.collectionName)
             document.title = "Delete - " + this.state.collectionName;
         else document.title = "404 not found";
+        if (this.state.response === "Error")
+            return <NotFoundView/>;
         return (
             <Delete
+                response={this.state.response}
                 message={this.state.message}
                 onDelete={this.onDelete}/>
         )

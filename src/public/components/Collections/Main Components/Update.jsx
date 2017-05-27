@@ -7,6 +7,8 @@ import PictureRow from '../Partials Components/PictureRow.jsx';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
+import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
+
 import {
     FlatButton,
     RaisedButton,
@@ -266,94 +268,103 @@ class Update extends Component {
 
         const {stepIndex} = this.state;
 
-        return (
+        if (this.props.fetched)
+        {
+            return (
+                <div className="parallax-collections-create">
+                    <div className="top-bar-spacing"/>
+                    <Card className="container-collections" style={{backgroundColor: 'none'}}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle
+                                    title={
+                                        <div className="top-actions-create">
+                                            <Stepper linear={false} activeStep={stepIndex}>
+                                                <Step>
+                                                    <StepButton
+                                                        onClick={() => this.setState({stepIndex: 0})}
+                                                        icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                            <FontIcon className="material-icons"
+                                                                      color={red500}>warning</FontIcon> :
+                                                            <FontIcon className="material-icons">mode_edit</FontIcon>}
+                                                    >
+                                                    </StepButton>
+                                                </Step>
+                                                <Step>
+                                                    <StepButton
+                                                        onClick={() => this.setState({stepIndex: 1})}
+                                                        icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                            <FontIcon className="material-icons"
+                                                                      color={red500}>warning</FontIcon> :
+                                                            <FontIcon className="material-icons">add_a_photo</FontIcon>}
+                                                    >
+                                                    </StepButton>
+                                                </Step>
+                                                <Step>
+                                                    <StepButton onClick={() => this.setState({stepIndex: 2})}
+                                                                icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                                    <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
+                                                                    <FontIcon className="material-icons">done</FontIcon>}
+                                                    >
+                                                    </StepButton>
+                                                </Step>
+                                            </Stepper>
+                                        </div>
+                                    }/>
+                            </CardHeader>
+                            {this.props.errorMessage !== '' && this.props.errorMessage !== 'Your collection was successfully updated!' && this.props.errorMessage !== "Fetched collection" ?
+                                <div className="errors-collections">
+                                    {this.props.errorMessage}
+                                </div> :
+                                <div className="success-collections">
+                                    {this.props.errorMessage}
+                                </div>
+                            }
+                            {this.props.errors.summary ?
+                                <div className="errors-collections">
+                                    {this.props.errors.summary}
+                                </div> : null
+                            }
+                            {this.props.errorMessage === 'Your collection was successfully updated!' ?
+                                <div className="success-collections-create">
+                                    <Link to={`/manage`}>
+                                        <RaisedButton
+                                            label="Finish"
+                                            secondary={true}
+                                            onTouchTap={this.resetScroll}
+                                        />
+                                    </Link>
+                                </div> : null
+                            }
+                            <div className="step-style">{this.getStepContent(stepIndex)}</div>
+                            <CardActions className="step-actions">
+                                {stepIndex === 0 ?
+                                    <Link to={`/manage`}>
+                                        <RaisedButton
+                                            label="Cancel"
+                                            secondary={true}/>
+                                    </Link>
+                                    :
+                                    <FlatButton
+                                        label="Back"
+                                        disabled={stepIndex === 0}
+                                        onTouchTap={this.handlePrev}/>
+                                }
+
+                                <RaisedButton
+                                    label={stepIndex === 2 ? "Add collection" : "Next"}
+                                    primary={true}
+                                    onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}/>
+                            </CardActions>
+                        </Card>
+                    </Card>
+                </div>
+            )
+        }
+        else return (
             <div className="parallax-collections-create">
                 <div className="top-bar-spacing"/>
-                <Card className="container-collections" style={{backgroundColor: 'none'}}>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle
-                                title={
-                                    <div className="top-actions-create">
-                                        <Stepper linear={false} activeStep={stepIndex}>
-                                            <Step>
-                                                <StepButton
-                                                    onClick={() => this.setState({stepIndex: 0})}
-                                                    icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
-                                                        <FontIcon className="material-icons"
-                                                                  color={red500}>warning</FontIcon> :
-                                                        <FontIcon className="material-icons">mode_edit</FontIcon>}
-                                                >
-                                                </StepButton>
-                                            </Step>
-                                            <Step>
-                                                <StepButton
-                                                    onClick={() => this.setState({stepIndex: 1})}
-                                                    icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
-                                                        <FontIcon className="material-icons"
-                                                                  color={red500}>warning</FontIcon> :
-                                                        <FontIcon className="material-icons">add_a_photo</FontIcon>}
-                                                >
-                                                </StepButton>
-                                            </Step>
-                                            <Step>
-                                                <StepButton onClick={() => this.setState({stepIndex: 2})}
-                                                            icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
-                                                                <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
-                                                                <FontIcon className="material-icons">done</FontIcon>}
-                                                >
-                                                </StepButton>
-                                            </Step>
-                                        </Stepper>
-                                    </div>
-                                }/>
-                        </CardHeader>
-                        {this.props.errorMessage !== '' && this.props.errorMessage !== 'Your collection was successfully updated!' && this.props.errorMessage !== "Fetched collection" ?
-                            <div className="errors-collections">
-                                {this.props.errorMessage}
-                            </div> :
-                            <div className="success-collections">
-                                {this.props.errorMessage}
-                            </div>
-                        }
-                        {this.props.errors.summary ?
-                            <div className="errors-collections">
-                                {this.props.errors.summary}
-                            </div> : null
-                        }
-                        {this.props.errorMessage === 'Your collection was successfully updated!' ?
-                            <div className="success-collections-create">
-                                <Link to={`/manage`}>
-                                    <RaisedButton
-                                        label="Finish"
-                                        secondary={true}
-                                        onTouchTap={this.resetScroll}
-                                    />
-                                </Link>
-                            </div> : null
-                        }
-                        <div className="step-style">{this.getStepContent(stepIndex)}</div>
-                        <CardActions className="step-actions">
-                            {stepIndex === 0 ?
-                                <Link to={`/manage`}>
-                                    <RaisedButton
-                                        label="Cancel"
-                                        secondary={true}/>
-                                </Link>
-                                :
-                                <FlatButton
-                                    label="Back"
-                                    disabled={stepIndex === 0}
-                                    onTouchTap={this.handlePrev}/>
-                            }
-
-                            <RaisedButton
-                                label={stepIndex === 2 ? "Add collection" : "Next"}
-                                primary={true}
-                                onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}/>
-                        </CardActions>
-                    </Card>
-                </Card>
+                <LoadingIndicator/>
             </div>
         )
     }

@@ -25,7 +25,8 @@ class ReadOneView extends Component {
             comment: '',
             comments: [],
             commentAdded : null,
-            fetched: false,
+            fetchedCollection: false,
+            fetchedComments: false,
             pictureDescriptionRaw: '',
             collectionDescriptionRaw: '',
             rows1: '',
@@ -89,7 +90,7 @@ class ReadOneView extends Component {
                     errorMessage: '',
                     collection: xhr.response.collection,
                     collectionDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(xhr.response.collection.collectionDescriptionRaw))),
-                    fetched: true
+                    fetchedCollection: true
                 });
 
                 let pictures = this.state.collection.picturesArray;
@@ -137,7 +138,8 @@ class ReadOneView extends Component {
             }
             else {
                 this.setState({
-                    errorMessage: xhr.response.message
+                    errorMessage: xhr.response.message,
+                    fetchedCollection: true
                 });
             }
         });
@@ -146,7 +148,7 @@ class ReadOneView extends Component {
         xhr.send(formData);
     };
 
-    onScroll = (e) => {
+    onScroll = () => {
         if (this.state.finished === false && document.title === this.state.collection.collectionName)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();
@@ -213,7 +215,8 @@ class ReadOneView extends Component {
             if (xhr.status === 200) {
                 //retrieved comments
                 this.setState({
-                    comments: xhr.response.comments
+                    comments: xhr.response.comments,
+                    fetchedComments: true
                 });
                 this.mapComments();
                 this.getCommentsOverallCount();
@@ -351,9 +354,10 @@ class ReadOneView extends Component {
         if (this.state.collection.collectionName)
             document.title = this.state.collection.collectionName;
         else document.title = "404 not found";
-        if (this.state.fetched === true) {
             return (
                 <ReadOne
+                    fetchedCollection={this.state.fetchedCollection}
+                    fetchedComments={this.state.fetchedComments}
                     guest={this.state.guest}
                     commentsCount={this.state.commentsCount}
                     commentsRows={this.state.commentsRows}
@@ -372,8 +376,6 @@ class ReadOneView extends Component {
                     onSave={this.onSave}
                 />
             );
-        }
-        else return <CircularProgress/>
     }
 }
 

@@ -18,7 +18,8 @@ class ReadAllView extends Component {
             searchErrorMessage: '',
             newsPreSearch: [],
             searchQuery: '',
-            searching: false
+            searching: false,
+            fetchedNews: false
         };
     };
 
@@ -52,17 +53,20 @@ class ReadAllView extends Component {
                 this.setState({
                     errorMessage: 'Fetched news',
                     news: xhr.response.news,
-                    newsPreSearch: xhr.response.news
+                    newsPreSearch: xhr.response.news,
+                    fetchedNews: true
                 });
             }
             else if (xhr.status === 404) {
                 this.setState({
-                    errorMessage: xhr.response.message
+                    errorMessage: xhr.response.message,
+                    fetchedNews: true
                 });
             }
             else {
                 this.setState({
-                    errorMessage: 'Please contact an administrator'
+                    errorMessage: 'Please contact an administrator',
+                    fetchedNews: true
                 })
             }
         });
@@ -70,7 +74,7 @@ class ReadAllView extends Component {
         xhr.send();
     };
 
-    onScroll = (e) => {
+    onScroll = () => {
         if (this.state.finished === false && document.title === "Manage news - Admin Controlled" && this.state.searching === false)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();
@@ -187,6 +191,7 @@ class ReadAllView extends Component {
             return (
                 <div>
                     <ReadAll
+                        fetchedNews={this.state.fetchedNews}
                         adminId={this.props.params._id}
                         news={this.state.news}
                         errorMessage={this.state.errorMessage}

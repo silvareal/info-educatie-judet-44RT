@@ -7,7 +7,6 @@ import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
-import {CircularProgress} from 'material-ui';
 import Comment from '../../../components/Admin/News/Partials Components/Comment.jsx';
 
 let socket = io.connect();
@@ -26,7 +25,8 @@ class ReadOneView extends Component {
             comment: '',
             comments: [],
             commentAdded: null,
-            fetched: false,
+            fetchedNews: false,
+            fetchedComments: false,
             newsDescriptionRaw: '',
             rows: '',
             profilePictureLink: '',
@@ -102,7 +102,7 @@ class ReadOneView extends Component {
                     errorMessage: '',
                     news: xhr.response.news,
                     newsDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(xhr.response.news.newsDescriptionRaw))),
-                    fetched: true
+                    fetchedNews: true
                 })
             }
             else {
@@ -116,7 +116,7 @@ class ReadOneView extends Component {
         xhr.send(formData);
     };
 
-    onScroll = (e) => {
+    onScroll = () => {
         if (this.state.finished === false && document.title === this.state.news.newsTitle)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();
@@ -183,7 +183,8 @@ class ReadOneView extends Component {
             if (xhr.status === 200) {
                 //retrieved comments
                 this.setState({
-                    comments: xhr.response.comments
+                    comments: xhr.response.comments,
+                    fetchedComments: true
                 });
                 this.mapComments();
                 this.getCommentsOverallCount();
@@ -319,10 +320,12 @@ class ReadOneView extends Component {
     render() {
         if (this.state.news.newsTitle)
             document.title = this.state.news.newsTitle;
-        if (this.state.isAdmin === true && this.state.fetched === true)
+        if (this.state.isAdmin === true)
         {
             return (
                 <ReadOne
+                    fetchedComments={this.state.fetchedComments}
+                    fetchedNews={this.state.fetchedNews}
                     userId={this.props.params._id}
                     news={this.state.news}
                     commentsCount={this.state.commentsCount}
@@ -340,8 +343,7 @@ class ReadOneView extends Component {
                 />
             );
         }
-        else if (this.state.isAdmin === false) return <NotAuthorizedPage/>;
-        else return <CircularProgress/>
+        else return <NotAuthorizedPage/>
     }
 }
 

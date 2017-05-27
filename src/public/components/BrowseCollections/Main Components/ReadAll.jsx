@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import TopActions from '../Partials Components/TopActions.jsx';
 import ViewTable from '../Partials Components/ViewTable.jsx';
+import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
 
 import {Card} from 'material-ui';
 
@@ -18,10 +19,15 @@ class ReadAll extends Component {
                         onQueryChange={this.props.onQueryChange}
                         onSearch={this.props.onSearch}
                     />
-                    <ViewTable
-                        collections={this.props.collections}
-                        errorMessage={this.props.errorMessage}
-                    />
+                    {this.props.fetchedCollections ?
+                        <ViewTable
+                            collections={this.props.collections}
+                            errorMessage={this.props.errorMessage}
+                        />
+                        :
+                        <LoadingIndicator/>
+                    }
+
                 </Card>
             </div>
         );

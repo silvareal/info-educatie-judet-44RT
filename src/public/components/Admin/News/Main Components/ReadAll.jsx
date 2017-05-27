@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import TopActions from '../Partials Components/TopActions.jsx';
 import ViewTable from '../Partials Components/ViewTable.jsx';
+import LoadingIndicator from '../../../Loading Indicator/LoadingIndicator.jsx';
 
 import {Card} from 'material-ui';
 
@@ -19,11 +20,16 @@ class ReadAll extends Component {
                         onSearch={this.props.onSearch}
                         adminId={this.props.adminId}
                     />
-                    <ViewTable
-                        news={this.props.news}
-                        errorMessage={this.props.errorMessage}
-                        adminId={this.props.adminId}
-                    />
+                    {this.props.fetchedNews ?
+                        <ViewTable
+                            news={this.props.news}
+                            errorMessage={this.props.errorMessage}
+                            adminId={this.props.adminId}
+                        />
+                        :
+                        <LoadingIndicator/>
+                    }
+
                 </Card>
             </div>
         );

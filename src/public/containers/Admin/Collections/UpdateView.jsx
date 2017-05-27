@@ -361,6 +361,7 @@ class UpdateView extends Component {
         {
             return (
                 <Update
+                    fetched={this.state.fetched}
                     onQRLinkChange={this.onQRLinkChange}
                     qrLink={this.state.qrLink}
                     onUserNameToAddChange={this.onUserNameToAddChange}

@@ -7,7 +7,6 @@ import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
-import {CircularProgress} from 'material-ui';
 import PictureRow from '../../../components/Admin/Collections/Partials Components/PictureRow.jsx';
 import Comment from '../../../components/Admin/Collections/Partials Components/Comment.jsx';
 
@@ -26,8 +25,9 @@ class ReadOneView extends Component {
             firstName: '',
             comment: '',
             comments: [],
-            commentAdded : null,
-            fetched: false,
+            commentAdded: null,
+            fetchedCollections: false,
+            fetchedComments: false,
             pictureDescriptionRaw: '',
             collectionDescriptionRaw: '',
             rows1: '',
@@ -70,6 +70,25 @@ class ReadOneView extends Component {
         xhr.send();
     };
 
+    adminAuth = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/admin/adminAuthentication');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                //User is an admin
+                this.setState({
+                    isAdmin: true
+                })
+            }
+            else {
+                this.state = {};
+            }
+        });
+        xhr.send();
+    };
+
     getCollection = () => {
         //The next few lines will define the HTTP body message
         const collectionId = encodeURIComponent(this.props.params._collectionId);
@@ -83,21 +102,19 @@ class ReadOneView extends Component {
         xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
         xhr.responseType = 'json';
         xhr.addEventListener('load', () => {
-            if (xhr.status === 200){
+            if (xhr.status === 200) {
 
                 //Retrieve the data for a single collection
 
-                if (xhr.response.message === "Not an admin"){
-                    this.setState({
-                        isAdmin: false
-                    })
+                if (xhr.response.message === "Not an admin") {
+                    this.state = {}
                 }
-                else{
+                else {
                     this.setState({
                         errorMessage: '',
                         collection: xhr.response.collection,
                         collectionDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(xhr.response.collection.collectionDescriptionRaw))),
-                        fetched: true,
+                        fetchedCollections: true,
                         isAdmin: true
                     });
 
@@ -224,7 +241,8 @@ class ReadOneView extends Component {
             if (xhr.status === 200) {
                 //retrieved comments
                 this.setState({
-                    comments: xhr.response.comments
+                    comments: xhr.response.comments,
+                    fetchedComments: true
                 });
                 this.mapComments();
                 this.getCommentsOverallCount();
@@ -286,12 +304,14 @@ class ReadOneView extends Component {
 
     componentDidMount() {
 
+        this.adminAuth();
         //get userName and firstName of the user
         this.getUser();
         //get collection details
         this.getCollection();
         //retrieve all comments for this specific collection
         this.getComments();
+
         //get the number of comments for this collection
         this.getCommentsOverallCount();
 
@@ -312,7 +332,7 @@ class ReadOneView extends Component {
     };
 
     onSave = () => {
-        if (Auth.isUserAuthenticated()){
+        if (Auth.isUserAuthenticated()) {
             const collectionId = encodeURIComponent(this.props.params._collectionId);
             const userName = encodeURIComponent(this.state.userName);
             const firstName = encodeURIComponent(this.state.firstName);
@@ -358,13 +378,12 @@ class ReadOneView extends Component {
     };
 
     render() {
-        if (this.state.collection.collectionName)
-            document.title = this.state.collection.collectionName;
-        else
-            document.title = "404 not found";
-        if (this.state.isAdmin === true && this.state.fetched === true){
+        document.title = this.state.collection.collectionName;
+        if (this.state.isAdmin === true) {
             return (
                 <ReadOne
+                    fetchedCollections={this.state.fetchedCollections}
+                    fetchedComments={this.state.fetchedComments}
                     errorMessage={this.state.errorMessage}
                     adminId={this.props.params._id}
                     commentsCount={this.state.commentsCount}
@@ -385,8 +404,7 @@ class ReadOneView extends Component {
                 />
             );
         }
-        else if (this.state.isAdmin === false) return <NotAuthorizedPage/>;
-        else return <CircularProgress/>;
+        else return <NotAuthorizedPage/>;
     }
 }
 

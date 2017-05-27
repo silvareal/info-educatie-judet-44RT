@@ -7,7 +7,8 @@ class ViewRow extends Component {
         return (
             <Card className="picture-separator">
                 <Link
-                    to={`/manage/readOne/${this.props.collection._id}`}>
+                    to={`/manage/readOne/${this.props.collection._id}`}
+                    target="_blank">
                     <CardMedia
                         mediaStyle={{minHeight: 300}}
                         overlay={<CardTitle title={this.props.collection.collectionName}
@@ -17,14 +18,16 @@ class ViewRow extends Component {
                     </CardMedia>
                 </Link>
                 <CardActions >
-                    <Link to={`/manage/readOne/${this.props.collection._id}/update`}>
+                    <Link to={`/manage/readOne/${this.props.collection._id}/update`}
+                          target="_blank">
                         <RaisedButton
                             type="button"
                             primary={true}
                             label="Update"
                         />
                     </Link>
-                    <Link to={`/manage/readOne/${this.props.collection._id}/delete`}>
+                    <Link to={`/manage/readOne/${this.props.collection._id}/delete`}
+                          target="_blank">
                         <RaisedButton
                             type="button"
                             secondary={true}
