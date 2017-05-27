@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import ReadAll from '../../../components/Admin/Collections/Main Components/ReadAll.jsx';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 import Auth from '../../../modules/Auth.js';
+import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 class ReadAllView extends Component {
 
@@ -71,13 +72,15 @@ class ReadAllView extends Component {
             else if (xhr.status === 404) {
                 //No collections found and we set the corresponding error message
                 this.setState({
-                    errorMessage: xhr.response.message
+                    errorMessage: xhr.response.message,
+                    fetchedCollections: true
                 });
             }
             else {
                 ////Database error to be handled only by an admin
                 this.setState({
-                    errorMessage: 'Please contact an administrator'
+                    errorMessage: 'Please contact an administrator',
+                    fetchedCollections: true
                 })
             }
         });
@@ -203,6 +206,13 @@ class ReadAllView extends Component {
 
     render() {
         document.title = "Manage collections - Admin Controlled";
+        if (this.state.fetchedCollections === false && this.state.isAdmin !== true)
+            return (
+                <div className="parallax-collections">
+                    <div className="top-bar-spacing"/>
+                    <LoadingIndicator/>
+                </div>
+            );
         if (this.state.isAdmin === true)
             return (
                 <div>

@@ -9,6 +9,8 @@ import {stateToHTML} from 'draft-js-export-html';
 
 import PictureRow from '../../../components/Admin/Collections/Partials Components/PictureRow.jsx';
 import Comment from '../../../components/Admin/Collections/Partials Components/Comment.jsx';
+import NotFoundView from "../../Error/NotFoundView.jsx";
+import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 let socket = io.connect();
 
@@ -165,7 +167,8 @@ class ReadOneView extends Component {
             else {
                 this.setState({
                     isAdmin: false,
-                    errorMessage: xhr.response.message
+                    errorMessage: xhr.response.message,
+                    fetchedCollections: "Error"
                 });
             }
         });
@@ -247,6 +250,9 @@ class ReadOneView extends Component {
                 this.mapComments();
                 this.getCommentsOverallCount();
             }
+            else this.setState({
+                fetchedComments: true
+            })
         });
         xhr.send(formData);
     };
@@ -379,6 +385,15 @@ class ReadOneView extends Component {
 
     render() {
         document.title = this.state.collection.collectionName;
+        if (this.state.fetchedCollections === "Error" && this.state.isAdmin === true)
+            return <NotFoundView/>;
+        if (this.state.fetchedCollections === false && this.state.isAdmin !== true)
+            return (
+                <div className="parallax-collections-readOne">
+                    <div className="top-bar-spacing"/>
+                    <LoadingIndicator/>
+                </div>
+            );
         if (this.state.isAdmin === true) {
             return (
                 <ReadOne

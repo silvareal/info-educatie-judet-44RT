@@ -1,17 +1,32 @@
-import React, {Component} from 'react'
-import {Card} from 'material-ui'
+import React, {Component} from 'react';
+import {Link} from 'react-router';
+import {Card, CardText} from 'material-ui';
 
-class NotFoundPage extends Component {
+class NotFoundView extends Component {
+
     render() {
         document.title = "404 not found";
+        const styles = {
+            text: {
+                fontSize: 30,
+                textAlign: "center"
+            }
+        };
         return (
-            <Card className="container">
-                <div>
-                    The page you are looking for doesn't exist.
-                </div>
-            </Card>
+            <div className="parallax-home">
+                <div className="top-bar-spacing"/>
+                <Card className="container-collections" style={{backgroundColor: "transparent", boxShadow: "none"}}>
+                    <Card>
+                        <CardText style={styles.text}>
+                        The page you are looking for doesn't exist.
+                            <br/>
+                            <Link to={`/`}>Back to the homepage</Link>
+                        </CardText>
+                    </Card>
+                </Card>
+            </div>
         )
     }
 }
 
-export default NotFoundPage
+export default NotFoundView

@@ -6,8 +6,8 @@ import Auth from '../../modules/Auth.js';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
-import {CircularProgress} from 'material-ui';
 import Comment from '../../components/BrowseNews/Partials Components/Comment.jsx';
+import NotFoundView from '../Error/NotFoundView.jsx';
 
 let socket = io.connect();
 
@@ -91,7 +91,8 @@ class ReadOneView extends Component {
             }
             else {
                 this.setState({
-                    errorMessage: xhr.response.message
+                    errorMessage: xhr.response.message,
+                    fetchedNews: "Error"
                 });
             }
         });
@@ -100,7 +101,7 @@ class ReadOneView extends Component {
         xhr.send(formData);
     };
 
-    onScroll = (e) => {
+    onScroll = () => {
         if (this.state.finished === false && document.title === this.state.news.newsTitle)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();
@@ -173,6 +174,9 @@ class ReadOneView extends Component {
                 this.mapComments();
                 this.getCommentsOverallCount();
             }
+            else this.setState({
+                fetchedComments: true
+            })
         });
         xhr.send(formData);
     };
@@ -305,6 +309,8 @@ class ReadOneView extends Component {
         if (this.state.news.newsTitle)
             document.title = this.state.news.newsTitle;
         else document.title = "404 not found";
+        if (this.state.fetchedNews === "Error")
+            return <NotFoundView/>;
             return (
                 <ReadOne
                     fetchedNews={this.state.fetchedNews}

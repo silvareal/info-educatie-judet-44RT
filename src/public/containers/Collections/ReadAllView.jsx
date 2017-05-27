@@ -51,13 +51,15 @@ class ReadAllView extends Component {
             else if (xhr.status === 404) {
                 //No collections found and we set the corresponding error message
                 this.setState({
-                    errorMessage: xhr.response.message
+                    errorMessage: xhr.response.message,
+                    fetchedCollections: true
                 });
             }
             else {
                 ////Database error to be handled only by an admin
                 this.setState({
-                    errorMessage: 'Please contact an administrator'
+                    errorMessage: 'Please contact an administrator',
+                    fetchedCollections: true
                 })
             }
         });
@@ -67,7 +69,7 @@ class ReadAllView extends Component {
         xhr.send();
     };
 
-    onScroll = (e) => {
+    onScroll = () => {
         if (this.state.finished === false && document.title === "Manage collections" && this.state.searching === false)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();

@@ -45,13 +45,15 @@ class ReadAllView extends Component {
             else if (xhr.status === 404) {
                 //No collections found and we set the corresponding error message
                 this.setState({
-                    errorMessage: xhr.response.message
+                    errorMessage: xhr.response.message,
+                    fetchedCollections: true
                 });
             }
             else {
                 ////Database error to be handled only by an admin
                 this.setState({
-                    errorMessage: 'Please contact an administrator'
+                    errorMessage: 'Please contact an administrator',
+                    fetchedCollections: true
                 })
             }
         });

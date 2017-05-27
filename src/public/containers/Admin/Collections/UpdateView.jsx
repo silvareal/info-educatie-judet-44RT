@@ -7,6 +7,8 @@ import {convertToRaw, convertFromRaw} from 'draft-js';
 import Update from '../../../components/Admin/Collections/Main Components/Update.jsx';
 import Auth from '../../../modules/Auth.js';
 import NotAuthorizedView from "../../Error/NotAuthorizedView.jsx";
+import NotFoundView from "../../Error/NotFoundView.jsx";
+import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 class UpdateView extends Component {
     constructor(props) {
@@ -120,7 +122,7 @@ class UpdateView extends Component {
                 for (let i = 0; i < pictures.length; i++) {
                     this.setRawValue(i);
                     this.setHTMLValue(i);
-                    if ( i === pictures.length -1 ){
+                    if (i === pictures.length - 1) {
                         this.setState({
                             fetched: true,
                         })
@@ -130,7 +132,8 @@ class UpdateView extends Component {
             } else {
                 this.setState({
                     errorMessage: xhr.response.message,
-                    response: false
+                    response: false,
+                    fetched: "Error"
                 });
             }
         });
@@ -258,7 +261,7 @@ class UpdateView extends Component {
     onSave = () => {
         if (this.state.response === true) {
 
-            for (let i = 0 ; i < this.state.pictures.length; i++) {
+            for (let i = 0; i < this.state.pictures.length; i++) {
                 const newPictures = this.state.pictures.map((picture, j) => {
                     if (i !== j) return picture;
 
@@ -320,32 +323,32 @@ class UpdateView extends Component {
                     errors.summary = xhr.response.message;
                     const errorsPicturesArray = xhr.response.errorsPicturesArray ? xhr.response.errorsPicturesArray : {};
 
-                        this.setState({
-                            successUpdate: false,
-                            errors,
-                            errorsPicturesArray
-                        });
+                    this.setState({
+                        successUpdate: false,
+                        errors,
+                        errorsPicturesArray
+                    });
 
-                        let pictureNameError, pictureDescriptionError, pictureLinkError;
+                    let pictureNameError, pictureDescriptionError, pictureLinkError;
 
-                        pictureNameError = this.state.errorsPicturesArray.map((a) => {
-                            return a.pictureName;
-                        });
+                    pictureNameError = this.state.errorsPicturesArray.map((a) => {
+                        return a.pictureName;
+                    });
 
-                        pictureDescriptionError = this.state.errorsPicturesArray.map((a) => {
-                            return a.pictureDescription
-                        });
+                    pictureDescriptionError = this.state.errorsPicturesArray.map((a) => {
+                        return a.pictureDescription
+                    });
 
-                        pictureLinkError = this.state.errorsPicturesArray.map((a) => {
-                            return a.pictureLink
-                        });
+                    pictureLinkError = this.state.errorsPicturesArray.map((a) => {
+                        return a.pictureLink
+                    });
 
-                        this.setState({
-                            pictureNameError: pictureNameError,
-                            pictureLinkError: pictureLinkError,
-                            pictureDescriptionError: pictureDescriptionError
-                        })
-                    }
+                    this.setState({
+                        pictureNameError: pictureNameError,
+                        pictureLinkError: pictureLinkError,
+                        pictureDescriptionError: pictureDescriptionError
+                    })
+                }
             });
             xhr.send(formData);
         }
@@ -357,8 +360,15 @@ class UpdateView extends Component {
         if (this.state.collectionName)
             document.title = "Update - " + this.state.collectionName;
         else document.title = "404 not found";
-        if (this.state.isAdmin === true)
-        {
+        if (this.state.isAdmin === true && this.state.fetched === "Error")
+            return <NotFoundView/>;
+        if (this.state.fetched === false && this.state.isAdmin !== true)
+            return (
+                <div className="parallax-collections-create">
+                    <div className="top-bar-spacing"/>
+                    <LoadingIndicator/>
+                </div>);
+        if (this.state.isAdmin === true) {
             return (
                 <Update
                     fetched={this.state.fetched}

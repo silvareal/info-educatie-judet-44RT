@@ -4,9 +4,9 @@ import {Link} from 'react-router';
 import {CardMedia, CardTitle} from 'material-ui';
 
 import Profile from '../../components/Profile/Profile.jsx';
-import NotFoundPage from '../Error/NotFoundView.jsx';
 
 import Auth from '../../modules/Auth.js';
+import NotFoundView from "../Error/NotFoundView.jsx";
 
 class ProfileView extends Component {
     constructor(props, context) {
@@ -160,7 +160,7 @@ class ProfileView extends Component {
                 errors.summary = xhr.response.message;
 
                 this.setState({
-                    errors
+                    errors, fetchedProfile: "Error"
                 });
             }
         });
@@ -324,6 +324,8 @@ class ProfileView extends Component {
         }
         else {
             document.title = this.state.userName + ' - Profile';
+            if (this.state.fetchedProfile === "Error")
+                return <NotFoundView/>;
             return (
                 <Profile
                     fetchedProfile={this.state.fetchedProfile}

@@ -2,12 +2,14 @@ import React, {Component} from 'react';
 
 import ReadOne from '../../../components/Admin/News/Main Components/ReadOne.jsx';
 import Auth from '../../../modules/Auth.js';
-import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
+import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
 import Comment from '../../../components/Admin/News/Partials Components/Comment.jsx';
+import LoadingIndicator from '../../../components/Loading Indicator/LoadingIndicator.jsx';
+import NotFoundView from "../../Error/NotFoundView.jsx";
 
 let socket = io.connect();
 
@@ -107,7 +109,8 @@ class ReadOneView extends Component {
             }
             else {
                 this.setState({
-                    errorMessage: xhr.response.message
+                    errorMessage: xhr.response.message,
+                    fetchedNews: "Error"
                 });
             }
         });
@@ -320,6 +323,15 @@ class ReadOneView extends Component {
     render() {
         if (this.state.news.newsTitle)
             document.title = this.state.news.newsTitle;
+        if (this.state.fetchedNews === "Error" && this.state.isAdmin === true)
+            return <NotFoundView/>;
+        if (this.state.fetchedNews === false && this.state.isAdmin !== true)
+            return (
+                <div className="parallax-collections-readOne">
+                    <div className="top-bar-spacing"/>
+                    <LoadingIndicator/>
+                </div>
+            );
         if (this.state.isAdmin === true)
         {
             return (
@@ -343,7 +355,7 @@ class ReadOneView extends Component {
                 />
             );
         }
-        else return <NotAuthorizedPage/>
+        else return <NotAuthorizedView/>
     }
 }
 

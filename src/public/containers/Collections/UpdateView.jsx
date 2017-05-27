@@ -4,10 +4,9 @@ import RichTextEditor from 'react-rte';
 import {stateToHTML} from 'draft-js-export-html';
 import {convertToRaw, convertFromRaw} from 'draft-js';
 
-import {CircularProgress} from 'material-ui';
-
 import Update from '../../components/Collections/Main Components/Update.jsx';
 import Auth from '../../modules/Auth.js';
+import NotFoundView from "../Error/NotFoundView.jsx";
 
 class UpdateView extends Component {
     constructor(props) {
@@ -102,7 +101,8 @@ class UpdateView extends Component {
             } else {
                 this.setState({
                     errorMessage: xhr.response.message,
-                    response: false
+                    response: false,
+                    fetched: "Error"
                 });
             }
         });
@@ -307,32 +307,36 @@ class UpdateView extends Component {
             document.title = "Update - " + this.state.collectionName;
         else
             document.title = "404 not found";
-        return (
-            <Update
-                qrLink={this.state.qrLink}
-                onQRLinkChange={this.onQRLinkChange}
-                collectionId={this.state.collectionId}
-                collectionName={this.state.collectionName}
-                onCollectionChange={this.onCollectionChange}
-                collectionDescription={this.state.collectionDescription}
-                onCollectionDescriptionChange={this.onCollectionDescriptionChange}
-                collectionDescriptionRaw={this.state.collectionDescriptionRaw}
-                getHTML={this.getHTML}
-                __html={this.state.__html}
-                errorMessage={this.state.errorMessage}
-                errors={this.state.errors}
-                pictureNameError={this.state.pictureNameError}
-                pictureDescriptionError={this.state.pictureDescriptionError}
-                pictureLinkError={this.state.pictureLinkError}
-                pictures={this.state.pictures}
-                handlePicturesNameChange={this.handlePicturesNameChange}
-                handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
-                handlePicturesLinkChange={this.handlePicturesLinkChange}
-                handleAddPictures={this.handleAddPictures}
-                handleRemovePictures={this.handleRemovePictures}
-                onSave={this.onSave}
-            />
-        );
+        if (this.state.fetched === "Error")
+            return <NotFoundView/>;
+        else
+            return (
+                <Update
+                    fetched={this.state.fetched}
+                    qrLink={this.state.qrLink}
+                    onQRLinkChange={this.onQRLinkChange}
+                    collectionId={this.state.collectionId}
+                    collectionName={this.state.collectionName}
+                    onCollectionChange={this.onCollectionChange}
+                    collectionDescription={this.state.collectionDescription}
+                    onCollectionDescriptionChange={this.onCollectionDescriptionChange}
+                    collectionDescriptionRaw={this.state.collectionDescriptionRaw}
+                    getHTML={this.getHTML}
+                    __html={this.state.__html}
+                    errorMessage={this.state.errorMessage}
+                    errors={this.state.errors}
+                    pictureNameError={this.state.pictureNameError}
+                    pictureDescriptionError={this.state.pictureDescriptionError}
+                    pictureLinkError={this.state.pictureLinkError}
+                    pictures={this.state.pictures}
+                    handlePicturesNameChange={this.handlePicturesNameChange}
+                    handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
+                    handlePicturesLinkChange={this.handlePicturesLinkChange}
+                    handleAddPictures={this.handleAddPictures}
+                    handleRemovePictures={this.handleRemovePictures}
+                    onSave={this.onSave}
+                />
+            );
     }
 }
 

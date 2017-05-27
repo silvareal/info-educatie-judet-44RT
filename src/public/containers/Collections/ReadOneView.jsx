@@ -6,9 +6,9 @@ import Auth from '../../modules/Auth.js';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
-import {CircularProgress} from 'material-ui';
 import PictureRow from "../../components/Collections/Partials Components/PictureRow.jsx";
 import Comment from '../../components/Collections/Partials Components/Comment.jsx';
+import NotFoundView from "../Error/NotFoundView.jsx";
 
 let socket = io.connect();
 
@@ -136,7 +136,7 @@ class ReadOneView extends Component {
             else {
                 this.setState({
                     errorMessage: xhr.response.message,
-                    fetchedCollection: 'Error'
+                    fetchedCollection: "Error"
                 });
             }
         });
@@ -145,7 +145,7 @@ class ReadOneView extends Component {
         xhr.send(formData);
     };
 
-    onScroll = (e) => {
+    onScroll = () => {
         if (this.state.finished === false && document.title === this.state.collection.collectionName)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();
@@ -217,6 +217,9 @@ class ReadOneView extends Component {
                 });
                 this.mapComments();
             }
+            else this.setState({
+                fetchedComments: true
+            })
         });
         xhr.send(formData);
     };
@@ -349,6 +352,8 @@ class ReadOneView extends Component {
         if (this.state.collection.collectionName)
             document.title = this.state.collection.collectionName;
         else document.title = "404 not found";
+        if (this.state.fetchedCollection === "Error")
+            return <NotFoundView/>;
         return (
             <ReadOne
                 fetchedCollection={this.state.fetchedCollection}

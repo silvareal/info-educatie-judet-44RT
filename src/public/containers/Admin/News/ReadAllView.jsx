@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import ReadAll from '../../../components/Admin/News/Main Components/ReadAll.jsx';
 import Auth from '../../../modules/Auth.js';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
+import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 class ReadAllView extends Component {
 
@@ -186,6 +187,13 @@ class ReadAllView extends Component {
 
     render() {
         document.title = "Manage news - Admin Controlled";
+        if (this.state.fetchedNews === false && this.state.isAdmin !== true)
+            return (
+                <div className="parallax-collections">
+                    <div className="top-bar-spacing"/>
+                    <LoadingIndicator/>
+                </div>
+            );
         if (this.state.isAdmin === true)
         {
             return (

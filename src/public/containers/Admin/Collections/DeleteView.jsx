@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
 
 import Delete from '../../../components/Admin/Collections/Main Components/Delete.jsx';
-import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
+import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 import Auth from '../../../modules/Auth.js';
+import NotFoundView from '../../Error/NotFoundView.jsx';
+import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 class DeleteView extends Component {
     constructor(props) {
@@ -10,7 +12,7 @@ class DeleteView extends Component {
 
         this.state = {
             message: '',
-            response: null,
+            response: false,
             ownerId: '',
             collectionName: '',
             collectionDescription: '',
@@ -61,7 +63,7 @@ class DeleteView extends Component {
                 //Collection or user doesn't exist
                 this.setState({
                     message: xhr.response.message,
-                    response: false
+                    response: "Error"
                 })
             }
         });
@@ -118,6 +120,15 @@ class DeleteView extends Component {
         if (this.state.collectionName)
             document.title = "Delete - " + this.state.collectionName;
         else document.title = "404 not found";
+        if (this.state.response === "Error")
+            return <NotFoundView/>;
+        if(this.state.response === false && this.state.isAdmin !== true)
+            return (
+                <div className="parallax-collections-delete">
+                    <div className="top-bar-spacing"/>
+                    <LoadingIndicator/>
+                </div>
+            );
         if (this.state.isAdmin === true)
         {
             return (
@@ -128,7 +139,7 @@ class DeleteView extends Component {
                     onDelete={this.onDelete}/>
             )
         }
-        else return <NotAuthorizedPage/>
+        else return <NotAuthorizedView/>
     }
 }
 

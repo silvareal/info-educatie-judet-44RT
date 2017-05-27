@@ -3,6 +3,8 @@ import React, {Component} from 'react'
 import Delete from '../../../components/Admin/News/Main Components/Delete.jsx';
 import Auth from '../../../modules/Auth.js';
 import NotAuthorizedPage from '../../Error/NotAuthorizedView.jsx';
+import NotFoundView from "../../Error/NotFoundView.jsx";
+import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 class DeleteView extends Component {
     constructor(props) {
@@ -10,7 +12,7 @@ class DeleteView extends Component {
 
         this.state = {
             message: '',
-            response: null,
+            response: false,
             newsTitle: '',
             newsCoverLink: '',
             newsDescription: '',
@@ -62,7 +64,7 @@ class DeleteView extends Component {
                 //Collection or user doesn't exist
                 this.setState({
                     message: xhr.response.message,
-                    response: false
+                    response: "Error"
                 })
             }
         });
@@ -119,6 +121,15 @@ class DeleteView extends Component {
             document.title = "Delete - " + this.state.newsTitle;
         else
         document.title = "404 not found";
+        if (this.state.isAdmin === true && this.state.response === "Error")
+            return <NotFoundView/>;
+        if (this.state.response === false && this.state.isAdmin !== true)
+            return (
+                <div className="parallax-collections-delete">
+                    <div className="top-bar-spacing"/>
+                    <LoadingIndicator/>
+                </div>
+            );
         if (this.state.isAdmin === true)
         {
             return (

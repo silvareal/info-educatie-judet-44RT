@@ -38,12 +38,14 @@ class ReadAllView extends Component {
             }
             else if (xhr.status === 404) {
                 this.setState({
-                    errorMessage: xhr.response.message
+                    errorMessage: xhr.response.message,
+                    fetchedNews: true
                 });
             }
             else {
                 this.setState({
-                    errorMessage: 'Please contact an administrator'
+                    errorMessage: 'Please contact an administrator',
+                    fetchedNews: true
                 })
             }
         });

@@ -27,7 +27,6 @@ class ReadAll extends Component {
                         :
                         <LoadingIndicator/>
                     }
-
                 </Card>
             </div>
         );

@@ -7,6 +7,8 @@ import {convertToRaw, convertFromRaw} from 'draft-js';
 import Update from '../../../components/Admin/News/Main Components/Update.jsx';
 import Auth from '../../../modules/Auth.js';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
+import NotFoundView from "../../Error/NotFoundView.jsx";
+import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 class UpdateView extends Component {
     constructor(props) {
@@ -98,7 +100,8 @@ class UpdateView extends Component {
             } else {
                 this.setState({
                     errorMessage: xhr.response.message,
-                    response: false
+                    response: false,
+                    fetched: "Error"
                 });
             }
         });
@@ -233,6 +236,15 @@ class UpdateView extends Component {
         document.title = "Update News - " + this.state.newsTitle;
         else
             document.title = "404 not found";
+        if (this.state.isAdmin === true && this.state.fetched === "Error")
+            return <NotFoundView/>;
+        if (this.state.fetched === false && this.state.isAdmin !== true)
+            return (
+                <div className="parallax-collections-create">
+                    <div className="top-bar-spacing"/>
+                    <LoadingIndicator/>
+                </div>
+            );
         if (this.state.isAdmin === true)
         {
             return (

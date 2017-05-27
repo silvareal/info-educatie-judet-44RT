@@ -12,9 +12,9 @@ class AdminView extends Component {
             isAdmin: false,
             message: '',
             userName: '',
-            firstName:'',
+            firstName: '',
             profilePictureLink: '',
-            adminId:''
+            adminId: ''
         };
     }
 
@@ -26,6 +26,7 @@ class AdminView extends Component {
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
                 //User is an admin
+                if (xhr.response.message === "Welcome admin")
                 this.setState({
                     isAdmin: true,
                     message: xhr.response.message
@@ -62,9 +63,9 @@ class AdminView extends Component {
 
     render() {
         document.title = "Admin panel";
-        return (
-            <div>
-                {this.state.isAdmin ?
+        if (this.state.isAdmin) {
+            return (
+                <div>
                     <AdminPage
                         adminId={this.state.adminId}
                         userName={this.state.userName}
@@ -72,11 +73,12 @@ class AdminView extends Component {
                         profilePictureLink={this.state.profilePictureLink}
                         userId={this.props.params._id}
                         message={this.state.message}
-                    /> : <NotAuthorizedView/>}
-            </div>
-        )
+                    />
+                </div>
+            )
+        }
+        else return <NotAuthorizedView/>
     }
-
 }
 
 export default AdminView;
