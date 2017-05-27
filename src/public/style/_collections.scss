@@ -42,7 +42,7 @@
     @include textAlign(center);
     @include display(flex, 1, flex-start);
     font-size: 2em !important;
-    word-break: break-all;
+    word-break: normal;
   }
 }
 

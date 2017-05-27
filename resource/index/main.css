@@ -164,7 +164,7 @@ a {
   color: black;
   transition: color 0.4s; }
   a :hover {
-    color: white; }
+    color: grey; }
 
 .loading-style {
   display: flex;
@@ -514,7 +514,7 @@ body, html, main {
     flex: 1;
     justify-content: flex-start;
     font-size: 2em !important;
-    word-break: break-all; }
+    word-break: normal; }
 
 .top-actions {
   display: flex;
@@ -862,6 +862,58 @@ body, html, main {
   padding: 10px   ; }
 
 .dialog-break-word {
-  word-break: break-all; }
+  word-break: normal; }
+
+.container-admin-cp {
+  padding: 64px 0 64px 0;
+  min-height: 800px; }
+  @media screen and (max-width: 1200px) {
+    .container-admin-cp {
+      min-height: 400px;
+      padding: 1em   ;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; } }
+  .container-admin-cp div {
+    width: 100%;
+    height: 100%; }
+
+.icons-container-admin-cp {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  width: 100%;
+  height: 100%; }
+  @media screen and (max-width: 1200px) {
+    .icons-container-admin-cp {
+      display: block;
+      flex: "";
+      justify-content: ""; } }
+
+.icons-content-admin-cp {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  width: 100%;
+  height: 100%; }
+  .icons-content-admin-cp svg {
+    height: 80% !important;
+    width: 80% !important; }
+
+.mobile-header-admin-cp {
+  display: flex;
+  flex: 1;
+  justify-content: center; }
+  .mobile-header-admin-cp div {
+    padding: 0 !important   ;
+    max-width: 80%; }
+  .mobile-header-admin-cp .user-header {
+    font-size: 2em;
+    word-break: normal; }
+
+.action-header {
+  font-weight: bold;
+  font-size: 1.5em;
+  word-break: normal; }
 
 /*# sourceMappingURL=main.css.map */

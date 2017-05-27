@@ -1,0 +1,52 @@
+@import "./constants/fonts";
+@import "./constants/functions";
+
+.container-admin-cp {
+  @include padding(64px, 0, 64px, 0);
+  min-height: 800px;
+  @media screen and (max-width: 1200px) {
+    min-height: 400px;
+    @include padding(1em);
+    @include box-sizing(border-box);
+  }
+  div {
+    @include widthAndHeight(100%, 100%);
+  }
+}
+
+.icons-container-admin-cp {
+  @include display(flex, 1, center);
+  @include widthAndHeight(100%, 100%);
+
+  @media screen and (max-width: 1200px) {
+    @include display(block);
+  }
+}
+
+.icons-content-admin-cp {
+  @include display(flex, 1, center);
+  @include widthAndHeight(100%, 100%);
+
+  svg {
+    height: 80% !important;
+    width: 80% !important;
+  }
+}
+
+.mobile-header-admin-cp {
+  div {
+    @include padding(0 !important);
+    max-width: 80%;
+  }
+  @include display(flex, 1, center);
+  .user-header {
+    font-size: 2em;
+    word-break: normal;
+  }
+}
+
+.action-header {
+  font-weight: bold;
+  font-size: 1.5em;
+  word-break: normal;
+}
