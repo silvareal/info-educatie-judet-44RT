@@ -315,7 +315,10 @@ router.post("/searchCollections", (req, res) => {
 
         const userId = decoded.sub;
 
-        Collection.find({collectionName: { $regex: req.body.searchQuery.trim(), $options: 'si', }, userId: userId}, (err, collections) => {
+        Collection.find({
+            collectionName: {$regex: req.body.searchQuery.trim(), $options: 'si',},
+            userId: userId
+        }, (err, collections) => {
             if (err) {
                 return res.status(400).json({
                     message: "Database error"
@@ -489,7 +492,7 @@ router.post('/updateSave', (req, res) => {
                 });
             }
 
-            if (!collection){
+            if (!collection) {
                 return res.status(404).json({
                     message: "Collection does not exist",
                     success: false

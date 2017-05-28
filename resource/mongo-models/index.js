@@ -27,4 +27,5 @@ module.exports.connect = (uri) => {
     require('./logs-models/profile-logs/updateProfileLogs');
     require('./collections/commentCollection');
     require('./news/commentNews');
+    require('./contact/contact');
 };

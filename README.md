@@ -42,9 +42,16 @@
         Update: added
         }
         
-        -make a placeholder for the contact page for v0.0.4
+        -make a placeholder for the contact page for v0.0.4{
+        Status Complete,
+        Notes: Will only make it functional. For 0.0.4 I will add actual viewing of the feedback in the admin panel
+        Note2: Page is functional
+        }
         
-        -like system
+        -like system {
+        Status: Delayed to 0.0.4,
+        Notes: Not enough time to optimize it
+        }
         
         -reorganize all files in specific folders {
         Status: Complete,
@@ -53,14 +60,19 @@
         
         -think of a design for the logs page ( should be simple ){
         Status: In-progress
+        Notes: Design is done, just need to apply it to all 8 or 9 pages
         }
         
         -on users management, have the make moderators on the AppBar and create ALL the rules for banning users {
-        Status: In-progress,
+        Status: Complete,
         Notes: Added the button on snackbar and rethinked the design of the manage users page
+        Note2: Banning an user is possible and functional
         }
         
-        -create specific actions for moderators
+        -create specific actions for moderators {
+        Status: Delayed to 0.0.4,
+        Notes: Requires reworking of the comment system which wil take a couple days
+        }
         
         -finish readAll, readOne, create, delete, update pages{
         Status: Complete,
@@ -102,9 +114,11 @@
         -that being said, make the application for mod page
 
         -unless there's anything left,clean up the code, remove futile variables and state
+        
         -make efficient functions and use them where necessary
+        
         -rework the hierarchy and split jobs between parents and children
-        */
+        
         
         -update the logging of the site{
         Status: Complete,

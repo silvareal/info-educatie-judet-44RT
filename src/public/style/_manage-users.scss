@@ -27,6 +27,10 @@
   }
 }
 
+.center-users-ban {
+  @include display(flex, 1, center);
+}
+
 .mobile-header-users {
   div {
     @include padding(0 !important);

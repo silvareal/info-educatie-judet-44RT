@@ -24,6 +24,13 @@ module.exports = new PassportLocalStrategy(
             return done(error);
         }
 
+        if (user.banned === true) {
+            const error = new Error('User is banned');
+            error.name = 'UserBanned';
+
+            return done(error);
+        }
+
         // check if a hashed user's password is equal to a value saved in the database
         return user.comparePasswordLogin(userData.password, (passwordErr, isMatch) => {
             if (err) {

@@ -335,6 +335,76 @@ router.get("/showUsers", (req, res) => {
     });
 });
 
+router.post('/banUser', (req, res) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        //here to be used for logs
+        const userId = decoded.sub;
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            User.findOne({_id: req.body.userIdToBan}, (err, user) => {
+
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
+                    });
+                }
+
+                if (!user) {
+                    return res.status(404).json({
+                        message: "User not found"
+                    });
+                }
+
+                User.updateOne({_id: req.body.userIdToBan}, {
+                        $set: {
+                            banned: !user.banned
+                        }
+                    }, (err, user) => {
+                        if (err) {
+                            return res.status(400).json({
+                                message: "Database error"
+                            });
+                        }
+
+                        if (!user) {
+                            return res.status(404).json({
+                                message: "User not found"
+                            })
+                        }
+
+                        res.json({
+                            success: true
+                        })
+                    }
+                )
+
+            });
+        }
+        else return res.status(401).end();
+    });
+});
+
 router.post('/makeModerators', (req, res) => {
 
     if (!req.headers.authorization) {
@@ -370,7 +440,7 @@ router.post('/makeModerators', (req, res) => {
 
                             if (err) {
                                 return res.status(400).json({
-                                    message: "User not found"
+                                    message: "Database error"
                                 });
                             }
 
@@ -388,11 +458,15 @@ router.post('/makeModerators', (req, res) => {
                                     }
                                 }, (err, user) => {
                                     if (err) {
-                                        console.log("error 1");
+                                        return res.status(400).json({
+                                            message: "Database error"
+                                        });
                                     }
 
                                     if (!user) {
-                                        console.log("error 2");
+                                        return res.status(404).json({
+                                            message: "User not found"
+                                        })
                                     }
                                 })
                             }
@@ -404,11 +478,15 @@ router.post('/makeModerators', (req, res) => {
                                         }
                                     }, (err, user) => {
                                         if (err) {
-                                            console.log("error 1");
+                                            return res.status(400).json({
+                                                message: "Database error"
+                                            });
                                         }
 
                                         if (!user) {
-                                            console.log("error 2");
+                                            return res.status(404).json({
+                                                message: "User not found"
+                                            })
                                         }
                                     });
                                 }

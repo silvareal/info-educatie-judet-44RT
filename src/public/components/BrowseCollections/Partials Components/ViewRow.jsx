@@ -17,12 +17,6 @@ class ViewRow extends Component {
                         <img src={this.props.collection.picturesArray[0].pictureLink}/>
                     </CardMedia>
                 </Link>
-                <CardActions>
-                    <RaisedButton
-                        label="Like placeholder"
-                        primary={true}
-                    />
-                </CardActions>
             </Card>
         );
     }

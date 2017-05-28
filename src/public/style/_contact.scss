@@ -1,0 +1,34 @@
+@import "./constants/fonts";
+@import "./constants/functions";
+
+.parallax-contact {
+  @include widthAndHeight("auto", 100%);
+  @include background-image("./images/art6.jpg", fixed, center, repeat, cover);
+}
+
+.container-contact {
+  @include padding(64px, 256px, 64px, 256px);
+  min-height: 800px;
+  @media screen and (max-width: 1200px) {
+    min-height: 400px;
+    @include padding(1em);
+    @include box-sizing(border-box);
+  }
+}
+
+.contact-header {
+  @include display(flex, 1, center);
+  @include padding(30px);
+  @include box-sizing(border-box);
+  @include widthAndHeight(100%, 100%);
+  font-size: 3em;
+  font-weight: bold;
+  color: #ffffff;
+  @include background-color(rgba(0,0,255, 0.8));
+}
+
+.success-message-contact {
+  font-size: 1.3em;
+  color: limegreen;
+  @include display(flex, 1, center)
+}

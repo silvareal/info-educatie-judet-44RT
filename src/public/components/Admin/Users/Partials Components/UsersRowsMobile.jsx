@@ -37,27 +37,55 @@ class UsersRowsMobile extends Component {
 
         return (
             <Card style={{backgroundColor: "transparent", boxShadow: "none"}}>
-                <CardHeader
-                    className="mobile-header-users"
-                    title={
-                        <div className="user-header">
-                            <Link to={`/profile/${this.props.user.name}`}
-                                  style={{textDecoration: "none"}}>
-                                {this.props.user.email}
-                            </Link>
-                        </div>}
+                {this.props.mobileAddModerators ?
+                    <CardHeader
+                        className="mobile-header-users"
+                        title={
+                            <div className="user-header">
+                                <Link to={`/profile/${this.props.user.name}`}
+                                      style={{textDecoration: "none"}}>
+                                    {this.props.user.email}
+                                </Link>
+                            </div>}
 
-                    subtitle={this.props.user.moderator === true ? "User is a moderator" : "User is NOT a moderator"}
-                    avatar={this.props.user.profilePictureLink ? this.props.user.profilePictureLink :
-                        <ActionAccountCircle/>}
-                />
-                <CardActions>
-                    <RaisedButton primary={true}
-                                  style={{backgroundColor: "transparent", boxShadow: "none"}}
-                                  label="Give/Revoke moderator permissions"
-                                  onTouchTap={this.props.mobileAddModerators(this.props.index)}
-                                  className="action-buttons-users"
+                        subtitle={this.props.user.moderator === true ? "User is a moderator" : "User is NOT a moderator"}
+                        avatar={this.props.user.profilePictureLink ? this.props.user.profilePictureLink :
+                            <ActionAccountCircle/>}
                     />
+                    :
+                    <CardHeader
+                        className="mobile-header-users"
+                        title={
+                            <div className="user-header">
+                                <Link to={`/profile/${this.props.user.name}`}
+                                      style={{textDecoration: "none"}}>
+                                    {this.props.user.email}
+                                </Link>
+                            </div>}
+
+                        subtitle={this.props.user.banned === true ? "User is banned" : "User is NOT banned"}
+                        avatar={this.props.user.profilePictureLink ? this.props.user.profilePictureLink :
+                            <ActionAccountCircle/>}
+                    />
+                }
+
+                <CardActions>
+                    {this.props.mobileAddModerators ?
+                        <RaisedButton primary={true}
+                                      style={{backgroundColor: "transparent", boxShadow: "none"}}
+                                      label="Give/Revoke moderator permissions"
+                                      onTouchTap={this.props.mobileAddModerators(this.props.index)}
+                                      className="action-buttons-users"
+                        />
+                        :
+                        <RaisedButton primary={true}
+                                      style={{backgroundColor: "transparent", boxShadow: "none"}}
+                                      label="Ban/Unban user"
+                                      onTouchTap={this.props.mobileBanUser(this.props.userId)}
+                                      className="action-buttons-users"
+                        />
+                    }
+
                     <RaisedButton primary={true}
                                   style={{backgroundColor: "transparent", boxShadow: "none"}}
                                   label="Details"

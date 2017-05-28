@@ -9,10 +9,14 @@ import {
     TableHeaderColumn,
     Snackbar,
     TextField,
-    IconButton
+    IconButton,
+    Tabs,
+    Tab
 } from 'material-ui';
 
 import ActionSearch from 'material-ui/svg-icons/action/search';
+import ContentRemoveCircle from 'material-ui/svg-icons/content/remove-circle';
+import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact-calendar';
 import LoadingIndicator from '../../../Loading Indicator/LoadingIndicator.jsx';
 
 class Users extends Component {
@@ -42,15 +46,18 @@ class Users extends Component {
         }
     };
 
+
     render() {
 
-        if (this.props.fetchedUsers)
-        {
+        if (this.props.fetchedUsers && this.props.rows1 && this.props.rows2) {
             return (
                 <div>
                     <div className="top-bar-spacing"/>
                     <Card className="container-manage-users" style={{boxShadow: "none"}}>
-                        {this.props.message}
+                        <Tabs initialSelectedIndex={this.props.currentMode === 'Ban' ? 1 : 2}>
+                            <Tab icon={<ActionPermContactCalendar/>} onClick={() => this.props.changeAppMode('Moderators')}/>
+                            <Tab icon={<ContentRemoveCircle/>} onClick={() => this.props.changeAppMode('Ban')}/>
+                        </Tabs>
                         <div className="top-actions">
                             <div className="capsules">
                                 <TextField hintText="Email, username or id"
@@ -114,7 +121,39 @@ class Users extends Component {
                 </div>
             )
         }
-        else return(
+        else if (this.props.fetchedUsers && this.props.rows3) {
+            return (
+                <div>
+                    <div className="top-bar-spacing"/>
+                    <Card className="container-manage-users" style={{boxShadow: "none"}}>
+                        <Tabs initialSelectedIndex={this.props.currentMode === 'Ban' ? 1 : 2}>
+                            <Tab icon={<ActionPermContactCalendar/>} onClick={() => this.props.changeAppMode('Moderators')}/>
+                            <Tab icon={<ContentRemoveCircle/>} onClick={() => this.props.changeAppMode('Ban')}/>
+                        </Tabs>
+                        <div className="top-actions">
+                            <div className="capsules">
+                                <TextField hintText="Email, username or id"
+                                           value={this.props.searchQuery}
+                                           onChange={this.props.onSearchQueryChange}
+                                           onKeyDown={this.props.handleKeyPress}
+                                />
+                                <IconButton onTouchTap={this.props.onSearchUser}>
+                                    <ActionSearch/>
+                                </IconButton>
+                            </div>
+                        </div>
+                        <form>
+                            <div className="center-users-ban">
+                                <div className="manage-users-ban">
+                                    {this.props.rows3}
+                                </div>
+                            </div>
+                        </form>
+                    </Card>
+                </div>
+            )
+        }
+        else return (
             <div>
                 <div className="top-bar-spacing"/>
                 <Card className="container-manage-users" style={{boxShadow: "none"}}>

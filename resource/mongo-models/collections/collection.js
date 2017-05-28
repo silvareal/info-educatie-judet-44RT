@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const CollectionSchema = new mongoose.Schema({
 
     //pictureDescription is never used except for keeping track of data (in state) in the UI
+    //so we don't save it and fill our db with megabytes of futile data
 
     userId: String,
     userName: String,

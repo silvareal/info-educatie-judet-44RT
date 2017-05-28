@@ -25,6 +25,7 @@ const UserSchema = new mongoose.Schema({
     profilePictureLink: String,
     profileCover: String,
     admin: { type: Boolean, default: false },
+    banned: { type: Boolean, default: false},
     moderator: { type: Boolean, default: false },
     time: { type: Date, default: Date.now }
 });

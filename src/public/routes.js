@@ -43,7 +43,9 @@ import ReadOneViewBrowseCollections from './containers/BrowseCollections/ReadOne
 import ReadAllViewBrowseNews from './containers/BrowseNews/ReadAllView.jsx';
 import ReadOneViewBrowseNews from './containers/BrowseNews/ReadOneView.jsx';
 
-import NotFoundPage from './containers/Error/NotFoundView.jsx';
+import ContactView from './containers/Contact/ContactView.jsx';
+
+import NotFoundView from './containers/Error/NotFoundView.jsx';
 
 import Auth from './modules/Auth';
 
@@ -67,6 +69,17 @@ const routes = {
             getComponent: (location, callback) => {
                 if (Auth.isUserAuthenticated()) {
                     callback(null, HomeView);
+                } else {
+                    callback(null, LoginView);
+                }
+            }
+        },
+
+        {
+            path: '/contact',
+            getComponent: (location, callback) => {
+                if (Auth.isUserAuthenticated()) {
+                    callback(null, ContactView);
                 } else {
                     callback(null, LoginView);
                 }
@@ -461,7 +474,7 @@ const routes = {
 
         {
             path: '*',
-            component: NotFoundPage
+            component: NotFoundView
         }
 
     ]

@@ -5,7 +5,8 @@ import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 import UsersRowsMobile from '../../../components/Admin/Users/Partials Components/UsersRowsMobile.jsx';
 import Auth from '../../../modules/Auth.js';
 
-import {TableRow, TableRowColumn} from 'material-ui';
+import {TableRow, TableRowColumn, Card} from 'material-ui';
+import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 let selectedUserId = [];
 let clicked = [];
@@ -22,7 +23,11 @@ class UsersView extends Component {
             rows1: '',
             rows2: '',
             searchQuery: '',
-            searched: ''
+            searched: '',
+            rows3: '',
+            rows4: '',
+            userIdToBan: '',
+            currentMode: 'Moderators'
         };
     }
 
@@ -65,6 +70,40 @@ class UsersView extends Component {
         selectedUserId[0] = this.state.users[i]._id;
         this.onSaveModerators();
         this.showAddedModerators();
+    };
+
+    mobileBanUser = (userId) => () => {
+        console.log(userId);
+        this.onBanUser(userId);
+        this.showAddedModerators();
+    };
+
+    onBanUser = (userId) => {
+
+        this.setState({
+            fetchedUsers: false
+        });
+
+        const userIdToBan = encodeURIComponent(userId);
+
+        console.log(userIdToBan);
+
+        const formData = `userIdToBan=${userIdToBan}`;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('post', '/admin/banUser');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                this.setState({
+                    message: xhr.response.message,
+                    userIdToBan: ''
+                })
+            }
+        });
+        xhr.send(formData);
     };
 
     onSaveModerators = () => {
@@ -151,11 +190,29 @@ class UsersView extends Component {
                 )
             }
         });
+
+        j = 0;
+
+        let rows3 = Object.keys(users).map((i) => {
+            if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery)) {
+                j++;
+                return (
+                    <UsersRowsMobile key={j}
+                                     index={i}
+                                     user={users[i]}
+                                     userId={users[i]._id}
+                                     mobileBanUser={this.mobileBanUser}/>
+                )
+            }
+        });
+
         this.setState({
-            rows1, rows2
+            rows1, rows2, rows3
         })
     };
 
+    //also used for showing banned users
+    //will change name in 0.0.4
     showAddedModerators = () => {
         const xhr = new XMLHttpRequest();
         xhr.open('get', '/admin/showUsers');
@@ -186,8 +243,18 @@ class UsersView extends Component {
                                          user={users[i]}
                                          mobileAddModerators={this.mobileAddModerators}/>
                     ));
+
+                    let rows3 = Object.keys(users).map((i) => (
+                        <UsersRowsMobile key={i}
+                                         index={i}
+                                         user={users[i]}
+                                         userId={users[i]._id}
+                                         mobileBanUser={this.mobileBanUser}/>
+                    ));
+
+
                     this.setState({
-                        rows1, rows2
+                        rows1, rows2, rows3
                     })
                 }
 
@@ -220,8 +287,23 @@ class UsersView extends Component {
                             )
                         }
                     });
+
+                    j = 0;
+
+                    let rows3 = Object.keys(users).map((i) => {
+                        if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery)) {
+                            j++;
+                            return (
+                                <UsersRowsMobile key={j}
+                                                 index={i}
+                                                 user={users[i]}
+                                                 mobileBanUser={this.mobileBanUser}/>
+                            )
+                        }
+                    });
+
                     this.setState({
-                        rows1, rows2
+                        rows1, rows2, rows3
                     });
                 }
             }
@@ -240,11 +322,28 @@ class UsersView extends Component {
         this.showAddedModerators();
     };
 
+    changeAppMode = (newMode) => {
+        this.setState({
+            currentMode: newMode
+        });
+    };
+
     render() {
+
         document.title = "User management";
+        if (this.state.isAdmin !== true && this.state.fetchedUsers === false) {
+            return <div>
+                <div className="top-bar-spacing"/>
+                <Card className="container-manage-users" style={{boxShadow: "none"}}>
+                    <LoadingIndicator/>
+                </Card>
+            </div>
+        }
         if (this.state.isAdmin === true) {
-            return (
+
+            let modeComponent =
                 <Users
+                    currentMode={this.state.currentMode}
                     searched={this.state.searched}
                     handleKeyPress={this.handleKeyPress}
                     onSearchUser={this.onSearchUser}
@@ -261,7 +360,35 @@ class UsersView extends Component {
                     cellClick={this.cellClick}
                     cellDeclick={this.cellDeclick}
                     addModerators={this.addModerators}
-                />
+                    changeAppMode={this.changeAppMode}/>;
+
+            switch (this.state.currentMode) {
+                case 'Moderators':
+                    break;
+                case 'Ban':
+                    modeComponent =
+                        <Users
+                            currentMode={this.state.currentMode}
+                            searched={this.state.searched}
+                            handleKeyPress={this.handleKeyPress}
+                            onSearchUser={this.onSearchUser}
+                            searchQuery={this.state.searchQuery}
+                            onSearchQueryChange={this.onSearchQueryChange}
+                            rows3={this.state.rows3}
+                            mobileAddModerators={this.mobileAddModerators}
+                            fetchedUsers={this.state.fetchedUsers}
+                            userId={this.props.params._id}
+                            users={this.state.users}
+                            message={this.state.message}
+                            clicked={clicked}
+                            cellClick={this.cellClick}
+                            cellDeclick={this.cellDeclick}
+                            addModerators={this.addModerators}
+                            changeAppMode={this.changeAppMode}/>;
+            }
+
+            return (
+                modeComponent
             )
         }
         else return <NotAuthorizedView/>

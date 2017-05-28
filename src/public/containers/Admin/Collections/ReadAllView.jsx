@@ -55,7 +55,7 @@ class ReadAllView extends Component {
 
         //AJAX for checking identity and retrieving all collections that belong to the user with the _id specified
         const xhr = new XMLHttpRequest();
-        xhr.open('get', '/crud/readAll');
+        xhr.open('get', '/admin/readAllCollections');
         xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
         xhr.responseType = 'json';
         xhr.addEventListener('load', () => {

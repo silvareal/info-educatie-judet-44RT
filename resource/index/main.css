@@ -849,6 +849,11 @@ body, html, main {
       flex: "";
       justify-content: ""; } }
 
+.center-users-ban {
+  display: flex;
+  flex: 1;
+  justify-content: center; }
+
 .mobile-header-users {
   display: flex;
   flex: 1;
@@ -915,5 +920,47 @@ body, html, main {
   font-weight: bold;
   font-size: 1.5em;
   word-break: normal; }
+
+.parallax-contact {
+  width: auto;
+  height: 100%;
+  background-image: url("./images/art6.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover; }
+
+.container-contact {
+  padding: 64px 256px 64px 256px;
+  min-height: 800px; }
+  @media screen and (max-width: 1200px) {
+    .container-contact {
+      min-height: 400px;
+      padding: 1em   ;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; } }
+
+.contact-header {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding: 30px   ;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  font-size: 3em;
+  font-weight: bold;
+  color: #ffffff;
+  background: rgba(0, 0, 255, 0.8); }
+
+.success-message-contact {
+  font-size: 1.3em;
+  color: limegreen;
+  display: flex;
+  flex: 1;
+  justify-content: center; }
 
 /*# sourceMappingURL=main.css.map */

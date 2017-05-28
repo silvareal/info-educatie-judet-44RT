@@ -24,7 +24,7 @@ const commentRoutes = require('./resource/routes/comment');
 const browseRoutes = require('./resource/routes/browse');
 
 const express = require('express');
-//tell the app to actually use the middleware
+
 app.use(express.static('./resource/index/'));
 app.use(express.static('./src/build/'));
 app.use(bodyParser.urlencoded({extended: false, limit: '1mb'}));
