@@ -1,132 +1,17 @@
 <h1>4Art</h1>
 
-<p>Version 0.0.2 of the project.
+<p>Version 0.0.3 of the project.
 
-THIS IS PART 1 OF 2 CONSECUTIVE COMMITS
+THIS IS PART 2 OF 2 CONSECUTIVE COMMITS
 
-#TODO
+Notes: Erased all objectives. Those who were still not met will be completed before 0.0.4
+This is the last commit before documentation is written.
 
-        -authorization rules {
-        Status: Complete,
-        Notes: Basic rules have been set but due to lack of Redux, state can be manipulated from the console. For version 0.0.4, Redux is required
-        Update: Authorization rules are now set on server side.
-         Even if somebody modifies a value like isAdmin to true while he's not, he can only see sensitive data. 
-         This requires us to have a separate login for admin panel
-         Update 2 : Admin panel is 100% secure. Any token that does not have the isAdmin attribute === true will not be able to finish the request
-         and will get a 401 unauthorized error res.status(401).end();
-        }
-        
-        -homepage for guests{
-        Status: Complete,
-        Notes: No notes
-        }
-        
-        -browse all collections both by guests and users {
-        Status: Complete,
-        Notes: Also added style to 2/3 collection pages ( Browse and Manage )
-        TODO: Add to admin panel
-        Update: All pages are complete
-        }
-        
-        -browse all news both by guests and users{
-        Status: Complete,
-        Notes: -
-        }
-        
-        -readOne news&collections with authorization rules for commenting {
-        Status: Complete,
-        Notes: All done
-        }
-        
-        -add the text editor to admin panel{
-        Status:Complete,
-        Notes: Must also add it to news management and finish both pages for news
-        Update: added
-        }
-        
-        -make a placeholder for the contact page for v0.0.4{
-        Status Complete,
-        Notes: Will only make it functional. For 0.0.4 I will add actual viewing of the feedback in the admin panel
-        Note2: Page is functional
-        }
-        
-        -like system {
-        Status: Delayed to 0.0.4,
-        Notes: Not enough time to optimize it
-        }
-        
-        -reorganize all files in specific folders {
-        Status: Complete,
-        Notes: Further development of the interface might require us to reorganize again
-        }
-        
-        -think of a design for the logs page ( should be simple ){
-        Status: Complete,
-        Notes: Design is done, just need to apply it to all 8 or 9 pages,
-        Note2: All pages are up and running
-        }
-        
-        -on users management, have the make moderators on the AppBar and create ALL the rules for banning users {
-        Status: Complete,
-        Notes: Added the button on snackbar and rethinked the design of the manage users page
-        Note2: Banning an user is possible and functional
-        }
-        
-        -create specific actions for moderators {
-        Status: Delayed to 0.0.4,
-        Notes: Requires reworking of the comment system which wil take a couple days
-        }
-        
-        -finish readAll, readOne, create, delete, update pages{
-        Status: Complete,
-        Notes: Finished ALL readAll, create, delete, update
-        TODO: finish readOne
-        Notes: Finished
-        }
-        
-        -remove event listeners{
-        Status: Complete,
-        Notes: Regarding 'load' event listeners, we will replace XML requests with Axios, a dependency that also includes the Promise API in version 0.0.4
-        }
-        
-        -add active link style to popover that bring up the menu{
-        Status: Complete,
-        Notes: -
-        }
-        
-        -add nested pages to the menu {
-        Status: REMOVED,
-        Notes: Material UI can't allow that in a non-buggy way and creating our own components would require us to create: lists, avatars, icons, waves for buttons, list items that can have icons on the left and right.
-        The way the navigator is now is perfectly fine.
-        }
-        
-        -add the loading indicator on all pages {
-        Status: Complete,
-        Notes: Only added on home page for now
-        }
-        
-        -write for us button should lead to a way of applying as a mod{
-        Status: REMOVED
-        }
-        
-        -remove adding more pictures on news ( update and delete ){
-        Status: Complete,
-        Notes: Removed it
-        }
-        
-        {
-        To be continued in 0.0.3
-        -that being said, make the application for mod page
+0.0.4 will take about 2 months to complete due to the difficult tasks our team has chosen
+for ourselves. As of today, the current version will be integrated with Redux and if there
+is any time left in those 2 months, backend will be reworked in Hacklang.
 
-        -unless there's anything left,clean up the code, remove futile variables and state
-        
-        -make efficient functions and use them where necessary
-        
-        -rework the hierarchy and split jobs between parents and children
-        }
-        -update the logging of the site{
-        Status: Complete,
-        Notes: Updated all the logging
-        }
-    
+Documentation comes in the next commit. All commits until 31.05.2017 will be meant to either
+write the Documentation or fix bugs/sanitize/reorganize files.
+As of today, the project is fully operational.
 </p>

@@ -1,6 +1,6 @@
 {
   "name": "info-educatie-44rt",
-  "version": "0.1.0",
+  "version": "0.0.3",
   "private": true,
   "scripts": {
     "start": "nodemon --use-strict index.js --exec babel-node --presets es2015,stage-2",
