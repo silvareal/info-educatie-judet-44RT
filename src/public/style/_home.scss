@@ -17,7 +17,7 @@ body, html, main {
   .footer {
     @include display(flex, 1, center);
     @include widthAndHeight(100%, auto);
-    @include background-color(#3460f1);
+    @include background-color(#f6f6f7);
     @include padding(20px);
     @include box-sizing(border-box);
 
@@ -28,7 +28,7 @@ body, html, main {
         @include padding(10px);
         @include box-sizing(border-box);
         a {
-          color: #ffffff;
+          color: #9e9e9e;
         }
 
         :hover {
@@ -56,15 +56,20 @@ body, html, main {
 
 .parallax-home {
   @include widthAndHeight("auto", 100%);
-  @include background-image("images/home.jpg", fixed, center, repeat, cover);
+  @include background-image("images/img6.jpg", fixed, center, repeat, cover);
   //------------------
 
   .section-title {
     @include font("", "", bold, "", 60px, "", $Roboto, "");
-    @include padding(30px);
-    @include background-color(#3460f1);
+    @include padding(90px);
+    @include box-sizing(border-box);
+    @include background-color(#42ab9e);
     @include textAlign(center);
     color: #ffffff;
+
+    @media screen and (max-width: 1200px) {
+      @include padding(30px);
+    }
   }
 
   .container-home {
@@ -83,7 +88,7 @@ body, html, main {
       ul {
         @include padding(30px);
         @include display(flex, "", "");
-        @include background-color(#ffffff);
+        @include background-color(#f4f7f6);
         flex-direction: column;
         list-style: none;
         height: auto;

@@ -18,6 +18,12 @@
   left: 0;
 }
 
+.active-link-classname {
+  span {
+    background-color: #8dd2cc !important;
+  }
+}
+
 .hidden {
   transition: top 6s;
   top: -64px;

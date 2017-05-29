@@ -3,7 +3,7 @@
 
 .parallax-profile {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/art2.jpg", fixed, center, repeat, cover);
+  @include background-image("./images/img1.jpg", fixed, center, repeat, cover);
 
   .container-profile {
     @include padding(0, 256px, 64px, 256px);
@@ -127,7 +127,7 @@
     height: 100%;
   }
 
-  collectionName {
+  .collectionName {
     @include display-flex(flex, center);
     background: rgb(0, 188, 212);
     color: white;

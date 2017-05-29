@@ -33,6 +33,9 @@ class Login extends Component {
                                         errorText={this.props.errors.email}
                                         autoFocus={true}
                                         style={{minWidth: "100%"}}
+                                        inputStyle={{color: "#ee6e73"}}
+                                        floatingLabelStyle={{color: "#ee6e73"}}
+                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
                                     />
                                 </div>
 
@@ -45,12 +48,16 @@ class Login extends Component {
                                         onChange={this.props.onChange}
                                         errorText={this.props.errors.password}
                                         style={{minWidth: "100%"}}
+                                        inputStyle={{color: "#ee6e73"}}
+                                        floatingLabelStyle={{color: "#ee6e73"}}
+                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
                                     />
                                 </div>
 
                                 <div className="button-login-signup">
                                     <RaisedButton
                                         style={styles.button}
+                                        buttonStyle={{backgroundColor: "#eb7077"}}
                                         type="submit" label="Log in" primary/>
                                 </div>
 

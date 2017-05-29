@@ -24,6 +24,7 @@ class ViewRow extends Component {
                             type="button"
                             primary={true}
                             label="Update"
+                            buttonStyle={{backgroundColor: "#9b9b9b"}}
                         />
                     </Link>
                     <Link to={`/manage/readOne/${this.props.collection._id}/delete`}
@@ -32,6 +33,7 @@ class ViewRow extends Component {
                             type="button"
                             secondary={true}
                             label="Delete"
+                            buttonStyle={{backgroundColor: "#ee6e73"}}
                         />
                     </Link>
                 </CardActions>

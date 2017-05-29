@@ -76,6 +76,8 @@ class UsersRowsMobile extends Component {
                                       label="Give/Revoke moderator permissions"
                                       onTouchTap={this.props.mobileAddModerators(this.props.index)}
                                       className="action-buttons-users"
+                                      buttonStyle={{backgroundColor: "#eb7077"}}
+                                      labelStyle={{color: "#ffffff"}}
                         />
                         :
                         <RaisedButton primary={true}
@@ -83,6 +85,8 @@ class UsersRowsMobile extends Component {
                                       label="Ban/Unban user"
                                       onTouchTap={this.props.mobileBanUser(this.props.userId)}
                                       className="action-buttons-users"
+                                      buttonStyle={{backgroundColor: "#eb7077"}}
+                                      labelStyle={{color: "#ffffff"}}
                         />
                     }
 
@@ -91,6 +95,8 @@ class UsersRowsMobile extends Component {
                                   label="Details"
                                   onTouchTap={this.handleOpen}
                                   className="action-buttons-users"
+                                  buttonStyle={{backgroundColor: "#42ab9e"}}
+                                  labelStyle={{color: "#ffffff"}}
                     />
                 </CardActions>
                 <Dialog

@@ -118,6 +118,9 @@ class Update extends Component {
                                 autoFocus={true}
                                 multiLine={true}
                                 className="step-textfields"
+                                inputStyle={{color: "#ee6e73"}}
+                                floatingLabelStyle={{color: "#ee6e73"}}
+                                underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
                         </div>
                         <div>
@@ -149,6 +152,9 @@ class Update extends Component {
                                        autoFocus={true}
                                        multiLine={true}
                                        className="step-textfields"
+                                       inputStyle={{color: "#ee6e73"}}
+                                       floatingLabelStyle={{color: "#ee6e73"}}
+                                       underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
                             <div className="qr-restrict-desktop">
                                 <QRCode value={this.props.qrLink} size={512}/>
@@ -172,6 +178,9 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
+                                                   inputStyle={{color: "#ee6e73"}}
+                                                   floatingLabelStyle={{color: "#ee6e73"}}
+                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
                                         :
                                         <TextField hintText="Give your work of art a cool name"
@@ -180,6 +189,9 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
+                                                   inputStyle={{color: "#ee6e73"}}
+                                                   floatingLabelStyle={{color: "#ee6e73"}}
+                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
                                     }
                                 </div>
@@ -192,6 +204,9 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
+                                                   inputStyle={{color: "#ee6e73"}}
+                                                   floatingLabelStyle={{color: "#ee6e73"}}
+                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
                                         :
                                         <TextField hintText="Give us the link of your work of art"
@@ -200,6 +215,9 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
+                                                   inputStyle={{color: "#ee6e73"}}
+                                                   floatingLabelStyle={{color: "#ee6e73"}}
+                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
                                     }
                                 </div>
@@ -235,11 +253,13 @@ class Update extends Component {
                                     }
                                 </div>
                                 <RaisedButton type="button" primary={true} label="+"
-                                              onClick={this.props.handleAddPictures(i)}/>
+                                              onClick={this.props.handleAddPictures(i)}
+                                              buttonStyle={{backgroundColor: "#42ab9e"}}/>
 
                                 { (i !== 0) ? (
                                     <RaisedButton type="button" secondary={true} label="-"
-                                                  onClick={this.props.handleRemovePictures(i)}/>
+                                                  onClick={this.props.handleRemovePictures(i)}
+                                                  buttonStyle={{backgroundColor: "#ee6e73"}}/>
                                 ) : null}
 
                             </div>
@@ -330,6 +350,7 @@ class Update extends Component {
                                     <Link to={`/manage`}>
                                         <RaisedButton
                                             label="Finish"
+                                            buttonStyle={{backgroundColor: "#42ab9e"}}
                                             secondary={true}
                                             onTouchTap={this.resetScroll}
                                         />
@@ -342,19 +363,23 @@ class Update extends Component {
                                     <Link to={`/manage`}>
                                         <RaisedButton
                                             label="Cancel"
-                                            secondary={true}/>
+                                            secondary={true}
+                                            buttonStyle={{backgroundColor: "#ee6e73"}}/>
                                     </Link>
                                     :
-                                    <FlatButton
+                                    <RaisedButton
                                         label="Back"
+                                        primary={true}
                                         disabled={stepIndex === 0}
-                                        onTouchTap={this.handlePrev}/>
+                                        onTouchTap={this.handlePrev}
+                                        buttonStyle={{backgroundColor: "#ee6e73"}}/>
                                 }
 
                                 <RaisedButton
                                     label={stepIndex === 2 ? "Add collection" : "Next"}
                                     primary={true}
-                                    onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}/>
+                                    onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}
+                                    buttonStyle={{backgroundColor: "#42ab9e"}}/>
                             </CardActions>
                         </Card>
                     </Card>

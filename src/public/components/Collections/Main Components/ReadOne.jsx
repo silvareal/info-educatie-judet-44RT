@@ -118,7 +118,7 @@ class ReadOne extends Component {
                 }
 
                 <Card className="container-collections" style={{boxShadow: "none", backgroundColor: "whitesmoke"}}>
-                    {parseInt(this.props.commentsCount) === 0 ?
+                    {this.props.commentsCount !== 0 ?
                         <CardHeader
                             title={`Comments ` + `(` + this.props.commentsCount + `)`}
                         />

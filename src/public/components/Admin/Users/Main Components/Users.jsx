@@ -54,8 +54,11 @@ class Users extends Component {
                 <div>
                     <div className="top-bar-spacing"/>
                     <Card className="container-manage-users" style={{boxShadow: "none"}}>
-                        <Tabs initialSelectedIndex={this.props.currentMode === 'Ban' ? 1 : 2}>
-                            <Tab icon={<ActionPermContactCalendar/>} onClick={() => this.props.changeAppMode('Moderators')}/>
+                        <Tabs initialSelectedIndex={this.props.currentMode === 'Ban' ? 1 : 2}
+                              inkBarStyle={{color: "#ee6e73", backgroundColor: "#ee6e73"}}
+                              tabItemContainerStyle={{backgroundColor: "#42ab9e"}}>
+                            <Tab icon={<ActionPermContactCalendar/>}
+                                 onClick={() => this.props.changeAppMode('Moderators')}/>
                             <Tab icon={<ContentRemoveCircle/>} onClick={() => this.props.changeAppMode('Ban')}/>
                         </Tabs>
                         <div className="top-actions">
@@ -64,6 +67,9 @@ class Users extends Component {
                                            value={this.props.searchQuery}
                                            onChange={this.props.onSearchQueryChange}
                                            onKeyDown={this.props.handleKeyPress}
+                                           inputStyle={{color: "#000000"}}
+                                           floatingLabelStyle={{color: "#ee6e73"}}
+                                           underlineFocusStyle={{borderColor: "#ee6e73"}}
                                 />
                                 <IconButton onTouchTap={this.props.onSearchUser}>
                                     <ActionSearch/>
@@ -106,7 +112,10 @@ class Users extends Component {
                                             message={<RaisedButton type="button" primary={true}
                                                                    style={{backgroundColor: "transparent"}}
                                                                    label="Give/Revoke moderator permissions"
-                                                                   onTouchTap={this.props.addModerators}/>}/>
+                                                                   onTouchTap={this.props.addModerators}
+                                                                   buttonStyle={{backgroundColor: "#eb7077"}}
+                                                                   labelStyle={{color: "#ffffff"}}
+                                            />}/>
                                     </div>
                                 }
 
@@ -126,8 +135,11 @@ class Users extends Component {
                 <div>
                     <div className="top-bar-spacing"/>
                     <Card className="container-manage-users" style={{boxShadow: "none"}}>
-                        <Tabs initialSelectedIndex={this.props.currentMode === 'Ban' ? 1 : 2}>
-                            <Tab icon={<ActionPermContactCalendar/>} onClick={() => this.props.changeAppMode('Moderators')}/>
+                        <Tabs initialSelectedIndex={this.props.currentMode === 'Ban' ? 1 : 2}
+                              inkBarStyle={{color: "#ee6e73", backgroundColor: "#ee6e73"}}
+                              tabItemContainerStyle={{backgroundColor: "#42ab9e"}}>
+                            <Tab icon={<ActionPermContactCalendar/>}
+                                 onClick={() => this.props.changeAppMode('Moderators')}/>
                             <Tab icon={<ContentRemoveCircle/>} onClick={() => this.props.changeAppMode('Ban')}/>
                         </Tabs>
                         <div className="top-actions">
@@ -136,6 +148,9 @@ class Users extends Component {
                                            value={this.props.searchQuery}
                                            onChange={this.props.onSearchQueryChange}
                                            onKeyDown={this.props.handleKeyPress}
+                                           inputStyle={{color: "#000000"}}
+                                           floatingLabelStyle={{color: "#ee6e73"}}
+                                           underlineFocusStyle={{borderColor: "#ee6e73"}}
                                 />
                                 <IconButton onTouchTap={this.props.onSearchUser}>
                                     <ActionSearch/>
@@ -154,13 +169,13 @@ class Users extends Component {
             )
         }
         else return (
-            <div>
-                <div className="top-bar-spacing"/>
-                <Card className="container-manage-users" style={{boxShadow: "none"}}>
-                    <LoadingIndicator/>
-                </Card>
-            </div>
-        )
+                <div>
+                    <div className="top-bar-spacing"/>
+                    <Card className="container-manage-users" style={{boxShadow: "none"}}>
+                        <LoadingIndicator/>
+                    </Card>
+                </div>
+            )
     }
 }
 

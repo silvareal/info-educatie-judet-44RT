@@ -3,7 +3,7 @@
 
 .parallax-login {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/art4.jpg", fixed, center, repeat, cover);
+  @include background-image("./images/img3.jpg", fixed, center, repeat, cover);
 }
 
 .container-login {
@@ -24,13 +24,18 @@
 }
 
 .content-login {
-  @include padding(20px);
+  @include padding(90px);
   @include margin(auto);
   @include display(flex, 1, center);
   @include widthAndHeight(100%, 100%);
   @include box-sizing(border-box);
   flex-direction: column;
-  @include background-color(rgba(0,0,255, 0.8));
+  color: #000000;
+  @include background-color(#ffffff);
+
+  @media screen and (max-width: 1200px) {
+    @include padding(20px);
+  }
 }
 
 .login-header {
@@ -38,5 +43,9 @@
   justify-content: center;
   text-align: center;
   font-family: Roboto, 'sans-serif';
-  font-size: 2em;
+  font-size: 3em;
+
+  @media screen and (max-width: 1200px) {
+    font-size: 2em;
+  }
 }

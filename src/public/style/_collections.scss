@@ -68,12 +68,12 @@
 
 .parallax-collections-delete {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/art1.jpg", fixed, center, repeat, cover);
+  @include background-image("./images/img7.jpg", fixed, center, repeat, cover);
 }
 
 .parallax-collections-readOne {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/art6.jpg", fixed, center, repeat, cover);
+  @include background-image("./images/img2.jpg", fixed, center, repeat, cover);
 }
 
 .pictures {
@@ -229,14 +229,19 @@
 
 .parallax-collections-create {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/art.jpg", fixed, center, repeat, cover);
+  @include background-image("./images/img5.jpg", fixed, center, repeat, cover);
 
   .section-title {
     @include font("", "", bold, "", 60px, "", $Roboto, "");
-    @include padding(30px);
-    @include background-color(#3460f1);
+    @include padding(90px);
+    @include box-sizing(border-box);
+    @include background-color(#42ab9e);
     @include textAlign(center);
     color: #ffffff;
+
+    @media screen and (max-width: 1200px) {
+      @include padding(30px);
+    }
   }
 
   .view-table {
@@ -256,7 +261,7 @@
 
 .parallax-collections {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/art5.jpg", fixed, center, repeat, cover);
+  @include background-image("./images/img2.jpg", fixed, center, repeat, cover);
 
   .container-collections {
     @include padding(64px, 256px, 64px, 256px);
@@ -272,10 +277,15 @@
 
   .section-title {
     @include font("", "", bold, "", 60px, "", $Roboto, "");
-    @include padding(30px);
-    @include background-color(#3460f1);
+    @include padding(90px);
+    @include box-sizing(border-box);
+    @include background-color(#42ab9e);
     @include textAlign(center);
     color: #ffffff;
+
+    @media screen and (max-width: 1200px) {
+      @include padding(30px);
+    }
   }
 
   .top-actions {

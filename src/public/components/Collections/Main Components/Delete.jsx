@@ -40,7 +40,8 @@ class Delete extends Component {
                                                 to="/manage"
                                             >
                                                 <RaisedButton label="Finish"
-                                                              secondary={true}/>
+                                                              secondary={true}
+                                                              buttonStyle={{backgroundColor: "#42ab9e"}}/>
                                             </Link>
                                         </div>
                                     </CardActions>
@@ -54,19 +55,22 @@ class Delete extends Component {
                                     </CardHeader>
                                     <CardActions>
                                         <div className="delete-actions">
-                                            <div>
+                                            <div style={{padding: 20}}>
                                                 <RaisedButton
                                                     primary={true}
                                                     onClick={this.props.onDelete}
-                                                    label="Yes"/>
+                                                    label="Yes"
+                                                    buttonStyle={{backgroundColor: "#ee6e73"}}
+                                                />
                                             </div>
-                                            <div>
+                                            <div style={{padding: 20}}>
                                                 <Link
                                                     to="/manage">
                                                     <RaisedButton
                                                         secondary={true}
                                                         label="No"
                                                         onTouchTap={this.resetScroll}
+                                                        buttonStyle={{backgroundColor: "#42ab9e"}}
                                                     />
                                                 </Link>
                                             </div>

@@ -63,8 +63,8 @@ class AppBarPersonal extends Component {
         return (
             <AppBar
                 className={"appBar " + hide}
-                style={{backgroundColor: "#3460f1"}}
-                title={<Link to={`/`} style={{color: "white"}}>4Art</Link>}
+                style={{backgroundColor: "#f4f7f6"}}
+                title={<Link to={`/`} style={{color: "black"}}>4Art</Link>}
                 showMenuIconButton={false}
                 iconElementRight={
                     Auth.isUserAuthenticated() ?
@@ -74,7 +74,7 @@ class AppBarPersonal extends Component {
                                 onRequestChange={this.props.handleOnRequestChange}
                                 iconButtonElement={
                                     <IconButton style={{padding: 0}}>
-                                        <NavigationMoreVert color="#ffffff"/>
+                                        <NavigationMoreVert color="black"/>
                                     </IconButton>}
                                 anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                                 targetOrigin={{horizontal: 'right', vertical: 'top'}}>

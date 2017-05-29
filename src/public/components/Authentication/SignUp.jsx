@@ -32,6 +32,9 @@ class SignUp extends Component {
                                         errorText={this.props.errors.name}
                                         autoFocus={true}
                                         style={{minWidth: "100%"}}
+                                        inputStyle={{color: "#ee6e73"}}
+                                        floatingLabelStyle={{color: "#ee6e73"}}
+                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
                                     />
                                 </div>
 
@@ -43,6 +46,9 @@ class SignUp extends Component {
                                         onChange={this.props.onChange}
                                         errorText={this.props.errors.email}
                                         style={{minWidth: "100%"}}
+                                        inputStyle={{color: "#ee6e73"}}
+                                        floatingLabelStyle={{color: "#ee6e73"}}
+                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
                                     />
                                 </div>
 
@@ -55,6 +61,9 @@ class SignUp extends Component {
                                         onChange={this.props.onChange}
                                         errorText={this.props.errors.password}
                                         style={{minWidth: "100%"}}
+                                        inputStyle={{color: "#ee6e73"}}
+                                        floatingLabelStyle={{color: "#ee6e73"}}
+                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
                                     />
                                 </div>
 
@@ -67,16 +76,22 @@ class SignUp extends Component {
                                         onChange={this.props.onChange}
                                         errorText={this.props.errors.confirmPassword}
                                         style={{minWidth: "100%"}}
+                                        inputStyle={{color: "#ee6e73"}}
+                                        floatingLabelStyle={{color: "#ee6e73"}}
+                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
                                     />
                                 </div>
 
                                 <div className="button-line">
                                     <RaisedButton
                                         style={styles.button}
+                                        buttonStyle={{backgroundColor: "#eb7077"}}
+                                        labelStyle={{color: "#ffffff"}}
                                         type="submit" label="Create New Account" primary/>
                                 </div>
 
-                                <CardText>Already a member? <Link to='/login'>Log in</Link></CardText>
+                                <CardText style={{textAlign: "center"}}>Already a member? <Link to='/login'>Log
+                                    in</Link></CardText>
                             </div>
                         </form>
                     </div>

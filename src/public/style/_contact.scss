@@ -3,7 +3,7 @@
 
 .parallax-contact {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/art6.jpg", fixed, center, repeat, cover);
+  @include background-image("./images/img6.jpg", fixed, center, repeat, cover);
 }
 
 .container-contact {

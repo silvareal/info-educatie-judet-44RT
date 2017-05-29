@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 
 import {RaisedButton} from 'material-ui';
-import Spinner from 'react-spinkit'
 import LoadingIndicator from '../../../components/Loading Indicator/LoadingIndicator.jsx';
 
 class Home extends Component {
@@ -19,6 +18,7 @@ class Home extends Component {
                                 <li style={{padding: 20}}>
                                     <Link to={`/news`}><RaisedButton label="Check out all news ever"
                                                                      style={{width: "100%"}}
+                                                                     buttonStyle={{backgroundColor: "#eb7077"}}
                                                                      primary={true}/></Link>
                                 </li>
                                 {this.props.rowsNews1}
@@ -48,6 +48,7 @@ class Home extends Component {
                                 <li style={{padding: 20}}>
                                     <Link to={`/collections`}><RaisedButton label="Browse all collections ever added"
                                                                             style={{width: "100%"}}
+                                                                            buttonStyle={{backgroundColor: "#eb7077"}}
                                                                             primary={true}/></Link>
                                 </li>
                                 {this.props.rowsCollections1}

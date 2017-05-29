@@ -73,7 +73,6 @@ class UsersView extends Component {
     };
 
     mobileBanUser = (userId) => () => {
-        console.log(userId);
         this.onBanUser(userId);
         this.showAddedModerators();
     };
@@ -86,8 +85,6 @@ class UsersView extends Component {
 
         const userIdToBan = encodeURIComponent(userId);
 
-        console.log(userIdToBan);
-
         const formData = `userIdToBan=${userIdToBan}`;
 
         const xhr = new XMLHttpRequest();
@@ -98,8 +95,7 @@ class UsersView extends Component {
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
                 this.setState({
-                    message: xhr.response.message,
-                    userIdToBan: ''
+                    message: xhr.response.message
                 })
             }
         });
@@ -297,6 +293,7 @@ class UsersView extends Component {
                                 <UsersRowsMobile key={j}
                                                  index={i}
                                                  user={users[i]}
+                                                 userId={users[i]._id}
                                                  mobileBanUser={this.mobileBanUser}/>
                             )
                         }

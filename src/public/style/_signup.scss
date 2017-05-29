@@ -2,41 +2,50 @@
 @import "./constants/functions";
 
 .parallax-signup {
-    @include widthAndHeight("auto", 100%);
-    @include background-image("./images/art5.jpg", fixed, center, repeat, cover);
+  @include widthAndHeight("auto", 100%);
+  @include background-image("./images/art5.jpg", fixed, center, repeat, cover);
 }
 
 .container-signup {
-    @include padding(0, 256px, 64px, 256px);
-    @include display(flex, 1, center);
-    min-height: 720px;
-    @media screen and (max-width: 1200px) {
-        min-height: 400px;
-        @include padding(1em);
-        @include box-sizing(border-box);
-    }
+  @include padding(0, 256px, 64px, 256px);
+  @include display(flex, 1, center);
+  min-height: 720px;
+  @media screen and (max-width: 1200px) {
+    min-height: 400px;
+    @include padding(1em);
+    @include box-sizing(border-box);
+  }
 }
 
 .button-login-signup {
-    @include padding(10px, 0, 0, 0);
-    @include display(flex, 1, center);
-    min-width: 100%;
+  @include padding(10px, 0, 0, 0);
+  @include display(flex, 1, center);
+  min-width: 100%;
 }
 
 .content-signup {
-@include padding(20px);
-@include margin(auto);
-@include display(flex, 1, center);
-@include widthAndHeight(100%, 100%);
-@include box-sizing(border-box);
-    flex-direction: column;
-    @include background-color(rgba(0,0,255, 0.8));
+  @include padding(90px);
+  @include margin(auto);
+  @include display(flex, 1, center);
+  @include widthAndHeight(100%, 100%);
+  @include box-sizing(border-box);
+  flex-direction: column;
+  color: #000000;
+  @include background-color(#ffffff);
+
+  @media screen and (max-width: 1200px) {
+    @include padding(20px);
+  }
 }
 
 .signup-header {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    font-family: Roboto, 'sans-serif';
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-family: Roboto, 'sans-serif';
+  font-size: 3em;
+
+  @media screen and (max-width: 1200px) {
     font-size: 2em;
+  }
 }

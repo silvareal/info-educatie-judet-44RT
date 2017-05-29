@@ -271,7 +271,8 @@ class HomeView extends Component {
                                                                   src={this.state.profilePictureLink}/>
                                                           </Link>}
                                                       rightIcon={<ContentSend onClick={this.onSave(key)}
-                                                                              hoverColor="green"/>}
+                                                                              hoverColor="#f3989b"
+                                                                              color="#eb7077"/>}
                                                       style={{paddingTop: 0, paddingBottom: 0}}
                                             >
                                                 <TextField name="commentNewsLeft"
@@ -298,7 +299,8 @@ class HomeView extends Component {
                                                               <ActionAccountCircle/>
                                                           </Link>}
                                                       rightIcon={<ContentSend onClick={this.onSave(key)}
-                                                                              hoverColor="green"/>}
+                                                                              hoverColor="#f3989b"
+                                                                              color="#eb7077"/>}
                                                       style={{paddingTop: 0, paddingBottom: 0}}
                                             >
                                                 <TextField name="commentNewsLeft"
@@ -344,7 +346,8 @@ class HomeView extends Component {
                                                               src={this.state.profilePictureLink}/>
                                                       </Link>}
                                                   rightIcon={<ContentSend onClick={this.onSave(key)}
-                                                                          hoverColor="green"/>}
+                                                                          hoverColor="#f3989b"
+                                                                          color="#eb7077"/>}
                                                   style={{paddingTop: 0, paddingBottom: 0}}
                                         >
                                             <TextField name="commentNewsRight"
@@ -368,7 +371,8 @@ class HomeView extends Component {
                                                           <ActionAccountCircle/>
                                                       </Link>}
                                                   rightIcon={<ContentSend onClick={this.onSave(key)}
-                                                                          hoverColor="green"/>}
+                                                                          hoverColor="#f3989b"
+                                                                          color="#eb7077"/>}
                                                   style={{paddingTop: 0, paddingBottom: 0}}
                                         >
                                             <TextField name="commentNewsRight"
@@ -406,7 +410,8 @@ class HomeView extends Component {
                                 <List style={{paddingTop: 0, paddingBottom: 0}}>
                                     <ListItem disabled={true}
                                               rightIcon={<ContentSend onClick={this.onSave(key)}
-                                                                      hoverColor="green"/>}
+                                                                      hoverColor="#f3989b"
+                                                                      color="#eb7077"/>}
                                               style={{paddingTop: 0, paddingBottom: 0}}
                                     >
                                         <TextField name="commentNewsMobile"
@@ -454,7 +459,8 @@ class HomeView extends Component {
                                                               src={this.state.profilePictureLink}/>
                                                       </Link>}
                                                   rightIcon={<ContentSend onClick={this.onSave(key + 4)}
-                                                                          hoverColor="green"/>}
+                                                                          hoverColor="#f3989b"
+                                                                          color="#eb7077"/>}
                                                   style={{paddingTop: 0, paddingBottom: 0}}
                                         >
                                             <TextField name="commentNewsLeft"
@@ -478,7 +484,8 @@ class HomeView extends Component {
                                                           <ActionAccountCircle/>
                                                       </Link>}
                                                   rightIcon={<ContentSend onClick={this.onSave(key + 4)}
-                                                                          hoverColor="green"/>}
+                                                                          hoverColor="#f3989b"
+                                                                          color="#eb7077"/>}
                                                   style={{paddingTop: 0, paddingBottom: 0}}
                                         >
                                             <TextField name="commentNewsLeft"
@@ -521,7 +528,8 @@ class HomeView extends Component {
                                                               src={this.state.profilePictureLink}/>
                                                       </Link>}
                                                   rightIcon={<ContentSend onClick={this.onSave(key + 4)}
-                                                                          hoverColor="green"/>}
+                                                                          hoverColor="#f3989b"
+                                                                          color="#eb7077"/>}
                                                   style={{paddingTop: 0, paddingBottom: 0}}
                                         >
                                             <TextField name="commentNewsLeft"
@@ -545,7 +553,8 @@ class HomeView extends Component {
                                                           <ActionAccountCircle/>
                                                       </Link>}
                                                   rightIcon={<ContentSend onClick={this.onSave(key + 4)}
-                                                                          hoverColor="green"/>}
+                                                                          hoverColor="#f3989b"
+                                                                          color="#eb7077"/>}
                                                   style={{paddingTop: 0, paddingBottom: 0}}
                                         >
                                             <TextField name="commentNewsLeft"
@@ -580,7 +589,8 @@ class HomeView extends Component {
                                 <List style={{paddingTop: 0, paddingBottom: 0}}>
                                     <ListItem disabled={true}
                                               rightIcon={<ContentSend onClick={this.onSave(key + 4)}
-                                                                      hoverColor="green"/>}
+                                                                      hoverColor="#f3989b"
+                                                                      color="#eb7077"/>}
                                               style={{paddingTop: 0, paddingBottom: 0}}
                                     >
                                         <TextField name="commentNewsLeft"

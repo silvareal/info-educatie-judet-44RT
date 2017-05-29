@@ -84,28 +84,32 @@ class Profile extends Component {
         const actions1 = [
             <RaisedButton
                 label="Cancel"
-                secondary={true}
+                buttonStyle={{backgroundColor: "#eb7077"}}
+                labelStyle={{color: "#ffffff"}}
                 onTouchTap={this.handleClose1}
                 onClick={this.props.onCancelEdit}
             />,
             <RaisedButton
                 label="Save"
-                primary={true}
                 onTouchTap={this.handleClose1}
                 onClick={this.props.onSave}
+                buttonStyle={{backgroundColor: "#42ab9e"}}
+                labelStyle={{color: "#ffffff"}}
             />,
         ];
 
         const actions2 = [
             <RaisedButton
                 label="Cancel"
-                secondary={true}
+                buttonStyle={{backgroundColor: "#eb7077"}}
+                labelStyle={{color: "#ffffff"}}
                 onTouchTap={this.handleClose2}
                 onClick={this.props.onCancelEdit}
             />,
             <RaisedButton
                 label="Save"
-                primary={true}
+                buttonStyle={{backgroundColor: "#42ab9e"}}
+                labelStyle={{color: "#ffffff"}}
                 onTouchTap={this.handleClose2}
                 onClick={this.props.onSave}
             />
@@ -136,7 +140,7 @@ class Profile extends Component {
                                                 <img
                                                     onClick={this.props.ownUser ? this.combineOpenFunctions1 : null}
                                                     style={{borderRadius: "50%"}}
-                                                    src={this.props.profilePictureLink ? this.props.profilePictureLink : "https://www.petfinder.com/wp-content/uploads/2012/11/91615172-find-a-lump-on-cats-skin-632x475.jpg"}/>
+                                                    src={this.props.profilePictureLink ? this.props.profilePictureLink : "/images/placeholder-profile.jpg"}/>
                                                 <Dialog
                                                     title="Change profile picture"
                                                     actions={actions1}
@@ -148,20 +152,23 @@ class Profile extends Component {
                                                     <CardMedia>
                                                         <img
                                                             style={{borderRadius: "50%"}}
-                                                            src={this.props.profilePictureLink ? this.props.profilePictureLink : "https://www.petfinder.com/wp-content/uploads/2012/11/91615172-find-a-lump-on-cats-skin-632x475.jpg"}/>
+                                                            src={this.props.profilePictureLink ? this.props.profilePictureLink : "/images/placeholder-profile.jpg"}/>
                                                     </CardMedia>
                                                     <TextField
                                                         floatingLabelText="Profile picture link"
                                                         value={this.props.profilePictureLink}
                                                         onChange={this.props.ownUser ? this.props.onProfilePictureLinkChange : null}
                                                         style={{width: "100%"}}
+                                                        inputStyle={{color: "#000000"}}
+                                                        floatingLabelStyle={{color: "#ee6e73"}}
+                                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
                                                     />
                                                 </Dialog>
                                             </CardMedia>
                                         </Card>
                                     }>
                                 <img
-                                    src={this.props.profileCover ? this.props.profileCover : "https://www.petfinder.com/wp-content/uploads/2012/11/91615172-find-a-lump-on-cats-skin-632x475.jpg"}
+                                    src={this.props.profileCover ? this.props.profileCover : "/images/placeholder-profile.jpg"}
                                     alt=""/>
                                 <Dialog
                                     title="Change cover picture"
@@ -174,7 +181,7 @@ class Profile extends Component {
                                     <CardMedia>
                                         <img
                                             style={{borderRadius: "50%"}}
-                                            src={this.props.profileCover ? this.props.profileCover : "https://www.petfinder.com/wp-content/uploads/2012/11/91615172-find-a-lump-on-cats-skin-632x475.jpg"}/>
+                                            src={this.props.profileCover ? this.props.profileCover : "/images/placeholder-profile.jpg"}/>
                                     </CardMedia>
                                     <TextField
                                         type="text"
@@ -182,6 +189,9 @@ class Profile extends Component {
                                         value={this.props.profileCover}
                                         onChange={this.props.ownUser ? this.props.onProfileCoverChange : null}
                                         style={{width: "100%"}}
+                                        inputStyle={{color: "#000000"}}
+                                        floatingLabelStyle={{color: "#ee6e73"}}
+                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
                                     />
                                 </Dialog>
                             </CardMedia>
@@ -196,7 +206,9 @@ class Profile extends Component {
                                 </CardTitle>
                                 <CardText>
                                     <Tabs onChange={this.handleChange}
-                                          value={this.state.slideIndex}>
+                                          value={this.state.slideIndex}
+                                          inkBarStyle={{color: "#ee6e73", backgroundColor: "#ee6e73"}}
+                                          tabItemContainerStyle={{backgroundColor: "#42ab9e"}}>
                                         <Tab icon={<ImageCameraRoll/>} value={0} onClick={this.props.onCancelEdit}/>
                                         <Tab icon={<ActionAccountBox/>} value={1} onClick={this.props.onCancelEdit}/>
                                         {this.props.ownUser ?
@@ -243,14 +255,20 @@ class Profile extends Component {
                                                                   <TextField floatingLabelText="First name"
                                                                              value={this.props.firstName}
                                                                              onChange={this.props.onFirstNameChange}
-                                                                             errorText={this.props.errors.firstName}/>}
+                                                                             errorText={this.props.errors.firstName}
+                                                                             inputStyle={{color: "#000000"}}
+                                                                             floatingLabelStyle={{color: "#ee6e73"}}
+                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <TextField floatingLabelText="Last name"
                                                                              value={this.props.lastName}
                                                                              onChange={this.props.onLastNameChange}
-                                                                             errorText={this.props.errors.lastName}/>}
+                                                                             errorText={this.props.errors.lastName}
+                                                                             inputStyle={{color: "#000000"}}
+                                                                             floatingLabelStyle={{color: "#ee6e73"}}
+                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
@@ -270,34 +288,47 @@ class Profile extends Component {
                                                                   <TextField floatingLabelText="Job"
                                                                              value={this.props.profession}
                                                                              onChange={this.props.onProfessionChange}
-                                                                             errorText={this.props.errors.profession}/>}
+                                                                             errorText={this.props.errors.profession}
+                                                                             inputStyle={{color: "#000000"}}
+                                                                             floatingLabelStyle={{color: "#ee6e73"}}
+                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <TextField floatingLabelText="Company name"
                                                                              value={this.props.companyName}
                                                                              onChange={this.props.onCompanyNameChange}
-                                                                             errorText={this.props.errors.companyName}/>}
+                                                                             errorText={this.props.errors.companyName}
+                                                                             inputStyle={{color: "#000000"}}
+                                                                             floatingLabelStyle={{color: "#ee6e73"}}
+                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <TextField floatingLabelText="City"
                                                                              value={this.props.city}
                                                                              onChange={this.props.onCityChange}
-                                                                             errorText={this.props.errors.city}/>}
+                                                                             errorText={this.props.errors.city}
+                                                                             inputStyle={{color: "#000000"}}
+                                                                             floatingLabelStyle={{color: "#ee6e73"}}
+                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <TextField floatingLabelText="Country"
                                                                              value={this.props.country}
                                                                              onChange={this.props.onCountryChange}
-                                                                             errorText={this.props.errors.country}/>}
+                                                                             errorText={this.props.errors.country}
+                                                                             inputStyle={{color: "#000000"}}
+                                                                             floatingLabelStyle={{color: "#ee6e73"}}
+                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <RaisedButton
                                                                       label="Save changes"
-                                                                      primary={true}
+                                                                      buttonStyle={{backgroundColor: "#eb7077"}}
+                                                                      labelStyle={{color: "#ffffff"}}
                                                                       onClick={this.props.onSave}/>}
                                                     />
                                                 </List>
