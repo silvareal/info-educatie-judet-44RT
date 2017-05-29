@@ -9,7 +9,6 @@ import {stateToHTML} from 'draft-js-export-html';
 import QRCode from 'qrcode.react';
 
 import {
-    FlatButton,
     RaisedButton,
     Step,
     StepButton,
@@ -117,6 +116,9 @@ class Create extends Component {
                                 autoFocus={true}
                                 multiLine={true}
                                 className="step-textfields"
+                                inputStyle={{color: "#000000"}}
+                                floatingLabelStyle={{color: "#ee6e73"}}
+                                underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
 
                             <TextField
@@ -127,6 +129,9 @@ class Create extends Component {
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
+                                inputStyle={{color: "#000000"}}
+                                floatingLabelStyle={{color: "#ee6e73"}}
+                                underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
 
                             <TextField
@@ -137,6 +142,9 @@ class Create extends Component {
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
+                                inputStyle={{color: "#000000"}}
+                                floatingLabelStyle={{color: "#ee6e73"}}
+                                underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
 
                             <TextField
@@ -147,6 +155,9 @@ class Create extends Component {
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
+                                inputStyle={{color: "#000000"}}
+                                floatingLabelStyle={{color: "#ee6e73"}}
+                                underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
                         </div>
                         <div>
@@ -178,6 +189,9 @@ class Create extends Component {
                                        autoFocus={true}
                                        multiLine={true}
                                        className="step-textfields"
+                                       inputStyle={{color: "#000000"}}
+                                       floatingLabelStyle={{color: "#ee6e73"}}
+                                       underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
                             <div className="qr-restrict-desktop">
                             <QRCode value={this.props.qrLink} size={512}/>
@@ -201,6 +215,9 @@ class Create extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
+                                                   inputStyle={{color: "#000000"}}
+                                                   floatingLabelStyle={{color: "#ee6e73"}}
+                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
                                         :
                                         <TextField hintText="Give your work of art a cool name"
@@ -209,6 +226,9 @@ class Create extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
+                                                   inputStyle={{color: "#000000"}}
+                                                   floatingLabelStyle={{color: "#ee6e73"}}
+                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
                                     }
                                 </div>
@@ -221,6 +241,9 @@ class Create extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
+                                                   inputStyle={{color: "#000000"}}
+                                                   floatingLabelStyle={{color: "#ee6e73"}}
+                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
                                         :
                                         <TextField hintText="Give us the link of your work of art"
@@ -229,6 +252,9 @@ class Create extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
+                                                   inputStyle={{color: "#000000"}}
+                                                   floatingLabelStyle={{color: "#ee6e73"}}
+                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
                                     }
                                 </div>
@@ -264,11 +290,13 @@ class Create extends Component {
                                     }
                                 </div>
                                 <RaisedButton type="button" primary={true} label="+"
-                                              onClick={this.props.handleAddPictures(i)}/>
+                                              onClick={this.props.handleAddPictures(i)}
+                                              buttonStyle={{backgroundColor: "#42ab9e"}}/>
 
                                 { (i !== 0) ? (
                                     <RaisedButton type="button" secondary={true} label="-"
-                                                  onClick={this.props.handleRemovePictures(i)}/>
+                                                  onClick={this.props.handleRemovePictures(i)}
+                                                  buttonStyle={{backgroundColor: "#ee6e73"}}/>
                                 ) : null}
 
                             </div>
@@ -345,6 +373,7 @@ class Create extends Component {
                                 <Link to={`/admin/${this.props.adminId}/collections`}>
                                     <RaisedButton label="Return"
                                                   primary={true}
+                                                  buttonStyle={{backgroundColor: "#42ab9e"}}
                                                   onTouchTap={this.resetScroll}
                                     />
                                 </Link>
@@ -365,18 +394,22 @@ class Create extends Component {
                                 <Link to={`/admin/${this.props.adminId}/collections`}>
                                     <RaisedButton
                                         label="Cancel"
-                                        secondary={true}/>
+                                        secondary={true}
+                                        buttonStyle={{backgroundColor: "#ee6e73"}}/>
                                 </Link>
                                 :
-                                <FlatButton
+                                <RaisedButton
                                     label="Back"
+                                    primary={true}
                                     disabled={stepIndex === 0}
-                                    onTouchTap={this.handlePrev}/>
+                                    onTouchTap={this.handlePrev}
+                                    buttonStyle={{backgroundColor: "#ee6e73"}}/>
                             }
 
                             <RaisedButton
                                 label={stepIndex === 2 ? "Add collection" : "Next"}
                                 primary={true}
+                                buttonStyle={{backgroundColor: "#42ab9e"}}
                                 onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}/>
                         </CardActions>
                     </Card>

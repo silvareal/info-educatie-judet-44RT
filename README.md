@@ -2,6 +2,8 @@
 
 <p>Version 0.0.2 of the project.
 
+THIS IS PART 1 OF 2 CONSECUTIVE COMMITS
+
 #TODO
 
         -authorization rules {
@@ -59,8 +61,9 @@
         }
         
         -think of a design for the logs page ( should be simple ){
-        Status: In-progress
-        Notes: Design is done, just need to apply it to all 8 or 9 pages
+        Status: Complete,
+        Notes: Design is done, just need to apply it to all 8 or 9 pages,
+        Note2: All pages are up and running
         }
         
         -on users management, have the make moderators on the AppBar and create ALL the rules for banning users {
@@ -111,6 +114,8 @@
         Notes: Removed it
         }
         
+        {
+        To be continued in 0.0.3
         -that being said, make the application for mod page
 
         -unless there's anything left,clean up the code, remove futile variables and state
@@ -118,13 +123,10 @@
         -make efficient functions and use them where necessary
         
         -rework the hierarchy and split jobs between parents and children
-        
-        
+        }
         -update the logging of the site{
         Status: Complete,
         Notes: Updated all the logging
         }
     
-        
-        photos: www.unsplash.com
 </p>

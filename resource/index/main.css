@@ -187,28 +187,6 @@ a {
   padding: 0 16px;
   color: deepskyblue; }
 
-.text-center {
-  text-align: center; }
-
-.top-bar {
-  display: flex;
-  flex: 1;
-  background: #2d2d2d;
-  justify-content: space-between;
-  margin-bottom: 30px; }
-  .top-bar a,
-  .top-bar .nav a {
-    margin: 0 8px; }
-
-.logo {
-  padding: 5px; }
-
-.actions {
-  padding: 5px; }
-
-.card-heading {
-  padding: 16px; }
-
 .parallax-login {
   width: auto;
   height: 100%;
@@ -333,15 +311,55 @@ a {
     .signup-header {
       font-size: 2em; } }
 
-.logs-wrap {
-  display: flex;
-  justify-content: center;
-  flex: 1; }
+.container-logs {
+  padding: 0 256px 64px 256px;
+  min-height: 720px; }
+  @media screen and (max-width: 1200px) {
+    .container-logs {
+      min-height: 400px;
+      padding: 1em   ;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; } }
 
-.logs-display {
+.logs-header {
+  padding: 30px   ;
+  font-size: 3em; }
+  @media screen and (max-width: 1200px) {
+    .logs-header {
+      font-size: 2em; } }
+
+.cancel-padding-cardHeader div {
+  padding: 0 !important   ; }
+
+.card-action-logs {
   display: flex;
   flex: 1;
-  justify-content: center; }
+  justify-content: center;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  @media screen and (max-width: 1200px) {
+    .card-action-logs {
+      display: block;
+      flex: "";
+      justify-content: "";
+      text-align: center; } }
+
+@media screen and (max-width: 1200px) {
+  .hide-table-mobile {
+    display: none;
+    flex: "";
+    justify-content: ""; } }
+
+@media screen and (min-width: 1200px) {
+  .hide-list-desktop {
+    display: none;
+    flex: "";
+    justify-content: ""; } }
+
+.break-word-logs {
+  word-break: break-all; }
 
 body {
   margin: 0; }

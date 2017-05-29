@@ -5,7 +5,6 @@ import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
 
 import {
-    FlatButton,
     RaisedButton,
     Step,
     StepButton,
@@ -14,8 +13,7 @@ import {
     Card,
     CardHeader,
     CardTitle,
-    CardActions,
-    CardMedia
+    CardActions
 } from "material-ui";
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
@@ -106,6 +104,9 @@ class Create extends Component {
                                 autoFocus={true}
                                 multiLine={true}
                                 className="step-textfields"
+                                inputStyle={{color: "#000000"}}
+                                floatingLabelStyle={{color: "#ee6e73"}}
+                                underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
                             <TextField
                                 hintText="Cover photo link"
@@ -115,6 +116,9 @@ class Create extends Component {
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
+                                inputStyle={{color: "#000000"}}
+                                floatingLabelStyle={{color: "#ee6e73"}}
+                                underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
                         </div>
                         <div>
@@ -195,6 +199,7 @@ class Create extends Component {
                                     <RaisedButton label="Return"
                                                   primary={true}
                                                   onTouchTap={this.resetScroll}
+                                                  buttonStyle={{backgroundColor: "#42ab9e"}}
                                     />
                                 </Link>
                             </div> : null}
@@ -214,19 +219,23 @@ class Create extends Component {
                                 <Link to={`/admin/${this.props.adminId}/news`}>
                                     <RaisedButton
                                         label="Cancel"
-                                        secondary={true}/>
+                                        secondary={true}
+                                        buttonStyle={{backgroundColor: "#ee6e73"}}/>
                                 </Link>
                                 :
-                                <FlatButton
+                                <RaisedButton
                                     label="Back"
+                                    primary={true}
                                     disabled={stepIndex === 0}
-                                    onTouchTap={this.handlePrev}/>
+                                    onTouchTap={this.handlePrev}
+                                    buttonStyle={{backgroundColor: "#ee6e73"}}/>
                             }
 
                             <RaisedButton
                                 label={stepIndex === 1 ? "Add collection" : "Next"}
                                 primary={true}
-                                onTouchTap={stepIndex === 1 ? this.props.onSave : this.handleNext}/>
+                                onTouchTap={stepIndex === 1 ? this.props.onSave : this.handleNext}
+                                buttonStyle={{backgroundColor: "#42ab9e"}}/>
                         </CardActions>
                     </Card>
                 </Card>

@@ -76,7 +76,7 @@ class ReadAllView extends Component {
     };
 
     onScroll = () => {
-        if (this.state.finished === false && document.title === "Manage news - Admin Controlled" && this.state.searching === false)
+        if (this.state.finished === false && document.title === "Manage articles - Admin Controlled" && this.state.searching === false)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();
             }
@@ -186,7 +186,7 @@ class ReadAllView extends Component {
     };
 
     render() {
-        document.title = "Manage news - Admin Controlled";
+        document.title = "Manage articles - Admin Controlled";
         if (this.state.fetchedNews === false && this.state.isAdmin !== true)
             return (
                 <div className="parallax-collections">

@@ -8,7 +8,6 @@ import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
 import {
-    FlatButton,
     RaisedButton,
     Step,
     StepButton,
@@ -117,7 +116,7 @@ class Create extends Component {
                                 autoFocus={true}
                                 multiLine={true}
                                 className="step-textfields"
-                                inputStyle={{color: "#ee6e73"}}
+                                inputStyle={{color: "#000000"}}
                                 floatingLabelStyle={{color: "#ee6e73"}}
                                 underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
@@ -151,7 +150,7 @@ class Create extends Component {
                                        autoFocus={true}
                                        multiLine={true}
                                        className="step-textfields"
-                                       inputStyle={{color: "#ee6e73"}}
+                                       inputStyle={{color: "#000000"}}
                                        floatingLabelStyle={{color: "#ee6e73"}}
                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
@@ -177,7 +176,7 @@ class Create extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000"}}
                                                    floatingLabelStyle={{color: "#ee6e73"}}
                                                    underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
@@ -188,7 +187,7 @@ class Create extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000"}}
                                                    floatingLabelStyle={{color: "#ee6e73"}}
                                                    underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
@@ -203,7 +202,7 @@ class Create extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000"}}
                                                    floatingLabelStyle={{color: "#ee6e73"}}
                                                    underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
@@ -214,7 +213,7 @@ class Create extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000"}}
                                                    floatingLabelStyle={{color: "#ee6e73"}}
                                                    underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />

@@ -14,8 +14,7 @@ class Delete extends Component {
     };
 
     render() {
-        if (this.props.response === true)
-        {
+        if (this.props.response === true) {
             if (this.props.message === "The item you are searching for does not exist")
                 return (
                     <div className="parallax-collections-delete">
@@ -37,7 +36,8 @@ class Delete extends Component {
                                         <div className="delete-actions">
                                             <Link to={`/admin/${this.props.adminId}/collections`}>
                                                 <RaisedButton label="Finish"
-                                                              secondary={true}/>
+                                                              secondary={true}
+                                                              buttonStyle={{backgroundColor: "#42ab9e"}}/>
                                             </Link>
                                         </div>
                                     </CardActions>
@@ -51,18 +51,20 @@ class Delete extends Component {
                                     </CardHeader>
                                     <CardActions>
                                         <div className="delete-actions">
-                                            <div>
+                                            <div style={{padding: 20}}>
                                                 <RaisedButton
                                                     primary={true}
                                                     onClick={this.props.onDelete}
-                                                    label="Yes"/>
+                                                    label="Yes"
+                                                    buttonStyle={{backgroundColor: "#ee6e73"}}/>
                                             </div>
-                                            <div>
+                                            <div style={{padding: 20}}>
                                                 <Link to={`/admin/${this.props.adminId}/collections`}>
                                                     <RaisedButton
                                                         secondary={true}
                                                         label="No"
                                                         onTouchTap={this.resetScroll}
+                                                        buttonStyle={{backgroundColor: "#42ab9e"}}
                                                     />
                                                 </Link>
                                             </div>

@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 
 import Auth from '../../../../modules/Auth.js';
 import LogsCollectionsCreate from '../../../../components/Admin/Logs/Collections/LogsCollectionsCreate.jsx';
-import NotAuthorizedPage from "../../../Error/NotAuthorizedView.jsx";
+import NotAuthorizedView from "../../../Error/NotAuthorizedView.jsx";
+import LoadingIndicator from "../../../../components/Loading Indicator/LoadingIndicator.jsx";
+
+import {Card} from 'material-ui';
 
 class LogsCollectionsCreateView extends Component {
     constructor(props){
@@ -10,7 +13,8 @@ class LogsCollectionsCreateView extends Component {
 
         this.state = {
             logs: [{}],
-            isAdmin: false
+            isAdmin: false,
+            fetched: false
         }
     }
 
@@ -39,7 +43,8 @@ class LogsCollectionsCreateView extends Component {
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
                 this.setState({
-                    logs: xhr.response.logs
+                    logs: xhr.response.logs,
+                    fetched: true
                 })
             }
         });
@@ -54,13 +59,23 @@ class LogsCollectionsCreateView extends Component {
 
     render() {
         document.title = "Logs - Create collections";
+        if (this.state.fetched === false && this.state.isAdmin !== true)
+            return (
+                <div>
+                    <div className="top-bar-spacing"/>
+                    <Card className="container-logs" style={{boxShadow: "none"}}>
+                        <LoadingIndicator/>
+                    </Card>
+                </div>
+            );
         if (this.state.isAdmin === true)
         {
             return (
-                <LogsCollectionsCreate logs={this.state.logs}/>
+                <LogsCollectionsCreate logs={this.state.logs}
+                userId={this.props.params._id}/>
             )
         }
-        else return <NotAuthorizedPage/>
+        else return <NotAuthorizedView/>
     }
 }
 

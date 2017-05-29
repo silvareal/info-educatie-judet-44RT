@@ -10,7 +10,6 @@ import {stateToHTML} from 'draft-js-export-html';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
 
 import {
-    FlatButton,
     RaisedButton,
     Step,
     StepButton,
@@ -118,7 +117,7 @@ class Update extends Component {
                                 autoFocus={true}
                                 multiLine={true}
                                 className="step-textfields"
-                                inputStyle={{color: "#ee6e73"}}
+                                inputStyle={{color: "#000000"}}
                                 floatingLabelStyle={{color: "#ee6e73"}}
                                 underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
@@ -152,7 +151,7 @@ class Update extends Component {
                                        autoFocus={true}
                                        multiLine={true}
                                        className="step-textfields"
-                                       inputStyle={{color: "#ee6e73"}}
+                                       inputStyle={{color: "#000000"}}
                                        floatingLabelStyle={{color: "#ee6e73"}}
                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
@@ -178,7 +177,7 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000"}}
                                                    floatingLabelStyle={{color: "#ee6e73"}}
                                                    underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
@@ -189,7 +188,7 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000"}}
                                                    floatingLabelStyle={{color: "#ee6e73"}}
                                                    underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
@@ -204,7 +203,7 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000"}}
                                                    floatingLabelStyle={{color: "#ee6e73"}}
                                                    underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />
@@ -215,7 +214,7 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000"}}
                                                    floatingLabelStyle={{color: "#ee6e73"}}
                                                    underlineFocusStyle={{borderColor: "#ee6e73"}}
                                         />

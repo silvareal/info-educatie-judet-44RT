@@ -38,32 +38,3 @@ a {
   padding: 0 16px;
   color: deepskyblue;
 }
-
-.text-center {
-  text-align: center;
-}
-
-.top-bar {
-  display: flex;
-  flex: 1;
-  background: #2d2d2d;
-  justify-content: space-between;
-  margin-bottom: 30px;
-  a,
-  .nav a {
-    margin: 0 8px;
-  }
-}
-
-.logo {
-  padding: 5px;
-}
-
-.actions {
-  padding: 5px;
-}
-
-.card-heading {
-  padding: 16px;
-}
-

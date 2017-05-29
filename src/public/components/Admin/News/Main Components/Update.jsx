@@ -5,7 +5,6 @@ import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
 
 import {
-    FlatButton,
     RaisedButton,
     Step,
     StepButton,
@@ -107,6 +106,9 @@ class Update extends Component {
                                 autoFocus={true}
                                 multiLine={true}
                                 className="step-textfields"
+                                inputStyle={{color: "#000000"}}
+                                floatingLabelStyle={{color: "#ee6e73"}}
+                                underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
                             <TextField
                                 hintText="Cover photo link"
@@ -116,6 +118,9 @@ class Update extends Component {
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
+                                inputStyle={{color: "#000000"}}
+                                floatingLabelStyle={{color: "#ee6e73"}}
+                                underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
                         </div>
                         <div>
@@ -148,6 +153,7 @@ class Update extends Component {
                 return 'Unknown error';
         }
     }
+
     resetScroll = () => {
         window.scrollTo(0, 0);
     };
@@ -156,8 +162,7 @@ class Update extends Component {
 
         const {stepIndex} = this.state;
 
-        if(this.props.fetched)
-        {
+        if (this.props.fetched) {
             if (this.props.errorMessage === "The item you are searching for does not exist")
                 return (
                     <div className="parallax-collections-create">
@@ -196,14 +201,16 @@ class Update extends Component {
                                                             icon={this.props.errors.newsTitle || this.props.errors.newsCoverLink || this.props.errors.newsDescriptionRaw ?
                                                                 <FontIcon className="material-icons"
                                                                           color={red500}>warning</FontIcon> :
-                                                                <FontIcon className="material-icons">mode_edit</FontIcon>}
+                                                                <FontIcon
+                                                                    className="material-icons">mode_edit</FontIcon>}
                                                         >
                                                         </StepButton>
                                                     </Step>
                                                     <Step>
                                                         <StepButton onClick={() => this.setState({stepIndex: 1})}
                                                                     icon={this.props.errors.newsTitle || this.props.errors.newsCoverLink || this.props.errors.newsDescriptionRaw ?
-                                                                        <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
+                                                                        <FontIcon className="material-icons"
+                                                                                  color={red500}>warning</FontIcon> :
                                                                         <FontIcon
                                                                             className="material-icons">done</FontIcon>}
                                                         >
@@ -233,9 +240,10 @@ class Update extends Component {
                                                 label="Finish"
                                                 secondary={true}
                                                 onTouchTap={this.resetScroll}
+                                                buttonStyle={{backgroundColor: "#42ab9e"}}
                                             />
                                         </Link>
-                                    </div>: null
+                                    </div> : null
                                 }
                                 <div className="step-style">{this.getStepContent(stepIndex)}</div>
                                 <CardActions className="step-actions">
@@ -243,11 +251,14 @@ class Update extends Component {
                                         <Link to={`/admin/${this.props.adminId}/news`}>
                                             <RaisedButton
                                                 label="Cancel"
+                                                buttonStyle={{backgroundColor: "#ee6e73"}}
                                                 secondary={true}/>
                                         </Link>
                                         :
-                                        <FlatButton
+                                        <RaisedButton
                                             label="Back"
+                                            primary={true}
+                                            buttonStyle={{backgroundColor: "#ee6e73"}}
                                             disabled={stepIndex === 0}
                                             onTouchTap={this.handlePrev}/>
                                     }
@@ -255,7 +266,8 @@ class Update extends Component {
                                     <RaisedButton
                                         label={stepIndex === 1 ? "Save" : "Next"}
                                         primary={true}
-                                        onTouchTap={stepIndex === 1 ? this.props.onSave : this.handleNext}/>
+                                        onTouchTap={stepIndex === 1 ? this.props.onSave : this.handleNext}
+                                        buttonStyle={{backgroundColor: "#42ab9e"}}/>
                                 </CardActions>
                             </Card>
                         </Card>

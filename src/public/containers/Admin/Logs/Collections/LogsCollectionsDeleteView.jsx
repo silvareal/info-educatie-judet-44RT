@@ -2,15 +2,19 @@ import React, {Component} from 'react';
 
 import Auth from '../../../../modules/Auth.js'
 import LogsCollectionsDelete from '../../../../components/Admin/Logs/Collections/LogsCollectionsDelete.jsx';
-import NotAuthorizedPage from '../../../Error/NotAuthorizedView.jsx';
+import NotAuthorizedView from '../../../Error/NotAuthorizedView.jsx';
+
+import {Card} from 'material-ui';
+import LoadingIndicator from "../../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 class LogsCollectionsDeleteView extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
             logs: [{}],
-            isAdmin: false
+            isAdmin: false,
+            fetched: false
         }
     }
 
@@ -39,7 +43,8 @@ class LogsCollectionsDeleteView extends Component {
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
                 this.setState({
-                    logs: xhr.response.logs
+                    logs: xhr.response.logs,
+                    fetched: true
                 })
             }
         });
@@ -54,13 +59,22 @@ class LogsCollectionsDeleteView extends Component {
 
     render() {
         document.title = "Logs - Delete collections";
-        if (this.state.isAdmin === true)
-        {
+        if (this.state.fetched === false && this.state.isAdmin !== true)
             return (
-                <LogsCollectionsDelete logs={this.state.logs}/>
+                <div>
+                    <div className="top-bar-spacing"/>
+                    <Card className="container-logs" style={{boxShadow: "none"}}>
+                        <LoadingIndicator/>
+                    </Card>
+                </div>
+            );
+        if (this.state.isAdmin === true) {
+            return (
+                <LogsCollectionsDelete logs={this.state.logs}
+                                       userId={this.props.params._id}/>
             )
         }
-        else return <NotAuthorizedPage/>
+        else return <NotAuthorizedView/>
     }
 }
 

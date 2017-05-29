@@ -2,32 +2,40 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {
     RaisedButton,
-    Drawer,
-    MenuItem,
     Table,
     TableHeader,
     TableBody,
     TableRow,
     TableRowColumn,
-    TableHeaderColumn
+    TableHeaderColumn,
+    Card,
+    CardHeader,
+    CardActions,
+    List,
+    ListItem,
+    Divider
 } from 'material-ui';
 
 class LogsSignup extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            open: false
-        };
-    }
-
-    handleToggle = () => {
-        this.setState({open: !this.state.open});
-    };
 
     render() {
 
-        let rows = Object.keys(this.props.logs).map((i) => {
+        const styles = {
+            cardHeader: {
+                textAlign: "center"
+            },
+            buttons: {
+                padding: 20,
+                background: "transparent",
+                boxShadow: "none"
+            },
+            divider: {
+                height: 5,
+                backgroundColor: "#42ab9e"
+            }
+        };
+
+        let rows1 = Object.keys(this.props.logs).map((i) => {
             let date = new Date(this.props.logs[i].time);
             if (date != "Invalid Date") {
                 return (
@@ -40,40 +48,68 @@ class LogsSignup extends Component {
             }
         });
 
+        let rows2 = Object.keys(this.props.logs).map((i) => {
+            let date = new Date(this.props.logs[i].time);
+            if (date != "Invalid Date") {
+                return (
+                    <span key={i}>
+                    <ListItem primaryText={this.props.logs[i].email}
+                              secondaryText="Email"
+                              disabled={true}/>
+                        <ListItem primaryText={this.props.logs[i].userName}
+                                  secondaryText="Username"
+                                  disabled={true}/>
+                        <Divider/>
+                        <ListItem primaryText={date.toString()}
+                                  secondaryText="Date and time"
+                                  disabled={true}/>
+                      <Divider style={styles.divider}/>
+                    </span>
+                )
+            }
+        });
+
         return (
-            <div>
-                <div className="logs-wrap">
-                    <RaisedButton label="Toggle drawer" onTouchTap={this.handleToggle}/>
-                </div>
+            <div className="break-word-logs">
+                <div className="top-bar-spacing"/>
+                <Card className="container-logs" style={{boxShadow: "none"}}>
+                    <div className="cancel-padding-cardHeader">
+                        <CardHeader
+                            style={styles.cardHeader}
+                            title={<div className="logs-header">Logs signup</div>}/>
+                    </div>
+                    <CardActions>
+                        <div className="card-action-logs">
+                            <Link to={`/admin/${this.props.userId}/logs`}>
+                                <RaisedButton
+                                    primary={true}
+                                    label="Back"
+                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                    style={styles.buttons}
+                                />
+                            </Link>
+                        </div>
+                    </CardActions>
 
-                <Table
-                    selectable={false}>
-                    <TableHeader displaySelectAll={false}>
-                        <TableRow>
-                            <TableHeaderColumn>Email</TableHeaderColumn>
-                            <TableHeaderColumn>Username</TableHeaderColumn>
-                            <TableHeaderColumn>Time</TableHeaderColumn>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
-                        {rows}
-                    </TableBody>
-                </Table>
-
-                <Drawer open={this.state.open}>
-                    <h1>Admin panel</h1>
-                    <MenuItem><Link to={`/admin/${this.props.userId}`} activeStyle={{color: 'blue'}}>Admin
-                        CP</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/logs`} activeStyle={{color: 'blue'}}>Logs
-                        component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/news`} activeStyle={{color: 'blue'}}>News
-                        management component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/users`} activeStyle={{color: 'blue'}}>Users
-                        management
-                        component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/collections`} activeStyle={{color: 'blue'}}>Collections
-                        management</Link></MenuItem>
-                </Drawer>
+                    <div className="hide-table-mobile">
+                        <Table
+                            selectable={false}>
+                            <TableHeader displaySelectAll={false}>
+                                <TableRow>
+                                    <TableHeaderColumn>Email</TableHeaderColumn>
+                                    <TableHeaderColumn>Username</TableHeaderColumn>
+                                    <TableHeaderColumn>Time</TableHeaderColumn>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody displayRowCheckbox={false}>
+                                {rows1}
+                            </TableBody>
+                        </Table>
+                    </div>
+                    <div className="hide-list-desktop">
+                        {rows2}
+                    </div>
+                </Card>
             </div>
         )
     }

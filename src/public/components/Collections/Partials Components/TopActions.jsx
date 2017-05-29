@@ -28,6 +28,9 @@ class TopActions extends Component {
                             onChange={this.props.onQueryChange}
                             onKeyDown={this.props.handleKeyPress}
                             errorText="Search term too long"
+                            inputStyle={{color: "#000000"}}
+                            floatingLabelStyle={{color: "#ee6e73"}}
+                            underlineFocusStyle={{borderColor: "#ee6e73"}}
                         />
                         :
                         <TextField
@@ -36,6 +39,9 @@ class TopActions extends Component {
                             value={this.props.searchQuery}
                             onChange={this.props.onQueryChange}
                             onKeyDown={this.props.handleKeyPress}
+                            inputStyle={{color: "#000000"}}
+                            floatingLabelStyle={{color: "#ee6e73"}}
+                            underlineFocusStyle={{borderColor: "#ee6e73"}}
                         />
                     }
                     <IconButton onTouchTap={this.props.onSearch}>

@@ -64,7 +64,7 @@ class ReadAllView extends Component {
     };
 
     onScroll = (e) => {
-        if (this.state.finished === false && document.title === "Manage collections" && this.state.searching === false)
+        if (this.state.finished === false && document.title === "Browse collections" && this.state.searching === false)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();
             }
@@ -171,7 +171,7 @@ class ReadAllView extends Component {
     };
 
     render() {
-        document.title = "Manage collections";
+        document.title = "Browse collections";
         return (
             <div>
                 <ReadAll

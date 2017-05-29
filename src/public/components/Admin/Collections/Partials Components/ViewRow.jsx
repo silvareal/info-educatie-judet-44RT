@@ -25,6 +25,7 @@ class ViewRow extends Component {
                             type="button"
                             primary={true}
                             label="Update"
+                            buttonStyle={{backgroundColor: "#9b9b9b"}}
                         />
                     </Link>
                     <Link to={`/admin/${this.props.adminId}/collections/delete/${this.props.collection._id}`}
@@ -33,6 +34,7 @@ class ViewRow extends Component {
                             type="button"
                             secondary={true}
                             label="Delete"
+                            buttonStyle={{backgroundColor: "#ee6e73"}}
                         />
                     </Link>
                 </CardActions>

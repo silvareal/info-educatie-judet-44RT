@@ -42,7 +42,7 @@ function validateCreateCollectionForm(payload) {
         errors.userId = "The userId needs to be 24 characters long"
     }
 
-    if (!payload.userName || typeof payload.userName !== 'string' || payload.userName.trim().length === 0) {
+    if (!payload.userNameToAdd || typeof payload.userNameToAdd !== 'string' || payload.userNameToAdd.trim().length === 0) {
         isFormValid = false;
         errors.userName = "Missing user name"
     }
@@ -110,7 +110,7 @@ function validateUpdateCollectionsForm(payload) {
         errors.userId = "The userId needs to be 24 characters long"
     }
 
-    if (!payload.userName || typeof payload.userName !== 'string' || payload.userName.trim().length === 0) {
+    if (!payload.userNameToAdd || typeof payload.userNameToAdd !== 'string' || payload.userNameToAdd.trim().length === 0) {
         isFormValid = false;
         errors.userName = "Missing user name"
     }

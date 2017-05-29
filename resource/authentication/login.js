@@ -4,55 +4,61 @@ const jwt = require('jsonwebtoken');
 const config = require('../../config');
 
 module.exports = new PassportLocalStrategy(
-    {usernameField: 'email', passwordField: 'password', session: false, passReqToCallback: true}, (req, email, password, done) => {
+    {
+        usernameField: 'email',
+        passwordField: 'password',
+        session: false,
+        passReqToCallback: true
+    }, (req, email, password, done) => {
 
-    const userData = {
-        email: email.trim(),
-        password: password.trim()
-    };
+        const userData = {
+            email: email.trim(),
+            password: password.trim()
+        };
 
-    // find a user by email address
-    return User.findOne({email: userData.email}, (err, user) => {
-        if (err) {
-            return done(err);
-        }
-
-        if (!user) {
-            const error = new Error('Incorrect credentials');
-            error.name = 'CredentialsError';
-
-            return done(error);
-        }
-
-        if (user.banned === true) {
-            const error = new Error('User is banned');
-            error.name = 'UserBanned';
-
-            return done(error);
-        }
-
-        // check if a hashed user's password is equal to a value saved in the database
-        return user.comparePasswordLogin(userData.password, (passwordErr, isMatch) => {
+        // find a user by email address
+        return User.findOne({email: userData.email}, (err, user) => {
             if (err) {
                 return done(err);
             }
 
-            if (!isMatch) {
+            if (!user) {
                 const error = new Error('Incorrect credentials');
                 error.name = 'CredentialsError';
 
                 return done(error);
             }
 
-            const payload = {
-                sub: user._id,
-                isAdmin: user.admin
-            };
+            //check if user is banned
+            if (user.banned === true) {
+                const error = new Error('User is banned');
+                error.name = 'UserBanned';
 
-            // create a token string
-            const token = jwt.sign(payload, config.jwtSecret);
+                return done(error);
+            }
 
-            return done(null, token);
+            // check if a hashed user's password is equal to a value saved in the database
+            return user.comparePasswordLogin(userData.password, (passwordErr, isMatch) => {
+                if (err) {
+                    return done(err);
+                }
+
+                if (!isMatch) {
+                    const error = new Error('Incorrect credentials');
+                    error.name = 'CredentialsError';
+
+                    return done(error);
+                }
+
+                const payload = {
+                    sub: user._id,
+                    isAdmin: user.admin
+                };
+
+                // create a token string
+                const token = jwt.sign(payload, config.jwtSecret);
+
+                return done(null, token);
+            });
         });
     });
-});

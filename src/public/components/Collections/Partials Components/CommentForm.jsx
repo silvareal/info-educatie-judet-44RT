@@ -40,7 +40,7 @@ class CommentForm extends Component {
                                 onKeyDown={this.props.handleKeyPress}
                                 multiLine={true}
                                 rowsMax={2}
-                                inputStyle={{color: "#ee6e73"}}
+                                inputStyle={{color: "#000000"}}
                                 floatingLabelStyle={{color: "#ee6e73"}}
                                 underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />
@@ -64,7 +64,7 @@ class CommentForm extends Component {
                                 onKeyDown={this.props.handleKeyPress}
                                 multiLine={true}
                                 rowsMax={2}
-                                inputStyle={{color: "#ee6e73"}}
+                                inputStyle={{color: "#000000"}}
                                 floatingLabelStyle={{color: "#ee6e73"}}
                                 underlineFocusStyle={{borderColor: "#ee6e73"}}
                             />

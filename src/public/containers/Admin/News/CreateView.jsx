@@ -150,7 +150,7 @@ class CreateView extends Component {
     };
 
     render() {
-        document.title = "Create news - Admin Controlled";
+        document.title = "Create an article - Admin Controlled";
         if (this.state.isAdmin === true)
         {
             return (

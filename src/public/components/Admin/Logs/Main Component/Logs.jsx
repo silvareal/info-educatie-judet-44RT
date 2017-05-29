@@ -2,83 +2,84 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {
     RaisedButton,
-    Drawer,
-    MenuItem,
+    Card,
+    CardActions,
+    CardHeader
 } from 'material-ui';
 
 class Logs extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            open: false
-        };
-    }
-
-    handleToggle = () => {
-        this.setState({open: !this.state.open});
-    };
 
     render() {
+
+        const styles = {
+            cardHeader: {
+                textAlign: "center"
+            },
+            buttons: {
+                padding: 20,
+                background: "transparent",
+                boxShadow: "none"
+            }
+        };
+
         return (
             <div>
-                <div className="logs-wrap">
-                    <div>
-                        <RaisedButton label="Toggle drawer" onTouchTap={this.handleToggle}/>
-                        <Link to={`/admin/${this.props.userId}/logs/login`}>
-                            <RaisedButton
-                                primary={true}
-                                label="Login logs"
-                            />
-                        </Link>
+                <div className="top-bar-spacing"/>
+                <Card className="container-logs" style={{boxShadow: "none"}}>
+                    <div className="cancel-padding-cardHeader">
+                        <CardHeader
+                            style={styles.cardHeader}
+                            title={<div className="logs-header">Logs overview</div>}/>
                     </div>
-                    <div>
-                        <Link to={`/admin/${this.props.userId}/logs/signup`}>
-                            <RaisedButton
-                                primary={true}
-                                label="Logs signup"
-                            />
-                        </Link>
-                    </div>
-                    <div>
-                        <Link to={`/admin/${this.props.userId}/logs/news`}>
-                            <RaisedButton
-                                primary={true}
-                                label="Logs news"
-                            />
-                        </Link>
-                    </div>
-                    <div>
-                        <Link to={`/admin/${this.props.userId}/logs/collections`}>
-                            <RaisedButton
-                                primary={true}
-                                label="Logs collections"
-                            />
-                        </Link>
-                    </div>
-                    <div>
-                        <Link to={`/admin/${this.props.userId}/logs/profile`}>
-                            <RaisedButton
-                                primary={true}
-                                label="Logs profile update"
-                            />
-                        </Link>
-                    </div>
-                </div>
-                <Drawer open={this.state.open}>
-                    <h1>Admin panel</h1>
-                    <MenuItem><Link to={`/admin/${this.props.userId}`} activeStyle={{color: 'blue'}}>Admin
-                        CP</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/logs`} activeStyle={{color: 'blue'}}>Logs
-                        component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/news`} activeStyle={{color: 'blue'}}>News
-                        management component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/users`} activeStyle={{color: 'blue'}}>Users
-                        management
-                        component</Link></MenuItem>
-                    <MenuItem><Link to={`/admin/${this.props.userId}/collections`} activeStyle={{color: 'blue'}}>Collections
-                        management</Link></MenuItem>
-                </Drawer>
+                    <CardActions>
+                        <div className="card-action-logs">
+                            <Link to={`/admin/${this.props.userId}/logs/login`}>
+                                <RaisedButton
+                                    primary={true}
+                                    label="Login logs"
+                                    style={styles.buttons}
+                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                />
+                            </Link>
+                            <Link to={`/admin/${this.props.userId}/logs/signup`}>
+                                <RaisedButton
+                                    primary={true}
+                                    label="Logs signup"
+                                    style={styles.buttons}
+                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                />
+                            </Link>
+                        </div>
+                        <div className="card-action-logs">
+                            <Link to={`/admin/${this.props.userId}/logs/news`}>
+                                <RaisedButton
+                                    primary={true}
+                                    label="Logs news"
+                                    style={styles.buttons}
+                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                />
+                            </Link>
+                            <Link to={`/admin/${this.props.userId}/logs/collections`}>
+                                <RaisedButton
+                                    primary={true}
+                                    label="Logs collections"
+                                    style={styles.buttons}
+                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                />
+                            </Link>
+                        </div>
+                        <div className="card-action-logs">
+                            <Link to={`/admin/${this.props.userId}/logs/profile`}>
+                                <RaisedButton
+                                    primary={true}
+                                    label="Logs profile update"
+                                    style={styles.buttons}
+                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                />
+                            </Link>
+                        </div>
+                    </CardActions>
+                </Card>
             </div>
         )
     }

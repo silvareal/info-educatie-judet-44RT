@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 
 import Auth from '../../../../modules/Auth.js';
 import LogsSignup from '../../../../components/Admin/Logs/Signup/LogsSignup.jsx';
-import NotAuthorizedPage from '../../../Error/NotAuthorizedView.jsx';
+import NotAuthorizedView from '../../../Error/NotAuthorizedView.jsx';
+import LoadingIndicator from "../../../../components/Loading Indicator/LoadingIndicator.jsx";
+
+import {Card} from 'material-ui';
 
 class LogsSignupView extends Component {
     constructor(props){
@@ -10,7 +13,8 @@ class LogsSignupView extends Component {
 
         this.state = {
             logs: [{}],
-            isAdmin: false
+            isAdmin: false,
+            fetched: false
         }
     }
 
@@ -39,7 +43,8 @@ class LogsSignupView extends Component {
         xhr.addEventListener('load', () => {
             if (xhr.status === 200) {
                 this.setState({
-                    logs: xhr.response.logs
+                    logs: xhr.response.logs,
+                    fetched: true
                 });
             }
         });
@@ -54,15 +59,25 @@ class LogsSignupView extends Component {
 
     render() {
         document.title = "Logs - Signup";
+        if (this.state.fetched === false && this.state.isAdmin !== true)
+            return (
+                <div>
+                    <div className="top-bar-spacing"/>
+                    <Card className="container-logs" style={{boxShadow: "none"}}>
+                        <LoadingIndicator/>
+                    </Card>
+                </div>
+            );
         if (this.state.isAdmin === true)
         {
             return (
                 <LogsSignup
                     logs={this.state.logs}
+                    userId={this.props.params._id}
                 />
             )
         }
-        else return <NotAuthorizedPage/>
+        else return <NotAuthorizedView/>
     }
 
 }

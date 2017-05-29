@@ -1,11 +1,52 @@
-.logs-wrap {
-  display: flex;
-  justify-content: center;
-  flex: 1;
+@import "./constants/fonts";
+@import "./constants/functions";
+
+.container-logs {
+  @include padding(0, 256px, 64px, 256px);
+  min-height: 720px;
+  @media screen and (max-width: 1200px) {
+    min-height: 400px;
+    @include padding(1em);
+    @include box-sizing(border-box);
+  }
 }
 
-.logs-display {
-  display: flex;
-  flex: 1;
-  justify-content: center;
+.logs-header {
+  @include padding(30px);
+  font-size: 3em;
+  @media screen and (max-width: 1200px) {
+    font-size: 2em;
+  }
+}
+
+.cancel-padding-cardHeader {
+  div {
+    @include padding(0 !important);
+  }
+}
+
+.card-action-logs {
+  @include display(flex, 1, center);
+  @include box-sizing(border-box);
+
+  @media screen and (max-width: 1200px) {
+    @include display(block);
+    @include textAlign(center);
+  }
+}
+
+.hide-table-mobile {
+  @media screen and (max-width: 1200px) {
+    @include display(none);
+  }
+}
+
+.hide-list-desktop {
+  @media screen and (min-width: 1200px) {
+    @include display(none);
+  }
+}
+
+.break-word-logs {
+  word-break: break-all;
 }
