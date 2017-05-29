@@ -41,12 +41,6 @@
   margin-left: $left;
 }
 
-@mixin box-sizing($box-sizing) {
-  -webkit-box-sizing: $box-sizing;
-  -moz-box-sizing: $box-sizing;
-  box-sizing: $box-sizing;
-}
-
 @mixin widthAndHeight($width:"", $height:"") {
   width: unquote($width);
   height: unquote($height);
@@ -79,9 +73,6 @@
   background-repeat: $repeat;
   background-size: $size;
 }
-
-// DELETE THOSE WHEN YOU FINISH PROFILE PAGE
-
 
 @mixin box-sizing($value:"") {
   -webkit-box-sizing: unquote($value);
