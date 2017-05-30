@@ -3,7 +3,7 @@
 
 <h5>If you are not currently on our GitHub page and are reading a printed version of this documentation, please visit the link below or scan the QR code to access our GitHub page.</h5>
 
-<a href="https://github.com/saniagh/info-educatie-judet-44RT">44RT on GitHub</a>
+https://github.com/saniagh/info-educatie-judet-44RT
 
 ![QR Missing?](/resource/index/images/qr-code-github.png)
 
