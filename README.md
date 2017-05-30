@@ -5,7 +5,7 @@
 
 <a href="https://github.com/saniagh/info-educatie-judet-44RT">44RT on GitHub</a>
 
-![QR Missing?](https://github.com/saniagh/info-educatie-judet-44RT/blob/master/resource/index/images/qr-code-github.png)
+![QR Missing?](/resource/index/images/qr-code-github.png)
 
 <h1><i>System requirements</i></h1>
 
