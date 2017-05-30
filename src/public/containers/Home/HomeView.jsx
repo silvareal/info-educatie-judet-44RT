@@ -616,7 +616,7 @@ class HomeView extends Component {
         return (
             <Home
                 fetchedNews={this.state.fetchedNews}
-                fetchedCollections={this.state.fetchedNews}
+                fetchedCollections={this.state.fetchedCollections}
                 userName={this.state.userName}
                 userId={this.state.userId}
                 rowsNews1={rowsNews1}

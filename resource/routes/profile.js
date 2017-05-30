@@ -108,7 +108,7 @@ router.post('/profile', (req, res) => {
 
             const userId = decoded.sub;
 
-            let boole = (parseInt(userId) === parseInt(user._id));
+            let boole = (userId.toString() === user._id.toString());
 
             Collection.find({userId: user._id}, (err, collections) => {
 

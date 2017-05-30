@@ -306,7 +306,7 @@ class Create extends Component {
             case 2:
                 return (
                     <div className="preview">
-                        <div>The preview of what you wish to add is here</div>
+                        <div className="preview-title">The preview of what you wish to add is here</div>
                         <div>{this.props.collectionName}</div>
                         <div dangerouslySetInnerHTML={this.props.getHTML()}/>
                         {rows}

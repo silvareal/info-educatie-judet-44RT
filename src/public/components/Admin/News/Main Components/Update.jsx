@@ -13,7 +13,8 @@ import {
     Card,
     CardHeader,
     CardTitle,
-    CardActions
+    CardActions,
+    CardMedia
 } from "material-ui";
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
@@ -143,8 +144,11 @@ class Update extends Component {
             case 1:
                 return (
                     <div className="preview">
-                        <div>The preview of what you wish to add is here</div>
+                        <div className="preview-title">The preview of what you wish to add is here</div>
                         <div>{this.props.newsTitle}</div>
+                        <CardMedia>
+                            <img src={this.props.newsCoverLink}/>
+                        </CardMedia>
                         <div dangerouslySetInnerHTML={this.props.getHTML()}/>
                         {rows}
                     </div>

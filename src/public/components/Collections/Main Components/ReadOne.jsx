@@ -46,12 +46,12 @@ class ReadOne extends Component {
                                                         subtitle={
                                                             <div>By
                                                                 <Link
-                                                                    to={`/profile/${this.props.userName}`}> {this.props.userName}
+                                                                    to={`/profile/${this.props.collection.userName}`}> {this.props.collection.userName}
                                                                 </Link>
                                                                 {formattedDate}
                                                             </div>
                                                         }
-                                                        avatar={this.props.profilePictureLink}
+                                                        avatar={this.props.collection.profilePictureLink}
                                             />
                                             <div className="pictures">
                                                 <div className="list-spacing-readOne">{this.props.rows1}</div>
@@ -118,7 +118,7 @@ class ReadOne extends Component {
                 }
 
                 <Card className="container-collections" style={{boxShadow: "none", backgroundColor: "whitesmoke"}}>
-                    {this.props.commentsCount !== 0 ?
+                    {parseInt(this.props.commentsCount) !== 0 && this.props.commentsCount !== undefined ?
                         <CardHeader
                             title={`Comments ` + `(` + this.props.commentsCount + `)`}
                         />

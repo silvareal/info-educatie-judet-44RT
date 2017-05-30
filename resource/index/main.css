@@ -252,7 +252,7 @@ a {
 .parallax-signup {
   width: auto;
   height: 100%;
-  background-image: url("./images/art5.jpg");
+  background-image: url("./images/img1.jpg");
   background-attachment: fixed;
   background-position: center;
   background-repeat: repeat;
@@ -606,17 +606,18 @@ body, html, main {
     display: none;
     flex: "";
     justify-content: ""; } }
-.collections-content-readOne-mobile .force-image-height {
+
+.force-image-height {
   min-height: 200px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  margin: 0 0 20px 0;
-  margin-right: "";
-  margin-top: 0 0 20px 0;
-  margin-bottom: "";
-  margin-left: ""; }
-  .collections-content-readOne-mobile .force-image-height img {
+  margin: 0;
+  margin-right: 0;
+  margin-top: 0;
+  margin-bottom: 30px;
+  margin-left: 0; }
+  .force-image-height img {
     min-height: 200px; }
 
 @media screen and (max-width: 1200px) {
@@ -731,7 +732,10 @@ body, html, main {
           height: auto; } }
     .container-collections .step-style .preview {
       min-height: 400px;
-      text-align: center; }
+      text-align: left; }
+      .container-collections .step-style .preview .preview-title {
+        font-size: 2em;
+        color: #6f6d6d; }
   .container-collections .step-actions {
     display: flex;
     flex: 1;

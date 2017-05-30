@@ -48,7 +48,7 @@ class Delete extends Component {
                             <Card className="container-collections-delete" style={{backgroundColor: 'none'}}>
                                 <Card>
                                     <CardHeader>
-                                        <div className="delete-header">Delete this collection?</div>
+                                        <div className="delete-header">Delete this article?</div>
                                     </CardHeader>
                                     <CardActions>
                                         <div className="delete-actions">

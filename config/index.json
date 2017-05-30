@@ -1,4 +1,4 @@
 {
-  "dbUri": "mongodb://localhost/react_app",
+  "dbUri": "mongodb://localhost/4art",
   "jwtSecret": "zdmPF9Eeq2QQcgA88NGcbDGgoXOP8dc1ElToawgoJ5RvTgkotu1d2OGjNwh0TKE"
 }

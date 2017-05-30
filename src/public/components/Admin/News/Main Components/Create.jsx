@@ -13,7 +13,8 @@ import {
     Card,
     CardHeader,
     CardTitle,
-    CardActions
+    CardActions,
+    CardMedia
 } from "material-ui";
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
@@ -141,8 +142,11 @@ class Create extends Component {
             case 1:
                 return (
                     <div className="preview">
-                        <div>The preview of what you wish to add is here</div>
+                        <div className="preview-title">The preview of what you wish to add is here</div>
                         <div>{this.props.newsTitle}</div>
+                        <CardMedia>
+                            <img src={this.props.newsCoverLink}/>
+                        </CardMedia>
                         <div dangerouslySetInnerHTML={this.props.getHTML()}/>
                         {rows}
                     </div>
@@ -232,7 +236,7 @@ class Create extends Component {
                             }
 
                             <RaisedButton
-                                label={stepIndex === 1 ? "Add collection" : "Next"}
+                                label={stepIndex === 1 ? "Save article" : "Next"}
                                 primary={true}
                                 onTouchTap={stepIndex === 1 ? this.props.onSave : this.handleNext}
                                 buttonStyle={{backgroundColor: "#42ab9e"}}/>

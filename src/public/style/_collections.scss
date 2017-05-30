@@ -84,13 +84,14 @@
   @media screen and(min-width: 1200px) {
     @include display(none);
   }
-  .force-image-height {
+}
+
+.force-image-height {
+  min-height: 200px;
+  @include box-sizing(border-box);
+  @include margin(0, 0, 30px, 0);
+  img {
     min-height: 200px;
-    @include box-sizing(border-box);
-    @include margin(0 0 20px 0);
-    img {
-      min-height: 200px;
-    }
   }
 }
 
@@ -206,10 +207,14 @@
 
     .preview {
       min-height: 400px;
-      //modify before final product
-      @include textAlign(center);
-    }
+      @include textAlign(left);
 
+      .preview-title {
+        font-size: 2em;
+        color: #6f6d6d;
+      }
+
+    }
   }
 
   .step-actions {

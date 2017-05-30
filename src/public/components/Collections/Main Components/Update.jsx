@@ -268,7 +268,7 @@ class Update extends Component {
             case 2:
                 return (
                     <div className="preview">
-                        <div>The preview of what you wish to add is here</div>
+                        <div className="preview-title">The preview of what you wish to add is here</div>
                         <div>{this.props.collectionName}</div>
                         <div dangerouslySetInnerHTML={this.props.getHTML()}/>
                         {rows}
@@ -375,7 +375,7 @@ class Update extends Component {
                                 }
 
                                 <RaisedButton
-                                    label={stepIndex === 2 ? "Add collection" : "Next"}
+                                    label={stepIndex === 2 ? "Save" : "Next"}
                                     primary={true}
                                     onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}
                                     buttonStyle={{backgroundColor: "#42ab9e"}}/>

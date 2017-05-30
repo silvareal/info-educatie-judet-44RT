@@ -140,7 +140,7 @@ class Profile extends Component {
                                                 <img
                                                     onClick={this.props.ownUser ? this.combineOpenFunctions1 : null}
                                                     style={{borderRadius: "50%"}}
-                                                    src={this.props.profilePictureLink ? this.props.profilePictureLink : "/images/placeholder-profile.jpg"}/>
+                                                    src={this.props.profilePictureLink ? this.props.profilePictureLink : "/images/img9.jpg"}/>
                                                 <Dialog
                                                     title="Change profile picture"
                                                     actions={actions1}
@@ -152,7 +152,7 @@ class Profile extends Component {
                                                     <CardMedia>
                                                         <img
                                                             style={{borderRadius: "50%"}}
-                                                            src={this.props.profilePictureLink ? this.props.profilePictureLink : "/images/placeholder-profile.jpg"}/>
+                                                            src={this.props.profilePictureLink ? this.props.profilePictureLink : "/images/img9.jpg"}/>
                                                     </CardMedia>
                                                     <TextField
                                                         floatingLabelText="Profile picture link"
@@ -168,7 +168,7 @@ class Profile extends Component {
                                         </Card>
                                     }>
                                 <img
-                                    src={this.props.profileCover ? this.props.profileCover : "/images/placeholder-profile.jpg"}
+                                    src={this.props.profileCover ? this.props.profileCover : "/images/img9.jpg"}
                                     alt=""/>
                                 <Dialog
                                     title="Change cover picture"
@@ -181,7 +181,7 @@ class Profile extends Component {
                                     <CardMedia>
                                         <img
                                             style={{borderRadius: "50%"}}
-                                            src={this.props.profileCover ? this.props.profileCover : "/images/placeholder-profile.jpg"}/>
+                                            src={this.props.profileCover ? this.props.profileCover : "/images/img9.jpg"}/>
                                     </CardMedia>
                                     <TextField
                                         type="text"

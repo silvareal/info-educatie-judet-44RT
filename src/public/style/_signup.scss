@@ -3,7 +3,7 @@
 
 .parallax-signup {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/art5.jpg", fixed, center, repeat, cover);
+  @include background-image("./images/img1.jpg", fixed, center, repeat, cover);
 }
 
 .container-signup {
