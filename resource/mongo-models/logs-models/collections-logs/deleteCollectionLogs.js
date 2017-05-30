@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const DeleteCollectionLogsSchema = new mongoose.Schema({
-
+    // Schema for deleting a collection logs
     userId: String,
     userName: String,
     ownerId: String,

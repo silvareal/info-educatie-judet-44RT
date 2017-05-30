@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
 const UpdateNewsLogsSchema = new mongoose.Schema({
+    // Schema for updating a news article logs
 
-    //newState
+    // New state
     newsTitle: String,
     newsCoverLink: String,
     newsDescriptionRaw: String,
@@ -13,7 +14,7 @@ const UpdateNewsLogsSchema = new mongoose.Schema({
             }
         }
     ],
-    //oldState
+    // Old state
     newsTitleOld: String,
     newsCoverLinkOld: String,
     newsDescriptionRawOld: String,
@@ -26,6 +27,8 @@ const UpdateNewsLogsSchema = new mongoose.Schema({
             }
         }
     ],
+
+    // Basic info
     newsId: String,
     time: {type: Date, default: Date.now},
 

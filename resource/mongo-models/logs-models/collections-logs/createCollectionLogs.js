@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
 const CreateCollectionLogsSchema = new mongoose.Schema({
-
-    //collectionName is a unique key
+    // Schema for creating a collection logs
     userId: String,
     collectionName: String,
     createdByAdmin: {

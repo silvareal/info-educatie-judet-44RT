@@ -7,6 +7,15 @@ https://github.com/saniagh/info-educatie-judet-44RT
 
 ![QR Missing?](/resource/index/images/qr-code-github.png)
 
+<h1><i>The ideea behind the project</i></h1>
+
+<p>4Art is a website dedicated to artists of all ages, genders and ethnicities. We offer a platform to share your own drawings, paintings, photographs etc.</p>
+<p>We think that the experience of the one that views your work of art should be the highest possible. If you see something you like, that exact visual stimuli might, make you feel better.</p>
+<p>But what about music? We all listen to music, in one form of another, the chirp of birds and whatnot. Combining both visual and auditorily stimuli determinates, in many cases, more efficiency.</p>
+<p>How do those two above ideas tie though? We combine auditory and visual stimuli here on 4Art, but also portability and quick access to information.</p>
+<p>When you add a new collection on our website, you have the ability to embed a link to a melody of your choice in a QR code, and not only. You can embed anything you want in that QR code, a backstory about yourself, a link to your Facebook page, etc</p>
+<p>This way we combine the surprise of what you can find in that QR code with the overall experience of the users.</p>
+
 <h1><i>System requirements</i></h1>
 
 <ul>

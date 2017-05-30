@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
 const UpdateProfileLogsSchema = new mongoose.Schema({
+    // Schema for users profile updates
 
-    //userId of the member that updated his profile
-    userId: String,
-    //newState
+    // New state
     profilePictureLink : String,
     profileCover: String,
     firstName: String,
@@ -14,7 +13,8 @@ const UpdateProfileLogsSchema = new mongoose.Schema({
     country: String,
     profession: String,
     companyName: String,
-    //oldState
+
+    // Old state
     profilePictureLinkOld : String,
     profileCoverOld: String,
     firstNameOld: String,
@@ -24,6 +24,9 @@ const UpdateProfileLogsSchema = new mongoose.Schema({
     countryOld: String,
     professionOld: String,
     companyNameOld: String,
+
+    // Basic info
+    userId: String,
     time: {type: Date, default: Date.now},
 
 });

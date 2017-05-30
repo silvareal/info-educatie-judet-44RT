@@ -21,6 +21,7 @@ const router = new express.Router();
 function validateSearchForm(payload) {
     let isFormValid = true;
 
+    // validate search query
     if (!payload.searchQuery || typeof payload.searchQuery !== 'string' || payload.searchQuery.trim().length > 100) {
         isFormValid = false
     }
@@ -35,35 +36,34 @@ function validateCreateCollectionForm(payload) {
     let isFormValid = true;
     let message = '';
 
-    //validate the user input and limit length of fields.
-
+    // validate user's id
     if (!payload.userId || typeof payload.userId !== 'string' || payload.userId.length !== 24) {
         isFormValid = false;
         errors.userId = "The userId needs to be 24 characters long"
     }
-
+    // validate userName
     if (!payload.userNameToAdd || typeof payload.userNameToAdd !== 'string' || payload.userNameToAdd.trim().length === 0) {
         isFormValid = false;
         errors.userName = "Missing user name"
     }
-
+    // validate the profile picture link - not required
     if (payload.profilePictureLink) {
         if (payload.profilePictureLink.trim().length > 10000) {
             isFormValid = false;
             errors.profilePictureLink = "Please use a shorter link for the profile picture"
         }
     }
-
+    // validate collection's name
     if (!payload.collectionName || typeof payload.collectionName !== 'string' || payload.collectionName.trim().length > 100) {
         isFormValid = false;
         errors.collectionName = "Please use a valid name for the collection"
     }
-
+    // validate collection's description
     if (!payload.collectionDescriptionRaw || typeof payload.collectionDescriptionRaw !== 'string' || payload.collectionDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
         errors.collectionDescriptionRaw = "Please use a valid description"
     }
-
+    // validate qr code link's length
     if (!payload.qrLink || typeof payload.qrLink !== 'string' || payload.qrLink.trim().length > 10000) {
         isFormValid = false;
         errors.qrLink = "Link missing or too long"
@@ -72,20 +72,24 @@ function validateCreateCollectionForm(payload) {
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
 
     Object.keys(errorsPicturesArray).map((key) => {
+        // validate every picture's name
         if (!errorsPicturesArray[key].pictureName || typeof errorsPicturesArray[key].pictureName !== 'string' || errorsPicturesArray[key].pictureName.trim().length > 100) {
             isFormValid = false;
             errorsPicturesArray[key].pictureName = "Please use a valid name for this picture"
         }
+        // validate every picture's description
         if (!errorsPicturesArray[key].pictureDescriptionRaw || typeof errorsPicturesArray[key].pictureDescriptionRaw !== 'string' || errorsPicturesArray[key].pictureDescriptionRaw.trim().length > 5000) {
             isFormValid = false;
             errorsPicturesArray[key].pictureDescriptionRaw = "Please use a valid description for this picture"
         }
+        // validate every picture's link length
         if (!errorsPicturesArray[key].pictureLink || typeof errorsPicturesArray[key].pictureLink !== 'string') {
             isFormValid = false;
             errorsPicturesArray[key].pictureLink = "Please use a link for the picture"
         }
     });
 
+    // message to send if there are any errors
     if (!isFormValid) {
         message = "Check the specified fields for errors";
     }
@@ -103,35 +107,34 @@ function validateUpdateCollectionsForm(payload) {
     let isFormValid = true;
     let message = '';
 
-    //validate the user input and limit length of fields.
-
+    // validate user's id
     if (!payload.userId || typeof payload.userId !== 'string' || payload.userId.length !== 24) {
         isFormValid = false;
         errors.userId = "The userId needs to be 24 characters long"
     }
-
+    // validate userName
     if (!payload.userNameToAdd || typeof payload.userNameToAdd !== 'string' || payload.userNameToAdd.trim().length === 0) {
         isFormValid = false;
         errors.userName = "Missing user name"
     }
-
+    // validate the profile picture link - not required
     if (payload.profilePictureLink) {
         if (payload.profilePictureLink.trim().length > 10000) {
             isFormValid = false;
             errors.profilePictureLink = "Please use a shorter link for the profile picture"
         }
     }
-
+    // validate collection's name
     if (!payload.collectionName || typeof payload.collectionName !== 'string' || payload.collectionName.trim().length > 100) {
         isFormValid = false;
         errors.collectionName = "Please use a valid name for the collection"
     }
-
+    // validate collection's description
     if (!payload.collectionDescriptionRaw || typeof payload.collectionDescriptionRaw !== 'string' || payload.collectionDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
         errors.collectionDescriptionRaw = "Please use a valid description"
     }
-
+    // validate qr code link's length
     if (!payload.qrLink || typeof payload.qrLink !== 'string' || payload.qrLink.trim().length > 10000) {
         isFormValid = false;
         errors.qrLink = "Please use a shorter link"
@@ -140,20 +143,24 @@ function validateUpdateCollectionsForm(payload) {
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
 
     Object.keys(errorsPicturesArray).map((key) => {
+        // validate every picture's name
         if (!errorsPicturesArray[key].pictureName || typeof errorsPicturesArray[key].pictureName !== 'string' || errorsPicturesArray[key].pictureName.trim().length > 100) {
             isFormValid = false;
             errorsPicturesArray[key].pictureName = "Please use a valid name for this picture"
         }
+        // validate every picture's description
         if (!errorsPicturesArray[key].pictureDescriptionRaw || typeof errorsPicturesArray[key].pictureDescriptionRaw !== 'string' || errorsPicturesArray[key].pictureDescriptionRaw.trim().length > 5000) {
             isFormValid = false;
             errorsPicturesArray[key].pictureDescriptionRaw = "Please use a valid description for this picture"
         }
+        // validate every picture's link
         if (!errorsPicturesArray[key].pictureLink || typeof errorsPicturesArray[key].pictureLink !== 'string') {
             isFormValid = false;
             errorsPicturesArray[key].pictureLink = "Please use a link for the picture"
         }
     });
 
+    // message to send if there are any errors
     if (!isFormValid) {
         message = "Check the specified fields for errors";
     }
@@ -166,8 +173,8 @@ function validateUpdateCollectionsForm(payload) {
     };
 }
 
-//retrieve the array from the ajax request and make a new array for database update query
 function validateMakeModeratorsForm(payload) {
+    // transforms the array from the request body to avoid empty indexes
     let i = 0;
     let makeModerators = [];
     payload.moderators = JSON.parse(payload.moderators);
@@ -187,23 +194,23 @@ function validateCreateNewsForm(payload) {
     let isFormValid = true;
     let message = '';
 
-    //validate the user input and limit length of fields.
-
+    // validate news article's title
     if (!payload.newsTitle || typeof payload.newsTitle !== 'string' || payload.newsTitle.trim().length > 100) {
         isFormValid = false;
         errors.newsTitle = "Please use a valid title"
     }
-
+    // validate news article's cover photo link
     if (!payload.newsCoverLink || typeof payload.newsCoverLink !== 'string' || payload.newsCoverLink.trim().length > 10000) {
         isFormValid = false;
         errors.newsCoverLink = "Please use a shorter link"
     }
-
+    // validate news article's description
     if (!payload.newsDescriptionRaw || typeof payload.newsDescriptionRaw !== 'string' || payload.newsDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
         errors.newsDescriptionRaw = "Please use a valid description"
     }
 
+    // message to send if there are any errors
     if (!isFormValid) {
         message = "Check the specified fields for errors";
     }
@@ -220,23 +227,23 @@ function validateUpdateNewsForm(payload) {
     let isFormValid = true;
     let message = '';
 
-    //validate the user input and limit length of fields.
-
+    // validate news article's title
     if (!payload.newsTitle || typeof payload.newsTitle !== 'string' || payload.newsTitle.trim().length > 100) {
         isFormValid = false;
         errors.newsTitle = "Please use a valid title"
     }
-
+    // validate news article's cover photo link
     if (!payload.newsCoverLink || typeof payload.newsCoverLink !== 'string' || payload.newsCoverLink.trim().length > 10000) {
         isFormValid = false;
         errors.newsCoverLink = "Please use a shorter link"
     }
-
+    // validate news article's description
     if (!payload.newsDescriptionRaw || typeof payload.newsDescriptionRaw !== 'string' || payload.newsDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
         errors.newsDescriptionRaw = "Please use a shorter and valid description"
     }
 
+    // message to send if there are any errors
     if (!isFormValid) {
         message = "Check the specified fields for errors";
     }
@@ -250,38 +257,29 @@ function validateUpdateNewsForm(payload) {
 
 router.get('/adminAuthentication', (req, res) => {
 
-    //check if user is admin and retrieve the users list if so
-
     if (req.headers.authorization && req.headers.authorization.split(' ')[1].toString() !== "null") {
 
         const token = req.headers.authorization.split(' ')[1];
 
         return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
+            // error
             if (err) {
                 return res.status(401).end();
             }
 
+            // jwt that was decoded is not valid
             if (!decoded) {
                 return res.status(401).end();
             }
 
-            const userId = decoded.sub;
+            // use the admin property from the jwt to check admin identity
+            const isAdmin = decoded.isAdmin;
 
-            User.findOne({_id: userId}, (err, user) => {
-
-                if (user.admin === true) {
-
-                    res.json({
-                        message: "Welcome admin"
-                    });
-                }
-                else {
-                    res.json({
-                        message: "Not an admin"
-                    })
-                }
-            })
+            if (isAdmin === true)
+                res.json({message: "Welcome admin"});
+            else
+                res.json({message: "Not an admin"});
         });
     }
     else return res.status(401).end();
@@ -297,41 +295,30 @@ router.get("/showUsers", (req, res) => {
 
     return jwt.verify(token, config.jwtSecret, (err, decoded) => {
 
+        // error
         if (err) {
             return res.status(401).json({
                 message: "Not authorized"
             })
         }
 
+        // jwt that was decoded is not valid
         if (!decoded) {
             return res.status(400).json({
                 message: "Internal error"
             })
         }
 
-        const userId = decoded.sub;
-        let isAdmin = decoded.isAdmin;
+        // use the admin property from the jwt to check admin identity
+        const isAdmin = decoded.isAdmin;
 
         if (isAdmin === true) {
-
-            User.findOne({_id: userId}, (err, user) => {
-
-                if (user.admin === true) {
-
-                    User.find({admin: false}, (err, users) => {
-                        res.json({
-                            data: users
-                        })
-                    });
-                }
-                else {
-                    res.status(401).json({
-                        message: "Not an admin"
-                    });
-                }
-            })
+            User.find({admin: false}, (err, users) => {
+                res.json({data: users})
+            });
         }
-        else return res.status(401).end();
+        else
+            return res.status(401).end();
     });
 });
 

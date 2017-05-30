@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
 const CreateNewsLogsSchema = new mongoose.Schema({
-
-    //newsTitle is a unique key
+    // Schema for creating a news article logs
     newsTitle: String,
     time: {type: Date, default: Date.now},
 });

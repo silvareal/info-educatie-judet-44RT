@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
 const UpdateCollectionLogsSchema = new mongoose.Schema({
+    // Schema for updating a collection logs
 
-    //newState
+    // New state
     userId: String,
     userName: String,
     collectionName: String,
@@ -22,7 +23,8 @@ const UpdateCollectionLogsSchema = new mongoose.Schema({
             }
         }
     ],
-    //oldState
+
+    // Old state
     userIdOld: String,
     profilePictureLinkOld: String,
     userNameOld: String,
@@ -42,6 +44,8 @@ const UpdateCollectionLogsSchema = new mongoose.Schema({
             }
         }
     ],
+
+    // Basic info
     collectionId: String,
     updatedByAdmin: {
         type: Boolean,

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const CommentNewsSchema = new mongoose.Schema({
-
+    // Schema for commenting on news articles
     newsId: String,
     userId: String,
     userName: String,

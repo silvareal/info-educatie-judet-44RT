@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const NewsSchema = new mongoose.Schema({
-
+    // Schema for creating a news article
+    // newsTitle must be unique
     userId: String,
     newsTitle: {
         type: String,

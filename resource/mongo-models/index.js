@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 module.exports.connect = (uri) => {
 
     mongoose.connect(uri);
-    // plug in the promise library:
-    // due to synchronous actions, mongoose won't work without a promise
+    // mongoose only runs with asynchronous actions
     mongoose.Promise = global.Promise;
 
     mongoose.connection.on('error', (err) => {

@@ -11,6 +11,7 @@ module.exports = new PassportLocalStrategy(
         passReqToCallback: true
     }, (req, email, password, done) => {
 
+        // payload from the request
         const userData = {
             email: email.trim(),
             password: password.trim()
@@ -18,10 +19,12 @@ module.exports = new PassportLocalStrategy(
 
         // find a user by email address
         return User.findOne({email: userData.email}, (err, user) => {
+            // error
             if (err) {
                 return done(err);
             }
 
+            // user not found
             if (!user) {
                 const error = new Error('Incorrect credentials');
                 error.name = 'CredentialsError';
@@ -29,7 +32,7 @@ module.exports = new PassportLocalStrategy(
                 return done(error);
             }
 
-            //check if user is banned
+            // user is banned
             if (user.banned === true) {
                 const error = new Error('User is banned');
                 error.name = 'UserBanned';
@@ -39,10 +42,12 @@ module.exports = new PassportLocalStrategy(
 
             // check if a hashed user's password is equal to a value saved in the database
             return user.comparePasswordLogin(userData.password, (passwordErr, isMatch) => {
+                // error
                 if (err) {
                     return done(err);
                 }
 
+                // the two passwords don't match
                 if (!isMatch) {
                     const error = new Error('Incorrect credentials');
                     error.name = 'CredentialsError';
@@ -50,12 +55,13 @@ module.exports = new PassportLocalStrategy(
                     return done(error);
                 }
 
+                // data saved in the jwt
                 const payload = {
                     sub: user._id,
                     isAdmin: user.admin
                 };
 
-                // create a token string
+                // create the token
                 const token = jwt.sign(payload, config.jwtSecret);
 
                 return done(null, token);

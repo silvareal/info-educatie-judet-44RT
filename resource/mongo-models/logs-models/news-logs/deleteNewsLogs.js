@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const DeleteNewsLogsSchema = new mongoose.Schema({
-
+    // Schema for deleting an news article logs
     newsId: String,
     userName: String,
     newsTitle: String,
