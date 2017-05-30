@@ -94,6 +94,7 @@ class DeleteView extends Component {
     };
 
     componentDidMount() {
+        this.resetScroll();
         this.adminAuth();
         this.getCollection();
         this.getUser();

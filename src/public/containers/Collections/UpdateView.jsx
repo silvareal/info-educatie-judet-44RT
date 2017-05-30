@@ -43,6 +43,8 @@ class UpdateView extends Component {
 
     componentDidMount() {
 
+        this.resetScroll();
+
         this.setState({
             errorMessage: "Fetching"
         });

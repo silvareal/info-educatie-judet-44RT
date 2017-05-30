@@ -51,6 +51,7 @@ class CreateView extends Component {
     };
 
     componentDidMount() {
+        this.resetScroll();
         this.getCredentials();
     };
 

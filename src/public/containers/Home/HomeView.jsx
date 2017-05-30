@@ -118,7 +118,12 @@ class HomeView extends Component {
         xhr.send();
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     componentDidMount() {
+        this.resetScroll();
         this.getCredentials();
         this.getNews();
         this.getCollections();

@@ -53,9 +53,14 @@ class LogsLoginView extends Component {
     };
 
     componentDidMount() {
+        this.resetScroll();
         this.adminAuth();
         this.getLogs();
     }
+
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
 
     render() {
         document.title = "Logs - Login";

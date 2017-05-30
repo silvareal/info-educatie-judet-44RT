@@ -18,6 +18,14 @@ class SignUpView extends Component {
         };
     }
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
+    componentDidMount() {
+        this.resetScroll();
+    }
+
     onChange = (e) => {
         const field = e.target.name;
         const user = this.state.user;

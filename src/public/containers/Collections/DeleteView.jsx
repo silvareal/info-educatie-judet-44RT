@@ -19,6 +19,8 @@ class DeleteView extends Component {
 
     componentDidMount() {
 
+        this.resetScroll();
+
         const collectionId = encodeURIComponent(this.props.params._id);
 
         const formData = `collectionId=${collectionId}`;

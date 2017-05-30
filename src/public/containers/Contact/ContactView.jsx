@@ -16,7 +16,12 @@ class ContactView extends Component {
         }
     }
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     componentDidMount() {
+        this.resetScroll();
         this.getCredentials();
     }
 

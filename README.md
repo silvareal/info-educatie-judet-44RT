@@ -1,6 +1,11 @@
 <h1><i>4Art</i></h1>
+<p>v0.0.3</p>
 
-<p>Version 0.0.3 of the project.</p>
+<h5>If you are not currently on our GitHub page and are reading a printed version of this documentation, please visit the link below or scan the QR code to access our GitHub page.</h5>
+
+<a href="https://github.com/saniagh/info-educatie-judet-44RT">44RT on GitHub</a>
+
+![QR Missing?](https://github.com/saniagh/info-educatie-judet-44RT/blob/master/resource/index/images/qr-code-github.png)
 
 <h1><i>System requirements</i></h1>
 
@@ -11,6 +16,7 @@
 <li>Browser that uses JavaScript</li>
 <li>Browser that supports LocalStorage (Chrome, Firefox etc)</li>
 <li>MongoDB installed (for development we used port 27017)</li>
+<li>Stable internet connection</li>
 </ul>
 
 <p>To check for a current installed version of NodeJS or npm, run the following commands:</p>
@@ -43,6 +49,7 @@ npm -v
 |    |    |    | -- img7.jpg
 |    |    |    | -- img8.jpg
 |    |    |    | -- img9.jpg
+|    |    |    | -- qr-code-github.png
 |    |    | -- favicon.ico
 |    |    | -- index.html
 |    |    | -- main.scss
@@ -343,7 +350,7 @@ node index.js
 
 <p>As soon as you finished the steps in the above section, you can register, login, create collections(our use of the term collections, not MondoDB's) , delete them etc</p>
 
-<p>To become an admin, you need to have create an account and manually modify the field in the collection called users (MongoDB's term of collections) called admin and set it to true. </p>
+<p><b>To become an admin, you need to create an account and manually modify the field in the collection called users (MongoDB's term of collections) called admin and set it to true. </b></p>
 
 <p>For the above operation, we strongly recommend MondoDB Compass.</p>
 
@@ -393,4 +400,121 @@ node index.js
 
 <h1><i>Technical details</i></h1>
 
-TO BE CONTINUED
+<h3><i>Front-end:</i></h3>
+
+<h5>Languages used:</h5>
+
+<ul>
+<li>JavaScript</li>
+<li>HTML5</li>
+<li>CSS&CSS3</li>
+</ul>
+
+<h5>Frameworks used:</h5>
+
+<ul>
+<li>ReactJS</li>
+<li>DraftJS</li>
+</ul>
+
+<h5>Pre-processors used:</h5>
+
+<ul>
+<li>Sass</li>
+</ul>
+
+<h5>Bundling:</h5>
+
+<ul>
+<li>Webpack</li>
+<li>Babel</li>
+</ul>
+
+<h5>Notes:</h5>
+
+<ul>
+<li>The website is a SPA (single-page-app) created with ReactJS, React-Router and ExpressJS</li>
+<li>Part of the style is created by using Material-UI</li>
+<li>Sass encapsulates our own approach to Material-UI and our own choice for element's style</li>
+<li>We use the principle of Container Components and Presentational Components</li>
+<li>Container components are found in /src/public/containers and they control the data flow and AJAX requests</li>
+<li>Presentational Components are found in /src/public/components and they contain the code regarding how every page is displayed</li>
+<li>React Dev Tools is disabled. If you wish to use it, delete the following section of /resource/index/index.html:</li>
+
+```html
+<script>
+    window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {}
+</script>
+```
+</ul>
+
+<p>Material-UI is described as:</p>
+
+> A Set of React Components that Implement Google's Material Design
+
+<h3><i>Back-end:</i></h3>
+
+<h5>Languages used:</h5>
+
+<ul>
+<li>JavaScript</li>
+</ul>
+
+<h5>Frameworks used:</h5>
+
+<ul>
+<li>ExpressJS</li>
+</ul>
+
+<h5>Other important libraries and middleware used:</h5>
+
+<ul>
+<li>Socket.io</li>
+<li>Mongoose</li>
+<li>Body-parser</li>
+<li>Passport</li>
+<li>Nodemon</li>
+</ul>
+
+<h5>General notes:</h5>
+
+<ul>
+<li>The application uses <a hre="https://jwt.io/">JSON Web Token Authentication</a></li>
+<li>Authentication was created with the <b>help</b> of <a href="https://vladimirponomarev.com/blog/authentication-in-react-apps-jwt">this</a> guide by Vladimir Ponomarev.</li>
+<li>The code was not copy-pasted, it was used as <b>guidance</b>. In the end, all credits for the ideea of implementing JWT Authencation like this goes to the author.</li>
+<li>User input is verified by the following criteria: length, type and existence (req.body.data)</li>
+<li>Sanitize is done by using the <a href="https://www.npmjs.com/package/express-mongo-sanitize">express-mongo-sanitize</a> middleware</li>
+<li>Models for the data that is to be inserted into the database can be found in /resource/mongo-models</li>
+<li>The code that handles POST and GET requests is found in /resource/routes, including the response to Socket.io emit events</li>
+</ul>
+
+<h5>In-depth notes:</h5>
+
+<ul>
+<li>The identitity of the user is only checked when he logs in.</li>
+<li>The credentials and permission of the user are checked every time they navigate to any page of the website.</li>
+<li>Regular users, if they manage to open React Dev Tools, can access Admin Panel, see the buttons but all requests to retrieve data will return a res.status(401).end() .</li>
+<li>This way, no sensitive data is shown to non-admins even if they manage to access the admin panel</li>
+<li>Trying to navigate to somebody's page for deleting a collection like <a>http://localhost/manage/readOne/591dc1ab2d590a01979b52a3/delete</a> will return a res.status(404) based on the fact that the collection's requested userId(creator's id) doesn't match the one from the decoded JWT. Same applies for all pages that are not part of Admin Panel</li>
+<li>Socket.io is used for the comments system. This way, we provide real-time comments for every single collection on the website, separately, of course.</li>
+<li>The reason behind why we use our own logging system if to be able to restore collections in case somebody deleted it or somebody messed with their account.</li>
+</ul>
+
+<h3><i>Issues:</i></h3>
+
+<h5>Any issue found on the website should be well documented and posted in the Issues section on GitHub</h5>
+
+<h3><i>TODO for v0.0.4</i></h3>
+
+<ul>
+<li>All of our AJAX requests need to be rewritten with <a href="https://github.com/mzabriskie/axios">Axios</a></li>
+<li><a href="https://github.com/reactjs/redux/">Redux</a> is required to increase performance ( a.k.a. reduce the number of AJAX requests )</li>
+<li>Implementation of a Like/Favourite System</li>
+<li>Implementation of Actions for Moderators (delete comments, hide offensive collections etc)</li>
+<li>Implementation of an upload system</li>
+<li>OPTIONAL: Rework the backend in <a href="http://hacklang.org/">Hacklang</a></li>
+</ul>
+
+<h1>Creators:</h1>
+<h5>Valentin Marian Constanda</h5>
+<h5>Cristiana Lazar</h5>

@@ -167,7 +167,12 @@ class ProfileView extends Component {
         xhr.send(formData);
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     componentDidMount() {
+        this.resetScroll();
         this.getCredentials();
         this.getProfile();
     };

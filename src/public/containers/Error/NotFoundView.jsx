@@ -4,6 +4,14 @@ import {Card, CardText} from 'material-ui';
 
 class NotFoundView extends Component {
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
+    componentDidMount() {
+        this.resetScroll();
+    }
+
     render() {
         document.title = "404 not found";
         const styles = {

@@ -53,14 +53,19 @@ class ReadAllView extends Component {
         xhr.send();
     };
 
-    onScroll = (e) => {
+    onScroll = () => {
         if (this.state.finished === false && document.title === "Browse news" && this.state.searching === false)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.loadMore();
             }
     };
 
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
     componentDidMount() {
+        this.resetScroll();
         this.getNews();
 
         //the load more event listener
