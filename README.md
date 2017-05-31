@@ -345,6 +345,14 @@ node index.js
 <li>Navigate to localhost:8080 or your reverse proxy equivalent in your browser.</li>
 <li>The site should be up and running at this point.</li>
 
+<li>OPTIONAL: if it isn't, it might be because bcrypt is acting strange. Just run:</li>
+
+```shell
+npm install bcrypt
+```
+
+<p>If that doesn,t fix it, open an issue.</p>
+
 <p>Again, the webiste is not distributed with a database. In the next section we will explain why.</p>
 </ol>
 
