@@ -19,4 +19,7 @@ module.exports = function (socket) {
             profilePictureLink: data.profilePictureLink
         });
     });
+    socket.on("updateCollectionsStore", function () {
+        socket.broadcast.emit("updateCollectionsStore");
+    })
 };

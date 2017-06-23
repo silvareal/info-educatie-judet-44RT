@@ -1,98 +1,98 @@
-import React, {Component} from 'react'
-
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import RichTextEditor from 'react-rte';
 import {stateToHTML} from 'draft-js-export-html';
 import {convertToRaw} from 'draft-js';
-
+import {connect} from 'react-redux';
+import * as createCollectionsActions from '../../actions/manageCollectionsCreateActions.js'
 import Create from '../../components/Collections/Main Components/Create.jsx'
-import Auth from '../../modules/Auth.js';
+import LoadingIndicator from "../../components/Loading Indicator/LoadingIndicator.jsx";
+
+let createHandler = function (dispatch) {
+    let getInitialState = function (collectionDescription, pictureDescription) {
+        dispatch(createCollectionsActions.onCreateInitiate(collectionDescription, pictureDescription))
+    };
+
+    let onCollectionNameChange = function (collectionName) {
+        dispatch(createCollectionsActions.onCollectionNameChange(collectionName))
+    };
+
+    let onCollectionDescriptionChange = function (collectionDescription, __html) {
+        dispatch(createCollectionsActions.onCollectionDescriptionChange(collectionDescription, __html))
+    };
+
+    let onPicturesArrayChange = function (pictures) {
+        dispatch(createCollectionsActions.onPicturesArrayChange(pictures))
+    };
+
+    let onAddInputField = function (pictures, pictureDescription) {
+        dispatch(createCollectionsActions.onAddInputField(pictures, pictureDescription))
+    };
+
+    let onRemoveInputField = function (pictures, index) {
+        dispatch(createCollectionsActions.onRemoveInputField(pictures, index))
+    };
+
+    let onSave = function (collectionName, collectionDescriptionRaw, pictures) {
+        dispatch(createCollectionsActions.onSaveCollection(collectionName, collectionDescriptionRaw, pictures))
+    };
+
+    return {
+        getInitialState,
+        onCollectionNameChange,
+        onCollectionDescriptionChange,
+        onPicturesArrayChange,
+        onAddInputField,
+        onRemoveInputField,
+        onSave
+    }
+};
 
 class CreateView extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            userName: '',
-            successCreation: '',
-            collectionName: '',
-            inputCount: 1,
-            errorMessage: '',
-            errors: {},
-            errorsPicturesArray: {},
-            pictureNameError: [],
-            pictureDescriptionError: [],
-            pictureLinkError: [],
-            pictures: [{
-                pictureName: '',
-                pictureLink: '',
-                pictureDescription: RichTextEditor.createEmptyValue(),
-                pictureDescriptionRaw: '',
-            }],
-            collectionDescription: RichTextEditor.createEmptyValue(),
-            __html: '',
-            qrLink: '',
-            profilePictureLink: ''
-        };
-    };
-
-    getCredentials = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/home/credentials');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                this.setState({
-                    userName: xhr.response.userName,
-                    profilePictureLink: xhr.response.profilePictureLink
-                })
-            }
-        });
-        xhr.send();
+        this.handlers = createHandler(this.props.dispatch);
     };
 
     componentDidMount() {
+        this.handlers.getInitialState(RichTextEditor.createEmptyValue(), RichTextEditor.createEmptyValue());
         this.resetScroll();
-        this.getCredentials();
+    };
+
+    onCollectionNameChange = (e) => {
+        this.handlers.onCollectionNameChange(e.target.value);
+    };
+
+    onCollectionDescriptionChange = (value) => {
+        this.handlers.onCollectionDescriptionChange(value, stateToHTML(value.getEditorState().getCurrentContent()));
     };
 
     getHTML = () => {
-        let editorState = this.state.collectionDescription.getEditorState();
+        let editorState = this.props.UIState.collectionDescription.getEditorState();
         let contentState = editorState.getCurrentContent();
         let __html = stateToHTML(contentState);
         if (__html.search("/script") === -1 && __html.search("script") === -1)
             return {__html: __html};
     };
 
-    onCollectionChange = (e) => {
-        this.setState({collectionName: e.target.value});
-    };
-
-    onCollectionDescriptionChange = (value) => {
-        this.setState({collectionDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
-    };
-
-    onQRLinkChange = (e) => {
-        this.setState({qrLink: e.target.value})
-    };
-
     handlePicturesNameChange = (i) => (e) => {
-        const newPictures = this.state.pictures.map((picture, j) => {
+        const newPictures = this.props.UIState.pictures.map((picture, j) => {
             if (i !== j) return picture;
             return {...picture, pictureName: e.target.value};
         });
-        this.setState({pictures: newPictures});
+        this.handlers.onPicturesArrayChange(newPictures);
     };
 
     handlePicturesLinkChange = (i) => (e) => {
-        const newPictures = this.state.pictures.map((picture, j) => {
+        const newPictures = this.props.UIState.pictures.map((picture, j) => {
             if (i !== j) return picture;
             return {...picture, pictureLink: e.target.value};
         });
-        this.setState({pictures: newPictures});
+        this.handlers.onPicturesArrayChange(newPictures);
     };
 
     handlePicturesDescriptionChange = (i) => (value) => {
-        const newPictures = this.state.pictures.map((picture, j) => {
+        const newPictures = this.props.UIState.pictures.map((picture, j) => {
             if (i !== j) return picture;
 
             let editorState = value.getEditorState();
@@ -100,32 +100,15 @@ class CreateView extends Component {
             let rawContentState = window.rawContentState = convertToRaw(contentState);
             return {...picture, pictureDescription: value, pictureDescriptionRaw: JSON.stringify(rawContentState)};
         });
-        this.setState({pictures: newPictures});
+        this.handlers.onPicturesArrayChange(newPictures);
     };
 
     handleAddPictures = (i) => () => {
-        if (this.state.inputCount < 4) {
-            this.setState({
-                inputCount: this.state.inputCount + 1,
-                pictures: this.state.pictures.concat([{
-                    pictureName: '',
-                    pictureLink: '',
-                    pictureDescription: RichTextEditor.createEmptyValue(),
-                    pictureDescriptionRaw: ''
-                }])
-            });
-        }
-        else {
-            this.setState({errorMessage: "You can only add up to 4 pictures"})
-        }
+        this.handlers.onAddInputField(this.props.UIState.pictures, RichTextEditor.createEmptyValue());
     };
 
     handleRemovePictures = (i) => () => {
-        this.setState({
-            pictures: this.state.pictures.filter((s, j) => i !== j),
-            errorMessage: '',
-            inputCount: this.state.inputCount - 1
-        });
+        this.handlers.onRemoveInputField(this.props.UIState.pictures, i);
     };
 
     resetScroll = () => {
@@ -133,120 +116,111 @@ class CreateView extends Component {
     };
 
     onSave = () => {
-
         this.resetScroll();
 
-        //converting collectionDescription to collectionDescriptionRaw
-        let editorState = this.state.collectionDescription.getEditorState();
+        // Convert editorState to contentState and then "HTML-ize" it
+        let editorState = this.props.UIState.collectionDescription.getEditorState();
         let contentState = editorState.getCurrentContent();
         let rawContentState = window.rawContentState = convertToRaw(contentState);
 
-        //The next few lines will define the HTTP body message
-        const collectionName = encodeURIComponent(this.state.collectionName);
-        const collectionDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
-        const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
-        const userName = encodeURIComponent(this.state.userName);
-        const qrLink = encodeURIComponent(this.state.qrLink);
-        const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
+        const collectionName = this.props.UIState.collectionName;
+        const collectionDescriptionRaw = JSON.stringify(rawContentState);
+        const pictures = JSON.stringify(this.props.UIState.pictures);
 
-        const formData = `profilePictureLink=${profilePictureLink}&qrLink=${qrLink}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}&userName=${userName}`;
-
-        //AJAX
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/crud/create');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-
-                //We will display a Success! message if the entry was added to the DB
-                //We will also reset the fields
-                this.setState({
-                    errors: {},
-                    successCreation: true,
-                    errorMessage: '',
-                    collectionName: '',
-                    collectionDescription: RichTextEditor.createEmptyValue(),
-                    pictures: [
-                        {
-                            pictureName: '',
-                            pictureLink: '',
-                            pictureDescription: ''
-                        }
-                    ],
-                    pictureNameError: '',
-                    pictureDescriptionError: '',
-                    pictureLinkError: '',
-                    qrLink: ''
-                });
-            }
-            else if (xhr.status === 400) {
-
-                const errors = xhr.response.errors ? xhr.response.errors : {};
-                errors.summary = xhr.response.message;
-                const errorsPicturesArray = xhr.response.errorsPicturesArray ? xhr.response.errorsPicturesArray : {};
-
-                this.setState({
-                    successCreation: false,
-                    errors,
-                    errorsPicturesArray
-                });
-
-                let pictureNameError, pictureDescriptionError, pictureLinkError;
-
-                pictureNameError = this.state.errorsPicturesArray.map((a) => {
-                    return a.pictureName;
-                });
-
-                pictureDescriptionError = this.state.errorsPicturesArray.map((a) => {
-                    return a.pictureDescription
-                });
-
-                pictureLinkError = this.state.errorsPicturesArray.map((a) => {
-                    return a.pictureLink
-                });
-
-                this.setState({
-                    pictureNameError: pictureNameError,
-                    pictureDescriptionError: pictureDescriptionError,
-                    pictureLinkError: pictureLinkError
-                })
-            }
-        });
-
-        //Send the data for insertion into the DB
-        xhr.send(formData);
+        this.handlers.onSave(collectionName, collectionDescriptionRaw, pictures);
     };
 
     render() {
 
         document.title = "Add collection";
+        if (typeof this.props.UIState.collectionName === 'string')
         return (
             <Create
-                onQRLinkChange={this.onQRLinkChange}
-                qrLink={this.state.qrLink}
-                collectionName={this.state.collectionName}
-                onCollectionChange={this.onCollectionChange}
-                collectionDescription={this.state.collectionDescription}
-                getHTML={this.getHTML}
-                __html={this.state.__html}
+                collectionName={this.props.UIState.collectionName}
+                onCollectionChange={this.onCollectionNameChange}
+                collectionDescription={this.props.UIState.collectionDescription}
                 onCollectionDescriptionChange={this.onCollectionDescriptionChange}
-                pictures={this.state.pictures}
-                errorMessage={this.state.errorMessage}
+                __html={this.props.UIState.__html}
+                getHTML={this.getHTML}
+                pictures={this.props.UIState.pictures}
                 handlePicturesNameChange={this.handlePicturesNameChange}
                 handlePicturesLinkChange={this.handlePicturesLinkChange}
                 handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
                 handleAddPictures={this.handleAddPictures}
                 handleRemovePictures={this.handleRemovePictures}
                 onSave={this.onSave}
-                successCreation={this.state.successCreation}
-                errors={this.state.errors}
-                pictureNameError={this.state.pictureNameError}
-                pictureDescriptionError={this.state.pictureDescriptionError}
-                pictureLinkError={this.state.pictureLinkError}
-            />)
+                errorMessage={this.props.UIState.message}
+                successCreation={this.props.UIState.successCreation}
+                errors={this.props.UIState.errors}
+                pictureNameError={this.props.UIState.pictureNameError}
+                pictureDescriptionError={this.props.UIState.pictureDescriptionError}
+                pictureLinkError={this.props.UIState.pictureLinkError}
+            />);
+        else return <LoadingIndicator/>
     }
 }
 
-export default CreateView;
+CreateView.propTypes = {
+    userName: PropTypes.string,
+    profilePictureLink: PropTypes.string,
+    guest: PropTypes.bool,
+    finished: PropTypes.bool,
+    collectionName: PropTypes.string,
+    collectionDescription: PropTypes.object,
+    __html: PropTypes.string,
+    pictures: PropTypes.array,
+    successCreation: PropTypes.bool,
+    errors: PropTypes.object,
+    pictureNameError: PropTypes.array,
+    pictureLinkError: PropTypes.array,
+    pictureDescriptionError: PropTypes.array,
+    message: PropTypes.string
+};
+
+const credentials = (state) => {
+    if (state.userReducer.fetching === true) {
+        return {
+            guest: false,
+            finished: false
+        }
+    }
+    else if (state.userReducer.data) {
+        const response = state.userReducer.data;
+        return {
+            userName: response.userName,
+            profilePictureLink: response.profilePictureLink,
+            guest: false,
+            finished: true
+        };
+    }
+    else if (state.userReducer.fetched === false)
+        return {
+            guest: true,
+            finished: true
+        };
+};
+
+const UIState = (state) => {
+    if (state.manageCollectionsCreateReducer) {
+        const statePath = state.manageCollectionsCreateReducer;
+        return {
+            collectionName: statePath.collectionName,
+            collectionDescription: statePath.collectionDescription,
+            __html: statePath.__html,
+            pictures: statePath.pictures,
+            successCreation: statePath.successCreation,
+            errors: statePath.errors,
+            pictureNameError: statePath.pictureNameError,
+            pictureLinkError: statePath.pictureLinkError,
+            pictureDescriptionError: statePath.pictureDescriptionError,
+            message: statePath.message
+        }
+    }
+};
+
+const mapStateToProps = (state) => ({
+    credentials: credentials(state),
+    UIState: UIState(state)
+});
+
+export default connect(mapStateToProps)(CreateView);

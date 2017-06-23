@@ -103,12 +103,12 @@ class Create extends Component {
                 return (
                     <div>
                         <div>
-                            {this.props.collectionName.length > 100 ?
+                            {(this.props.collectionName && this.props.collectionName.length  > 100) ?
                                 <div>
                                     Please use a name that is shorter than 100 characters
                                 </div> : null}
                             <TextField
-                                hintText="Give your collection a cool title"
+                                hintText="Give your collection a cool name"
                                 value={this.props.collectionName}
                                 onChange={this.props.onCollectionChange}
                                 errorText={this.props.errors.collectionName}
@@ -122,7 +122,7 @@ class Create extends Component {
                             />
                         </div>
                         <div>
-                            {this.props.__html.length > 5000 ?
+                            {this.props.__html && this.props.__html.length > 5000 ?
                                 <div>
                                     Write less, keep it simple !
                                 </div> : null
@@ -141,26 +141,6 @@ class Create extends Component {
             case 1:
                 return (
                     <div>
-                        <div>
-                            <TextField hintText="Link embeded in QR code"
-                                       value={this.props.qrLink}
-                                       onChange={this.props.onQRLinkChange}
-                                       errorText={this.props.errors.qrLink}
-                                       onKeyDown={this.handleKeyPress}
-                                       autoFocus={true}
-                                       multiLine={true}
-                                       className="step-textfields"
-                                       inputStyle={{color: "#000000"}}
-                                       floatingLabelStyle={{color: "#ee6e73"}}
-                                       underlineFocusStyle={{borderColor: "#ee6e73"}}
-                            />
-                            <div className="qr-restrict-desktop">
-                                <QRCode value={this.props.qrLink} size={512}/>
-                            </div>
-                            <div className="qr-allow-mobile">
-                                <QRCode value={this.props.qrLink} size={128}/>
-                            </div>
-                        </div>
                         {this.props.pictures.map((picture, i) => (
                             <div key={i}>
                                 <div className="input-field">

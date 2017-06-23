@@ -62,7 +62,8 @@ router.get('/credentials', (req, res) => {
                     userName: user.name,
                     userId: userId,
                     firstName: user.firstName,
-                    profilePictureLink: user.profilePictureLink
+                    profilePictureLink: user.profilePictureLink,
+                    admin: user.admin
                 })
             });
         });

@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const config = require('./config');
 const mongoSanitize = require('express-mongo-sanitize');
+const redis = require('redis');
+const client = redis.createClient();
 
 const socket = require('./resource/routes/socket.js');
 
@@ -47,6 +49,10 @@ app.use('/admin', adminRoutes);
 app.use('/browse', browseRoutes);
 
 app.use('/comment', commentRoutes);
+
+client.on('connect', () => {
+    // redis is connected
+});
 
 io.sockets.on('connection', socket);
 

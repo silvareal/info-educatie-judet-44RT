@@ -58,7 +58,9 @@ module.exports = new PassportLocalStrategy(
                 // data saved in the jwt
                 const payload = {
                     sub: user._id,
-                    isAdmin: user.admin
+                    isAdmin: user.admin,
+                    profilePictureLink: user.profilePictureLink,
+                    userName: user.name
                 };
 
                 // create the token

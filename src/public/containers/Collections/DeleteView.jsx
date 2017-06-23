@@ -4,6 +4,8 @@ import Delete from '../../components/Collections/Main Components/Delete.jsx';
 import Auth from '../../modules/Auth.js';
 import NotFoundView from "../Error/NotFoundView.jsx";
 
+let socket = io.connect();
+
 class DeleteView extends Component {
     constructor(props) {
         super(props);
@@ -72,13 +74,18 @@ class DeleteView extends Component {
             xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
             xhr.responseType = 'json';
             xhr.addEventListener('load', () => {
-                if (xhr.response === 200) {
+                if (xhr.status === 200) {
+
+                    // The Redux Store should update
+                    socket.emit("updateCollectionsStore");
+
                     //Collection was successfully deleted
                     this.setState({
                         message: xhr.response.message
                     });
                 }
                 else {
+
                     //Collection was not deleted/Was already deleted/Database error
                     this.setState({
                         message: xhr.response.message

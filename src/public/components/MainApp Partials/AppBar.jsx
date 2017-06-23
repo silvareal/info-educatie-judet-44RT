@@ -29,9 +29,22 @@ class AppBarPersonal extends Component {
         super(props);
 
         this.state = {
-            isVisible: false
+            isVisible: false,
+            openMenu: false
         }
     }
+
+    handleOpenMenu = (value) => {
+        this.setState({
+            openMenu: value,
+        });
+    };
+
+    handleCloseMenu = () => {
+        this.setState({
+            openMenu: false
+        })
+    };
 
     hideAppBar = (e) => {
         let {isVisible} = this.state;
@@ -70,15 +83,15 @@ class AppBarPersonal extends Component {
                     Auth.isUserAuthenticated() ?
                         <div>
                             <IconMenu
-                                open={this.props.openMenu}
-                                onRequestChange={this.props.handleOnRequestChange}
+                                open={this.state.openMenu}
+                                onRequestChange={this.handleOpenMenu}
                                 iconButtonElement={
                                     <IconButton style={{padding: 0}}>
                                         <NavigationMoreVert color="black"/>
                                     </IconButton>}
                                 anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                                 targetOrigin={{horizontal: 'right', vertical: 'top'}}>
-                                    <span onClick={this.props.handleCloseMenu}>
+                                    <span onClick={this.handleCloseMenu}>
                                     <List>
                                         <Link to={`/profile/${this.props.userName}`}
                                               onClick={this.props.resetScroll}

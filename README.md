@@ -535,3 +535,7 @@ npm install bcrypt
 <h1>Creators:</h1>
 <h5>Valentin Marian Constanda</h5>
 <h5>Cristiana Lazar</h5>
+
+
+// Working notes: when you log in, the store should retrieve credentials.
+// look at the crud.js top of file

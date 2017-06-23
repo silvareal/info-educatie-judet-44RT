@@ -8,6 +8,8 @@ import Update from '../../components/Collections/Main Components/Update.jsx';
 import Auth from '../../modules/Auth.js';
 import NotFoundView from "../Error/NotFoundView.jsx";
 
+let socket = io.connect();
+
 class UpdateView extends Component {
     constructor(props) {
         super(props);
@@ -254,7 +256,11 @@ class UpdateView extends Component {
             xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
             xhr.responseType = 'json';
             xhr.addEventListener('load', () => {
+
                 if (xhr.status === 200) {
+                    // The Redux Store should update
+                    socket.emit("updateCollectionsStore");
+
                     this.setState({
                         errorMessage: "Your collection was successfully updated!"
                     });

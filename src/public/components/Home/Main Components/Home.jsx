@@ -1,10 +1,36 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-
-import {RaisedButton} from 'material-ui';
+import {RaisedButton, Snackbar} from 'material-ui';
 import LoadingIndicator from '../../../components/Loading Indicator/LoadingIndicator.jsx';
 
 class Home extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            open: false
+        }
+    }
+
+    //the notification system here is a demonstration of how it must be used therefore not the place or final form of the notification Snackbar
+
+    handleNotification = () => {
+        this.setState({
+            open: true
+        });
+    };
+
+    handleRequestClose = () => {
+        this.setState({
+            open: false
+        });
+    };
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.shouldUpdateCollections !== nextProps.shouldUpdateCollections && nextProps.shouldUpdateCollections === true)
+            this.handleNotification();
+    }
+
     render() {
         return (
             <div className="parallax-home">
@@ -37,11 +63,8 @@ class Home extends Component {
                     <LoadingIndicator/>
                 }
 
-                {/*
-                 We use the same class names and style for both news and collections to avoid repeating ourselves
-                 */}
                 <div className="section-title">Latest collections</div>
-                {this.props.fetchedCollections ?
+                {!this.props.fetchingCollections && this.props.fetchedCollections ?
                     <div className="container-home">
                         <div className="news-desktop">
                             <ul>
@@ -66,6 +89,12 @@ class Home extends Component {
                     :
                     <LoadingIndicator/>
                 }
+
+                <Snackbar open={this.state.open}
+                          message="Times have changed, refresh to see the future"
+                          autoHideDuration={6000}
+                          onRequestClose={this.handleRequestClose}
+                />
 
             </div>
         )

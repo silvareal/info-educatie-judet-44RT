@@ -1,3 +1,15 @@
+
+
+
+
+// take userName and profilePicture link from jwt
+// update all collections when user updates profilePicture to match change
+
+
+
+
+
+
 const express = require('express');
 const Collection = require('mongoose').model('Collection');
 const CreateCollectionLogs = require('mongoose').model('CreateCollectionLogs');
@@ -37,11 +49,6 @@ function validateCreateForm(payload) {
     if (!payload.collectionDescriptionRaw || typeof payload.collectionDescriptionRaw !== 'string' || payload.collectionDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
         errors.collectionDescriptionRaw = "Please use a valid description"
-    }
-
-    if (!payload.qrLink || typeof payload.qrLink !== 'string' || payload.qrLink > 10000) {
-        isFormValid = false;
-        errors.qrLink = "Link missing or too long"
     }
 
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
@@ -153,18 +160,16 @@ router.post('/create', (req, res) => {
         }
 
         const userId = decoded.sub;
-
-        //Values we don't necessarily need and we set to a string
-        //We can simply convert the rawState we save from the editors to HTML
+        const userName = decoded.userName;
+        const profilePictureLink = decoded.profilePictureLink;
 
         const collectionData = {
             userId: userId,
-            userName: req.body.userName,
+            userName: userName,
+            profilePictureLink: profilePictureLink,
             collectionName: req.body.collectionName,
             collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-            picturesArray: JSON.parse(req.body.picturesArray),
-            qrLink: req.body.qrLink,
-            profilePictureLink: req.body.profilePictureLink
+            picturesArray: JSON.parse(req.body.picturesArray)
         };
 
         const logData = {
