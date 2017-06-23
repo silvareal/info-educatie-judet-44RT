@@ -5,7 +5,7 @@ import Auth from '../modules/Auth.js';
 
 let socket = io.connect();
 
-// Initial State
+// Initial State - View
 export function onCreateInitiateType(collectionDescription, pictureDescription) {
     return {type: types.ON_CREATE_INITIATE, collectionDescription: collectionDescription, pictureDescription: pictureDescription}
 }
@@ -16,6 +16,30 @@ export function onCreateInitiate(collectionDescription, pictureDescription) {
     }
 }
 // ---
+
+// Initial State - Component
+export function onCreateComponentInitiateType() {
+    return {type: types.ON_CREATE_COMPONENT_INITIATE}
+}
+
+export function onCreateComponentInitiate() {
+    return function (dispatch) {
+        dispatch(onCreateComponentInitiateType())
+    }
+}
+// ---
+
+// Slide Index change handler
+
+export function onSlideIndexChangeType(stepIndex) {
+    return {type: types.ON_SLIDE_INDEX_CHANGE, stepIndex: stepIndex}
+}
+
+export function onSlideIndexChange(stepIndex) {
+    return function (dispatch) {
+        dispatch(onSlideIndexChangeType(stepIndex))
+    }
+}
 
 // Handle collectionName change
 export function onCollectionNameChangeType(collectionName) {

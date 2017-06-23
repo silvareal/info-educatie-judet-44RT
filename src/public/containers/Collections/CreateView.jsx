@@ -133,11 +133,13 @@ class CreateView extends Component {
     render() {
 
         document.title = "Add collection";
+
+        //Verify if the Redux Store has filled up initial state
         if (typeof this.props.UIState.collectionName === 'string')
         return (
             <Create
                 collectionName={this.props.UIState.collectionName}
-                onCollectionChange={this.onCollectionNameChange}
+                onCollectionNameChange={this.onCollectionNameChange}
                 collectionDescription={this.props.UIState.collectionDescription}
                 onCollectionDescriptionChange={this.onCollectionDescriptionChange}
                 __html={this.props.UIState.__html}
@@ -149,7 +151,7 @@ class CreateView extends Component {
                 handleAddPictures={this.handleAddPictures}
                 handleRemovePictures={this.handleRemovePictures}
                 onSave={this.onSave}
-                errorMessage={this.props.UIState.message}
+                message={this.props.UIState.message}
                 successCreation={this.props.UIState.successCreation}
                 errors={this.props.UIState.errors}
                 pictureNameError={this.props.UIState.pictureNameError}

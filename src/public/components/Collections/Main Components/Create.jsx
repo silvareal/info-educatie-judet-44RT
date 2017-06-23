@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
-import QRCode from 'qrcode.react';
-
+import {connect} from 'react-redux';
+import * as createCollectionsActions from '../../../actions/manageCollectionsCreateActions.js'
 import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
 import {convertFromRaw} from 'draft-js';
@@ -22,29 +22,46 @@ import {
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
 
-class Create extends Component {
+let createHandler = function (dispatch) {
+    let getInitialState = function () {
+        dispatch(createCollectionsActions.onCreateComponentInitiate())
+    };
 
+    let onSlideIndexChange = function (stepIndex) {
+        dispatch(createCollectionsActions.onSlideIndexChange(stepIndex))
+    };
+
+    return {
+        getInitialState,
+        onSlideIndexChange
+    }
+};
+
+class Create extends Component {
 
     constructor(props) {
         super(props);
+        this.handlers = createHandler(this.props.dispatch);
+    }
 
-        this.state = {
-            stepIndex: 0,
-        };
+    componentDidMount() {
+        this.handlers.getInitialState();
     }
 
     handleNext = () => {
-        const {stepIndex} = this.state;
+        let stepIndex = this.props.stepIndex;
         if (stepIndex < 2) {
-            this.setState({stepIndex: stepIndex + 1});
+            stepIndex ++;
+            this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
     };
 
     handlePrev = () => {
-        const {stepIndex} = this.state;
+        let stepIndex = this.props.stepIndex;
         if (stepIndex > 0) {
-            this.setState({stepIndex: stepIndex - 1});
+            stepIndex --;
+            this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
     };
@@ -110,7 +127,7 @@ class Create extends Component {
                             <TextField
                                 hintText="Give your collection a cool name"
                                 value={this.props.collectionName}
-                                onChange={this.props.onCollectionChange}
+                                onChange={this.props.onCollectionNameChange}
                                 errorText={this.props.errors.collectionName}
                                 onKeyDown={this.handleKeyPress}
                                 autoFocus={true}
@@ -264,7 +281,7 @@ class Create extends Component {
 
     render() {
 
-        const {stepIndex} = this.state;
+        const {stepIndex} = this.props;
 
         return (
             <div className="parallax-collections-create">
@@ -278,7 +295,7 @@ class Create extends Component {
                                         <Stepper linear={false} activeStep={stepIndex}>
                                             <Step>
                                                 <StepButton
-                                                    onClick={() => this.setState({stepIndex: 0})}
+                                                    onClick={() => this.handlers.onSlideIndexChange(0)}
                                                     icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
@@ -288,7 +305,7 @@ class Create extends Component {
                                             </Step>
                                             <Step>
                                                 <StepButton
-                                                    onClick={() => this.setState({stepIndex: 1})}
+                                                    onClick={() => this.handlers.onSlideIndexChange(1)}
                                                     icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
@@ -297,7 +314,7 @@ class Create extends Component {
                                                 </StepButton>
                                             </Step>
                                             <Step>
-                                                <StepButton onClick={() => this.setState({stepIndex: 2})}
+                                                <StepButton onClick={() => this.handlers.onSlideIndexChange(2)}
                                                             icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
                                                                 <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
                                                                 <FontIcon className="material-icons">done</FontIcon>}
@@ -319,9 +336,9 @@ class Create extends Component {
                                     />
                                 </Link>
                             </div> : null}
-                        {this.props.errorMessage !== '' ?
+                        {this.props.message !== '' ?
                             <div className="errors-collections">
-                                {this.props.errorMessage}
+                                {this.props.message}
                             </div> : null
                         }
                         {this.props.errors.summary ?
@@ -360,4 +377,10 @@ class Create extends Component {
     }
 }
 
-export default Create;
+const mapStateToProps = (state) => {
+    return {
+        stepIndex: state.manageCollectionsCreateComponentReducer.stepIndex
+    }
+};
+
+export default connect(mapStateToProps)(Create);
