@@ -1,55 +1,34 @@
 import React, {Component} from 'react'
-
+import PropTypes from 'prop-types'
 import Delete from '../../components/Collections/Main Components/Delete.jsx';
-import Auth from '../../modules/Auth.js';
 import NotFoundView from "../Error/NotFoundView.jsx";
+import {connect} from 'react-redux';
+import * as deleteCollectionsActions from '../../actions/Collections/manageCollectionsDeleteActions.js'
 
-let socket = io.connect();
+let createHandlers = function (dispatch) {
+    let getCollection = function (collectionId) {
+        dispatch(deleteCollectionsActions.onDeleteInitiate(collectionId))
+    };
+
+    let onDelete = function (collectionId, collectionName, collectionDescriptionRaw, picturesArray) {
+        dispatch(deleteCollectionsActions.onDeleteExecute(collectionId, collectionName, collectionDescriptionRaw, picturesArray))
+    };
+
+    return {
+        getCollection,
+        onDelete
+    }
+};
 
 class DeleteView extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            message: '',
-            response: null,
-            collectionName: '',
-            collectionDescriptionRaw: '',
-            pictures:[{}]
-        };
+        this.handlers = createHandlers(this.props.dispatch);
     };
 
     componentDidMount() {
-
         this.resetScroll();
-
-        const collectionId = encodeURIComponent(this.props.params._id);
-
-        const formData = `collectionId=${collectionId}`;
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/crud/deleteShow');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //Collection exists and the user that wants to delete it is the creator
-                this.setState({
-                    message: xhr.response.message,
-                    response: true,
-                    collectionName: xhr.response.collection.collectionName,
-                    collectionDescriptionRaw: xhr.response.collection.collectionDescriptionRaw,
-                    pictures: xhr.response.collection.picturesArray
-                });
-            }
-            else {
-                this.setState({
-                    response: "Error"
-                })
-            }
-        });
-        xhr.send(formData)
+        this.handlers.getCollection(this.props.params._id);
     };
 
     resetScroll = () => {
@@ -57,58 +36,57 @@ class DeleteView extends Component {
     };
 
     onDelete = () => {
-        if (this.state.response === true) {
-
+        if (this.props.response === true) {
             this.resetScroll();
-
-            const collectionName = encodeURIComponent(this.state.collectionName);
-            const collectionDescriptionRaw = encodeURIComponent(this.state.collectionDescriptionRaw);
-            const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
-            const collectionId = encodeURIComponent(this.props.params._id);
-
-            const formData = `collectionId=${collectionId}&collectionName=${collectionName}&collectionDescriptionRaw=${collectionDescriptionRaw}&picturesArray=${picturesArray}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('post', '/crud/deleteExecute');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-
-                    // The Redux Store should update
-                    socket.emit("updateCollectionsStore");
-
-                    //Collection was successfully deleted
-                    this.setState({
-                        message: xhr.response.message
-                    });
-                }
-                else {
-
-                    //Collection was not deleted/Was already deleted/Database error
-                    this.setState({
-                        message: xhr.response.message
-                    });
-                }
-            });
-            xhr.send(formData);
+            const collectionId = this.props.params._id;
+            const collectionName = this.props.collectionName;
+            const collectionDescriptionRaw = this.props.collectionDescriptionRaw;
+            const pictures = this.props.pictures;
+            this.handlers.onDelete(collectionId, collectionName, collectionDescriptionRaw, pictures);
         }
     };
 
     render() {
-        if (this.state.collectionName)
-            document.title = "Delete - " + this.state.collectionName;
+        if (this.props.collectionName)
+            document.title = "Delete - " + this.props.collectionName;
         else document.title = "404 not found";
-        if (this.state.response === "Error")
+        if (this.props.response === "Error")
             return <NotFoundView/>;
         return (
             <Delete
-                response={this.state.response}
-                message={this.state.message}
+                response={this.props.response}
+                message={this.props.message}
                 onDelete={this.onDelete}/>
         )
     }
 }
 
-export default DeleteView
+DeleteView.propTypes = {
+    response: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
+    message: PropTypes.string,
+    collection: React.PropTypes.shape({
+        collectionName: PropTypes.string,
+        collectionDescriptionRaw: PropTypes.string,
+        pictures: React.PropTypes.shape({
+            pictureName: PropTypes.string,
+            pictureLink: PropTypes.string,
+            pictureDescriptionRaw: PropTypes.string
+        })
+    })
+};
+
+const mapStateToProps = (state) => {
+    const statePath = state.manageCollectionsDeleteReducer;
+    return {
+        response: statePath.response,
+        message: statePath.message,
+        collectionName: statePath.collectionName,
+        collectionDescriptionRaw: statePath.collectionDescriptionRaw,
+        pictures: statePath.pictures
+    }
+};
+
+export default connect(mapStateToProps)(DeleteView);

@@ -4,7 +4,7 @@ import RichTextEditor from 'react-rte';
 import {stateToHTML} from 'draft-js-export-html';
 import {convertToRaw} from 'draft-js';
 import {connect} from 'react-redux';
-import * as createCollectionsActions from '../../actions/manageCollectionsCreateActions.js'
+import * as createCollectionsActions from '../../actions/Collections/manageCollectionsCreateActions.js'
 import Create from '../../components/Collections/Main Components/Create.jsx'
 import LoadingIndicator from "../../components/Loading Indicator/LoadingIndicator.jsx";
 

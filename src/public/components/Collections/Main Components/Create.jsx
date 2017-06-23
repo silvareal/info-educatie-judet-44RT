@@ -1,7 +1,8 @@
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 import {Link} from "react-router";
 import {connect} from 'react-redux';
-import * as createCollectionsActions from '../../../actions/manageCollectionsCreateActions.js'
+import * as createCollectionsActions from '../../../actions/Collections/manageCollectionsCreateActions.js'
 import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
 import {convertFromRaw} from 'draft-js';
@@ -376,6 +377,10 @@ class Create extends Component {
         )
     }
 }
+
+Create.propTypes = {
+    stepIndex: PropTypes.number
+};
 
 const mapStateToProps = (state) => {
     return {
