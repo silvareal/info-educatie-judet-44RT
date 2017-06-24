@@ -7,6 +7,8 @@ import manageCollectionsCreateComponentReducer from './Collections/manageCollect
 import manageCollectionsDeleteReducer from './Collections/manageCollectionsDeleteReducer.js';
 import manageCollectionsReadAllReducer from './Collections/manageCollectionsReadAllReducer.js';
 import searchReducer from './AppBar/searchReducer.js'
+import browseCollectionsReadAllReducer from './Browse/browseCollectionsReadAllReducer.js';
+import collectionNamesReducer from './AppBar/collectionNamesReducer.js';
 
 const rootReducer = combineReducers({
     userReducer: userReducer,
@@ -16,7 +18,9 @@ const rootReducer = combineReducers({
     manageCollectionsCreateComponentReducer: manageCollectionsCreateComponentReducer,
     manageCollectionsDeleteReducer: manageCollectionsDeleteReducer,
     manageCollectionsReadAllReducer: manageCollectionsReadAllReducer,
-    searchReducer: searchReducer
+    searchReducer: searchReducer,
+    browseCollectionsReadAllReducer: browseCollectionsReadAllReducer,
+    collectionNamesReducer: collectionNamesReducer
 });
 
 export default rootReducer

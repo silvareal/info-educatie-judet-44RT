@@ -18,8 +18,7 @@ class ReadAll extends Component {
         else if (this.props.fetchingCollections === false && this.props.fetchedCollections === true) {
             modeComponent =
                 <ViewTable
-                collections={this.props.collections}
-                errorMessage={this.props.errorMessage}/>
+                collections={this.props.collections}/>
         }
         else if (this.props.fetchingCollections === false && this.props.fetchedCollections === false) {
             modeComponent = <NoCollectionsFound/>

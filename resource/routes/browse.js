@@ -59,6 +59,28 @@ router.post('/loadMoreCollections', (req, res) => {
     }).sort({time: -1}).limit(10).skip(parseInt(req.body.loadAfter));
 });
 
+// retrieve all collection names for suggestions
+router.get('/getCollectionsForSearch', (req, res) => {
+    Collection.find({}, (err, collections) => {
+
+        if (err) {
+            return res.status(400).json({
+                message: "Database error"
+            })
+        }
+
+        if (!collections) {
+            return res.status(404).json({
+                message: "NoCollections"
+            })
+        }
+
+        return res.json({
+            collections: collections
+        })
+    }).sort({time: -1});
+});
+
 // all collections
 router.post("/searchCollections", (req, res) => {
 

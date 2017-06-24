@@ -17,6 +17,8 @@ export function onSearchQueryChange(searchQuery) {
 
 // All Collections
 
+// Get all collection names
+
 // Initiated the Axios request
 export function onSearchAllInitiate() {
     return {type: types.ON_SEARCH_ALL_INITIATE}

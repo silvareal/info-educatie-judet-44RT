@@ -28,7 +28,7 @@ export function getAllCollections() {
             headers: {'Authorization': `bearer ${Auth.getToken()}`}
         }).then((response) => {
             dispatch(getCollectionsSuccess(response))
-        }).catch((err) => {
+        }).catch(() => {
             dispatch(getCollectionsFailure())
         })
     }

@@ -1,6 +1,14 @@
 import React, {Component} from 'react';
-
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import * as collectionsActions from '../../actions/Browse/browseCollectionsReadAllActions.js';
 import ReadAll from '../../components/BrowseCollections/Main Components/ReadAll.jsx';
+
+let createHandler = function (dispatch) {
+    let updateCollectionsStore = function () {
+        dispatch(collectionsActions.getAllCollections());
+    }
+};
 
 class ReadAllView extends Component {
 
@@ -193,4 +201,4 @@ class ReadAllView extends Component {
     }
 }
 
-export default ReadAllView
+export default connect()(ReadAllView)

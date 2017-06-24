@@ -13,6 +13,8 @@ import {getCredentials} from './actions/userCredentialsActions.js';
 import {getCollectionsHomeView} from './actions/collectionsHomeViewActions.js';
 import {setShouldUpdate} from './actions/shouldUpdateActions.js';
 import {getAllCollections} from './actions/Collections/manageCollectionsReadAllActions.js';
+import * as browseReadAllActions from './actions/Browse/browseCollectionsReadAllActions.js';
+import * as getAllCollectionNames from './actions/AppBar/collectionNamesActions.js';
 
 import {Provider} from 'react-redux';
 
@@ -21,8 +23,10 @@ let socket = io.connect();
 const store = configureStore();
 
 store.dispatch(getCredentials());
+store.dispatch(getAllCollectionNames.getAllCollections());
 store.dispatch(getCollectionsHomeView());
 store.dispatch(getAllCollections());
+store.dispatch(browseReadAllActions.getAllCollections());
 
 socket.on("updateCollectionsStore", () => {
     store.dispatch(setShouldUpdate());

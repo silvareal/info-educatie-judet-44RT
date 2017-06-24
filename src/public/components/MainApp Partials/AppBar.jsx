@@ -2,10 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
-import {AutoComplete, RadioButton, RadioButtonGroup, Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui';
+import {AutoComplete, Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui';
 import * as searchActions from '../../actions/AppBar/searchActions.js';
 import {
-    AppBar,
     Avatar,
     IconMenu,
     IconButton,
@@ -101,6 +100,7 @@ class AppBarPersonal extends Component {
 
     onSearch = () => {
         this.handler.searchAllCollections(this.props.searchFunction.searchQuery);
+        this.context.router.replace(`/search/${this.props.searchFunction.searchQuery}`)
     };
 
     render() {
@@ -109,7 +109,9 @@ class AppBarPersonal extends Component {
             <Toolbar className={"appBar " + hide}
                      style={{backgroundColor: "#f4f7f6", width: "100%"}}>
                 <ToolbarGroup firstChild={true}>
-                    <ToolbarTitle text="4Art"/>
+                    <Link to={`/`}>
+                        <ToolbarTitle text="4Art"/>
+                    </Link>
                 </ToolbarGroup>
                 <ToolbarGroup>
                     <div style={{width: "31em"}}>
@@ -284,14 +286,14 @@ AppBarPersonal.contextTypes = {
 };
 
 const allCollections = (state) => {
-    if (state.manageCollectionsReadAllReducer.fetching === true) {
+    if (state.collectionNamesReducer.fetching === true) {
         return {
             fetchingOwnCollections: true,
             allCollections: []
         }
     }
-    else if (state.manageCollectionsReadAllReducer.collections) {
-        const response = state.manageCollectionsReadAllReducer.collections.data.collections;
+    else if (state.collectionNamesReducer.collections) {
+        const response = state.collectionNamesReducer.collections.data.collections;
         let allCollections = Object.keys(response).map((key) => {
             return response[key].collectionName
         });
@@ -299,7 +301,7 @@ const allCollections = (state) => {
             allCollections: allCollections
         }
     }
-    else if (state.manageCollectionsReadAllReducer.fetched === false) {
+    else if (state.collectionNamesReducer.fetched === false) {
         return {
             fetchedOwnCollections: false,
             fetchingOwnCollections: false

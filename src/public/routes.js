@@ -43,6 +43,8 @@ import ReadOneViewBrowseCollections from './containers/BrowseCollections/ReadOne
 import ReadAllViewBrowseNews from './containers/BrowseNews/ReadAllView.jsx';
 import ReadOneViewBrowseNews from './containers/BrowseNews/ReadOneView.jsx';
 
+import ReadAllViewSearch from './containers/SearchResults/ReadAllView.jsx';
+
 import ContactView from './containers/Contact/ContactView.jsx';
 
 import NotFoundView from './containers/Error/NotFoundView.jsx';
@@ -437,6 +439,11 @@ const routes = {
                     callback(null, LoginView);
                 }
             }
+        },
+
+        {
+            path: '/search/:_searchQuery',
+            component: ReadAllViewSearch
         },
 
         {
