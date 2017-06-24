@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-
+import {connect} from 'react-redux';
 import Auth from '../../modules/Auth';
 import Login from '../../components/Authentication/Login.jsx';
+
+let socket = io.connect();
 
 class LoginView extends Component {
     constructor(props, context) {
@@ -65,6 +67,8 @@ class LoginView extends Component {
 
                 Auth.authenticateUser(xhr.response.token);
 
+                socket.emit("getCredentials");
+
                 this.context.router.replace('/');
             } else {
                 const errors = xhr.response.errors ? xhr.response.errors : {};
@@ -96,4 +100,4 @@ LoginView.contextTypes = {
     router: PropTypes.object.isRequired
 };
 
-export default LoginView;
+export default connect()(LoginView);

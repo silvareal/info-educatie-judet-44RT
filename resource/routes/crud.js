@@ -190,7 +190,8 @@ router.post('/create', (req, res) => {
         newCollection.save((err) => {
             if (err) {
                 return res.status(400).json({
-                    success: false
+                    success: false,
+                    message: "Another collection with the same name exists"
                 })
             }
 
@@ -277,7 +278,7 @@ router.post('/loadMore', (req, res) => {
             }
 
             if (parseInt(collections.length) === 0) {
-                return res.json({
+                return res.status(404).json({
                     message: "NoCollections"
                 })
             }
@@ -289,6 +290,7 @@ router.post('/loadMore', (req, res) => {
     })
 });
 
+// only own collections
 router.post("/searchCollections", (req, res) => {
 
     const validationResult = validateSearchForm(req.body);
@@ -343,6 +345,8 @@ router.post("/searchCollections", (req, res) => {
 
     })
 });
+
+
 
 router.post('/readOne', (req, res) => {
 

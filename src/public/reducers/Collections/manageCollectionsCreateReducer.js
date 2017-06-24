@@ -61,7 +61,7 @@ export default function manageCollectionsCreateReducer(state = {}, action) {
         case types.ON_SAVE_COLLECTION_INITIATE:
             return {
                 ...state,
-                message: "Data send to the server"
+                message: "Data sent to the server"
             };
 
         case types.ON_SAVE_COLLECTION_SUCCESS:

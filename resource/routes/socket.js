@@ -21,5 +21,8 @@ module.exports = function (socket) {
     });
     socket.on("updateCollectionsStore", function () {
         socket.broadcast.emit("updateCollectionsStore");
-    })
+    });
+    socket.on("getCredentials", function () {
+        socket.broadcast.emit("getCredentials");
+    });
 };

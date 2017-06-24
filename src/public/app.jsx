@@ -12,7 +12,7 @@ import configureStore from './store/configureStore.js';
 import {getCredentials} from './actions/userCredentialsActions.js';
 import {getCollectionsHomeView} from './actions/collectionsHomeViewActions.js';
 import {setShouldUpdate} from './actions/shouldUpdateActions.js';
-import {removeShouldUpdate} from './actions/shouldUpdateActions.js';
+import {getAllCollections} from './actions/Collections/manageCollectionsReadAllActions.js';
 
 import {Provider} from 'react-redux';
 
@@ -22,9 +22,14 @@ const store = configureStore();
 
 store.dispatch(getCredentials());
 store.dispatch(getCollectionsHomeView());
+store.dispatch(getAllCollections());
 
 socket.on("updateCollectionsStore", () => {
     store.dispatch(setShouldUpdate());
+});
+
+socket.on("getCredentials", () => {
+    store.dispatch(getCredentials());
 });
 
 injectTapEventPlugin();

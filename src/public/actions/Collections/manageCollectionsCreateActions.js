@@ -162,17 +162,21 @@ export function onSaveCollection(collectionName, collectionDescriptionRaw, pictu
         }).then((response) => {
             dispatch(onSaveCollectionSuccessType(response.data.success))
         }).catch((err) => {
+
             const errPath = err.response.data;
             let pictureNameError, pictureLinkError, pictureDescriptionError;
 
+            if (errPath.errorsPicturesArray)
             pictureNameError = errPath.errorsPicturesArray.map((i) => {
                 return i.pictureName
             });
 
+            if (errPath.errorsPicturesArray)
             pictureLinkError = errPath.errorsPicturesArray.map((i) => {
                 return i.pictureLink
             });
 
+            if (errPath.errorsPicturesArray)
             pictureDescriptionError = errPath.errorsPicturesArray.map((i) => {
                 return i.pictureDescriptionRaw
             });

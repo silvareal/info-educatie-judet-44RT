@@ -3,11 +3,28 @@ import React, {Component} from 'react';
 import TopActions from '../Partials Components/TopActions.jsx';
 import ViewTable from '../Partials Components/ViewTable.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
+import NoCollectionsFound from '../Partials Components/NoCollectionsFound.jsx';
 
 import {Card} from 'material-ui';
 
 class ReadAll extends Component {
     render() {
+
+        let modeComponent = <LoadingIndicator/>;
+
+        if (this.props.fetchingCollections === true) {
+            modeComponent = <LoadingIndicator/>;
+        }
+        else if (this.props.fetchingCollections === false && this.props.fetchedCollections === true) {
+            modeComponent =
+                <ViewTable
+                collections={this.props.collections}
+                errorMessage={this.props.errorMessage}/>
+        }
+        else if (this.props.fetchingCollections === false && this.props.fetchedCollections === false) {
+            modeComponent = <NoCollectionsFound/>
+        }
+
         return (
             <div className="parallax-collections">
                 <div className="top-bar-spacing"/>
@@ -19,15 +36,7 @@ class ReadAll extends Component {
                             onQueryChange={this.props.onQueryChange}
                             onSearch={this.props.onSearch}
                         />
-                    {this.props.fetchedCollections ?
-                        <ViewTable
-                            collections={this.props.collections}
-                            errorMessage={this.props.errorMessage}
-                        />
-                        :
-                        <LoadingIndicator/>
-                    }
-
+                    {modeComponent}
                 </Card>
             </div>
         );

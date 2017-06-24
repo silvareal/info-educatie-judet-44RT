@@ -1,79 +1,55 @@
 import React, {Component} from 'react';
-
+import PropTypes from 'prop-types';
 import ReadAll from '../../components/Collections/Main Components/ReadAll.jsx';
 import Auth from '../../modules/Auth.js';
+import {connect} from 'react-redux';
+import * as collectionsActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
+import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
+import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
+
+let createHandler = function (dispatch) {
+    let updateCollectionsStore = function () {
+        dispatch(collectionsActions.getAllCollections());
+        dispatch(collectionsHomeViewActions.getCollectionsHomeView());
+    };
+
+    let removeShouldUpdate = function () {
+        dispatch(shouldUpdateActions.removeShouldUpdate())
+    };
+
+    let loadMore = function (loadAfter) {
+        dispatch(collectionsActions.onLoadMore(loadAfter))
+    };
+
+    return {
+        updateCollectionsStore,
+        removeShouldUpdate,
+        loadMore
+    }
+};
 
 class ReadAllView extends Component {
 
     constructor(props) {
         super(props);
 
+        this.handlers = createHandler(this.props.dispatch);
+
         this.state = {
             errorMessage: '',
-            collections: [],
-            collectionId: [],
-            collectionName: [],
-            pictureLink: [],
-            loadAfter: 0,
-            finished: false,
             searchErrorMessage: '',
-            collectionsPreSearch: [],
             searchQuery: '',
             searching: false,
-            requesting: false,
-            fetchedCollections: false
+            requesting: false
         };
     };
 
-    fetchAllCollections = () => {
-        //errorMessage name might confuse, it is also used to tell when to show a loading component
-        //all comparisons can be found in ViewTable.jsx
-        this.setState({
-            errorMessage: 'Fetching'
-        });
-
-        //AJAX for checking identity and retrieving all collections that belong to the user with the _id specified
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/crud/readAll');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //The user is who he says he is
-                //We store our results for further safe data management in state
-                this.setState({
-                    errorMessage: 'Fetched collections',
-                    collections: xhr.response.collections,
-                    collectionsPreSearch: xhr.response.collections,
-                    fetchedCollections: true
-                });
-            }
-            else if (xhr.status === 404) {
-                //No collections found and we set the corresponding error message
-                this.setState({
-                    errorMessage: xhr.response.message,
-                    fetchedCollections: true
-                });
-            }
-            else {
-                ////Database error to be handled only by an admin
-                this.setState({
-                    errorMessage: 'Please contact an administrator',
-                    fetchedCollections: true
-                })
-            }
-        });
-
-        //Send the identity check only when the page loads
-        //Any further modifications to localStorage are futile for attackers, we don't use that data for DB selection
-        xhr.send();
-    };
-
     onScroll = () => {
-        if (this.state.finished === false && document.title === "Manage collections" && this.state.searching === false)
+        if (this.props.collections.finished === false && document.title === "Manage collections" && this.state.searching === false && this.props.collections.requesting === false) {
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
-                this.loadMore();
+                this.handlers.loadMore(this.props.collections.loadAfter);
             }
+        }
     };
 
     resetScroll = () => {
@@ -82,7 +58,11 @@ class ReadAllView extends Component {
 
     componentDidMount() {
         this.resetScroll();
-        this.fetchAllCollections();
+
+        if (this.props.shouldUpdateCollections && this.props.shouldUpdateCollections.shouldUpdateCollections) {
+            this.handlers.updateCollectionsStore();
+            this.handlers.removeShouldUpdate();
+        }
 
         //the load more event listener
         window.addEventListener('scroll', this.onScroll);
@@ -91,51 +71,6 @@ class ReadAllView extends Component {
     componentWillUnmount() {
         window.removeEventListener('scroll', this.onScroll);
     }
-
-    loadMore = () => {
-        if (this.state.finished === false && this.state.requesting === false) {
-            this.loadAndAppendCollections(this.state.loadAfter + 10);
-            this.setState({loadAfter: this.state.loadAfter + 10})
-        }
-    };
-
-    loadAndAppendCollections = (loadAfter) => {
-
-        this.setState({
-            requesting: true
-        });
-
-        if (this.state.finished === false) {
-            const loadAfterParam = encodeURIComponent(loadAfter);
-
-            const formData = `loadAfter=${loadAfterParam}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('post', '/crud/loadMore');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-
-                    if (xhr.response.message === "NoCollections") {
-                        this.setState({finished: true, requesting: false});
-                    }
-                    else {
-                        //Do this to not mutate state
-                        let newCollections = this.state.collections;
-
-                        Object.keys(xhr.response.collections).map((key) => {
-                            newCollections.push(xhr.response.collections[key]);
-                        });
-
-                        this.setState({collections: newCollections, collectionsPreSearch: newCollections, requesting: false});
-                    }
-                }
-            });
-            xhr.send(formData);
-        }
-    };
 
     onQueryChange = (e) => {
         if (e.target.value.length === 0) {
@@ -177,7 +112,7 @@ class ReadAllView extends Component {
                     }
                 }
             });
-                xhr.send(formData);
+            xhr.send(formData);
             this.setState({searching: true});
         }
         else {
@@ -189,11 +124,12 @@ class ReadAllView extends Component {
         document.title = "Manage collections";
         return (
             <ReadAll
-                fetchedCollections={this.state.fetchedCollections}
+                fetchedCollections={this.props.collections.fetchedCollections}
+                fetchingCollections={this.props.collections.fetchingCollections}
                 handleKeyPress={this.handleKeyPress}
                 onQueryChange={this.onQueryChange}
                 searchQuery={this.state.searchQuery}
-                collections={this.state.collections}
+                collections={this.props.collections.collections}
                 errorMessage={this.state.errorMessage}
                 onSearch={this.onSearch}
             />
@@ -201,4 +137,58 @@ class ReadAllView extends Component {
     }
 }
 
-export default ReadAllView
+ReadAllView.propTypes = {
+    collections: React.PropTypes.shape({
+        collections: PropTypes.array,
+        fetchedCollections: PropTypes.bool,
+        fetchingCollections: PropTypes.bool,
+        loadAfter: PropTypes.number,
+        finished: PropTypes.bool,
+        requesting: PropTypes.bool
+    }),
+    shouldUpdateCollections: React.PropTypes.shape({
+        shouldUpdateCollections: PropTypes.bool
+    })
+};
+
+const collections = (state) => {
+    if (state.manageCollectionsReadAllReducer.fetching === true) {
+        return {
+            fetchingCollections: true
+        }
+    }
+    else if (state.manageCollectionsReadAllReducer.collections) {
+        const response = state.manageCollectionsReadAllReducer.collections.data;
+        return {
+            collections: response.collections,
+            fetchedCollections: true,
+            fetchingCollections: false,
+            loadAfter: state.manageCollectionsReadAllReducer.loadAfter,
+            finished: state.manageCollectionsReadAllReducer.finished,
+            requesting: state.manageCollectionsReadAllReducer.requesting
+        }
+    }
+    else if (state.manageCollectionsReadAllReducer.fetched === false) {
+        return {
+            fetchedCollections: false,
+            fetchingCollections: false
+        }
+    }
+};
+
+// Map shouldUpdate
+const shouldUpdateFunction = (state) => {
+    if (state.shouldUpdateCollectionsReducer) {
+        const response = state.shouldUpdateCollectionsReducer;
+        return {
+            shouldUpdateCollections: response.shouldUpdate
+        }
+    }
+};
+
+const mapStateToProps = (state) => ({
+    collections: collections(state),
+    shouldUpdateCollections: shouldUpdateFunction(state)
+});
+
+export default connect(mapStateToProps)(ReadAllView)

@@ -129,7 +129,7 @@ class Create extends Component {
                                 hintText="Give your collection a cool name"
                                 value={this.props.collectionName}
                                 onChange={this.props.onCollectionNameChange}
-                                errorText={this.props.errors.collectionName}
+                                errorText={this.props.message === "Another collection with the same name exists" ? this.props.message : this.props.errors.collectionName}
                                 onKeyDown={this.handleKeyPress}
                                 autoFocus={true}
                                 multiLine={true}
@@ -145,7 +145,7 @@ class Create extends Component {
                                     Write less, keep it simple !
                                 </div> : null
                             }
-                            {this.props.errors.collectionDescriptionRaw ?
+                            {this.props.errors && this.props.errors.collectionDescriptionRaw ?
                                 <div style={{color: 'red'}}>{this.props.errors.collectionDescriptionRaw}</div> : null}
                             <RichTextEditor
                                 value={this.props.collectionDescription}
@@ -166,7 +166,7 @@ class Create extends Component {
                                         <div>
                                             Please use a name that is shorter than 100 characters
                                         </div> : null}
-                                    {this.props.pictureNameError[i] === "Please use a valid name for this picture" ?
+                                    {this.props.pictureNameError && this.props.pictureNameError[i] === "Please use a valid name for this picture" ?
                                         <TextField hintText="Give your pictures a cool name"
                                                    value={picture.pictureName}
                                                    onChange={this.props.handlePicturesNameChange(i)}
@@ -192,7 +192,7 @@ class Create extends Component {
                                     }
                                 </div>
                                 <div className="input-field">
-                                    {this.props.pictureLinkError[i] === "Please use a link for the picture" ?
+                                    {this.props.pictureLinkError && this.props.pictureLinkError[i] === "Please use a link for the picture" ?
                                         <TextField hintText="Give us the link of your work of art"
                                                    value={picture.pictureLink}
                                                    onChange={this.props.handlePicturesLinkChange(i)}
@@ -226,7 +226,7 @@ class Create extends Component {
                                             Please use a description that is shorther than 5000 characters
                                         </div> : null
                                     }
-                                    {this.props.pictureDescriptionError[i] === "Please use a valid description for this picture" ?
+                                    {this.props.pictureDescriptionError && this.props.pictureDescriptionError[i] === "Please use a valid description for this picture" ?
 
                                         <div>
                                             {this.props.pictureDescriptionError[i]}
@@ -297,7 +297,7 @@ class Create extends Component {
                                             <Step>
                                                 <StepButton
                                                     onClick={() => this.handlers.onSlideIndexChange(0)}
-                                                    icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                    icon={this.props.pictureLinkError && this.props.pictureLinkError[0] === "Please use a link for the picture" ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
                                                         <FontIcon className="material-icons">mode_edit</FontIcon>}
@@ -307,7 +307,7 @@ class Create extends Component {
                                             <Step>
                                                 <StepButton
                                                     onClick={() => this.handlers.onSlideIndexChange(1)}
-                                                    icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                    icon={this.props.pictureLinkError && this.props.pictureLinkError[0] === "Please use a link for the picture" ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
                                                         <FontIcon className="material-icons">add_a_photo</FontIcon>}
@@ -316,7 +316,7 @@ class Create extends Component {
                                             </Step>
                                             <Step>
                                                 <StepButton onClick={() => this.handlers.onSlideIndexChange(2)}
-                                                            icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                            icon={this.props.pictureLinkError && this.props.pictureLinkError[0] === "Please use a link for the picture" ?
                                                                 <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
                                                                 <FontIcon className="material-icons">done</FontIcon>}
                                                 >
@@ -342,7 +342,7 @@ class Create extends Component {
                                 {this.props.message}
                             </div> : null
                         }
-                        {this.props.errors.summary ?
+                        {this.props.errors && this.props.errors.summary ?
                             <div className="errors-collections">
                                 {this.props.errors.summary}
                             </div> : null

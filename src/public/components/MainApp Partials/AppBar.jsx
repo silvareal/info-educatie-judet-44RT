@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {Link} from 'react-router';
-
+import {connect} from 'react-redux';
+import {AutoComplete, RadioButton, RadioButtonGroup, Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui';
+import * as searchActions from '../../actions/AppBar/searchActions.js';
 import {
     AppBar,
     Avatar,
@@ -20,13 +23,30 @@ import AVLibraryBooks from 'material-ui/svg-icons/av/library-books';
 import ActionAnnouncement from 'material-ui/svg-icons/action/announcement';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact-calendar';
-
 import Auth from '../../modules/Auth';
+
+let createHandler = function (dispatch) {
+
+    let onSearchQueryChange = function (searchQuery) {
+        dispatch(searchActions.onSearchQueryChange(searchQuery))
+    };
+
+    let searchAllCollections = function (searchQuery) {
+        dispatch(searchActions.onSearchAll(searchQuery))
+    };
+
+    return {
+        onSearchQueryChange,
+        searchAllCollections
+    }
+};
 
 class AppBarPersonal extends Component {
 
     constructor(props) {
         super(props);
+
+        this.handler = createHandler(this.props.dispatch);
 
         this.state = {
             isVisible: false,
@@ -69,28 +89,59 @@ class AppBarPersonal extends Component {
         window.removeEventListener('scroll', this.hideAppBar)
     }
 
+    onSearchQueryChange = (searchText) => {
+        this.handler.onSearchQueryChange(searchText)
+    };
+
+    handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            this.onSearch();
+        }
+    };
+
+    onSearch = () => {
+        this.handler.searchAllCollections(this.props.searchFunction.searchQuery);
+    };
+
     render() {
-
         let hide = this.state.isVisible ? "hidden" : "";
-
         return (
-            <AppBar
-                className={"appBar " + hide}
-                style={{backgroundColor: "#f4f7f6"}}
-                title={<Link to={`/`} style={{color: "black"}}>4Art</Link>}
-                showMenuIconButton={false}
-                iconElementRight={
-                    Auth.isUserAuthenticated() ?
-                        <div>
-                            <IconMenu
-                                open={this.state.openMenu}
-                                onRequestChange={this.handleOpenMenu}
-                                iconButtonElement={
-                                    <IconButton style={{padding: 0}}>
-                                        <NavigationMoreVert color="black"/>
-                                    </IconButton>}
-                                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                                targetOrigin={{horizontal: 'right', vertical: 'top'}}>
+            <Toolbar className={"appBar " + hide}
+                     style={{backgroundColor: "#f4f7f6", width: "100%"}}>
+                <ToolbarGroup firstChild={true}>
+                    <ToolbarTitle text="4Art"/>
+                </ToolbarGroup>
+                <ToolbarGroup>
+                    <div style={{width: "31em"}}>
+                        {this.state.isVisible ? null :
+                            <AutoComplete
+                                searchText={this.props.searchFunction.searchQuery}
+                                dataSource={this.props.allCollections.allCollections}
+                                hintText="Search collections"
+                                onUpdateInput={this.onSearchQueryChange}
+                                openOnFocus={true}
+                                maxSearchResults={10}
+                                filter={AutoComplete.fuzzyFilter}
+                                fullWidth={true}
+                                onKeyDown={this.handleKeyPress}
+                                onNewRequest={() => this.onSearch()}
+                            />
+                        }
+                    </div>
+                </ToolbarGroup>
+                <ToolbarGroup lastChild={true}>
+                    {
+                        Auth.isUserAuthenticated() ?
+                            <div>
+                                <IconMenu
+                                    open={this.state.openMenu}
+                                    onRequestChange={this.handleOpenMenu}
+                                    iconButtonElement={
+                                        <IconButton style={{padding: 0}}>
+                                            <NavigationMoreVert color="black"/>
+                                        </IconButton>}
+                                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                                    targetOrigin={{horizontal: 'right', vertical: 'top'}}>
                                     <span onClick={this.handleCloseMenu}>
                                     <List>
                                         <Link to={`/profile/${this.props.userName}`}
@@ -198,28 +249,75 @@ class AppBarPersonal extends Component {
                                                   onClick={this.props.resetScroll}
                                             >
                                                             <ListItem primaryText="Logout"
-                                                                      leftIcon={<ActionExitToApp/>}
-                                                            />
+                                                                      leftIcon={<ActionExitToApp/>}/>
                                                     </Link>
                                         </List>
                                         </span>
-                            </IconMenu>
-                        </div> :
-                        <div style={{display: "flex", justifyContent: "center", flex: 1}}>
-                            <Link to={`/login`}>
-                                <FlatButton label="Login"
-                                />
-                            </Link>
-                            <Link to={`/signup`}>
-                                <FlatButton label="Sign up"
-                                />
-                            </Link>
-                        </div>
-                }
-            />
-
+                                </IconMenu>
+                            </div> :
+                            <div style={{display: "flex", justifyContent: "center", flex: 1}}>
+                                <Link to={`/login`}>
+                                    <FlatButton label="Login"
+                                    />
+                                </Link>
+                                <Link to={`/signup`}>
+                                    <FlatButton label="Sign up"
+                                    />
+                                </Link>
+                            </div>
+                    }
+                </ToolbarGroup>
+            </Toolbar>
         )
     }
 }
 
-export default AppBarPersonal;
+AppBarPersonal.propTypes = {
+    allCollections: PropTypes.oneOfType([
+        PropTypes.array,
+        PropTypes.object
+    ])
+};
+
+AppBarPersonal.contextTypes = {
+    router: PropTypes.object.isRequired
+};
+
+const allCollections = (state) => {
+    if (state.manageCollectionsReadAllReducer.fetching === true) {
+        return {
+            fetchingOwnCollections: true,
+            allCollections: []
+        }
+    }
+    else if (state.manageCollectionsReadAllReducer.collections) {
+        const response = state.manageCollectionsReadAllReducer.collections.data.collections;
+        let allCollections = Object.keys(response).map((key) => {
+            return response[key].collectionName
+        });
+        return {
+            allCollections: allCollections
+        }
+    }
+    else if (state.manageCollectionsReadAllReducer.fetched === false) {
+        return {
+            fetchedOwnCollections: false,
+            fetchingOwnCollections: false
+        }
+    }
+};
+
+const searchFunction = (state) => {
+    return {
+        searchQuery: state.searchReducer.searchQuery,
+        allCollections: state.searchReducer.allCollections,
+        message: state.searchReducer.message
+    }
+};
+
+const mapStateToProps = (state) => ({
+    allCollections: allCollections(state),
+    searchFunction: searchFunction(state)
+});
+
+export default connect(mapStateToProps)(AppBarPersonal)

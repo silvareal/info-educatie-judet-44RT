@@ -142,7 +142,7 @@
 
 .appBar {
   position: fixed !important;
-  transition: top 6s;
+  transition: top 0.3s;
   top: 0;
   left: 0; }
 
@@ -150,7 +150,7 @@
   background-color: #8dd2cc !important; }
 
 .hidden {
-  transition: top 6s;
+  transition: top 0.3s;
   top: -64px; }
 
 .top-bar-spacing {

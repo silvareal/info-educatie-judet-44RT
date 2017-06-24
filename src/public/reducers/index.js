@@ -5,6 +5,8 @@ import shouldUpdateCollectionsReducer from './shouldUpdateCollectionsReducer.js'
 import manageCollectionsCreateReducer from './Collections/manageCollectionsCreateReducer.js';
 import manageCollectionsCreateComponentReducer from './Collections/manageCollectionsCreateComponentReducer.js';
 import manageCollectionsDeleteReducer from './Collections/manageCollectionsDeleteReducer.js';
+import manageCollectionsReadAllReducer from './Collections/manageCollectionsReadAllReducer.js';
+import searchReducer from './AppBar/searchReducer.js'
 
 const rootReducer = combineReducers({
     userReducer: userReducer,
@@ -12,7 +14,9 @@ const rootReducer = combineReducers({
     shouldUpdateCollectionsReducer: shouldUpdateCollectionsReducer,
     manageCollectionsCreateReducer: manageCollectionsCreateReducer,
     manageCollectionsCreateComponentReducer: manageCollectionsCreateComponentReducer,
-    manageCollectionsDeleteReducer: manageCollectionsDeleteReducer
+    manageCollectionsDeleteReducer: manageCollectionsDeleteReducer,
+    manageCollectionsReadAllReducer: manageCollectionsReadAllReducer,
+    searchReducer: searchReducer
 });
 
 export default rootReducer

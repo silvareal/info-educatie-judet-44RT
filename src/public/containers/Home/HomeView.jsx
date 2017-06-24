@@ -7,13 +7,15 @@ import {Card, CardMedia, CardTitle, CardActions, TextField, ListItem, List, Avat
 import ContentSend from 'material-ui/svg-icons/content/send';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import {connect} from 'react-redux';
-import * as collectionsActions from '../../actions/collectionsHomeViewActions.js';
+import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
+import * as collectionsActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
 let socket = io.connect();
 
 let createHandler = function (dispatch) {
     let updateCollectionsStore = function () {
-        dispatch(collectionsActions.getCollectionsHomeView());
+        dispatch(collectionsHomeViewActions.getCollectionsHomeView());
+        dispatch(collectionsActions.getAllCollections());
     };
 
     let removeShouldUpdate = function () {

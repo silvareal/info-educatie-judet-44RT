@@ -59,6 +59,7 @@ router.post('/loadMoreCollections', (req, res) => {
     }).sort({time: -1}).limit(10).skip(parseInt(req.body.loadAfter));
 });
 
+// all collections
 router.post("/searchCollections", (req, res) => {
 
     const validationResult = validateSearchForm(req.body);
