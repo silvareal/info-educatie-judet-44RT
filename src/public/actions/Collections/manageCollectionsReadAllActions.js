@@ -52,7 +52,7 @@ export function onLoadMoreFailure(message) {
 }
 
 // Iterate loadAfter if we successfully loaded more collections
-export function iterateLoadMore(loadAfter) {
+export function iterateLoadAfter(loadAfter) {
     return {type: types.ITERATE_LOAD_AFTER, loadAfter}
 }
 
@@ -72,7 +72,7 @@ export function onLoadMore(loadAfter) {
             })
         }).then((response) => {
             dispatch(onLoadMoreSuccess(response.data.collections));
-            dispatch(iterateLoadMore(loadAfter))
+            dispatch(iterateLoadAfter(loadAfter))
         }).catch((err) => {
             dispatch(onLoadMoreFailure(err.response.data.message))
         })

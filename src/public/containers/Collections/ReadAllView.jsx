@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReadAll from '../../components/Collections/Main Components/ReadAll.jsx';
-import Auth from '../../modules/Auth.js';
 import {connect} from 'react-redux';
 import * as collectionsActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
 import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
@@ -32,20 +31,11 @@ class ReadAllView extends Component {
 
     constructor(props) {
         super(props);
-
         this.handlers = createHandler(this.props.dispatch);
-
-        this.state = {
-            errorMessage: '',
-            searchErrorMessage: '',
-            searchQuery: '',
-            searching: false,
-            requesting: false
-        };
     };
 
     onScroll = () => {
-        if (this.props.collections.finished === false && document.title === "Manage collections" && this.state.searching === false && this.props.collections.requesting === false) {
+        if (this.props.collections.finished === false && document.title === "Manage collections" && this.props.collections.requesting === false) {
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.handlers.loadMore(this.props.collections.loadAfter);
             }
@@ -72,66 +62,13 @@ class ReadAllView extends Component {
         window.removeEventListener('scroll', this.onScroll);
     }
 
-    onQueryChange = (e) => {
-        if (e.target.value.length === 0) {
-            this.setState({searchQuery: e.target.value, searching: false, collections: this.state.collectionsPreSearch})
-        }
-        else
-            this.setState({searchQuery: e.target.value});
-    };
-
-    handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            this.onSearch();
-        }
-    };
-
-    onSearch = () => {
-
-        //if the search box is not empty
-        if (this.state.searchQuery) {
-
-            const searchQuery = encodeURIComponent(this.state.searchQuery);
-
-            const formData = `searchQuery=${searchQuery}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('post', '/crud/searchCollections');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-
-                    //no collections found
-                    if (xhr.response.errorMessage) {
-                        this.setState({searchErrorMessage: xhr.response.errorMessage, collections: []});
-                    }
-                    else {
-                        this.setState({collections: xhr.response.collections})
-                    }
-                }
-            });
-            xhr.send(formData);
-            this.setState({searching: true});
-        }
-        else {
-            this.setState({collections: this.state.collectionsPreSearch});
-        }
-    };
-
     render() {
         document.title = "Manage collections";
         return (
             <ReadAll
                 fetchedCollections={this.props.collections.fetchedCollections}
                 fetchingCollections={this.props.collections.fetchingCollections}
-                handleKeyPress={this.handleKeyPress}
-                onQueryChange={this.onQueryChange}
-                searchQuery={this.state.searchQuery}
                 collections={this.props.collections.collections}
-                errorMessage={this.state.errorMessage}
-                onSearch={this.onSearch}
             />
         );
     }
@@ -151,6 +88,7 @@ ReadAllView.propTypes = {
     })
 };
 
+// Map collections
 const collections = (state) => {
     if (state.manageCollectionsReadAllReducer.fetching === true) {
         return {

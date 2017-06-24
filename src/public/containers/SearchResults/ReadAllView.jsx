@@ -25,6 +25,9 @@ class ReadAllView extends Component {
         if (typeof this.props.collections === 'undefined' && this.props.params._searchQuery) {
             this.handlers.searchAllCollections(this.props.params._searchQuery)
         }
+        else if (typeof this.props.params._searchQuery === 'undefined' && typeof this.props.collections === 'undefined') {
+            this.context.router.replace('/collections');
+        }
     }
 
     render() {
@@ -43,6 +46,10 @@ ReadAllView.propTypes = {
     ]),
     fetchedCollections: PropTypes.bool,
     fetchingCollections: PropTypes.bool,
+};
+
+ReadAllView.contextTypes = {
+    router: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {

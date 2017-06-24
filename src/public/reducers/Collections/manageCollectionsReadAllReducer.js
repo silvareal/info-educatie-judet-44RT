@@ -20,7 +20,10 @@ export default function manageCollectionsReadAllReducer(state = {}, action) {
             };
 
         case types.READ_ALL_COLLECTIONS_FAILURE:
-            return {fetched: false};
+            return {
+                ...state,
+                fetched: false
+            };
 
         case types.ON_LOAD_MORE_INITIATE:
             return {
@@ -39,6 +42,7 @@ export default function manageCollectionsReadAllReducer(state = {}, action) {
             if (newCollections && newCollections.length % 10 === 0) {
                 return {
                     ...state,
+                    requesting: false,
                     collections: {
                         ...state.collections,
                         data: {

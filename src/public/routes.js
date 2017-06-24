@@ -447,6 +447,16 @@ const routes = {
         },
 
         {
+            path: '/search/',
+            component: ReadAllViewSearch
+        },
+
+        {
+            path: '/search',
+            component: ReadAllViewSearch
+        },
+
+        {
             path: '/profile/:userName',
             getComponent: (location, callback) => {
                 if (Auth.isUserAuthenticated()) {

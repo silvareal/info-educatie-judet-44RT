@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
-import {AutoComplete, Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui';
+import {} from 'material-ui';
 import * as searchActions from '../../actions/AppBar/searchActions.js';
 import {
     Avatar,
@@ -11,7 +11,11 @@ import {
     ListItem,
     Divider,
     List,
-    FlatButton
+    FlatButton,
+    AutoComplete,
+    Toolbar,
+    ToolbarGroup,
+    ToolbarTitle
 } from 'material-ui';
 import ImageCollections from 'material-ui/svg-icons/image/collections';
 import ActionSupervisorAccount from 'material-ui/svg-icons/action/supervisor-account';
@@ -53,9 +57,9 @@ class AppBarPersonal extends Component {
         }
     }
 
-    handleOpenMenu = (value) => {
+    handleOpenMenu = () => {
         this.setState({
-            openMenu: value,
+            openMenu: !this.state.openMenu,
         });
     };
 
@@ -107,10 +111,12 @@ class AppBarPersonal extends Component {
         let hide = this.state.isVisible ? "hidden" : "";
         return (
             <Toolbar className={"appBar " + hide}
-                     style={{backgroundColor: "#f4f7f6", width: "100%"}}>
+                     style={{backgroundColor: "#f4f7f6", width: "100%", zIndex: 99}}>
                 <ToolbarGroup firstChild={true}>
                     <Link to={`/`}>
-                        <ToolbarTitle text="4Art"/>
+                        <ToolbarTitle text="4Art"
+                                      style={{paddingLeft: 20}}
+                        />
                     </Link>
                 </ToolbarGroup>
                 <ToolbarGroup>

@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-
 import TopActions from '../Partials Components/TopActions.jsx';
 import ViewTable from '../Partials Components/ViewTable.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
 import NoCollectionsFound from '../Partials Components/NoCollectionsFound.jsx';
-
 import {Card} from 'material-ui';
 
 class ReadAll extends Component {
@@ -29,12 +27,7 @@ class ReadAll extends Component {
                 <div className="top-bar-spacing"/>
                 <div className="section-title">Manage collections</div>
                 <Card className="container-collections" style={{backgroundColor: 'none'}}>
-                        <TopActions
-                            handleKeyPress={this.props.handleKeyPress}
-                            searchQuery={this.props.searchQuery}
-                            onQueryChange={this.props.onQueryChange}
-                            onSearch={this.props.onSearch}
-                        />
+                        <TopActions/>
                     {modeComponent}
                 </Card>
             </div>

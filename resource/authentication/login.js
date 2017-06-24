@@ -60,7 +60,8 @@ module.exports = new PassportLocalStrategy(
                     sub: user._id,
                     isAdmin: user.admin,
                     profilePictureLink: user.profilePictureLink,
-                    userName: user.name
+                    userName: user.name,
+                    firstName: user.firstName
                 };
 
                 // create the token

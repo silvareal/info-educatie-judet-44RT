@@ -289,15 +289,18 @@ router.post("/postCommentCollections", (req, res) => {
         }
 
         const userId = decoded.sub;
+        const userName = decoded.userName;
+        const firstName = decoded.firstName;
+        const profilePictureLink = decoded.profilePictureLink;
 
         if (validationResult.success) {
             const commentData = {
                 collectionId: req.body.collectionId,
                 userId: userId,
-                userName: req.body.userName,
-                firstName: req.body.firstName,
+                userName: userName,
+                firstName: firstName,
                 comment: req.body.comment,
-                profilePictureLink: req.body.profilePictureLink
+                profilePictureLink: profilePictureLink
             };
 
             const newComment = new CommentCollection(commentData);
