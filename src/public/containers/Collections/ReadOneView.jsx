@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import ReadOne from '../../components/Collections/Main Components/ReadOne.jsx';
-import Auth from '../../modules/Auth.js';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 import PictureRow from "../../components/Collections/Partials Components/PictureRow.jsx";

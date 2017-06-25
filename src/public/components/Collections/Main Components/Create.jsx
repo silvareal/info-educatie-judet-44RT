@@ -52,7 +52,7 @@ class Create extends Component {
     handleNext = () => {
         let stepIndex = this.props.stepIndex;
         if (stepIndex < 2) {
-            stepIndex ++;
+            stepIndex++;
             this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
@@ -61,7 +61,7 @@ class Create extends Component {
     handlePrev = () => {
         let stepIndex = this.props.stepIndex;
         if (stepIndex > 0) {
-            stepIndex --;
+            stepIndex--;
             this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
@@ -121,7 +121,7 @@ class Create extends Component {
                 return (
                     <div>
                         <div>
-                            {(this.props.collectionName && this.props.collectionName.length  > 100) ?
+                            {(this.props.collectionName && this.props.collectionName.length > 100) ?
                                 <div>
                                     Please use a name that is shorter than 100 characters
                                 </div> : null}
@@ -276,6 +276,29 @@ class Create extends Component {
         }
     }
 
+    checkForErrors = (message) => {
+        return message === "Check the specified fields for errors"
+    };
+
+    checkStepOneErrors = (errors) => {
+        if (Object.keys(errors).length === 0)
+            return false;
+        return true
+    };
+
+    checkStepTwoErrors = (pictureNameError, pictureLinkError) => {
+        let flag = false;
+        Object.keys(pictureNameError).map((key) => {
+            if (pictureNameError[key] === "Please use a valid name for this picture")
+                flag = true;
+        });
+        Object.keys(pictureLinkError).map((key) => {
+            if (pictureLinkError[key] === "Please use a link for the picture")
+                flag = true;
+        });
+        return flag;
+    };
+
     resetScroll = () => {
         window.scrollTo(0, 0);
     };
@@ -297,7 +320,7 @@ class Create extends Component {
                                             <Step>
                                                 <StepButton
                                                     onClick={() => this.handlers.onSlideIndexChange(0)}
-                                                    icon={this.props.pictureLinkError && this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                    icon={this.checkStepOneErrors(this.props.errors) ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
                                                         <FontIcon className="material-icons">mode_edit</FontIcon>}
@@ -307,7 +330,7 @@ class Create extends Component {
                                             <Step>
                                                 <StepButton
                                                     onClick={() => this.handlers.onSlideIndexChange(1)}
-                                                    icon={this.props.pictureLinkError && this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                    icon={this.checkStepTwoErrors(this.props.pictureNameError, this.props.pictureLinkError) ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
                                                         <FontIcon className="material-icons">add_a_photo</FontIcon>}
@@ -316,7 +339,7 @@ class Create extends Component {
                                             </Step>
                                             <Step>
                                                 <StepButton onClick={() => this.handlers.onSlideIndexChange(2)}
-                                                            icon={this.props.pictureLinkError && this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                            icon={this.checkForErrors(this.props.message) ?
                                                                 <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
                                                                 <FontIcon className="material-icons">done</FontIcon>}
                                                 >

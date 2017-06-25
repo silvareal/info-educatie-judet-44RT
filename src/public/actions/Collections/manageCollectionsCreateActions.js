@@ -30,7 +30,6 @@ export function onCreateComponentInitiate() {
 // ---
 
 // Slide Index change handler
-
 export function onSlideIndexChangeType(stepIndex) {
     return {type: types.ON_SLIDE_INDEX_CHANGE, stepIndex: stepIndex}
 }
@@ -115,6 +114,7 @@ export function onSaveCollectionInitiateType(collectionName, collectionDescripti
         message: "Data sent"
     }
 }
+// ---
 
 // Handle save collection success
 export function onSaveCollectionSuccessType(success) {

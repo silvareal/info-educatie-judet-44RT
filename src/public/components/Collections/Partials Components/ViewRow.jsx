@@ -18,8 +18,7 @@ class ViewRow extends Component {
                     </CardMedia>
                 </Link>
                 <CardActions >
-                    <Link to={`/manage/readOne/${this.props.collection._id}/update`}
-                          target="_blank">
+                    <Link to={`/manage/readOne/${this.props.collection._id}/update`}>
                         <RaisedButton
                             type="button"
                             primary={true}
@@ -27,8 +26,7 @@ class ViewRow extends Component {
                             buttonStyle={{backgroundColor: "#9b9b9b"}}
                         />
                     </Link>
-                    <Link to={`/manage/readOne/${this.props.collection._id}/delete`}
-                          target="_blank">
+                    <Link to={`/manage/readOne/${this.props.collection._id}/delete`}>
                         <RaisedButton
                             type="button"
                             secondary={true}

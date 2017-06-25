@@ -97,11 +97,6 @@ function validateUpdateForm(payload) {
         errors.collectionDescriptionRaw = "Please use a valid description"
     }
 
-    if (!payload.qrLink || typeof payload.qrLink !== 'string' || payload.qrLink > 10000) {
-        isFormValid = false;
-        errors.qrLink = "Link missing or too long"
-    }
-
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
 
     Object.keys(errorsPicturesArray).map((key) => {
@@ -490,8 +485,7 @@ router.post('/updateSave', (req, res) => {
             $set: {
                 collectionName: req.body.collectionName,
                 collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-                picturesArray: JSON.parse(req.body.picturesArray),
-                qrLink: req.body.qrLink
+                picturesArray: JSON.parse(req.body.picturesArray)
             }
         }, (err, collection) => {
             if (err) {

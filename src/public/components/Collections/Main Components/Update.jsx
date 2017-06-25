@@ -1,12 +1,11 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
-import QRCode from 'qrcode.react'
 
 import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
-
+import NotFoundView from '../../../containers/Error/NotFoundView.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
 
 import {
@@ -111,7 +110,7 @@ class Update extends Component {
                             <TextField
                                 hintText="Give your collection a cool title"
                                 value={this.props.collectionName}
-                                onChange={this.props.onCollectionChange}
+                                onChange={this.props.onCollectionNameChange}
                                 errorText={this.props.errors.collectionName}
                                 onKeyDown={this.handleKeyPress}
                                 autoFocus={true}
@@ -142,26 +141,6 @@ class Update extends Component {
             case 1:
                 return (
                     <div>
-                        <div>
-                            <TextField hintText="Link embeded in QR code"
-                                       value={this.props.qrLink}
-                                       onChange={this.props.onQRLinkChange}
-                                       errorText={this.props.errors.qrLink}
-                                       onKeyDown={this.handleKeyPress}
-                                       autoFocus={true}
-                                       multiLine={true}
-                                       className="step-textfields"
-                                       inputStyle={{color: "#000000"}}
-                                       floatingLabelStyle={{color: "#ee6e73"}}
-                                       underlineFocusStyle={{borderColor: "#ee6e73"}}
-                            />
-                            <div className="qr-restrict-desktop">
-                                <QRCode value={this.props.qrLink} size={512}/>
-                            </div>
-                            <div className="qr-allow-mobile">
-                                <QRCode value={this.props.qrLink} size={128}/>
-                            </div>
-                        </div>
                         {this.props.pictures.map((picture, i) => (
                             <div key={i}>
                                 <div className="input-field">
@@ -279,6 +258,29 @@ class Update extends Component {
         }
     }
 
+    checkForErrors = (message) => {
+        return message === "Check the specified fields for errors"
+    };
+
+    checkStepOneErrors = (errors) => {
+        if (Object.keys(errors).length === 0)
+            return false;
+        return true
+    };
+
+    checkStepTwoErrors = (pictureNameError, pictureLinkError) => {
+        let flag = false;
+        Object.keys(pictureNameError).map((key) => {
+            if (pictureNameError[key] === "Please use a valid name for this picture")
+                flag = true;
+        });
+        Object.keys(pictureLinkError).map((key) => {
+            if (pictureLinkError[key] === "Please use a link for the picture")
+                flag = true;
+        });
+        return flag;
+    };
+
     resetScroll = () => {
         window.scrollTo(0, 0);
     };
@@ -287,7 +289,7 @@ class Update extends Component {
 
         const {stepIndex} = this.state;
 
-        if (this.props.fetched)
+        if (this.props.fetchedCollection === true && this.props.fetchingCollection === false)
         {
             return (
                 <div className="parallax-collections-create">
@@ -302,7 +304,7 @@ class Update extends Component {
                                                 <Step>
                                                     <StepButton
                                                         onClick={() => this.setState({stepIndex: 0})}
-                                                        icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                        icon={this.checkStepOneErrors(this.props.errors) ?
                                                             <FontIcon className="material-icons"
                                                                       color={red500}>warning</FontIcon> :
                                                             <FontIcon className="material-icons">mode_edit</FontIcon>}
@@ -312,7 +314,7 @@ class Update extends Component {
                                                 <Step>
                                                     <StepButton
                                                         onClick={() => this.setState({stepIndex: 1})}
-                                                        icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                        icon={this.checkStepTwoErrors(this.props.pictureNameError, this.props.pictureLinkError) ?
                                                             <FontIcon className="material-icons"
                                                                       color={red500}>warning</FontIcon> :
                                                             <FontIcon className="material-icons">add_a_photo</FontIcon>}
@@ -321,7 +323,7 @@ class Update extends Component {
                                                 </Step>
                                                 <Step>
                                                     <StepButton onClick={() => this.setState({stepIndex: 2})}
-                                                                icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                                icon={this.checkForErrors(this.props.message) ?
                                                                     <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
                                                                     <FontIcon className="material-icons">done</FontIcon>}
                                                     >
@@ -331,12 +333,12 @@ class Update extends Component {
                                         </div>
                                     }/>
                             </CardHeader>
-                            {this.props.errorMessage !== '' && this.props.errorMessage !== 'Your collection was successfully updated!' && this.props.errorMessage !== "Fetched collection" ?
+                            {this.props.message !== '' && this.props.message !== 'Your collection was successfully updated!' && this.props.message !== "Fetched collection" ?
                                 <div className="errors-collections">
-                                    {this.props.errorMessage}
+                                    {this.props.message}
                                 </div> :
                                 <div className="success-collections">
-                                    {this.props.errorMessage}
+                                    {this.props.message}
                                 </div>
                             }
                             {this.props.errors.summary ?
@@ -344,7 +346,7 @@ class Update extends Component {
                                     {this.props.errors.summary}
                                 </div> : null
                             }
-                            {this.props.errorMessage === 'Your collection was successfully updated!' ?
+                            {this.props.message === 'Your collection was successfully updated!' ?
                                 <div className="success-collections-create">
                                     <Link to={`/manage`}>
                                         <RaisedButton
@@ -385,12 +387,15 @@ class Update extends Component {
                 </div>
             )
         }
-        else return (
-            <div className="parallax-collections-create">
-                <div className="top-bar-spacing"/>
-                <LoadingIndicator/>
-            </div>
-        )
+        else if (this.props.fetchedCollection === false && this.props.fetchingCollection === true)
+            return (
+                <div className="parallax-collections-create">
+                    <div className="top-bar-spacing"/>
+                    <LoadingIndicator/>
+                </div>
+            );
+        else if (this.props.fetchedCollection === false && this.props.fetchingCollection === false)
+            return <NotFoundView/>
     }
 }
 export default Update
