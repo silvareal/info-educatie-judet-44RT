@@ -50,9 +50,11 @@ function validateSignupForm(payload) {
         errors.password = 'Password must have at least 8 characters';
     }
 
-    if (!payload || typeof payload.confirmPassword !== 'string' || payload.confirmPassword !== payload.password) {
+    if (!payload || typeof payload.confirmPassword !== 'string' || payload.confirmPassword !== payload.password || !payload.confirmPassword) {
         isFormValid = false;
-        errors.password = 'The two passwords do not match';
+        if (payload.confirmPassword) {
+            errors.password = 'The two passwords do not match';
+        }
         errors.confirmPassword = 'The two password do not match';
     }
 

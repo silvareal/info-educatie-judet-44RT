@@ -46,8 +46,8 @@ let createHandler = function (dispatch) {
 
 class AppBarPersonal extends Component {
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.handler = createHandler(this.props.dispatch);
 

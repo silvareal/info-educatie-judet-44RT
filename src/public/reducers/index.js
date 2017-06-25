@@ -8,8 +8,10 @@ import manageCollectionsReadAllReducer from './Collections/manageCollectionsRead
 import searchReducer from './AppBar/searchReducer.js'
 import browseCollectionsReadAllReducer from './Browse/browseCollectionsReadAllReducer.js';
 import collectionNamesReducer from './AppBar/collectionNamesReducer.js';
-import manageCollectionsReadOneReducer from './Collections/manageCollectionsReadOneReducer.js'
+import manageCollectionsReadOneReducer from './Collections/manageCollectionsReadOneReducer.js';
 import manageCollectionsUpdateReducer from './Collections/manageCollectionsUpdateReducer.js';
+import signUpReducer from './Authentication/signUpReducer.js';
+import loginReducer from './Authentication/loginReducer.js'
 
 const rootReducer = combineReducers({
     userReducer: userReducer,
@@ -23,6 +25,8 @@ const rootReducer = combineReducers({
     searchReducer: searchReducer,
     collectionNamesReducer: collectionNamesReducer,
     browseCollectionsReadAllReducer: browseCollectionsReadAllReducer,
+    signUpReducer: signUpReducer,
+    loginReducer: loginReducer
 });
 
 export default rootReducer

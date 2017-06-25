@@ -1,94 +1,58 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import Auth from '../../modules/Auth';
+import * as loginActions from '../../actions/Authentication/loginActions.js';
 import Login from '../../components/Authentication/Login.jsx';
 
-let socket = io.connect();
+let createHandler = function (dispatch) {
+    let onUserInfoChange = function (fieldName, user, value) {
+        dispatch(loginActions.onUserInfoChange(fieldName, user, value))
+    };
+
+    let onLogin = function (user) {
+        dispatch(loginActions.onLogin(user))
+    };
+
+    return {
+        onUserInfoChange,
+        onLogin
+    }
+};
 
 class LoginView extends Component {
     constructor(props, context) {
         super(props, context);
-
-        const storedMessage = localStorage.getItem('successMessage');
-        let successMessage = '';
-
-        if (storedMessage) {
-            successMessage = storedMessage;
-            localStorage.removeItem('successMessage');
-        }
-
-        this.state = {
-            errors: {},
-            successMessage,
-            user: {
-                email: '',
-                password: ''
-            }
-        };
-    };
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
+        this.handlers = createHandler(this.props.dispatch);
     };
 
     componentDidMount() {
         this.resetScroll();
     }
 
-    onChange = (e) => {
-        const field = e.target.name;
-        const user = this.state.user;
-        user[field] = e.target.value;
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.success === true)
+            this.context.router.replace('/')
+    }
 
-        this.setState({
-            user
-        });
+    resetScroll = () => {
+        window.scrollTo(0, 0);
+    };
+
+    onChange = (e) => {
+        this.handlers.onUserInfoChange(e.target.name, this.props.user, e.target.value);
     };
 
     onSubmit = (e) => {
         e.preventDefault();
-
-        //The next few lines will define the HTTP body message
-        const email = encodeURIComponent(this.state.user.email);
-        const password = encodeURIComponent(this.state.user.password);
-        const formData = `email=${email}&password=${password}`;
-
-        //AJAX
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/authentication/login');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                this.setState({
-                    errors: {}
-                });
-
-                Auth.authenticateUser(xhr.response.token);
-
-                socket.emit("getCredentials");
-
-                this.context.router.replace('/');
-            } else {
-                const errors = xhr.response.errors ? xhr.response.errors : {};
-                errors.summary = xhr.response.message;
-
-                this.setState({
-                    errors
-                });
-            }
-        });
-        xhr.send(formData);
+        this.handlers.onLogin(this.props.user);
     };
 
     render() {
         document.title = "Login";
         return (
             <Login
-                errors={this.state.errors}
-                successMessage={this.state.successMessage}
-                user={this.state.user}
+                errors={this.props.errors}
+                user={this.props.user}
                 onChange={this.onChange}
                 onSubmit={this.onSubmit}
             />
@@ -96,8 +60,24 @@ class LoginView extends Component {
     }
 }
 
+LoginView.propTypes = {
+    user: PropTypes.object,
+    errors: PropTypes.object
+};
+
 LoginView.contextTypes = {
     router: PropTypes.object.isRequired
 };
 
-export default connect()(LoginView);
+const mapStateToProps = (state) => {
+    let errors = state.loginReducer.errors;
+    if (errors)
+        errors = {...errors, summary: state.loginReducer.message};
+    return {
+        user: state.loginReducer.user,
+        errors: errors,
+        success: state.loginReducer.success
+    }
+};
+
+export default connect(mapStateToProps)(LoginView);

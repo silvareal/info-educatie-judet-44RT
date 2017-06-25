@@ -4,13 +4,11 @@ import {Card, CardText, RaisedButton, TextField} from 'material-ui';
 
 class Login extends Component {
     render() {
-
         const styles = {
             button: {
                 width: '100%',
             }
         };
-
         return (
             <div className="parallax-login">
                 <div className="top-bar-spacing"/>
@@ -19,8 +17,6 @@ class Login extends Component {
                         <form action="/" onSubmit={this.props.onSubmit}>
                             <div className="login-header">Login</div>
 
-                            {this.props.successMessage &&
-                            <div className="success-message">{this.props.successMessage}</div>}
                             {this.props.errors.summary &&
                             <div className="error-message">{this.props.errors.summary}</div>}
                             <div>

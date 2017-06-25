@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import Auth from './modules/Auth.js';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -21,19 +21,21 @@ import {Provider} from 'react-redux';
 let socket = io.connect();
 
 const store = configureStore();
-
-store.dispatch(getCredentials());
+// Does not need the user to be authenticated
 store.dispatch(getAllCollectionNames.getAllCollections());
-store.dispatch(getCollectionsHomeView());
-store.dispatch(getAllCollections());
 store.dispatch(browseReadAllActions.getAllCollections());
-
+store.dispatch(getCollectionsHomeView());
+store.dispatch(getCredentials());
 socket.on("updateCollectionsStore", () => {
     store.dispatch(setShouldUpdate());
 });
 
 socket.on("getCredentials", () => {
-    store.dispatch(getCredentials());
+    // Requires the user to be authenticated
+    if (Auth.isUserAuthenticated()){
+        store.dispatch(getCredentials());
+        store.dispatch(getAllCollections());
+    }
 });
 
 injectTapEventPlugin();
