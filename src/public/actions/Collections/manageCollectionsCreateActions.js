@@ -17,18 +17,6 @@ export function onCreateInitiate(collectionDescription, pictureDescription) {
 }
 // ---
 
-// Initial State - Component
-export function onCreateComponentInitiateType() {
-    return {type: types.ON_CREATE_COMPONENT_INITIATE}
-}
-
-export function onCreateComponentInitiate() {
-    return function (dispatch) {
-        dispatch(onCreateComponentInitiateType())
-    }
-}
-// ---
-
 // Slide Index change handler
 export function onSlideIndexChangeType(stepIndex) {
     return {type: types.ON_SLIDE_INDEX_CHANGE, stepIndex: stepIndex}
@@ -39,6 +27,7 @@ export function onSlideIndexChange(stepIndex) {
         dispatch(onSlideIndexChangeType(stepIndex))
     }
 }
+// ---
 
 // Handle collectionName change
 export function onCollectionNameChangeType(collectionName) {

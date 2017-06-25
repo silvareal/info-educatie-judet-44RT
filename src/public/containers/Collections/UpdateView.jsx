@@ -183,6 +183,7 @@ class UpdateView extends Component {
                     handleAddPictures={this.handleAddPictures}
                     handleRemovePictures={this.handleRemovePictures}
                     onSave={this.onSave}
+                    successUpdate={this.props.successUpdate}
                 />
             );
     }
@@ -224,12 +225,12 @@ const mapStateToProps = (state) => {
             fetchedCollection: true,
             collectionId: collection.collectionId,
             collectionName: collection.collectionName,
-            collectionNameOld: collection.collectionName,
+            collectionNameOld: statePath.collectionNameOld,
             collectionDescription: collection.collectionDescription,
             collectionDescriptionRaw: collection.collectionDescriptionRaw,
-            collectionDescriptionRawOld: collection.collectionDescriptionRaw,
+            collectionDescriptionRawOld: statePath.collectionDescriptionRaw,
             pictures: collection.picturesArray,
-            picturesOld: collection.picturesArray,
+            picturesOld: statePath.picturesArrayOld,
             __html: statePath.__html,
             successUpdate: statePath.successUpdate,
             errors: statePath.errors,

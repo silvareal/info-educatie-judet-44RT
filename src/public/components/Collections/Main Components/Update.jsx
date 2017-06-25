@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
-
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import * as updateActions from '../../../actions/Collections/manageCollectionsUpdateActions.js';
 import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
 import {convertFromRaw} from 'draft-js';
@@ -23,28 +25,38 @@ import {
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
 
+let createHandler = function (dispatch) {
+
+    let onSlideIndexChange = function (stepIndex) {
+        dispatch(updateActions.onSlideIndexChange(stepIndex))
+    };
+
+    return {
+        onSlideIndexChange
+    }
+};
+
 class Update extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            stepIndex: 0,
-        };
+        this.handlers = createHandler(this.props.dispatch);
     }
 
     handleNext = () => {
-        const {stepIndex} = this.state;
+        let stepIndex = this.props.stepIndex;
         if (stepIndex < 2) {
-            this.setState({stepIndex: stepIndex + 1});
+            stepIndex++;
+            this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
     };
 
     handlePrev = () => {
-        const {stepIndex} = this.state;
+        let stepIndex = this.props.stepIndex;
         if (stepIndex > 0) {
-            this.setState({stepIndex: stepIndex - 1});
+            stepIndex--;
+            this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
     };
@@ -287,10 +299,9 @@ class Update extends Component {
 
     render() {
 
-        const {stepIndex} = this.state;
+        const {stepIndex} = this.props;
 
-        if (this.props.fetchedCollection === true && this.props.fetchingCollection === false)
-        {
+        if (this.props.fetchedCollection === true && this.props.fetchingCollection === false) {
             return (
                 <div className="parallax-collections-create">
                     <div className="top-bar-spacing"/>
@@ -303,7 +314,7 @@ class Update extends Component {
                                             <Stepper linear={false} activeStep={stepIndex}>
                                                 <Step>
                                                     <StepButton
-                                                        onClick={() => this.setState({stepIndex: 0})}
+                                                        onClick={() => this.handlers.onSlideIndexChange(0)}
                                                         icon={this.checkStepOneErrors(this.props.errors) ?
                                                             <FontIcon className="material-icons"
                                                                       color={red500}>warning</FontIcon> :
@@ -313,7 +324,7 @@ class Update extends Component {
                                                 </Step>
                                                 <Step>
                                                     <StepButton
-                                                        onClick={() => this.setState({stepIndex: 1})}
+                                                        onClick={() => this.handlers.onSlideIndexChange(1)}
                                                         icon={this.checkStepTwoErrors(this.props.pictureNameError, this.props.pictureLinkError) ?
                                                             <FontIcon className="material-icons"
                                                                       color={red500}>warning</FontIcon> :
@@ -322,10 +333,12 @@ class Update extends Component {
                                                     </StepButton>
                                                 </Step>
                                                 <Step>
-                                                    <StepButton onClick={() => this.setState({stepIndex: 2})}
-                                                                icon={this.checkForErrors(this.props.message) ?
-                                                                    <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
-                                                                    <FontIcon className="material-icons">done</FontIcon>}
+                                                    <StepButton
+                                                        onClick={() => this.handlers.onSlideIndexChange(2)}
+                                                        icon={this.checkForErrors(this.props.message) ?
+                                                            <FontIcon className="material-icons"
+                                                                      color={red500}>warning</FontIcon> :
+                                                            <FontIcon className="material-icons">done</FontIcon>}
                                                     >
                                                     </StepButton>
                                                 </Step>
@@ -333,11 +346,11 @@ class Update extends Component {
                                         </div>
                                     }/>
                             </CardHeader>
-                            {this.props.message !== '' && this.props.message !== 'Your collection was successfully updated!' && this.props.message !== "Fetched collection" ?
-                                <div className="errors-collections">
-                                    {this.props.message}
-                                </div> :
+                            {this.props.successUpdate === true ?
                                 <div className="success-collections">
+                                    Collection was successfully updated
+                                </div> :
+                                <div className="errors-collections">
                                     {this.props.message}
                                 </div>
                             }
@@ -346,7 +359,7 @@ class Update extends Component {
                                     {this.props.errors.summary}
                                 </div> : null
                             }
-                            {this.props.message === 'Your collection was successfully updated!' ?
+                            {this.props.successUpdate === true ?
                                 <div className="success-collections-create">
                                     <Link to={`/manage`}>
                                         <RaisedButton
@@ -398,4 +411,15 @@ class Update extends Component {
             return <NotFoundView/>
     }
 }
-export default Update
+
+Update.propTypes = {
+    stepIndex: PropTypes.number
+};
+
+const mapStateToProps = (state) => {
+    return {
+        stepIndex: state.manageCollectionsUpdateReducer.stepIndex
+    }
+};
+
+export default connect(mapStateToProps)(Update)

@@ -20,7 +20,8 @@ export default function manageCollectionsCreateReducer(state = {}, action) {
                 pictureDescriptionError: [],
                 pictureLinkError: [],
                 collectionDescription: action.collectionDescription,
-                __html: ''
+                __html: '',
+                stepIndex: 0
             };
 
         case types.ON_COLLECTION_NAME_CHANGE:
@@ -85,6 +86,12 @@ export default function manageCollectionsCreateReducer(state = {}, action) {
                 pictureLinkError: action.pictureLinkError,
                 pictureDescriptionError: action.pictureDescriptionError,
                 message: action.message
+            };
+
+        case types.ON_SLIDE_INDEX_CHANGE:
+            return {
+                ...state,
+                stepIndex: action.stepIndex
             };
 
         default:

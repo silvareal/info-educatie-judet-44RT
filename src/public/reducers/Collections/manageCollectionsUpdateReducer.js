@@ -13,7 +13,8 @@ export default function manageCollectionsUpdateReducer(state = {}, action) {
                 pictureNameError: [],
                 pictureDescriptionError: [],
                 pictureLinkError: [],
-                __html: ''
+                __html: '',
+                stepIndex: 0
             };
 
         case types.ON_MOUNT_UPDATE_SUCCESS:
@@ -22,7 +23,10 @@ export default function manageCollectionsUpdateReducer(state = {}, action) {
                 fetched: true,
                 fetching: false,
                 collection: action.collection,
-                textEditorState: action.textEditorState
+                textEditorState: action.textEditorState,
+                collectionNameOld: action.collection.collectionName,
+                collectionDescriptionRawOld: action.collection.collectionDescriptionRaw,
+                picturesArrayOld: action.collection.picturesArray
             };
 
         case types.ON_MOUNT_UPDATE_FAILURE:
@@ -111,6 +115,12 @@ export default function manageCollectionsUpdateReducer(state = {}, action) {
                 pictureLinkError: action.pictureLinkError,
                 pictureDescriptionError: action.pictureDescriptionError,
                 message: action.message
+            };
+
+        case types.ON_SLIDE_INDEX_CHANGE:
+            return {
+                ...state,
+                stepIndex: action.stepIndex
             };
 
         default:

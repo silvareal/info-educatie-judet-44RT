@@ -24,16 +24,12 @@ import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
 
 let createHandler = function (dispatch) {
-    let getInitialState = function () {
-        dispatch(createCollectionsActions.onCreateComponentInitiate())
-    };
 
     let onSlideIndexChange = function (stepIndex) {
         dispatch(createCollectionsActions.onSlideIndexChange(stepIndex))
     };
 
     return {
-        getInitialState,
         onSlideIndexChange
     }
 };
@@ -43,10 +39,6 @@ class Create extends Component {
     constructor(props) {
         super(props);
         this.handlers = createHandler(this.props.dispatch);
-    }
-
-    componentDidMount() {
-        this.handlers.getInitialState();
     }
 
     handleNext = () => {
@@ -407,7 +399,7 @@ Create.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        stepIndex: state.manageCollectionsCreateComponentReducer.stepIndex
+        stepIndex: state.manageCollectionsCreateReducer.stepIndex
     }
 };
 
