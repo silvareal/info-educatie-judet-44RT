@@ -53,12 +53,7 @@ class UsersView extends Component {
         xhr.send();
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     componentDidMount() {
-        this.resetScroll();
         this.adminAuth();
         this.showAddedModerators();
     }

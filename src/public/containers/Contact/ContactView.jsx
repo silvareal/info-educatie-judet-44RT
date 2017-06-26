@@ -25,14 +25,6 @@ class ContactView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     }
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
-    componentDidMount() {
-        this.resetScroll();
-    }
-
     onFeedbackChange = (e) => {
         this.handlers.onFeedbackChange(e.target.value);
     };

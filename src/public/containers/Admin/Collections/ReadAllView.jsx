@@ -1,110 +1,58 @@
 import React, {Component} from 'react';
-
+import PropTypes from 'prop-types';
 import ReadAll from '../../../components/Admin/Collections/Main Components/ReadAll.jsx';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
-import Auth from '../../../modules/Auth.js';
 import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
+import {connect} from 'react-redux';
+import * as readActions from '../../../actions/Admin/Collections/manageCollectionsReadAllActionsAdmin.js';
+import * as collectionsHomeViewActions from '../../../actions/collectionsHomeViewActions.js';
+import * as collectionsBrowseActions from '../../../actions/Browse/browseCollectionsReadAllActions.js';
+import * as collectionsManageActions from '../../../actions/Collections/manageCollectionsReadAllActions.js';
+import * as shouldUpdateActions from '../../../actions/shouldUpdateActions.js';
+
+let createHandler = function (dispatch) {
+    let updateCollectionsStore = function () {
+        dispatch(readActions.getAllCollections());
+        dispatch(collectionsManageActions.getAllCollections());
+        dispatch(collectionsBrowseActions.getAllCollections());
+        dispatch(collectionsHomeViewActions.getCollectionsHomeView());
+    };
+
+    let removeShouldUpdate = function () {
+        dispatch(shouldUpdateActions.removeShouldUpdate())
+    };
+
+    let loadMore = function (loadAfter) {
+        dispatch(readActions.onLoadMore(loadAfter))
+    };
+
+    return {
+        updateCollectionsStore,
+        removeShouldUpdate,
+        loadMore
+    }
+};
 
 class ReadAllView extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            errorMessage: '',
-            collections: [],
-            isAdmin: false,
-            collectionId: [],
-            collectionName: [],
-            pictureLink: [],
-            loadAfter: 0,
-            finished: false,
-            searchErrorMessage: '',
-            collectionsPreSearch: [],
-            searchQuery: '',
-            searching: false,
-            fetchedCollections: false
-        };
-    };
-
-    adminAuth = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/adminAuthentication');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //User is an admin
-                this.setState({
-                    isAdmin: true
-                })
-            }
-            else {
-                this.state = {};
-            }
-        });
-        xhr.send();
-    };
-
-    fetchAllCollections = () => {
-        //errorMessage name might confuse, it is also used to tell when to show a loading component
-        //all comparisons can be found in ViewTable.jsx
-        this.setState({
-            errorMessage: 'Fetching'
-        });
-
-        //AJAX for checking identity and retrieving all collections that belong to the user with the _id specified
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/readAllCollections');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //The user is who he says he is
-                //We store our results for further safe data management in state
-                this.setState({
-                    errorMessage: 'Fetched collections',
-                    collections: xhr.response.collections,
-                    collectionsPreSearch: xhr.response.collections,
-                    fetchedCollections: true
-                });
-            }
-            else if (xhr.status === 404) {
-                //No collections found and we set the corresponding error message
-                this.setState({
-                    errorMessage: xhr.response.message,
-                    fetchedCollections: true
-                });
-            }
-            else {
-                ////Database error to be handled only by an admin
-                this.setState({
-                    errorMessage: 'Please contact an administrator',
-                    fetchedCollections: true
-                })
-            }
-        });
-
-        //Send the identity check only when the page loads
-        //Any further modifications to localStorage are futile for attackers, we don't use that data for DB selection
-        xhr.send();
+        this.handlers = createHandler(this.props.dispatch);
     };
 
     onScroll = () => {
-        if (this.state.finished === false && document.title === "Manage collections - Admin Controlled" && this.state.searching === false)
+        if (this.props.collections.finished === false && document.title === "Manage collections - Admin Controlled" && this.props.collections.requesting === false) {
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
-                this.loadMore();
+                this.handlers.loadMore(this.props.collections.loadAfter);
             }
-    };
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
+        }
     };
 
     componentDidMount() {
-        this.resetScroll();
-        this.adminAuth();
-        this.fetchAllCollections();
+        if (this.props.shouldUpdateCollections && this.props.shouldUpdateCollections.shouldUpdateCollections) {
+            this.handlers.updateCollectionsStore();
+            this.handlers.removeShouldUpdate();
+        }
 
         //the load more event listener
         window.addEventListener('scroll', this.onScroll);
@@ -114,124 +62,102 @@ class ReadAllView extends Component {
         window.removeEventListener('scroll', this.onScroll);
     }
 
-    loadMore = () => {
-        if (this.state.finished === false) {
-            this.loadAndAppendCollections(this.state.loadAfter + 10);
-            this.setState({loadAfter: this.state.loadAfter + 10})
-        }
-    };
-
-    loadAndAppendCollections = (loadAfter) => {
-
-        if (this.state.finished === false) {
-            const loadAfterParam = encodeURIComponent(loadAfter);
-
-            const formData = `loadAfter=${loadAfterParam}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('post', '/admin/loadMoreCollections');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-
-                    if (xhr.response.message === "NoCollections") {
-                        this.setState({finished: true});
-                    }
-                    else {
-                        //Do this to not mutate state
-                        let newCollections = this.state.collections;
-
-                        Object.keys(xhr.response.collections).map((key) => {
-                            newCollections.push(xhr.response.collections[key]);
-                        });
-
-                        this.setState({collections: newCollections, collectionsPreSearch: newCollections});
-                    }
-                }
-            });
-            xhr.send(formData);
-        }
-    };
-
-    onQueryChange = (e) => {
-        if (e.target.value.length === 0) {
-            this.setState({searchQuery: e.target.value, searching: false, collections: this.state.collectionsPreSearch})
-        }
-        else
-            this.setState({searchQuery: e.target.value});
-    };
-
-    handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            this.onSearch();
-        }
-    };
-
-    onSearch = () => {
-
-        //if the search box is not empty
-        if (this.state.searchQuery && this.state.fetchedCollections) {
-
-            const searchQuery = encodeURIComponent(this.state.searchQuery);
-
-            const formData = `searchQuery=${searchQuery}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('post', '/admin/searchCollections');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-
-                    //no collections found
-                    if (xhr.response.errorMessage) {
-                        this.setState({searchErrorMessage: xhr.response.errorMessage, collections: []});
-                    }
-                    else {
-                        this.setState({collections: xhr.response.collections})
-                    }
-                }
-            });
-            if (this.state.searchErrorMessage.length === 0)
-                xhr.send(formData);
-            this.setState({searching: true});
-        }
-        else {
-            this.setState({collections: this.state.collectionsPreSearch});
-        }
-    };
-
     render() {
         document.title = "Manage collections - Admin Controlled";
-        if (this.state.fetchedCollections === false && this.state.isAdmin !== true)
-            return (
-                <div className="parallax-collections">
-                    <div className="top-bar-spacing"/>
-                    <LoadingIndicator/>
-                </div>
-            );
-        if (this.state.isAdmin === true)
-            return (
-                <div>
-                    <ReadAll
-                        fetchedCollections={this.state.fetchedCollections}
-                        adminId={this.props.params._id}
-                        collections={this.state.collections}
-                        errorMessage={this.state.errorMessage}
-                        handleKeyPress={this.handleKeyPress}
-                        onQueryChange={this.onQueryChange}
-                        searchQuery={this.state.searchQuery}
-                        onSearch={this.onSearch}
-                    />
-                </div>
-            );
-        else return (
-            <NotAuthorizedView/>
-        )
+        if (this.props.credentials.admin === true)
+        return <ReadAll
+            fetchedCollections={this.props.collections.fetchedCollections}
+            fetchingCollections={this.props.collections.fetchingCollections}
+            collections={this.props.collections.collections}
+            adminId={this.props.params._id}
+        />;
+        else if (this.props.credentials.admin === false) return <NotAuthorizedView/>;
+        else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
     }
 }
 
-export default ReadAllView
+ReadAllView.propTypes = {
+    credentials: React.PropTypes.shape({
+        admin: PropTypes.bool,
+        fetched: PropTypes.bool,
+        fetching: PropTypes.bool
+    }),
+    collections: React.PropTypes.shape({
+        collections: PropTypes.array,
+        fetchedCollections: PropTypes.bool,
+        fetchingCollections: PropTypes.bool,
+        loadAfter: PropTypes.number,
+        finished: PropTypes.bool,
+        requesting: PropTypes.bool
+    }),
+    shouldUpdateCollections: React.PropTypes.shape({
+        shouldUpdateCollections: PropTypes.bool
+    })
+};
+
+// Map credentials
+const credentials = (state) => {
+    if (state.userReducer.fetching === true)
+        return {
+            fetching: true,
+            fetched: false,
+            admin: null
+        };
+    else if (state.userReducer.data) {
+        return {
+            fetching: false,
+            fetched: true,
+            admin: state.userReducer.data.admin
+        }
+    }
+    else return {
+            fetched: true,
+            fetching: false,
+            admin: false
+        }
+};
+
+// Map collections
+const collections = (state) => {
+    if (state.manageCollectionsReadAllReducerAdmin.fetching === true) {
+        return {
+            fetchingCollections: true,
+            fetchedCollections: false
+        }
+    }
+    else if (state.manageCollectionsReadAllReducerAdmin.collections) {
+        const response = state.manageCollectionsReadAllReducerAdmin.collections.data;
+        return {
+            collections: response.collections,
+            fetchedCollections: true,
+            fetchingCollections: false,
+            loadAfter: state.manageCollectionsReadAllReducerAdmin.loadAfter,
+            finished: state.manageCollectionsReadAllReducerAdmin.finished,
+            requesting: state.manageCollectionsReadAllReducerAdmin.requesting
+        }
+    }
+    else if (state.manageCollectionsReadAllReducerAdmin.fetched === false) {
+        return {
+            fetchedCollections: false,
+            fetchingCollections: false
+        }
+    }
+};
+
+// Map shouldUpdate
+const shouldUpdateFunction = (state) => {
+    if (state.shouldUpdateCollectionsReducer) {
+        const response = state.shouldUpdateCollectionsReducer;
+        return {
+            shouldUpdateCollections: response.shouldUpdate
+        }
+    }
+};
+
+const mapStateToProps = (state) => ({
+    collections: collections(state),
+    shouldUpdateCollections: shouldUpdateFunction(state),
+    credentials: credentials(state)
+});
+
+export default connect(mapStateToProps)(ReadAllView)

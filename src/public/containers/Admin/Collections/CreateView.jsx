@@ -72,7 +72,6 @@ class CreateView extends Component {
 
     componentDidMount() {
         this.handlers.getInitialState(RichTextEditor.createEmptyValue(), RichTextEditor.createEmptyValue());
-        this.resetScroll();
     }
 
     onUserIdChange = (e) => {
@@ -139,12 +138,7 @@ class CreateView extends Component {
         this.handlers.onRemoveInputField(this.props.UIState.pictures, i);
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     onSave = () => {
-        this.resetScroll();
 
         // Convert editorState to contentState and then "HTML-ize" it
         let editorState = this.props.UIState.collectionDescription.getEditorState();

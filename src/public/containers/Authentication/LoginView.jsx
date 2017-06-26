@@ -25,18 +25,10 @@ class LoginView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     };
 
-    componentDidMount() {
-        this.resetScroll();
-    }
-
     componentWillReceiveProps(nextProps) {
         if (nextProps.success === true)
             this.context.router.replace('/')
     }
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
 
     onChange = (e) => {
         this.handlers.onUserInfoChange(e.target.name, this.props.user, e.target.value);

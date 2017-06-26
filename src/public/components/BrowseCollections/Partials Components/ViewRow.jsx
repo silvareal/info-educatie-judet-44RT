@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import {Card, CardMedia, CardTitle, CardActions, RaisedButton} from 'material-ui';
+import {Card, CardMedia, CardTitle} from 'material-ui';
 
 class ViewRow extends Component {
     render() {

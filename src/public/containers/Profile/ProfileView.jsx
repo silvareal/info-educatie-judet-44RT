@@ -117,12 +117,7 @@ class ProfileView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     componentDidMount() {
-        this.resetScroll();
         this.handlers.getProfile(this.props.params.userName);
     };
 

@@ -44,13 +44,7 @@ class ReadAllView extends Component {
         }
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     componentDidMount() {
-        this.resetScroll();
-
         if (this.props.shouldUpdateCollections && this.props.shouldUpdateCollections.shouldUpdateCollections) {
             this.handlers.updateCollectionsStore();
             this.handlers.removeShouldUpdate();

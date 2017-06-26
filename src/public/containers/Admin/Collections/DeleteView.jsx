@@ -29,12 +29,7 @@ class DeleteView extends Component {
     };
 
     componentDidMount() {
-        this.resetScroll();
         this.handlers.getCollection(this.props.params._collectionId);
-    };
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
     };
 
     onDelete = () => {

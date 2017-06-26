@@ -67,7 +67,6 @@ class CreateView extends Component {
     };
 
     componentDidMount() {
-        this.resetScroll();
         this.adminAuth();
         this.getUser();
     }
@@ -92,13 +91,7 @@ class CreateView extends Component {
         this.setState({newsDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     onSave = () => {
-
-        this.resetScroll();
 
         //converting collectionDescription to collectionDescriptionRaw
         let editorState = this.state.newsDescription.getEditorState();

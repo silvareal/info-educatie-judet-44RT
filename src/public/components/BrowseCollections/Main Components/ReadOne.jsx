@@ -8,6 +8,11 @@ import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
 
 class ReadOne extends Component {
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps)
+            this.props = nextProps;
+    };
+
     handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             this.props.onSave();

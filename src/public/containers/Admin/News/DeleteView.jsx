@@ -94,14 +94,9 @@ class DeleteView extends Component {
     };
 
     componentDidMount() {
-        this.resetScroll();
         this.adminAuth();
         this.getCollection();
         this.getUser();
-    };
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
     };
 
     //We don t need to verify the identity in the componentDidMount lifecycle

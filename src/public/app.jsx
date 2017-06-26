@@ -15,6 +15,7 @@ import {setShouldUpdate} from './actions/shouldUpdateActions.js';
 import {getAllCollections} from './actions/Collections/manageCollectionsReadAllActions.js';
 import * as browseReadAllActions from './actions/Browse/browseCollectionsReadAllActions.js';
 import * as getAllCollectionNames from './actions/AppBar/collectionNamesActions.js';
+import * as getCollectionsAdmin from './actions/Admin/Collections/manageCollectionsReadAllActionsAdmin';
 
 import {Provider} from 'react-redux';
 
@@ -30,16 +31,18 @@ socket.on("updateCollectionsStore", () => {
     store.dispatch(setShouldUpdate());
 });
 
-if (Auth.isUserAuthenticated()){
+if (Auth.isUserAuthenticated()) {
     store.dispatch(getCredentials());
     store.dispatch(getAllCollections());
+    store.dispatch(getCollectionsAdmin.getAllCollections());
 }
 
 socket.on("getCredentials", () => {
     // Requires the user to be authenticated
-    if (Auth.isUserAuthenticated()){
+    if (Auth.isUserAuthenticated()) {
         store.dispatch(getCredentials());
         store.dispatch(getAllCollections());
+        store.dispatch(getCollectionsAdmin.getAllCollections());
     }
 });
 

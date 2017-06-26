@@ -133,14 +133,8 @@ class UpdateView extends Component {
         this.setState({newsDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     onSave = () => {
         if (this.state.response === true) {
-
-            this.resetScroll();
 
             //converting collectionDescription to collectionDescriptionRaw
             let editorState = this.state.newsDescription.getEditorState();

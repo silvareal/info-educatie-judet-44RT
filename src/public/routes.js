@@ -1,4 +1,4 @@
-import MainApp from './containers/MainApp/MainApp.jsx';
+import ScrollToTop from './containers/MainApp/ScrollToTop.jsx';
 
 import HomeView from './containers/Home/HomeView.jsx';
 
@@ -52,7 +52,7 @@ import NotFoundView from './containers/Error/NotFoundView.jsx';
 import Auth from './modules/Auth';
 
 const routes = {
-    component: MainApp,
+    component: ScrollToTop,
     childRoutes: [
 
         {

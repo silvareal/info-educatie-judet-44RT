@@ -127,7 +127,7 @@ class AppBarPersonal extends Component {
                                 dataSource={this.props.allCollections.allCollections}
                                 hintText="Search collections"
                                 onUpdateInput={this.onSearchQueryChange}
-                                openOnFocus={true}
+                                openOnFocus={!!this.props.searchFunction.searchQuery}
                                 maxSearchResults={10}
                                 filter={AutoComplete.fuzzyFilter}
                                 fullWidth={true}

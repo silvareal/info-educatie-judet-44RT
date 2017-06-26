@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {CircularProgress} from 'material-ui';
-import {NO_RECORDS_ERROR} from '../../../../constants/errors.js';
 
 import ViewRow from './ViewRow.jsx';
 
@@ -11,22 +9,16 @@ class ViewTable extends Component {
                 return (
                     <ViewRow
                         key={i}
-                        collection={collection}
                         adminId={this.props.adminId}
+                        collection={collection}
                     />
                 )
             }.bind(this));
         return (
             <div className="view-table">
-                {this.props.errorMessage.toString() === 'Fetched collections' && this.props.collections.length !== 0 ?
-                    <div>
-                        {rows}
-                    </div>
-                    :
-                    <div>
-                        {NO_RECORDS_ERROR}
-                    </div>}
-                {this.props.errorMessage.toString() === 'Fetching' ? <CircularProgress/> : null}
+                <div>
+                    {rows}
+                </div>
             </div>
         );
     }

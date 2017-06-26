@@ -19,7 +19,6 @@ class LogsView extends Component {
     }
 
     componentDidMount() {
-        this.resetScroll();
         const xhr = new XMLHttpRequest();
         xhr.open('get', '/admin/adminAuthentication');
         xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
@@ -36,10 +35,6 @@ class LogsView extends Component {
         });
         xhr.send();
     }
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
 
     render() {
         document.title = "Logs - Overview";

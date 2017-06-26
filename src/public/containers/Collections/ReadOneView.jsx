@@ -52,10 +52,6 @@ class ReadOneView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     }
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     onScroll = () => {
         if (this.props.comments.finished === false && document.title === this.props.collection.collectionName && this.props.comments.requesting === false)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
@@ -64,9 +60,7 @@ class ReadOneView extends Component {
     };
 
     componentDidMount() {
-
-        this.resetScroll();
-
+        console.log("I mount myself");
         this.handlers.getComments(this.props.params._id);
         this.handlers.getCollection(this.props.params._id);
         this.handlers.getCommentsCount(this.props.params._id);

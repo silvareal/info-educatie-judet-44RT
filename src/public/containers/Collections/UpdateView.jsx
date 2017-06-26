@@ -56,7 +56,6 @@ class UpdateView extends Component {
 
     componentDidMount() {
         this.handlers.getCollection(this.props.params._id, RichTextEditor.createEmptyValue());
-        this.resetScroll();
     };
 
     onCollectionNameChange = (e) => {
@@ -74,8 +73,6 @@ class UpdateView extends Component {
             if (__html.search("/script") === -1 && __html.search("script") === -1)
                 return {__html: __html};
     };
-
-
 
     handlePicturesNameChange = (i) => (e) => {
         const newPictures = this.props.pictures.map((picture, j) => {
@@ -113,10 +110,6 @@ class UpdateView extends Component {
         this.handlers.onRemoveInputField(this.props.pictures, i);
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     onSave = () => {
 
         if (this.props.fetchedCollection === true) {
@@ -132,8 +125,6 @@ class UpdateView extends Component {
                 });
                 this.handlers.onPicturesArrayChange(newPictures);
             }
-
-            this.resetScroll();
 
             //converting collectionDescription to collectionDescriptionRaw
             let editorState = this.props.collectionDescription.getEditorState();

@@ -3,15 +3,6 @@ import {Link} from 'react-router';
 import {Card, CardText} from 'material-ui';
 
 class NotAuthorizedView extends Component {
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
-    componentDidMount() {
-        this.resetScroll();
-    }
-
     render() {
         document.title = "401 not authorized";
         const styles = {

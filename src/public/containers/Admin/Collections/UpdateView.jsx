@@ -174,7 +174,6 @@ class UpdateView extends Component {
     };
 
     componentDidMount() {
-        this.resetScroll();
         this.adminAuth();
         this.getCollection();
     };
@@ -255,10 +254,6 @@ class UpdateView extends Component {
         });
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     onSave = () => {
         if (this.state.response === true) {
 
@@ -274,7 +269,6 @@ class UpdateView extends Component {
                 this.setState({pictures: newPictures});
             }
 
-            this.resetScroll();
 
             //converting collectionDescription to collectionDescriptionRaw
             let editorState = this.state.collectionDescription.getEditorState();

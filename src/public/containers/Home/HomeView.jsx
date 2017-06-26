@@ -64,12 +64,7 @@ class HomeView extends Component {
         xhr.send();
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     componentDidMount() {
-        this.resetScroll();
         this.getNews();
         if (this.props.shouldUpdateCollections && this.props.shouldUpdateCollections.shouldUpdateCollections) {
             this.handlers.updateCollectionsStore();
@@ -208,7 +203,8 @@ class HomeView extends Component {
                         onMouseEnter={this.getNewsId(key)}
                     >
                         <Card>
-                            <Link to={`/news/${news[key]._id}`}>
+                            <Link to={`/news/${news[key]._id}`}
+                                  target="_blank">
                                 <CardMedia overlay={<CardTitle title={news[key].newsTitle}/>}>
                                     <img src={news[key].newsCoverLink}/>
                                 </CardMedia>
@@ -284,7 +280,8 @@ class HomeView extends Component {
                         onMouseEnter={this.getNewsId(key)}
                     >
                         <Card>
-                            <Link to={`/news/${news[key]._id}`}>
+                            <Link to={`/news/${news[key]._id}`}
+                                  target="_blank">
                                 <CardMedia overlay={<CardTitle title={news[key].newsTitle}/>}>
                                     <img src={news[key].newsCoverLink}/>
                                 </CardMedia>
@@ -353,7 +350,8 @@ class HomeView extends Component {
                     onClick={this.getNewsId(key)}
                 >
                     <Card>
-                        <Link to={`/news/${news[key]._id}`}>
+                        <Link to={`/news/${news[key]._id}`}
+                              target="_blank">
                             <CardMedia overlay={<CardTitle title={news[key].newsTitle}/>}>
                                 <img src={news[key].newsCoverLink}/>
                             </CardMedia>
@@ -399,7 +397,9 @@ class HomeView extends Component {
                             onMouseEnter={this.getCollectionId(key)}
                         >
                             <Card>
-                                <Link to={`/collections/${collections[key]._id}`}>
+                                <Link to={`/collections/${collections[key]._id}`}
+                                    target="_blank"
+                                >
                                     <CardMedia overlay={<CardTitle title={collections[key].collectionName}/>}>
                                         <img src={collections[key].picturesArray[0].pictureLink}/>
                                     </CardMedia>
@@ -468,7 +468,8 @@ class HomeView extends Component {
                             onMouseEnter={this.getCollectionId(key)}
                         >
                             <Card>
-                                <Link to={`/collections/${collections[key]._id}`}>
+                                <Link to={`/collections/${collections[key]._id}`}
+                                      target="_blank">
                                     <CardMedia overlay={<CardTitle title={collections[key].collectionName}/>}>
                                         <img src={collections[key].picturesArray[0].pictureLink}/>
                                     </CardMedia>
@@ -535,7 +536,8 @@ class HomeView extends Component {
                         onClick={this.getCollectionId(key)}
                     >
                         <Card>
-                            <Link to={`/collections/${collections[key]._id}`}>
+                            <Link to={`/collections/${collections[key]._id}`}
+                                  target="_blank">
                                 <CardMedia overlay={<CardTitle title={collections[key].collectionName}/>}>
                                     <img src={collections[key].picturesArray[0].pictureLink}/>
                                 </CardMedia>

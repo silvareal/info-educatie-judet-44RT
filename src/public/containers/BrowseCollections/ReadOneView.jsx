@@ -52,20 +52,7 @@ class ReadOneView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     }
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-    
-    onScroll = () => {
-        if (this.props.comments.finished === false && document.title === this.props.collection.collectionName && this.props.comments.requesting === false)
-            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
-                this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.params._id)
-            }
-    };
-
     componentDidMount() {
-
-        this.resetScroll();
 
         this.handlers.getComments(this.props.params._id);
         this.handlers.getCollection(this.props.params._id);
@@ -75,6 +62,13 @@ class ReadOneView extends Component {
         window.addEventListener('scroll', this.onScroll);
 
         socket.on('send:comment', this.handlers.getComments(this.props.params._id));
+    };
+
+    onScroll = () => {
+        if (this.props.comments.finished === false && document.title === this.props.collection.collectionName && this.props.comments.requesting === false)
+            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
+                this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.params._id)
+            }
     };
 
     componentWillUnmount() {
@@ -107,7 +101,7 @@ class ReadOneView extends Component {
         if (this.props.collection.collectionName && this.props.collection.collectionName)
             document.title = this.props.collection.collectionName;
         else document.title = "404 not found";
-        if (this.props.collection.fetchedCollection === "Error")
+        if (this.props.collection.fetchedCollection === false && this.props.collection.fetchingCollection === false)
             return <NotFoundView/>;
         return (
             <ReadOne
@@ -313,8 +307,8 @@ const comments = (state) => {
 };
 
 const mapStateToProps = (state) => ({
-    credentials: credentials(state),
     collection: collection(state),
+    credentials: credentials(state),
     comments: comments(state)
 });
 

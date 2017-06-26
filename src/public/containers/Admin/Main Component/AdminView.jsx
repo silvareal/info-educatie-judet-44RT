@@ -57,14 +57,9 @@ class AdminView extends Component {
 
     //Check if the user that requests this page is an admin or not
     componentDidMount() {
-        this.resetScroll();
         this.adminAuth();
         this.getUser();
     }
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
 
     render() {
         document.title = "Admin panel";

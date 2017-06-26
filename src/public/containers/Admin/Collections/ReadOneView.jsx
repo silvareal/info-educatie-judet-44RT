@@ -45,10 +45,6 @@ class ReadOneView extends Component {
         };
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     getUser = () => {
         const xhr = new XMLHttpRequest();
         xhr.open("get", "/comment/getUserCredentials");
@@ -320,8 +316,6 @@ class ReadOneView extends Component {
 
         //get the number of comments for this collection
         this.getCommentsOverallCount();
-
-        this.resetScroll();
 
         //the load more event listener
         window.addEventListener('scroll', this.onScroll);

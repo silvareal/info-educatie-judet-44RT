@@ -82,12 +82,7 @@ class ReadAllView extends Component {
             }
     };
 
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     componentDidMount() {
-        this.resetScroll();
         this.adminAuth();
         this.getNews();
 
