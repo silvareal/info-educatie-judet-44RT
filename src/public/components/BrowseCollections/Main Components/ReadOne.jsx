@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import {Card, CardText, CardMedia, CardHeader} from 'material-ui';
-import QRCode from 'qrcode.react';
-
+import {Card, CardText, CardHeader} from 'material-ui';
+import NoCommentsFound from '../Partials Components/NoCommentsFound.jsx';
 import CommentForm from '../Partials Components/CommentForm.jsx';
 import CommentList from '../Partials Components/CommentList.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
@@ -64,22 +63,6 @@ class ReadOne extends Component {
                                             </CardText>
                                         </Card>
                                     </ul>
-                                    <ul style={{display: "flex"}}>
-                                        <li style={{margin: "auto"}}>
-                                            <Card style={{background: "none", boxShadow: 'none'}}>
-                                                <CardText
-                                                    style={{maxWidth: 512, padding: 16, fontSize: 16, textAlign: "center"}}>
-                                                    Scan this QR code to listen to a song that the creator of this
-                                                    collection has chosen for you to listen to while viewing his collection
-                                                </CardText>
-                                                <CardMedia style={{padding: 0}}>
-                                                    <QRCode
-                                                        value={this.props.collection.qrLink ? this.props.collection.qrLink : "123"}
-                                                        bgColor="whitesmoke" level="H" size={512}/>
-                                                </CardMedia>
-                                            </Card>
-                                        </li>
-                                    </ul>
                                 </div>
                                 <div className="collections-content-readOne-mobile">
                                     <Card style={{padding: 14, boxSizing: "border-box", marginBottom: 64}}>
@@ -103,11 +86,6 @@ class ReadOne extends Component {
                                                 className="collection-description"
                                                 dangerouslySetInnerHTML={this.getHTML()}/>
                                         </CardText>
-                                        <CardMedia style={{display: "flex", justifyContent: "center"}}>
-                                            <QRCode
-                                                value={this.props.collection.qrLink ? this.props.collection.qrLink : "123"}
-                                                level="H" size={128}/>
-                                        </CardMedia>
                                     </Card>
                                 </div>
                             </div>
@@ -118,9 +96,9 @@ class ReadOne extends Component {
                 }
 
                 <Card className="container-collections" style={{boxShadow: "none", backgroundColor: "whitesmoke"}}>
-                    {parseInt(this.props.commentsCount) !== 0 && this.props.commentsCount !== undefined ?
+                    {parseInt(this.props.comments && this.props.comments.commentsCount ? this.props.comments.commentsCount : 0) !== 0 ?
                         <CardHeader
-                            title={`Comments ` + `(` + this.props.commentsCount + `)`}
+                            title={`Comments ` + `(` + this.props.comments.commentsCount + `)`}
                         />
                         :
                         <CardHeader
@@ -131,27 +109,36 @@ class ReadOne extends Component {
                         <CommentForm
                             userName={this.props.userName}
                             profilePictureLink={this.props.profilePictureLink}
-                            comment={this.props.comment}
+                            comment={this.props.comments && this.props.comments.comment ? this.props.comments.comment : ""}
                             handleKeyPress={this.handleKeyPress}
                             onCommentChange={this.props.onCommentChange}
                             onSave={this.props.onSave}
-                            commentAdded={this.props.commentAdded}
+                            commentAdded={this.props.comments && this.props.comments.commentAdded ? this.props.comments.commentAdded : ""}
                         />
                         :
                         null
                     }
-                    {this.props.fetchedComments ?
+                    {this.props.comments && this.props.comments.fetchingComments === true ?
+                        <LoadingIndicator/>
+                        : null
+                    }
+                    {this.props.comments && this.props.comments.fetchedComments && this.props.comments.fetchingComments === false ?
                         <CommentList
                             userName={this.props.userName}
                             profilePictureLink={this.props.profilePictureLink}
-                            commentsRows={this.props.commentsRows}
-                            comment={this.props.comment}
+                            commentsRows={this.props.comments.commentsRows}
+                            comment={this.props.comments && this.props.comments.comment ? this.props.comments.comment : ""}
                             onCommentChange={this.props.onCommentChange}
                             onSave={this.props.onSave}
-                            commentAdded={this.props.commentAdded}
+                            commentAdded={this.props.comments && this.props.comments.commentAdded ? this.props.comments.commentAdded : ""}
                         />
                         :
-                        <LoadingIndicator/>
+                        null
+                    }
+                    {this.props.comments && this.props.comments.fetchedComments === false && this.props.comments.fetchingComments === false ?
+                        <NoCommentsFound/>
+                        :
+                        null
                     }
 
                 </Card>

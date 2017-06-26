@@ -14,22 +14,24 @@ import signUpReducer from './Authentication/signUpReducer.js';
 import loginReducer from './Authentication/loginReducer.js';
 import profileReducer from './Profile/profileReducer.js';
 import contactReducer from './Contact/contactReducer.js';
+import browseCollectionsReadOneReducer from './Browse/browseCollectionsReadOneReducer.js';
 
 const rootReducer = combineReducers({
+    signUpReducer: signUpReducer,
+    loginReducer: loginReducer,
     userReducer: userReducer,
-    collectionsHomeViewReducer: collectionsHomeViewReducer,
+    profileReducer: profileReducer,
+    searchReducer: searchReducer,
+    collectionNamesReducer: collectionNamesReducer,
     shouldUpdateCollectionsReducer: shouldUpdateCollectionsReducer,
+    collectionsHomeViewReducer: collectionsHomeViewReducer,
     manageCollectionsCreateReducer: manageCollectionsCreateReducer,
     manageCollectionsDeleteReducer: manageCollectionsDeleteReducer,
     manageCollectionsReadAllReducer: manageCollectionsReadAllReducer,
     manageCollectionsReadOneReducer: manageCollectionsReadOneReducer,
     manageCollectionsUpdateReducer: manageCollectionsUpdateReducer,
-    searchReducer: searchReducer,
-    collectionNamesReducer: collectionNamesReducer,
     browseCollectionsReadAllReducer: browseCollectionsReadAllReducer,
-    signUpReducer: signUpReducer,
-    loginReducer: loginReducer,
-    profileReducer: profileReducer,
+    browseCollectionsReadOneReducer: browseCollectionsReadOneReducer,
     contactReducer: contactReducer
 });
 

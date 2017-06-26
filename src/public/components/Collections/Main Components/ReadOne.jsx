@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import {Card, CardText, CardMedia, CardHeader} from 'material-ui';
+import {Card, CardText, CardHeader} from 'material-ui';
 import NoCommentsFound from '../Partials Components/NoCommentsFound.jsx';
 import CommentForm from '../Partials Components/CommentForm.jsx';
 import CommentList from '../Partials Components/CommentList.jsx';

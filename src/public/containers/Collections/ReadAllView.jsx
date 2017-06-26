@@ -4,12 +4,13 @@ import ReadAll from '../../components/Collections/Main Components/ReadAll.jsx';
 import {connect} from 'react-redux';
 import * as collectionsActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
 import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
+import * as collectionsBrowseActions from '../../actions/Browse/browseCollectionsReadAllActions.js';
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
-import LoadingIndicator from "../../components/Loading Indicator/LoadingIndicator.jsx";
 
 let createHandler = function (dispatch) {
     let updateCollectionsStore = function () {
         dispatch(collectionsActions.getAllCollections());
+        dispatch(collectionsBrowseActions.getAllCollections());
         dispatch(collectionsHomeViewActions.getCollectionsHomeView());
     };
 

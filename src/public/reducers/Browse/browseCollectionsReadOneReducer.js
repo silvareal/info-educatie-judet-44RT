@@ -1,6 +1,6 @@
 import * as types from '../../actions/actionTypes.js';
 
-export default function manageCollectionsReadOneReducer(state = {
+export default function browseCollectionsReadOneReducer(state = {
     loadAfter: 10,
     finished: false,
     requesting: false,
@@ -10,47 +10,46 @@ export default function manageCollectionsReadOneReducer(state = {
 }, action) {
     switch (action.type) {
 
-        case types.READ_ONE_COLLECTION:
+        case types.READ_ONE_COLLECTION_BROWSE:
             return {
                 ...state,
                 collectionId: action.collectionId
             };
 
-        case types.GET_COMMENTS_INITIATED:
+        case types.GET_COMMENTS_BROWSE_INITIATED:
             return {
                 ...state,
                 fetched: false,
                 fetching: true
             };
 
-        case types.GET_COMMENTS_SUCCESS:
+        case types.GET_COMMENTS_BROWSE_SUCCESS:
             return {
                 ...state,
                 fetched: true,
-                fetching: false,
+                fetching:false,
                 comments: action.comments
             };
 
-        case types.GET_COMMENTS_FAILURE:
+        case types.GET_COMMENTS_BROWSE_FAILURE:
             return {
                 ...state,
                 fetched: false,
                 fetching: false
             };
 
-        case types.ON_LOAD_MORE_COMMENTS_INITIATE:
+        case types.ON_LOAD_MORE_COMMENTS_BROWSE_INITIATE:
             return {
                 ...state,
                 requesting: true,
                 finished: false
             };
 
-        case types.ON_LOAD_MORE_COMMENTS_SUCCESS: {
+        case types.ON_LOAD_MORE_COMMENTS_BROWSE_SUCCESS: {
 
             let newComments = state.comments.data.comments;
 
             if (action.comments) {
-
                 Object.keys(action.comments).map((key) => {
                     newComments.push(action.comments[key])
                 });
@@ -88,49 +87,50 @@ export default function manageCollectionsReadOneReducer(state = {
             }
         }
 
-        case types.ITERATE_COMMENTS_LOAD_AFTER:
+        case types.ITERATE_COMMENTS_LOAD_AFTER_BROWSE:
             return {
                 ...state,
                 loadAfter: action.loadAfter + 10
             };
 
-        case types.ON_LOAD_MORE_COMMENTS_FAILURE:
+        case types.ON_LOAD_MORE_COMMENTS_BROWSE_FAILURE:
             return {
                 ...state,
                 requesting: false,
                 finished: true
             };
 
-        case types.ON_CHANGE_COMMENT_INPUT:
+        case types.ON_CHANGE_COMMENT_INPUT_BROWSE:
             return {
                 ...state,
                 comment: action.comment
             };
 
-        case types.ON_SAVE_COMMENT_INITIATE:
+        case types.ON_SAVE_COMMENT_BROWSE_INITIATE:
             return {
                 ...state,
                 message: "Data sent to the server"
             };
 
-        case types.ON_SAVE_COMMENT_SUCCESS:
+        case types.ON_SAVE_COMMENT_BROWSE_SUCCESS:
             return {
                 ...state,
                 commentAdded: true,
                 comment: ""
             };
 
-        case types.ON_SAVE_COMMENT_FAILURE:
+        case types.ON_SAVE_COMMENT_BROWSE_FAILURE:
             return {
                 ...state,
                 commentAdded: false
             };
 
-        case types.GET_COMMENTS_COUNT:
+        case types.GET_COMMENTS_COUNT_BROWSE:
             return {
                 ...state,
                 commentsCount: action.count
             };
+
 
         default:
             return state;

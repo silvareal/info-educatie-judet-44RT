@@ -1,261 +1,276 @@
 import React, {Component} from 'react';
-
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import ReadOne from '../../components/BrowseCollections/Main Components/ReadOne.jsx';
-import Auth from '../../modules/Auth.js';
-
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
-
 import PictureRow from "../../components/BrowseCollections/Partials Components/PictureRow.jsx";
 import Comment from '../../components/BrowseCollections/Partials Components/Comment.jsx';
 import NotFoundView from "../Error/NotFoundView.jsx";
+import * as readOneActions from '../../actions/Browse/browseCollectionsReadOneActions.js';
 
 let socket = io.connect();
+
+let createHandler = function (dispatch) {
+    let getCollection = function (collectionId) {
+        dispatch(readOneActions.getCollection(collectionId))
+    };
+
+    let getComments = function (collectionId) {
+        dispatch(readOneActions.getComments(collectionId))
+    };
+
+    let loadMoreComments = function (loadAfter, collectionId) {
+        dispatch(readOneActions.onLoadMoreComments(loadAfter, collectionId));
+    };
+
+    let onCommentInputChange = function (comment) {
+        dispatch(readOneActions.onChangeCommentInput(comment))
+    };
+
+    let getCommentsCount = function (collectionId) {
+        dispatch(readOneActions.getCommentsCount(collectionId))
+    };
+
+    let onSaveComment = function (collectionId, comment) {
+        dispatch(readOneActions.onSaveComment(collectionId, comment))
+    };
+
+    return {
+        getCollection,
+        getComments,
+        loadMoreComments,
+        onCommentInputChange,
+        getCommentsCount,
+        onSaveComment
+    }
+};
 
 class ReadOneView extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            collection: '',
-            errorMessage: '',
-            userId: '',
-            userName: '',
-            firstName: '',
-            comment: '',
-            comments: [],
-            commentAdded : null,
-            fetchedCollection: false,
-            fetchedComments: false,
-            pictureDescriptionRaw: '',
-            collectionDescriptionRaw: '',
-            rows1: '',
-            rows2: '',
-            rows3: '',
-            profilePictureLink: '',
-            pictures: [],
-            commentsRows: '',
-            loadAfter: 0,
-            finished: false,
-            commentsCount: 0,
-            requesting: false,
-            guest: false
-        };
+        this.handlers = createHandler(this.props.dispatch);
     }
 
     resetScroll = () => {
         window.scrollTo(0, 0);
     };
-
-    getUser = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open("get", "/comment/getUserCredentials");
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                if (xhr.response.guest !== true)
-                this.setState({
-                    userName: xhr.response.userName,
-                    firstName: xhr.response.firstName,
-                    userId: xhr.response.userId,
-                    profilePictureLink: xhr.response.profilePictureLink
-                });
-                else this.setState({
-                    guest: true
-                })
-            }
-        });
-        xhr.send();
-    };
-
-    getCollection = () => {
-
-        //The next few lines will define the HTTP body message
-        const collectionId = encodeURIComponent(this.props.params._id);
-
-        const formData = `collectionId=${collectionId}`;
-
-        //AJAX
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/crud/readOne');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200){
-
-                //Retrieve the data for a single collection
-                this.setState({
-                    errorMessage: '',
-                    collection: xhr.response.collection,
-                    collectionDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(xhr.response.collection.collectionDescriptionRaw))),
-                    fetchedCollection: true
-                });
-
-                let pictures = this.state.collection.picturesArray;
-
-                Object.keys(pictures).map((key) => {
-                    this.state.pictures.push(pictures[parseInt(key)].pictureLink);
-                });
-
-                this.setState({
-                    rows1: Object.keys(pictures).map((key) => {
-                        if (parseInt(key) % 2 === 0) {
-                            return (
-                                <PictureRow
-                                    key={key}
-                                    pictureName={pictures[key].pictureName}
-                                    pictureLink={pictures[key].pictureLink}
-                                    pictureDescription={stateToHTML(convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw)))}
-                                />
-                            )
-                        }
-                    }),
-                    rows2: Object.keys(pictures).map((key) => {
-                        if (parseInt(key) % 2 === 1) {
-                            return (
-                                <PictureRow
-                                    key={key}
-                                    pictureName={pictures[key].pictureName}
-                                    pictureLink={pictures[key].pictureLink}
-                                    pictureDescription={stateToHTML(convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw)))}
-                                />
-                            )
-                        }
-                    }),
-                    rows3: Object.keys(pictures).map((key) => {
-                        return (
-                            <PictureRow
-                                key={key}
-                                pictureName={pictures[key].pictureName}
-                                pictureLink={pictures[key].pictureLink}
-                                pictureDescription={stateToHTML(convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw)))}
-                            />
-                        )
-                    })
-                });
-            }
-            else {
-                this.setState({
-                    errorMessage: xhr.response.message,
-                    fetchedCollection: "Error"
-                });
-            }
-        });
-
-        //Send data for db interrogation
-        xhr.send(formData);
-    };
-
+    
     onScroll = () => {
-        if (this.state.finished === false && document.title === this.state.collection.collectionName)
+        if (this.props.comments.finished === false && document.title === this.props.collection.collectionName && this.props.comments.requesting === false)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
-                this.loadMore();
+                this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.params._id)
             }
     };
 
-    loadMore = () => {
-        if (this.state.finished === false && this.state.requesting === false) {
-            this.loadAndAppendComments(this.state.loadAfter + 10);
-            this.setState({loadAfter: this.state.loadAfter + 10})
-        }
+    componentDidMount() {
+
+        this.resetScroll();
+
+        this.handlers.getComments(this.props.params._id);
+        this.handlers.getCollection(this.props.params._id);
+        this.handlers.getCommentsCount(this.props.params._id);
+
+        //the load more event listener
+        window.addEventListener('scroll', this.onScroll);
+
+        socket.on('send:comment', this.handlers.getComments(this.props.params._id));
     };
 
-    loadAndAppendComments = (loadAfter) => {
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.onScroll);
+    }
 
-        this.setState({requesting: true});
-
-        if (this.state.finished === false) {
-            const loadAfterParam = encodeURIComponent(loadAfter);
-            const collectionId = encodeURIComponent(this.state.collection._id);
-
-            const formData = `loadAfter=${loadAfterParam}&collectionId=${collectionId}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('post', '/comment/loadMoreCommentsCollections');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-
-                    if (xhr.response.message === "NoComments") {
-                        this.setState({finished: true, requesting: false});
-                    }
-                    else {
-                        //Do this to not mutate state
-                        let newComments = this.state.comments;
-
-                        Object.keys(xhr.response.comments).map((key) => {
-                            newComments.push(xhr.response.comments[key]);
-                        });
-
-                        this.setState({comments: newComments, requesting: false});
-                        this.mapComments();
-                    }
-                }
-            });
-            xhr.send(formData);
-        }
+    onCommentChange = (e) => {
+        this.handlers.onCommentInputChange(e.target.value);
     };
 
-    getComments = () => {
+    //for the comment section
+    onSave = () => {
 
-        const collectionId = encodeURIComponent(this.props.params._id);
+        this.handlers.onSaveComment(this.props.params._id, this.props.comments.comment);
+        this.handlers.getComments(this.props.params._id);
+        this.handlers.getCommentsCount(this.props.params._id);
 
-        const formData = `collectionId=${collectionId}`;
-
-        const xhr = new XMLHttpRequest();
-        xhr.open("post", "/comment/retrieveCollectionsComments");
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //retrieved comments
-                this.setState({
-                    comments: xhr.response.comments,
-                    fetchedComments: true
-                });
-                this.mapComments();
-                this.getCommentsOverallCount();
-            }
-            else this.setState({
-                fetchedComments: true
-            })
+        socket.emit('send:comment', {
+            comment: this.props.comments.comment,
+            collectionId: this.props.params._id,
+            userName: this.props.credentials.userName,
+            firstName: this.props.credentials.firstName,
+            userId: this.props.credentials.userId,
+            profilePictureLink: this.props.credentials.profilePictureLink
         });
-        xhr.send(formData);
     };
 
-    getCommentsOverallCount = () => {
-        const collectionId = encodeURIComponent(this.props.params._id);
+    render() {
 
-        const formData = `collectionId=${collectionId}`;
+        if (this.props.collection.collectionName && this.props.collection.collectionName)
+            document.title = this.props.collection.collectionName;
+        else document.title = "404 not found";
+        if (this.props.collection.fetchedCollection === "Error")
+            return <NotFoundView/>;
+        return (
+            <ReadOne
+                guest={this.props.credentials.guest}
+                fetchedCollection={this.props.collection.fetchedCollection}
+                collection={this.props.collection}
+                collectionDescriptionRaw={this.props.collection.collectionDescriptionRaw}
+                rows1={this.props.collection.rows1}
+                rows2={this.props.collection.rows2}
+                rows3={this.props.collection.rows3}
+                comments={this.props.comments}
+                onCommentChange={this.onCommentChange}
+                onSave={this.onSave}
+                userName={this.props.credentials.userName}
+                profilePictureLink={this.props.credentials.profilePictureLink}
+            />
+        );
+    }
+}
 
-        const xhr = new XMLHttpRequest();
-        xhr.open("post", "/comment/commentsCount");
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //retrieved comments
-                this.setState({
-                    commentsCount: xhr.response.commentsCount
-                });
+ReadOneView.propTypes = {
+    credentials: React.PropTypes.shape({
+        userName: PropTypes.string,
+        firstName: PropTypes.string,
+        userId: PropTypes.string,
+        profilePictureLink: PropTypes.string,
+        guest: PropTypes.bool
+    }),
+    collection: React.PropTypes.shape({
+        collection: PropTypes.array,
+        collectionDescriptionRaw: PropTypes.string,
+        rows1: PropTypes.array,
+        rows2: PropTypes.array,
+        rows3: PropTypes.array
+    }),
+    comments: React.PropTypes.shape({
+        fetchedComments: PropTypes.bool,
+        fetchingComments: PropTypes.bool,
+        loadAfter: PropTypes.number,
+        finished: PropTypes.bool,
+        requesting: PropTypes.bool,
+        comment: PropTypes.string,
+        commentAdded: PropTypes.bool,
+        commentsCount: PropTypes.number
+    })
+};
+
+// Map credentials
+const credentials = (state) => {
+    if (state.userReducer.fetching === true) {
+        return {
+            finished: false
+        }
+    }
+    else if (state.userReducer.data) {
+        const response = state.userReducer.data;
+        return {
+            userId: response.userId,
+            userName: response.userName,
+            profilePictureLink: response.profilePictureLink,
+            firstName: response.firstName,
+            finished: true,
+            guest: response.guest
+        };
+    }
+    else if (state.userReducer.fetched === false)
+        return {
+            finished: true
+        };
+};
+
+const collection = (state) => {
+    if (state.collectionNamesReducer.collections && state.collectionNamesReducer.collections.data.collections) {
+        let longPath = state.collectionNamesReducer.collections.data.collections;
+        let collectionKey;
+        Object.keys(longPath).map((key) => {
+            if (longPath[key]._id === state.browseCollectionsReadOneReducer.collectionId)
+                collectionKey = key;
+        });
+
+        let pictures = longPath[collectionKey].picturesArray, rows1, rows2, rows3;
+
+        rows1 = Object.keys(pictures).map((key) => {
+            if (parseInt(key) % 2 === 0) {
+                return (
+                    <PictureRow
+                        key={key}
+                        pictureName={pictures[key].pictureName}
+                        pictureLink={pictures[key].pictureLink}
+                        pictureDescription={stateToHTML(convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw)))}
+                    />
+                )
             }
         });
-        xhr.send(formData);
-    };
 
-    mapComments = () => {
-        let comments = this.state.comments;
+        rows2 = Object.keys(pictures).map((key) => {
+            if (parseInt(key) % 2 === 1) {
+                return (
+                    <PictureRow
+                        key={key}
+                        pictureName={pictures[key].pictureName}
+                        pictureLink={pictures[key].pictureLink}
+                        pictureDescription={stateToHTML(convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw)))}
+                    />
+                )
+            }
+        });
 
-        let commentsRows;
+        rows3 = Object.keys(pictures).map((key) => {
+            return (
+                <PictureRow
+                    key={key}
+                    pictureName={pictures[key].pictureName}
+                    pictureLink={pictures[key].pictureLink}
+                    pictureDescription={stateToHTML(convertFromRaw(JSON.parse(pictures[key].pictureDescriptionRaw)))}
+                />
+            )
+        });
 
-        if (comments) {
-            commentsRows = Object.keys(comments).map((key) => {
+        return {
+            _id: longPath[collectionKey]._id,
+            collectionName: longPath[collectionKey].collectionName,
+            collectionDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(longPath[collectionKey].collectionDescriptionRaw))),
+            picturesArray: longPath[collectionKey].picturesArray,
+            profilePictureLink: longPath[collectionKey].profilePictureLink,
+            time: longPath[collectionKey].time,
+            userId: longPath[collectionKey].userId,
+            userName: longPath[collectionKey].userName,
+            rows1: rows1,
+            rows2: rows2,
+            rows3: rows3,
+            fetchedCollection: true
+        }
+    }
+    else return {
+        _id: "",
+        collectionName: "",
+        collectionDescriptionRaw: "",
+        picturesArray: "",
+        profilePictureLink: "",
+        time: "",
+        userId: "",
+        userName: "",
+        rows1: null,
+        rows2: null,
+        rows3: null
+    }
+};
+
+const comments = (state) => {
+    if (state.browseCollectionsReadOneReducer.fetching === true)
+        return {
+            fetchedComments: false,
+            fetchingComments: true,
+            comment: state.browseCollectionsReadOneReducer.comment,
+            commentsCount: state.browseCollectionsReadOneReducer.commentsCount
+        };
+    else if (state.browseCollectionsReadOneReducer.fetched === true && state.browseCollectionsReadOneReducer.fetching === false) {
+        if (state.browseCollectionsReadOneReducer.comments.data.comments.length !== 0) {
+
+            let comments = state.browseCollectionsReadOneReducer.comments.data.comments;
+
+            let commentsRows = Object.keys(comments).map((key) => {
 
                 const date = new Date(comments[key].time);
 
@@ -274,114 +289,33 @@ class ReadOneView extends Component {
                         profilePictureLink={comments[key].profilePictureLink}
                     />
                 )
-            })
-        }
-        this.setState({commentsRows});
-    };
-
-    componentDidMount() {
-
-        //get userName and firstName of the user
-        this.getUser();
-        //get collection details
-        this.getCollection();
-        //retrieve all comments for this specific collection
-        this.getComments();
-        //get the number of comments for this collection
-        this.getCommentsOverallCount();
-
-        this.resetScroll();
-
-        //the load more event listener
-        window.addEventListener('scroll', this.onScroll);
-
-        socket.on('send:comment', this.getComments);
-    };
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.onScroll);
-    }
-
-    onCommentChange = (e) => {
-        this.setState({comment: e.target.value});
-    };
-
-    //for the comment section
-    onSave = () => {
-        if (Auth.isUserAuthenticated()){
-            const collectionId = encodeURIComponent(this.props.params._id);
-            const userName = encodeURIComponent(this.state.userName);
-            const firstName = encodeURIComponent(this.state.firstName);
-            const comment = encodeURIComponent(this.state.comment);
-            const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
-
-            const formData = `profilePictureLink=${profilePictureLink}&collectionId=${collectionId}&userName=${userName}&firstName=${firstName}&comment=${comment}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open("post", "/comment/postCommentCollections");
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-
-                    this.setState({
-                        commentAdded: xhr.response.commentAdded,
-                        comment: ''
-                    });
-                }
-                else {
-                    this.setState({
-                        commentAdded: false
-                    })
-                }
             });
 
-            xhr.send(formData);
-
-            this.getComments();
-
-            socket.emit('send:comment', {
-                comment: this.state.comment,
-                collectionId: this.props.params._id,
-                userName: this.state.userName,
-                firstName: this.state.firstName,
-                userId: this.state.userId,
-                profilePictureLink: this.state.profilePictureLink
-            });
+            return {
+                fetchedComments: true,
+                fetchingComments: false,
+                commentsRows: commentsRows,
+                loadAfter: state.browseCollectionsReadOneReducer.loadAfter,
+                finished: state.browseCollectionsReadOneReducer.finished,
+                requesting: state.browseCollectionsReadOneReducer.requesting,
+                comment: state.browseCollectionsReadOneReducer.comment,
+                commentsCount: state.browseCollectionsReadOneReducer.commentsCount
+            };
         }
-    };
-
-    render() {
-
-        if (this.state.collection.collectionName)
-            document.title = this.state.collection.collectionName;
-        else document.title = "404 not found";
-        if (this.state.fetchedCollection === "Error")
-            return <NotFoundView/>;
-            return (
-                <ReadOne
-                    fetchedCollection={this.state.fetchedCollection}
-                    fetchedComments={this.state.fetchedComments}
-                    guest={this.state.guest}
-                    commentsCount={this.state.commentsCount}
-                    commentsRows={this.state.commentsRows}
-                    comments={this.state.comments}
-                    pictures={this.state.pictures}
-                    profilePictureLink={this.state.profilePictureLink}
-                    userName={this.state.userName}
-                    rows1={this.state.rows1}
-                    rows2={this.state.rows2}
-                    rows3={this.state.rows3}
-                    collectionDescriptionRaw={this.state.collectionDescriptionRaw}
-                    commentAdded={this.state.commentAdded}
-                    collection={this.state.collection}
-                    comment={this.state.comment}
-                    onCommentChange={this.onCommentChange}
-                    onSave={this.onSave}
-                />
-            );
+        else return {
+            fetchedComments: false,
+            fetchingComments: false,
+            commentsRows: null,
+            comment: state.browseCollectionsReadOneReducer.comment,
+            commentsCount: state.browseCollectionsReadOneReducer.commentsCount
+        }
     }
-}
+};
 
-export default ReadOneView
+const mapStateToProps = (state) => ({
+    credentials: credentials(state),
+    collection: collection(state),
+    comments: comments(state)
+});
+
+export default connect(mapStateToProps)(ReadOneView)
