@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
 import {RaisedButton, Card, CardHeader, CardActions} from 'material-ui';
-import LoadingIndicator from "../../../Loading Indicator/LoadingIndicator.jsx";
+
+import LoadingIndicator from '../../../Loading Indicator/LoadingIndicator.jsx';
 
 class Delete extends Component {
 
@@ -14,7 +15,8 @@ class Delete extends Component {
     };
 
     render() {
-        if (this.props.response === true) {
+        if(this.props.response)
+        {
             if (this.props.message === "The item you are searching for does not exist")
                 return (
                     <div className="parallax-collections-delete">
@@ -56,7 +58,8 @@ class Delete extends Component {
                                                     primary={true}
                                                     onClick={this.props.onDelete}
                                                     label="Yes"
-                                                    buttonStyle={{backgroundColor: "#ee6e73"}}/>
+                                                    buttonStyle={{backgroundColor: "#ee6e73"}}
+                                                />
                                             </div>
                                             <div style={{padding: 20}}>
                                                 <Link to={`/admin/${this.props.adminId}/collections`}>

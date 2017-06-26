@@ -4,37 +4,37 @@ import RichTextEditor from 'react-rte';
 import {stateToHTML} from 'draft-js-export-html';
 import {convertToRaw} from 'draft-js';
 import {connect} from 'react-redux';
-import * as createCollectionsActions from '../../actions/Collections/manageCollectionsCreateActions.js'
+import * as createActions from '../../actions/Collections/manageCollectionsCreateActions.js'
 import Create from '../../components/Collections/Main Components/Create.jsx'
 import LoadingIndicator from "../../components/Loading Indicator/LoadingIndicator.jsx";
 
 let createHandler = function (dispatch) {
     let getInitialState = function (collectionDescription, pictureDescription) {
-        dispatch(createCollectionsActions.onCreateInitiate(collectionDescription, pictureDescription))
+        dispatch(createActions.onCreateInitiate(collectionDescription, pictureDescription))
     };
 
     let onCollectionNameChange = function (collectionName) {
-        dispatch(createCollectionsActions.onCollectionNameChange(collectionName))
+        dispatch(createActions.onCollectionNameChange(collectionName))
     };
 
     let onCollectionDescriptionChange = function (collectionDescription, __html) {
-        dispatch(createCollectionsActions.onCollectionDescriptionChange(collectionDescription, __html))
+        dispatch(createActions.onCollectionDescriptionChange(collectionDescription, __html))
     };
 
     let onPicturesArrayChange = function (pictures) {
-        dispatch(createCollectionsActions.onPicturesArrayChange(pictures))
+        dispatch(createActions.onPicturesArrayChange(pictures))
     };
 
     let onAddInputField = function (pictures, pictureDescription) {
-        dispatch(createCollectionsActions.onAddInputField(pictures, pictureDescription))
+        dispatch(createActions.onAddInputField(pictures, pictureDescription))
     };
 
     let onRemoveInputField = function (pictures, index) {
-        dispatch(createCollectionsActions.onRemoveInputField(pictures, index))
+        dispatch(createActions.onRemoveInputField(pictures, index))
     };
 
     let onSave = function (collectionName, collectionDescriptionRaw, pictures) {
-        dispatch(createCollectionsActions.onSaveCollection(collectionName, collectionDescriptionRaw, pictures))
+        dispatch(createActions.onSaveCollection(collectionName, collectionDescriptionRaw, pictures))
     };
 
     return {

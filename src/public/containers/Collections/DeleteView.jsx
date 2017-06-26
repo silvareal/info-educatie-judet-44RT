@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 import Delete from '../../components/Collections/Main Components/Delete.jsx';
 import NotFoundView from "../Error/NotFoundView.jsx";
 import {connect} from 'react-redux';
-import * as deleteCollectionsActions from '../../actions/Collections/manageCollectionsDeleteActions.js'
+import * as deleteActions from '../../actions/Collections/manageCollectionsDeleteActions.js'
 
 let createHandlers = function (dispatch) {
     let getCollection = function (collectionId) {
-        dispatch(deleteCollectionsActions.onDeleteInitiate(collectionId))
+        dispatch(deleteActions.onDeleteInitiate(collectionId))
     };
 
     let onDelete = function (collectionId, collectionName, collectionDescriptionRaw, picturesArray) {
-        dispatch(deleteCollectionsActions.onDeleteExecute(collectionId, collectionName, collectionDescriptionRaw, picturesArray))
+        dispatch(deleteActions.onDeleteExecute(collectionId, collectionName, collectionDescriptionRaw, picturesArray))
     };
 
     return {

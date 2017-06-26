@@ -1,85 +1,36 @@
 import React, {Component} from 'react'
-
+import PropTypes from 'prop-types';
 import Delete from '../../../components/Admin/Collections/Main Components/Delete.jsx';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
-import Auth from '../../../modules/Auth.js';
 import NotFoundView from '../../Error/NotFoundView.jsx';
+import {connect} from 'react-redux';
 import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
+import * as deleteActions from '../../../actions/Admin/Collections/manageCollectionsDeleteActionsAdmin.js';
+
+let createHandlers = function (dispatch) {
+    let getCollection = function (collectionId) {
+        dispatch(deleteActions.onDeleteInitiate(collectionId))
+    };
+
+    let onDelete = function (collectionId, ownerId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, picturesArray) {
+        dispatch(deleteActions.onDeleteExecute(collectionId, ownerId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, picturesArray))
+    };
+
+    return {
+        getCollection,
+        onDelete
+    }
+};
 
 class DeleteView extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            message: '',
-            response: false,
-            ownerId: '',
-            collectionName: '',
-            collectionDescription: '',
-            pictures:[{}],
-            userName: '',
-            profilePictureLink: '',
-            qrLink: '',
-            isAdmin: false
-        };
-    };
-
-    adminAuth = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/adminAuthentication');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //User is an admin
-                this.setState({
-                    isAdmin: true
-                })
-            }
-            else this.setState({isAdmin: false})
-        });
-        xhr.send();
-    };
-
-    getCollection = () => {
-        const collectionId = encodeURIComponent(this.props.params._collectionId);
-
-        const formData = `collectionId=${collectionId}`;
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/admin/deleteShowCollection');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                    this.setState({
-                        message: xhr.response.message,
-                        response: true,
-                        collectionName: xhr.response.collection.collectionName,
-                        collectionDescription: xhr.response.collection.collectionDescription,
-                        pictures: xhr.response.collection.picturesArray,
-                        ownerId: xhr.response.collection.userId,
-                        userName: xhr.response.collection.userName,
-                        qrLink: xhr.response.collection.qrLink,
-                        profilePictureLink: xhr.response.collection.profilePictureLink
-                    });
-            }
-            else {
-                //Collection or user doesn't exist
-                this.setState({
-                    message: xhr.response.message,
-                    response: "Error"
-                })
-            }
-        });
-        xhr.send(formData)
+        this.handlers = createHandlers(this.props.dispatch);
     };
 
     componentDidMount() {
         this.resetScroll();
-        this.adminAuth();
-        this.getCollection();
+        this.handlers.getCollection(this.props.params._collectionId);
     };
 
     resetScroll = () => {
@@ -87,69 +38,99 @@ class DeleteView extends Component {
     };
 
     onDelete = () => {
-        if (this.state.response === true) {
-
+        if (this.props.collection.response === true) {
             this.resetScroll();
-
-            const ownerId = encodeURIComponent(this.state.ownerId);
-            const collectionName = encodeURIComponent(this.state.collectionName);
-            const collectionDescription = encodeURIComponent(this.state.collectionDescription);
-            const picturesArray = encodeURIComponent(JSON.stringify(this.state.pictures));
-            const collectionId = encodeURIComponent(this.props.params._collectionId);
-            const userName = encodeURIComponent(this.state.userName);
-            const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
-            const qrLink = encodeURIComponent(this.state.qrLink);
-
-            const formData = `qrLink=${qrLink}&profilePictureLink=${profilePictureLink}&userName=${userName}&ownerId=${ownerId}&collectionId=${collectionId}&collectionName=${collectionName}&collectionDescription=${collectionDescription}&picturesArray=${picturesArray}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('post', '/admin/deleteCollection');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.response === 200) {
-                    //Collection was successfully deleted
-                    this.setState({
-                        message: xhr.response.message
-                    });
-                }
-                else {
-                    //Collection was not deleted/Was already deleted/Database error
-                    this.setState({
-                        message: xhr.response.message
-                    });
-                }
-            });
-            xhr.send(formData);
+            const collectionId = this.props.params._collectionId;
+            const ownerId = this.props.collection.userId;
+            const userName = this.props.collection.userName;
+            const profilePictureLink = this.props.collection.profilePictureLink;
+            const collectionName = this.props.collection.collectionName;
+            const collectionDescriptionRaw = this.props.collection.collectionDescriptionRaw;
+            const pictures = this.props.collection.pictures;
+            this.handlers.onDelete(collectionId, ownerId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, pictures);
         }
     };
 
     render() {
-        if (this.state.collectionName)
-            document.title = "Delete - " + this.state.collectionName;
+        if (this.props.collection.collectionName)
+            document.title = "Delete - " + this.props.collection.collectionName;
         else document.title = "404 not found";
-        if (this.state.response === "Error")
+        if (this.props.collection.response === "Error")
             return <NotFoundView/>;
-        if(this.state.response === false && this.state.isAdmin !== true)
-            return (
-                <div className="parallax-collections-delete">
-                    <div className="top-bar-spacing"/>
-                    <LoadingIndicator/>
-                </div>
-            );
-        if (this.state.isAdmin === true)
-        {
-            return (
-                <Delete
-                    response={this.state.response}
-                    adminId={this.props.params._id}
-                    message={this.state.message}
-                    onDelete={this.onDelete}/>
-            )
-        }
-        else return <NotAuthorizedView/>
+        if (this.props.credentials.admin === true)
+            return <Delete
+                response={this.props.collection.response}
+                adminId={this.props.params._id}
+                message={this.props.collection.message}
+                onDelete={this.onDelete}/>;
+        else if (this.props.credentials.admin === false) return <NotAuthorizedView/>;
+        else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
+
     }
 }
 
-export default DeleteView
+DeleteView.propTypes = {
+    credentials: React.PropTypes.shape({
+        admin: PropTypes.bool,
+        fetched: PropTypes.bool,
+        fetching: PropTypes.bool
+    }),
+    collection: React.PropTypes.shape({
+        response: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.bool
+        ]),
+        message: PropTypes.string,
+        collection: React.PropTypes.shape({
+            collectionName: PropTypes.string,
+            collectionDescriptionRaw: PropTypes.string,
+            pictures: React.PropTypes.shape({
+                pictureName: PropTypes.string,
+                pictureLink: PropTypes.string,
+                pictureDescriptionRaw: PropTypes.string
+            })
+        })
+    })
+};
+
+const credentials = (state) => {
+    if (state.userReducer.fetching === true)
+        return {
+            fetching: true,
+            fetched: false,
+            admin: null
+        };
+    else if (state.userReducer.data) {
+        return {
+            fetching: false,
+            fetched: true,
+            admin: state.userReducer.data.admin
+        }
+    }
+    else return {
+            fetched: true,
+            fetching: false,
+            admin: false
+        }
+};
+
+const collection = (state) => {
+    const statePath = state.manageCollectionsDeleteReducerAdmin;
+    return {
+        response: statePath.response,
+        message: statePath.message,
+        collectionName: statePath.collectionName,
+        collectionDescriptionRaw: statePath.collectionDescriptionRaw,
+        pictures: statePath.pictures,
+        userId: statePath.userId,
+        userName: statePath.userName,
+        profilePictureLink: statePath.profilePictureLink
+    }
+};
+
+const mapStateToProps = (state) => ({
+    credentials: credentials(state),
+    collection: collection(state)
+});
+
+export default connect(mapStateToProps)(DeleteView)

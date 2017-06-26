@@ -68,29 +68,6 @@ class CreateView extends Component {
     constructor(props) {
         super(props);
         this.handlers = createHandler(this.props.dispatch);
-        this.state = {
-            userId: '',
-            successCreation: '',
-            collectionName: '',
-            inputCount: 1,
-            errorMessage: '',
-            errors: {},
-            errorsPicturesArray: {},
-            pictureNameError: [],
-            pictureDescriptionError: [],
-            pictureLinkError: [],
-            pictures: [{
-                pictureName: '',
-                pictureLink: '',
-                pictureDescription: RichTextEditor.createEmptyValue(),
-                pictureDescriptionRaw: '',
-            }],
-            collectionDescription: RichTextEditor.createEmptyValue(),
-            __html: '',
-            isAdmin: false,
-            userNameToAdd: '',
-            userProfilePictureLink: ''
-        };
     };
 
     componentDidMount() {
@@ -188,41 +165,46 @@ class CreateView extends Component {
     render() {
         // make sure to check if user is admin
         document.title = "Create collections - Admin Controlled";
-        return (
-            <Create
-                adminId={this.props.params._id}
-                userId={this.props.UIState.userId}
-                onUserIdChange={this.onUserIdChange}
-                userName={this.props.UIState.userName}
-                onUserNameChange={this.onUserNameChange}
-                profilePictureLink={this.props.UIState.profilePictureLink}
-                onProfilePictureLinkChange={this.onProfilePictureLinkChange}
-                collectionName={this.props.UIState.collectionName}
-                onCollectionNameChange={this.onCollectionNameChange}
-                collectionDescription={this.props.UIState.collectionDescription}
-                onCollectionDescriptionChange={this.onCollectionDescriptionChange}
-                __html={this.props.UIState.__html}
-                getHTML={this.getHTML}
-                pictures={this.props.UIState.pictures}
-                handlePicturesNameChange={this.handlePicturesNameChange}
-                handlePicturesLinkChange={this.handlePicturesLinkChange}
-                handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
-                handleAddPictures={this.handleAddPictures}
-                handleRemovePictures={this.handleRemovePictures}
-                onSave={this.onSave}
-                message={this.props.UIState.errorMessage}
-                successCreation={this.props.UIState.successCreation}
-                errors={this.props.UIState.errors}
-                pictureNameError={this.props.UIState.pictureNameError}
-                pictureDescriptionError={this.props.UIState.pictureDescriptionError}
-                pictureLinkError={this.props.UIState.pictureLinkError}
-            />)
+        if (this.props.credentials.admin === true)
+            return (
+                <Create
+                    adminId={this.props.params._id}
+                    userId={this.props.UIState.userId}
+                    onUserIdChange={this.onUserIdChange}
+                    userName={this.props.UIState.userName}
+                    onUserNameChange={this.onUserNameChange}
+                    profilePictureLink={this.props.UIState.profilePictureLink}
+                    onProfilePictureLinkChange={this.onProfilePictureLinkChange}
+                    collectionName={this.props.UIState.collectionName}
+                    onCollectionNameChange={this.onCollectionNameChange}
+                    collectionDescription={this.props.UIState.collectionDescription}
+                    onCollectionDescriptionChange={this.onCollectionDescriptionChange}
+                    __html={this.props.UIState.__html}
+                    getHTML={this.getHTML}
+                    pictures={this.props.UIState.pictures}
+                    handlePicturesNameChange={this.handlePicturesNameChange}
+                    handlePicturesLinkChange={this.handlePicturesLinkChange}
+                    handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
+                    handleAddPictures={this.handleAddPictures}
+                    handleRemovePictures={this.handleRemovePictures}
+                    onSave={this.onSave}
+                    message={this.props.UIState.errorMessage}
+                    successCreation={this.props.UIState.successCreation}
+                    errors={this.props.UIState.errors}
+                    pictureNameError={this.props.UIState.pictureNameError}
+                    pictureDescriptionError={this.props.UIState.pictureDescriptionError}
+                    pictureLinkError={this.props.UIState.pictureLinkError}
+                />);
+        else if (this.props.credentials.admin === false) return <NotAuthorizedView/>;
+        else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
     }
 }
 
 CreateView.propTypes = {
     credentials: React.PropTypes.shape({
-        admin: PropTypes.bool
+        admin: PropTypes.bool,
+        fetched: PropTypes.bool,
+        fetching: PropTypes.bool
     }),
     UIState: React.PropTypes.shape({
         userId: PropTypes.string,
@@ -243,14 +225,20 @@ CreateView.propTypes = {
 const credentials = (state) => {
     if (state.userReducer.fetching === true)
         return {
+            fetching: true,
+            fetched: false,
             admin: null
         };
     else if (state.userReducer.data) {
         return {
+            fetching: false,
+            fetched: true,
             admin: state.userReducer.data.admin
         }
     }
     else return {
+            fetched: true,
+            fetching: false,
             admin: false
         }
 };
