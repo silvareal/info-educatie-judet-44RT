@@ -143,10 +143,11 @@ router.post('/contact', (req, res) => {
                 }
 
                 const userId = decoded.sub;
+                const userName = decoded.userName;
 
                 const contactData = {
                     userId: userId,
-                    userName: req.body.userName,
+                    userName: userName,
                     feedback: req.body.feedback
                 };
 

@@ -48,6 +48,14 @@ export const ON_CLOSE_COVER_PICTURE_MODAL = 'ON_CLOSE_COVER_PICTURE_MODAL';
 export const ON_SLIDE_INDEX_PROFILE_CHANGE = 'ON_SLIDE_INDEX_PROFILE_CHANGE';
 export const ON_CLOSE_SNACK_BAR = 'ON_CLOSE_SNACK_BAR'; // open event is handled by ON_UPDATE_PROFILE_SUCCESS
 
+// Feedback actions
+
+//View
+export const ON_FEEDBACK_CHANGE = 'ON_FEEDBACK_CHANGE';
+export const ON_SAVE_FEEDBACK_INITIATE = 'ON_SAVE_FEEDBACK_INITIATE';
+export const ON_SAVE_FEEDBACK_SUCCESS = 'ON_SAVE_FEEDBACK_SUCCESS';
+export const ON_SAVE_FEEDBACK_FAILURE = 'ON_SAVE_FEEDBACK_FAILURE';
+
 // Collections actions
 
 // Search Actions - Universal Action

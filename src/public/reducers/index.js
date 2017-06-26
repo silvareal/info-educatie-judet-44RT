@@ -13,6 +13,7 @@ import manageCollectionsUpdateReducer from './Collections/manageCollectionsUpdat
 import signUpReducer from './Authentication/signUpReducer.js';
 import loginReducer from './Authentication/loginReducer.js';
 import profileReducer from './Profile/profileReducer.js';
+import contactReducer from './Contact/contactReducer.js';
 
 const rootReducer = combineReducers({
     userReducer: userReducer,
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
     browseCollectionsReadAllReducer: browseCollectionsReadAllReducer,
     signUpReducer: signUpReducer,
     loginReducer: loginReducer,
-    profileReducer: profileReducer
+    profileReducer: profileReducer,
+    contactReducer: contactReducer
 });
 
 export default rootReducer

@@ -438,6 +438,13 @@ class Profile extends Component {
     }
 }
 
+Profile.propTypes = {
+    openProfilePicture: PropTypes.bool,
+    openCoverPicture: PropTypes.bool,
+    slideIndex: PropTypes.number,
+    openSnackBar: PropTypes.bool
+};
+
 const mapStateToProps = (state) => {
     return {
         openProfilePicture: state.profileReducer.openProfilePicture,

@@ -4,7 +4,6 @@ import {TextField, Card, CardActions, RaisedButton} from 'material-ui';
 
 class Contact extends Component {
     render() {
-
         const styles = {
             cardText: {
                 textAlign: "center",
@@ -23,7 +22,6 @@ class Contact extends Component {
                 width: "100%"
             }
         };
-
         return (
             <div className="parallax-contact">
                 <div className="top-bar-spacing"/>
@@ -40,7 +38,7 @@ class Contact extends Component {
                                     </div> : null}
                                 <TextField value={this.props.feedback}
                                            onChange={this.props.onFeedbackChange}
-                                           errorText={this.props.errors.feedback}
+                                           errorText={this.props.errors && this.props.errors.feedback ? this.props.errors.feedback : null}
                                            hintText="Write us anything you want to see improve or added"
                                            multiLine={true}
                                            rows={1}

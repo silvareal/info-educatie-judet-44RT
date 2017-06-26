@@ -1,19 +1,28 @@
 import React, {Component} from 'react';
-
-import Auth from '../../modules/Auth.js';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import * as contactActions from '../../actions/Contact/contactActions.js';
 import Contact from '../../components/Contact/Contact.jsx';
+
+let createHandler = function (dispatch) {
+    let onFeedbackChange = function (feedback) {
+        dispatch(contactActions.onFeedbackChange(feedback))
+    };
+
+    let onSaveFeedback = function (feedback) {
+        dispatch(contactActions.onSaveFeedback(feedback))
+    };
+
+    return {
+        onFeedbackChange,
+        onSaveFeedback
+    }
+};
 
 class ContactView extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            userName: '',
-            feedback: '',
-            errors: {},
-            success: '',
-            guest: false
-        }
+        this.handlers = createHandler(this.props.dispatch);
     }
 
     resetScroll = () => {
@@ -22,74 +31,40 @@ class ContactView extends Component {
 
     componentDidMount() {
         this.resetScroll();
-        this.getCredentials();
     }
 
-    getCredentials = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/home/credentials');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-
-                //Check for guest
-                xhr.response.guest ?
-                    this.setState({
-                        guest: xhr.response.guest
-                    })
-                    :
-                    this.setState({
-                        guest: xhr.response.guest,
-                        userName: xhr.response.userName
-                    })
-            }
-        });
-        xhr.send();
-    };
-
     onFeedbackChange = (e) => {
-        this.setState({feedback: e.target.value});
+        this.handlers.onFeedbackChange(e.target.value);
     };
 
     onSave = () => {
-
-        const userName = encodeURIComponent(this.state.userName);
-        const feedback = encodeURIComponent(this.state.feedback);
-
-        const formData = `userName=${userName}&feedback=${feedback}`;
-
-        const xhr = new XMLHttpRequest();
-        xhr.open("post", "/home/contact");
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                this.setState({
-                    errors: {},
-                    success: true,
-                    feedback: ''
-                })
-            }
-            else {
-                const errors = xhr.response.errors ? xhr.response.errors : {};
-                this.setState({errors, success: false})
-            }
-        });
-
-        xhr.send(formData);
+        this.handlers.onSaveFeedback(this.props.feedback);
     };
 
     render() {
-        return <Contact errors={this.state.errors}
-                        guest={this.state.guest}
-                        feedback={this.state.feedback}
-                        onFeedbackChange={this.onFeedbackChange}
-                        onSave={this.onSave}
-                        success={this.state.success}
-                        />
+        return <Contact
+            feedback={this.props.feedback}
+            success={this.props.success}
+            errors={this.props.errors}
+            onFeedbackChange={this.onFeedbackChange}
+            onSave={this.onSave}
+
+        />
     }
 }
 
-export default ContactView;
+ContactView.propTypes = {
+    feedback: PropTypes.string,
+    success: PropTypes.bool,
+    errors: PropTypes.object
+};
+
+const mapStateToProps = (state) => {
+    return {
+        feedback: state.contactReducer.feedback,
+        success: state.contactReducer.success,
+        errors: state.contactReducer.errors
+    }
+};
+
+export default connect(mapStateToProps)(ContactView)
