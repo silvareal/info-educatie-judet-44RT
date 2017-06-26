@@ -9,7 +9,6 @@ import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 import NotFoundView from '../../../containers/Error/NotFoundView.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
-
 import {
     RaisedButton,
     Step,

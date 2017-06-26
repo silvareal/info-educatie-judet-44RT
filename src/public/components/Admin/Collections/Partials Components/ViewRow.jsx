@@ -7,7 +7,7 @@ class ViewRow extends Component {
         return (
             <Card className="picture-separator">
                 <Link
-                    to={`/admin/${this.props.adminId}/collections/readOne/${this.props.collection._id}`}
+                    to={`/collections/${this.props.collection._id}`}
                     target="_blank"
                 >
                     <CardMedia

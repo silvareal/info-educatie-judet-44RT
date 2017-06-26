@@ -18,6 +18,7 @@ import browseCollectionsReadOneReducer from './Browse/browseCollectionsReadOneRe
 import manageCollectionsCreateReducerAdmin from './Admin/Collections/manageCollectionsCreateReducerAdmin.js';
 import manageCollectionsDeleteReducerAdmin from './Admin/Collections/manageCollectionsDeleteReducerAdmin.js';
 import manageCollectionsReadAllReducerAdmin from './Admin/Collections/manageCollectionsReadAllReducerAdmin.js';
+import manageCollectionsUpdateReducerAdmin from './Admin/Collections/manageCollectionsUpdateReducerAdmin.js';
 
 const rootReducer = combineReducers({
     signUpReducer: signUpReducer,
@@ -38,7 +39,8 @@ const rootReducer = combineReducers({
     contactReducer: contactReducer,
     manageCollectionsCreateReducerAdmin: manageCollectionsCreateReducerAdmin,
     manageCollectionsDeleteReducerAdmin: manageCollectionsDeleteReducerAdmin,
-    manageCollectionsReadAllReducerAdmin: manageCollectionsReadAllReducerAdmin
+    manageCollectionsReadAllReducerAdmin: manageCollectionsReadAllReducerAdmin,
+    manageCollectionsUpdateReducerAdmin: manageCollectionsUpdateReducerAdmin
 });
 
 export default rootReducer

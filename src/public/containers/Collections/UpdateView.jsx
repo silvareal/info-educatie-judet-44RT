@@ -50,7 +50,6 @@ let createHandler = function (dispatch) {
 class UpdateView extends Component {
     constructor(props) {
         super(props);
-
         this.handlers = createHandler(this.props.dispatch);
     };
 
@@ -197,7 +196,6 @@ UpdateView.propTypes = {
     pictureDescriptionError: PropTypes.array,
     successUpdate: PropTypes.bool,
     message: PropTypes.string,
-
 };
 
 const mapStateToProps = (state) => {
