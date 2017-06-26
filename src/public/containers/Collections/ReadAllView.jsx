@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import * as collectionsActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
 import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
+import LoadingIndicator from "../../components/Loading Indicator/LoadingIndicator.jsx";
 
 let createHandler = function (dispatch) {
     let updateCollectionsStore = function () {
@@ -92,7 +93,8 @@ ReadAllView.propTypes = {
 const collections = (state) => {
     if (state.manageCollectionsReadAllReducer.fetching === true) {
         return {
-            fetchingCollections: true
+            fetchingCollections: true,
+            fetchedCollections: false
         }
     }
     else if (state.manageCollectionsReadAllReducer.collections) {

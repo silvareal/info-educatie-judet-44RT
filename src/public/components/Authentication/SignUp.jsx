@@ -4,13 +4,11 @@ import {Card, CardText, RaisedButton, TextField} from 'material-ui';
 
 class SignUp extends Component {
     render() {
-
         const styles = {
             button: {
                 width: '100%',
             }
         };
-
         return (
             <div className="parallax-signup">
                 <div className="top-bar-spacing"/>

@@ -16,12 +16,12 @@ function validateProfileForm(payload) {
     //we do not check for the lack of credentials but for length and type
 
     //longest name in the world is 898 characters long
-    if (typeof payload.firstName !== 'string' || payload.firstName.trim().length > 899) {
+    if (typeof payload.firstName !== 'string' || payload.firstName.trim().length > 30) {
         isFormValid = false;
         errors.firstName = "Please use a valid first/given name"
     }
 
-    if (typeof payload.lastName !== 'string' || payload.lastName.trim().length > 899) {
+    if (typeof payload.lastName !== 'string' || payload.lastName.trim().length > 30) {
         isFormValid = false;
         errors.lastName = "Please use a valid last/family name"
     }
@@ -125,8 +125,8 @@ router.post('/profile', (req, res) => {
                 }
 
                 const data = {
-                    name: user.name,
                     userId: userId,
+                    name: user.name,
                     firstName: user.firstName,
                     lastName: user.lastName,
                     birthDate: user.birthDate,
@@ -137,7 +137,7 @@ router.post('/profile', (req, res) => {
                     profilePictureLink: user.profilePictureLink,
                     profileCover: user.profileCover,
                     ownUser: boole,
-                    latestCollection: collections
+                    latestCollections: collections
                 };
 
                 return res.json({

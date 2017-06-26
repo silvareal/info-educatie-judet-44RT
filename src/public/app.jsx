@@ -30,6 +30,11 @@ socket.on("updateCollectionsStore", () => {
     store.dispatch(setShouldUpdate());
 });
 
+if (Auth.isUserAuthenticated()){
+    store.dispatch(getCredentials());
+    store.dispatch(getAllCollections());
+}
+
 socket.on("getCredentials", () => {
     // Requires the user to be authenticated
     if (Auth.isUserAuthenticated()){

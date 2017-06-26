@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import * as profileActions from '../../actions/Profile/profileActions.js'
 import {
     Tabs,
     Tab,
@@ -21,63 +24,84 @@ import LoadingIndicator from '../Loading Indicator/LoadingIndicator.jsx';
 import ImageCameraRoll from 'material-ui/svg-icons/image/camera-roll';
 import ActionAccountBox from 'material-ui/svg-icons/action/account-box';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
+import NotFoundView from '../../containers/Error/NotFoundView.jsx';
+
+let createHandler = function (dispatch) {
+    let openProfilePictureModal = function () {
+        dispatch(profileActions.openProfilePictureModal())
+    };
+
+    let closeProfilePictureModal = function () {
+        dispatch(profileActions.closeProfilePictureModal())
+    };
+
+    let openProfileCoverModal = function () {
+        dispatch(profileActions.openProfileCoverModal())
+    };
+
+    let closeProfileCoverModal = function () {
+        dispatch(profileActions.closeProfileCoverModal())
+    };
+
+    let onSlideIndexChange = function (slideIndex) {
+        dispatch(profileActions.onSlideIndexChange(slideIndex))
+    };
+
+    let closeSnackBar = function () {
+        dispatch(profileActions.closeSnackBar())
+    };
+
+    return {
+        openProfilePictureModal,
+        closeProfilePictureModal,
+        openProfileCoverModal,
+        closeProfileCoverModal,
+        onSlideIndexChange,
+        closeSnackBar
+    }
+};
 
 class Profile extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            open1: false,
-            open2: false,
-            //initial index in the one containing credentials
-            slideIndex: 1,
-            openSnackbar: false
-        };
+        this.handlers = createHandler(this.props.dispatch);
     }
 
-    handleOpen1 = () => {
-        this.setState({open1: true});
-    };
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.openSnackBar === true) {
+            setTimeout(() => this.handlers.closeSnackBar(), 4000)
+        }
+    }
 
-    handleClose1 = () => {
-        this.setState({open1: false});
-    };
-
-    handleOpen2 = () => {
-        this.setState({open2: true});
-    };
-
-    handleClose2 = () => {
-        this.setState({open2: false});
-    };
-
-    handleChange = (value) => {
-        this.setState({
-            slideIndex: value,
-        });
-    };
-
-    //combine saving to localStorage of backup credentials with the modal open effect.
-    //when canceled, the component must have the same state as before and we set it with the data stored in localStorage before the edit attempt.
-    combineOpenFunctions1 = (e) => {
+    openProfilePictureModal = (e) => {
         e.stopPropagation();
-        this.props.onEdit();
-        this.handleOpen1();
+        this.handlers.openProfilePictureModal();
     };
 
-    combineOpenFunctions2 = () => {
-        this.props.onEdit();
-        this.handleOpen2();
+    closeProfilePictureModal = () => {
+        this.handlers.closeProfilePictureModal();
     };
 
-    combineCloseFunctions1 = () => {
+    openProfileCoverModal = () => {
+        this.handlers.openProfileCoverModal();
+    };
+
+    closeProfileCoverModal = () => {
+        this.handlers.closeProfileCoverModal();
+    };
+
+    onSlideIndexChange = (value) => {
+        this.handlers.onSlideIndexChange(value)
+    };
+
+    combineFunctionsProfilePicture = () => {
         this.props.onCancelEdit();
-        this.handleClose1();
+        this.closeProfilePictureModal();
     };
 
-    combineCloseFunctions2 = () => {
+    combineFunctionsProfileCover = () => {
         this.props.onCancelEdit();
-        this.handleClose2();
+        this.closeProfileCoverModal();
     };
 
     render() {
@@ -86,12 +110,12 @@ class Profile extends Component {
                 label="Cancel"
                 buttonStyle={{backgroundColor: "#eb7077"}}
                 labelStyle={{color: "#ffffff"}}
-                onTouchTap={this.handleClose1}
+                onTouchTap={this.closeProfilePictureModal}
                 onClick={this.props.onCancelEdit}
             />,
             <RaisedButton
                 label="Save"
-                onTouchTap={this.handleClose1}
+                onTouchTap={this.closeProfilePictureModal}
                 onClick={this.props.onSave}
                 buttonStyle={{backgroundColor: "#42ab9e"}}
                 labelStyle={{color: "#ffffff"}}
@@ -103,21 +127,21 @@ class Profile extends Component {
                 label="Cancel"
                 buttonStyle={{backgroundColor: "#eb7077"}}
                 labelStyle={{color: "#ffffff"}}
-                onTouchTap={this.handleClose2}
+                onTouchTap={this.closeProfileCoverModal}
                 onClick={this.props.onCancelEdit}
             />,
             <RaisedButton
                 label="Save"
                 buttonStyle={{backgroundColor: "#42ab9e"}}
                 labelStyle={{color: "#ffffff"}}
-                onTouchTap={this.handleClose2}
+                onTouchTap={this.closeProfileCoverModal}
                 onClick={this.props.onSave}
             />
         ];
 
         const DateTimeFormat = global.Intl.DateTimeFormat;
 
-        const date = new Date(this.props.birthDate);
+        const date = new Date(this.props.profile.birthDate);
 
         const formattedDate =
             <div>
@@ -127,37 +151,37 @@ class Profile extends Component {
         return (
             <div className="parallax-profile">
                 <div className="top-bar-spacing"/>
-                {this.props.fetchedProfile ?
+                {this.props.profile.fetchedProfile === true && this.props.profile.fetchingProfile === false ?
                     <Card className="container-profile" style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
                         <Card className="cover-container">
                             <CardMedia
-                                onClick={this.props.ownUser ? this.combineOpenFunctions2 : null}
+                                onClick={this.props.profile.ownUser ? this.openProfileCoverModal : null}
                                 className="force-no-overlay-background"
                                 overlay=
                                     {
                                         <Card style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
                                             <CardMedia className="force-profile-picture-width">
                                                 <img
-                                                    onClick={this.props.ownUser ? this.combineOpenFunctions1 : null}
+                                                    onClick={this.props.profile.ownUser ? this.openProfilePictureModal : null}
                                                     style={{borderRadius: "50%"}}
-                                                    src={this.props.profilePictureLink ? this.props.profilePictureLink : "/images/img9.jpg"}/>
+                                                    src={this.props.profile.profilePictureLink ? this.props.profile.profilePictureLink : "/images/img9.jpg"}/>
                                                 <Dialog
                                                     title="Change profile picture"
                                                     actions={actions1}
                                                     modal={false}
-                                                    open={this.state.open1}
-                                                    onRequestClose={this.combineCloseFunctions1}
+                                                    open={this.props.openProfilePicture}
+                                                    onRequestClose={this.combineFunctionsProfilePicture}
                                                     autoScrollBodyContent={true}
                                                 >
                                                     <CardMedia>
                                                         <img
                                                             style={{borderRadius: "50%"}}
-                                                            src={this.props.profilePictureLink ? this.props.profilePictureLink : "/images/img9.jpg"}/>
+                                                            src={this.props.profile.profilePictureLink ? this.props.profile.profilePictureLink : "/images/img9.jpg"}/>
                                                     </CardMedia>
                                                     <TextField
                                                         floatingLabelText="Profile picture link"
-                                                        value={this.props.profilePictureLink}
-                                                        onChange={this.props.ownUser ? this.props.onProfilePictureLinkChange : null}
+                                                        value={this.props.profile.profilePictureLink}
+                                                        onChange={this.props.profile.ownUser ? this.props.onProfilePictureLinkChange : null}
                                                         style={{width: "100%"}}
                                                         inputStyle={{color: "#000000"}}
                                                         floatingLabelStyle={{color: "#ee6e73"}}
@@ -168,26 +192,26 @@ class Profile extends Component {
                                         </Card>
                                     }>
                                 <img
-                                    src={this.props.profileCover ? this.props.profileCover : "/images/img9.jpg"}
+                                    src={this.props.profile.profileCover ? this.props.profile.profileCover : "/images/img9.jpg"}
                                     alt=""/>
                                 <Dialog
                                     title="Change cover picture"
                                     actions={actions2}
                                     modal={false}
-                                    open={this.state.open2}
-                                    onRequestClose={this.combineCloseFunctions2}
+                                    open={this.props.openCoverPicture}
+                                    onRequestClose={this.combineFunctionsProfileCover}
                                     autoScrollBodyContent={true}
                                 >
                                     <CardMedia>
                                         <img
                                             style={{borderRadius: "50%"}}
-                                            src={this.props.profileCover ? this.props.profileCover : "/images/img9.jpg"}/>
+                                            src={this.props.profile.profileCover ? this.props.profile.profileCover : "/images/img9.jpg"}/>
                                     </CardMedia>
                                     <TextField
                                         type="text"
                                         floatingLabelText="Cover pictue link"
-                                        value={this.props.profileCover}
-                                        onChange={this.props.ownUser ? this.props.onProfileCoverChange : null}
+                                        value={this.props.profile.profileCover}
+                                        onChange={this.props.profile.ownUser ? this.props.onProfileCoverChange : null}
                                         style={{width: "100%"}}
                                         inputStyle={{color: "#000000"}}
                                         floatingLabelStyle={{color: "#ee6e73"}}
@@ -197,54 +221,60 @@ class Profile extends Component {
                             </CardMedia>
                             <Card style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
                                 <CardTitle>
-                                    {this.props.firstName ?
+                                    {this.props.profile.firstName ?
                                         <div className="profile-header">
-                                            {this.props.firstName}
-                                            <br/> {"@" + this.props.userName}</div>
+                                            {this.props.profile.firstName}
+                                            <br/> {"@" + this.props.profile.userName}</div>
                                         :
-                                        <div className="profile-header">{this.props.userName}</div>}
+                                        <div className="profile-header">{this.props.profile.userName}</div>}
                                 </CardTitle>
                                 <CardText>
-                                    <Tabs onChange={this.handleChange}
-                                          value={this.state.slideIndex}
+                                    <Tabs onChange={this.onSlideIndexChange}
+                                          value={this.props.slideIndex}
                                           inkBarStyle={{color: "#ee6e73", backgroundColor: "#ee6e73"}}
                                           tabItemContainerStyle={{backgroundColor: "#42ab9e"}}>
                                         <Tab icon={<ImageCameraRoll/>} value={0} onClick={this.props.onCancelEdit}/>
                                         <Tab icon={<ActionAccountBox/>} value={1} onClick={this.props.onCancelEdit}/>
-                                        {this.props.ownUser ?
-                                            <Tab icon={<ActionSettings/>} value={2} onClick={this.props.onEdit}/>
+                                        {this.props.profile.ownUser ?
+                                            <Tab icon={<ActionSettings/>} value={2}/>
                                             :
                                             null
                                         }
                                     </Tabs>
-                                    {this.props.ownUser ?
-                                        <SwipeableViews index={this.state.slideIndex}
-                                                        onChangeIndex={this.handleChange}
+                                    {this.props.profile.ownUser ?
+                                        <SwipeableViews index={this.props.slideIndex}
+                                                        onChangeIndex={this.onSlideIndexChange}
                                                         animateHeight={true}
                                         >
                                             <div>
                                                 <div>
-                                                    {this.props.rows ? this.props.rows : null}
+                                                    {this.props.profile.rows1 ? this.props.profile.rows1 : null}
                                                 </div>
                                                 <div className="mobile-whitespace-fill-profile">
-                                                    {this.props.rows2 ? this.props.rows2 : null}
+                                                    {this.props.profile.rows2 ? this.props.profile.rows2 : null}
                                                 </div>
                                             </div>
                                             <div>
                                                 <List>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.firstName}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.firstName}</div>}
                                                               secondaryText="First name"/>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.lastName}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.lastName}</div>}
                                                               secondaryText="Last name"/>
                                                     <ListItem disabled={true} primaryText={formattedDate}
                                                               secondaryText="Birthday"/>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.profession}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.profession}</div>}
                                                               secondaryText="Job"/>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.companyName}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.companyName}</div>}
                                                               secondaryText="Company name"/>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.city}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.city}</div>}
                                                               secondaryText="Lives in"/>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.country}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.country}</div>}
                                                               secondaryText="Located in"/>
                                                 </List>
                                             </div>
@@ -253,9 +283,9 @@ class Profile extends Component {
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <TextField floatingLabelText="First name"
-                                                                             value={this.props.firstName}
+                                                                             value={this.props.profile.firstName}
                                                                              onChange={this.props.onFirstNameChange}
-                                                                             errorText={this.props.errors.firstName}
+                                                                             errorText={this.props.profile.errors.firstName}
                                                                              inputStyle={{color: "#000000"}}
                                                                              floatingLabelStyle={{color: "#ee6e73"}}
                                                                              underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
@@ -263,9 +293,9 @@ class Profile extends Component {
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <TextField floatingLabelText="Last name"
-                                                                             value={this.props.lastName}
+                                                                             value={this.props.profile.lastName}
                                                                              onChange={this.props.onLastNameChange}
-                                                                             errorText={this.props.errors.lastName}
+                                                                             errorText={this.props.profile.errors.lastName}
                                                                              inputStyle={{color: "#000000"}}
                                                                              floatingLabelStyle={{color: "#ee6e73"}}
                                                                              underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
@@ -286,9 +316,9 @@ class Profile extends Component {
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <TextField floatingLabelText="Job"
-                                                                             value={this.props.profession}
+                                                                             value={this.props.profile.profession}
                                                                              onChange={this.props.onProfessionChange}
-                                                                             errorText={this.props.errors.profession}
+                                                                             errorText={this.props.profile.errors.profession}
                                                                              inputStyle={{color: "#000000"}}
                                                                              floatingLabelStyle={{color: "#ee6e73"}}
                                                                              underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
@@ -296,9 +326,9 @@ class Profile extends Component {
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <TextField floatingLabelText="Company name"
-                                                                             value={this.props.companyName}
+                                                                             value={this.props.profile.companyName}
                                                                              onChange={this.props.onCompanyNameChange}
-                                                                             errorText={this.props.errors.companyName}
+                                                                             errorText={this.props.profile.errors.companyName}
                                                                              inputStyle={{color: "#000000"}}
                                                                              floatingLabelStyle={{color: "#ee6e73"}}
                                                                              underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
@@ -306,9 +336,9 @@ class Profile extends Component {
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <TextField floatingLabelText="City"
-                                                                             value={this.props.city}
+                                                                             value={this.props.profile.city}
                                                                              onChange={this.props.onCityChange}
-                                                                             errorText={this.props.errors.city}
+                                                                             errorText={this.props.profile.errors.city}
                                                                              inputStyle={{color: "#000000"}}
                                                                              floatingLabelStyle={{color: "#ee6e73"}}
                                                                              underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
@@ -316,9 +346,9 @@ class Profile extends Component {
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <TextField floatingLabelText="Country"
-                                                                             value={this.props.country}
+                                                                             value={this.props.profile.country}
                                                                              onChange={this.props.onCountryChange}
-                                                                             errorText={this.props.errors.country}
+                                                                             errorText={this.props.profile.errors.country}
                                                                              inputStyle={{color: "#000000"}}
                                                                              floatingLabelStyle={{color: "#ee6e73"}}
                                                                              underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
@@ -335,33 +365,39 @@ class Profile extends Component {
                                             </div>
                                         </SwipeableViews>
                                         :
-                                        <SwipeableViews index={this.state.slideIndex}
-                                                        onChangeIndex={this.handleChange}
+                                        <SwipeableViews index={this.props.slideIndex}
+                                                        onChangeIndex={this.onSlideIndexChange}
                                                         animateHeight={true}
                                         >
                                             <div>
                                                 <div>
-                                                    {this.props.rows ? this.props.rows : null}
+                                                    {this.props.profile.rows1 ? this.props.profile.rows1 : null}
                                                 </div>
                                                 <div className="mobile-whitespace-fill-profile">
-                                                    {this.props.rows2 ? this.props.rows2 : null}
+                                                    {this.props.profile.rows2 ? this.props.profile.rows2 : null}
                                                 </div>
                                             </div>
                                             <div>
                                                 <List>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.firstName}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.firstName}</div>}
                                                               secondaryText="First name"/>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.lastName}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.lastName}</div>}
                                                               secondaryText="Last name"/>
                                                     <ListItem disabled={true} primaryText={formattedDate}
                                                               secondaryText="Birthday"/>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.profession}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.profession}</div>}
                                                               secondaryText="Job"/>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.companyName}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.companyName}</div>}
                                                               secondaryText="Company name"/>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.city}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.city}</div>}
                                                               secondaryText="Lives in"/>
-                                                    <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.country}</div>}
+                                                    <ListItem disabled={true} primaryText={<div
+                                                        className="dialog-break-word">{this.props.profile.country}</div>}
                                                               secondaryText="Located in"/>
                                                 </List>
                                             </div>
@@ -372,29 +408,43 @@ class Profile extends Component {
                         </Card>
                     </Card>
                     :
+                    null
+                }
+                {this.props.profile.fetchingProfile === true && this.props.profile.fetchedProfile === false ?
                     <LoadingIndicator/>
+                    : null
                 }
-                {this.props.successUpdate && this.props.successUpdate.toString() === "false" && this.props.ownUser ?
-                    <Snackbar
-                        open={true}
-                        message="An error occurred"
-                        onRequestClose={this.props.handleRequestClose}
-                    />
+                {this.props.profile.fetchingProfile === false && this.props.profile.fetchedProfile === false ?
+                    <NotFoundView/>
                     :
                     null
                 }
-                {this.props.successUpdate && this.props.successUpdate.toString() === "true" && this.props.ownUser ?
-                    <Snackbar
-                        open={true}
-                        message="Profile successfully updated!"
-                        onRequestClose={this.props.handleRequestClose}
-                    />
-                    :
-                    null
+                {this.props.profile.fetchingProfile === false && this.props.profile.fetchedProfile === true && this.props.profile.successStatus === false ?
+                    <Snackbar message="An error has occurred"
+                              open={this.props.openSnackBar}
+                              autoHideDuration={6000}
+                              onRequestClose={() => this.handlers.closeSnackBar()}/>
+                    : null
+                }
+                {this.props.profile.fetchingProfile === false && this.props.profile.fetchedProfile === true && this.props.profile.successStatus === true ?
+                    <Snackbar message="Profile successfully updated!"
+                              open={this.props.openSnackBar}
+                              autoHideDuration={6000}
+                              onRequestClose={() => this.handlers.closeSnackBar()}/>
+                    : null
                 }
             </div>
         );
     }
 }
 
-export default Profile
+const mapStateToProps = (state) => {
+    return {
+        openProfilePicture: state.profileReducer.openProfilePicture,
+        openCoverPicture: state.profileReducer.openCoverPicture,
+        slideIndex: state.profileReducer.slideIndex,
+        openSnackBar: state.profileReducer.openSnackBar
+    }
+};
+
+export default connect(mapStateToProps)(Profile)

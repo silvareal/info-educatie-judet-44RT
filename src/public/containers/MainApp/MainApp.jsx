@@ -8,7 +8,6 @@ class MainApp extends Component {
     resetScroll = () => {
         window.scrollTo(0, 0);
     };
-
     render() {
         return (
             <div className="force-parallax">

@@ -11,7 +11,8 @@ import collectionNamesReducer from './AppBar/collectionNamesReducer.js';
 import manageCollectionsReadOneReducer from './Collections/manageCollectionsReadOneReducer.js';
 import manageCollectionsUpdateReducer from './Collections/manageCollectionsUpdateReducer.js';
 import signUpReducer from './Authentication/signUpReducer.js';
-import loginReducer from './Authentication/loginReducer.js'
+import loginReducer from './Authentication/loginReducer.js';
+import profileReducer from './Profile/profileReducer.js';
 
 const rootReducer = combineReducers({
     userReducer: userReducer,
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
     collectionNamesReducer: collectionNamesReducer,
     browseCollectionsReadAllReducer: browseCollectionsReadAllReducer,
     signUpReducer: signUpReducer,
-    loginReducer: loginReducer
+    loginReducer: loginReducer,
+    profileReducer: profileReducer
 });
 
 export default rootReducer
