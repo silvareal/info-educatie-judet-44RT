@@ -10,6 +10,7 @@ class ViewTable extends Component {
                     <ViewRow
                         key={i}
                         collection={collection}
+                        onClickCollection={this.props.onClickCollection}
                     />
                 )
             }.bind(this));

@@ -38,8 +38,9 @@ class ReadAllView extends Component {
 
     onScroll = () => {
         if (this.props.collections.finished === false && document.title === "Manage collections" && this.props.collections.requesting === false) {
-            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
+            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 1000) {
                 this.handlers.loadMore(this.props.collections.loadAfter);
+                this.forceUpdate();
             }
         }
     };

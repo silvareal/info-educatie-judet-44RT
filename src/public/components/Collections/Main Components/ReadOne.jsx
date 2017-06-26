@@ -121,6 +121,8 @@ class ReadOne extends Component {
                     }
                     {this.props.comments && this.props.comments.fetchedComments && this.props.comments.fetchingComments === false ?
                         <CommentList
+                            finished={this.props.finished}
+                            onLoadMoreComments={this.props.onLoadMoreComments}
                             userName={this.props.userName}
                             profilePictureLink={this.props.profilePictureLink}
                             commentsRows={this.props.comments.commentsRows}

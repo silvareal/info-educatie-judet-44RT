@@ -6,17 +6,14 @@ class ViewRow extends Component {
     render() {
         return (
             <Card className="picture-separator">
-                <Link
-                    to={`/manage/readOne/${this.props.collection._id}`}
-                    target="_blank">
                     <CardMedia
+                        onClick={() => this.props.onClickCollection(this.props.collection._id)}
                         mediaStyle={{minHeight: 300}}
                         overlay={<CardTitle title={this.props.collection.collectionName}
                                             subtitle={"by " + this.props.collection.userName}/>}
                     >
                         <img src={this.props.collection.picturesArray[0].pictureLink}/>
                     </CardMedia>
-                </Link>
                 <CardActions >
                     <Link to={`/manage/readOne/${this.props.collection._id}/update`}>
                         <RaisedButton

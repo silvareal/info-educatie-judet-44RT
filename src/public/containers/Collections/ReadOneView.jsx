@@ -36,13 +36,18 @@ let createHandler = function (dispatch) {
         dispatch(readOneActions.onSaveComment(collectionId, comment))
     };
 
+    let resetReducer = function () {
+        dispatch(readOneActions.resetReducer())
+    };
+
     return {
         getCollection,
         getComments,
         loadMoreComments,
         onCommentInputChange,
         getCommentsCount,
-        onSaveComment
+        onSaveComment,
+        resetReducer
     }
 };
 
@@ -52,27 +57,20 @@ class ReadOneView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     }
 
-    onScroll = () => {
-        if (this.props.comments.finished === false && document.title === this.props.collection.collectionName && this.props.comments.requesting === false)
-            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
-                this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.params._id)
-            }
+    onLoadMoreComments = () => {
+        this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.collectionId)
     };
 
     componentDidMount() {
-        console.log("I mount myself");
-        this.handlers.getComments(this.props.params._id);
-        this.handlers.getCollection(this.props.params._id);
-        this.handlers.getCommentsCount(this.props.params._id);
+        this.handlers.getComments(this.props.collectionId);
+        this.handlers.getCollection(this.props.collectionId);
+        this.handlers.getCommentsCount(this.props.collectionId);
 
-        //the load more event listener
-        window.addEventListener('scroll', this.onScroll);
-
-        socket.on('send:comment', this.handlers.getComments(this.props.params._id));
+        socket.on('send:comment', this.handlers.getComments(this.props.collectionId));
     };
 
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.onScroll);
+        this.handlers.resetReducer();
     }
 
     onCommentChange = (e) => {
@@ -82,13 +80,13 @@ class ReadOneView extends Component {
     //for the comment section
     onSave = () => {
 
-        this.handlers.onSaveComment(this.props.params._id, this.props.comments.comment);
-        this.handlers.getComments(this.props.params._id);
-        this.handlers.getCommentsCount(this.props.params._id);
+        this.handlers.onSaveComment(this.props.collectionId, this.props.comments.comment);
+        this.handlers.getComments(this.props.collectionId);
+        this.handlers.getCommentsCount(this.props.collectionId);
 
         socket.emit('send:comment', {
             comment: this.props.comments.comment,
-            collectionId: this.props.params._id,
+            collectionId: this.props.collectionId,
             userName: this.props.credentials.userName,
             firstName: this.props.credentials.firstName,
             userId: this.props.credentials.userId,
@@ -97,13 +95,12 @@ class ReadOneView extends Component {
     };
 
     render() {
-        if (this.props.collection.collectionName && this.props.collection.collectionName)
-            document.title = this.props.collection.collectionName;
-        else document.title = "404 not found";
         if (this.props.collection.fetchedCollection === "Error")
             return <NotFoundView/>;
         return (
             <ReadOne
+                finished={this.props.comments.finished}
+                onLoadMoreComments={this.onLoadMoreComments}
                 fetchedCollection={this.props.collection.fetchedCollection}
                 collection={this.props.collection}
                 collectionDescriptionRaw={this.props.collection.collectionDescriptionRaw}
@@ -253,7 +250,8 @@ const comments = (state) => {
             fetchedComments: false,
             fetchingComments: true,
             comment: state.manageCollectionsReadOneReducer.comment,
-            commentsCount: state.manageCollectionsReadOneReducer.commentsCount
+            commentsCount: state.manageCollectionsReadOneReducer.commentsCount,
+            finished: false
         };
     else if (state.manageCollectionsReadOneReducer.fetched === true && state.manageCollectionsReadOneReducer.fetching === false) {
         if (state.manageCollectionsReadOneReducer.comments.data.comments.length !== 0) {
@@ -297,9 +295,13 @@ const comments = (state) => {
             fetchingComments: false,
             commentsRows: null,
             comment: state.manageCollectionsReadOneReducer.comment,
-            commentsCount: state.manageCollectionsReadOneReducer.commentsCount
+            commentsCount: state.manageCollectionsReadOneReducer.commentsCount,
+            finished: true
         }
     }
+    else return {
+            finished: false
+        }
 };
 
 const mapStateToProps = (state) => ({

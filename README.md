@@ -542,3 +542,4 @@ npm install bcrypt
 // SearchView needs to check if shouldUpdate is set to true and fetch collectionNamesReducer again if so
 // Update reducer for manage should use different action names or it will conflict with Create -- FIXED
 // ideea for readOne for the final product: have it in a modal, 90% width 90% height of the page and scrollable. use a function to retrieve all needed stuff based on collectionId and have it pop over ReadAll. that way, scroll doesn t need to be preserved since the page is the same and there will be no need to use target _blank to avoid "THE BUG"
+// added above ideea. pending feedback from Cristiana . Note: ReadOne as it is must still be kept for instant share links
