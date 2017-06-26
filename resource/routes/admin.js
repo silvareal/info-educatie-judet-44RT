@@ -63,11 +63,6 @@ function validateCreateCollectionForm(payload) {
         isFormValid = false;
         errors.collectionDescriptionRaw = "Please use a valid description"
     }
-    // validate qr code link's length
-    if (!payload.qrLink || typeof payload.qrLink !== 'string' || payload.qrLink.trim().length > 10000) {
-        isFormValid = false;
-        errors.qrLink = "Link missing or too long"
-    }
 
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
 
@@ -133,11 +128,6 @@ function validateUpdateCollectionsForm(payload) {
     if (!payload.collectionDescriptionRaw || typeof payload.collectionDescriptionRaw !== 'string' || payload.collectionDescriptionRaw.trim().length > 5000) {
         isFormValid = false;
         errors.collectionDescriptionRaw = "Please use a valid description"
-    }
-    // validate qr code link's length
-    if (!payload.qrLink || typeof payload.qrLink !== 'string' || payload.qrLink.trim().length > 10000) {
-        isFormValid = false;
-        errors.qrLink = "Please use a shorter link"
     }
 
     let errorsPicturesArray = JSON.parse(payload.picturesArray);
@@ -989,7 +979,6 @@ router.post("/createCollection", (req, res) => {
                 collectionName: req.body.collectionName,
                 collectionDescriptionRaw: req.body.collectionDescriptionRaw,
                 picturesArray: JSON.parse(req.body.picturesArray),
-                qrLink: req.body.qrLink,
                 profilePictureLink: req.body.userProfilePictureLink,
                 userName: req.body.userNameToAdd
             };

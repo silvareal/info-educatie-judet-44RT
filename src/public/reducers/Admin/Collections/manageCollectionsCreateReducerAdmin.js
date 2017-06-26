@@ -1,9 +1,12 @@
-import * as types from '../../actions/actionTypes.js';
+import * as types from '../../../actions/actionTypes.js';
 
-export default function manageCollectionsCreateReducer(state = {}, action) {
+export default function manageCollectionsCreateReducerAdmin(state = {}, action) {
     switch (action.type) {
-        case types.ON_CREATE_INITIATE:
+        case types.ON_CREATE_INITIATE_ADMIN_COLLECTIONS:
             return {
+                userId: '',
+                userName: '',
+                profilePictureLink: '',
                 collectionName: '',
                 collectionsDescriptionRaw: '',
                 pictures: [{
@@ -24,25 +27,43 @@ export default function manageCollectionsCreateReducer(state = {}, action) {
                 stepIndex: 0
             };
 
-        case types.ON_COLLECTION_NAME_CHANGE:
+        case types.ON_USER_ID_CHANGE_ADMIN_COLLECTIONS:
+            return {
+                ...state,
+                userId: action.userId
+            };
+
+        case types.ON_USER_NAME_CHANGE_ADMIN_COLLECTIONS:
+            return {
+                ...state,
+                userName: action.userName
+            };
+
+        case types.ON_PROFILE_PICTURE_LINK_CHANGE_ADMIN_COLLECTIONS:
+            return {
+                ...state,
+                profilePictureLink: action.profilePictureLink
+            };
+
+        case types.ON_COLLECTION_NAME_CHANGE_ADMIN_COLLECTIONS:
             return {
                 ...state, collectionName: action.collectionName
             };
 
-        case types.ON_COLLECTION_DESCRIPTION_CHANGE:
+        case types.ON_COLLECTION_DESCRIPTION_CHANGE_ADMIN_COLLECTIONS:
             return {
                 ...state,
                 collectionDescription: action.collectionDescription,
                 __html: action.__html
             };
 
-        case types.ON_PICTURES_ARRAY_CHANGE:
+        case types.ON_PICTURES_ARRAY_CHANGE_ADMIN_COLLECTIONS:
             return {
                 ...state,
                 pictures: action.pictures
             };
 
-        case types.ON_ADD_INPUT_FIELDS:
+        case types.ON_ADD_INPUT_FIELDS_ADMIN_COLLECTIONS:
             return {
                 ...state,
                 pictures: action.pictures.concat([{
@@ -53,19 +74,19 @@ export default function manageCollectionsCreateReducer(state = {}, action) {
                 }])
             };
 
-        case types.ON_REMOVE_INPUT_FIELDS:
+        case types.ON_REMOVE_INPUT_FIELDS_ADMIN_COLLECTIONS:
             return {
                 ...state,
                 pictures: action.pictures.filter((s, j) => action.index !== j)
             };
 
-        case types.ON_SAVE_COLLECTION_INITIATE:
+        case types.ON_SAVE_COLLECTION_INITIATE_ADMIN_COLLECTIONS:
             return {
                 ...state,
                 message: "Data sent to the server"
             };
 
-        case types.ON_SAVE_COLLECTION_SUCCESS:
+        case types.ON_SAVE_COLLECTION_SUCCESS_ADMIN_COLLECTIONS:
             return {
                 ...state,
                 successCreation: action.successCreation,
@@ -77,7 +98,7 @@ export default function manageCollectionsCreateReducer(state = {}, action) {
 
             };
 
-        case types.ON_SAVE_COLLECTION_FAILURE:
+        case types.ON_SAVE_COLLECTION_FAILURE_ADMIN_COLLECTIONS:
             return {
                 ...state,
                 successCreation: action.successCreation,
@@ -88,7 +109,7 @@ export default function manageCollectionsCreateReducer(state = {}, action) {
                 message: action.message
             };
 
-        case types.ON_SLIDE_INDEX_CHANGE:
+        case types.ON_SLIDE_INDEX_CHANGE_ADMIN_COLLECTIONS:
             return {
                 ...state,
                 stepIndex: action.stepIndex

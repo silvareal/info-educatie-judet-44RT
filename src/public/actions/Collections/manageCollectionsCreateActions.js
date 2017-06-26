@@ -1,100 +1,65 @@
 import * as types from '../actionTypes.js';
 import axios from 'axios';
-import qs from 'qs';
 import Auth from '../../modules/Auth.js';
+import qs from 'qs';
 
 let socket = io.connect();
 
 // Initial State - View
-export function onCreateInitiateType(collectionDescription, pictureDescription) {
-    return {type: types.ON_CREATE_INITIATE, collectionDescription: collectionDescription, pictureDescription: pictureDescription}
-}
-
 export function onCreateInitiate(collectionDescription, pictureDescription) {
     return function (dispatch) {
-        dispatch(onCreateInitiateType(collectionDescription, pictureDescription));
+        dispatch({type: types.ON_CREATE_INITIATE, collectionDescription: collectionDescription, pictureDescription: pictureDescription});
     }
 }
-// ---
 
 // Slide Index change handler
-export function onSlideIndexChangeType(stepIndex) {
-    return {type: types.ON_SLIDE_INDEX_CHANGE, stepIndex: stepIndex}
-}
-
 export function onSlideIndexChange(stepIndex) {
     return function (dispatch) {
-        dispatch(onSlideIndexChangeType(stepIndex))
+        dispatch({type: types.ON_SLIDE_INDEX_CHANGE, stepIndex: stepIndex})
     }
 }
-// ---
 
 // Handle collectionName change
-export function onCollectionNameChangeType(collectionName) {
-    return {type: types.ON_COLLECTION_NAME_CHANGE, collectionName: collectionName}
-}
-
 export function onCollectionNameChange(collectionName) {
     return function (dispatch) {
-        dispatch(onCollectionNameChangeType(collectionName))
+        dispatch({type: types.ON_COLLECTION_NAME_CHANGE, collectionName: collectionName})
     }
 }
-// ---
 
 // Handle collectionDescription change
-export function onCollectionDescriptionChangeType(collectionDescription, __html) {
-    return {
-        type: types.ON_COLLECTION_DESCRIPTION_CHANGE,
-        collectionDescription: collectionDescription,
-        __html: __html
-    }
-}
-
 export function onCollectionDescriptionChange(collectionDescription, __html) {
     return function (dispatch) {
-        dispatch(onCollectionDescriptionChangeType(collectionDescription, __html))
+        dispatch({
+            type: types.ON_COLLECTION_DESCRIPTION_CHANGE,
+            collectionDescription: collectionDescription,
+            __html: __html
+        })
     }
 }
-// ---
 
 // Handle changes in the pictures array
-export function onPicturesArrayChangeType(pictures) {
-    return {type: types.ON_PICTURES_ARRAY_CHANGE, pictures: pictures}
-}
-
 export function onPicturesArrayChange(pictures) {
     return function (dispatch) {
-        dispatch(onPicturesArrayChangeType(pictures))
+        dispatch({type: types.ON_PICTURES_ARRAY_CHANGE, pictures: pictures})
     }
 }
-// ---
 
 // Handle add input fields for pictures
-export function onAddInputFieldType(pictures, pictureDescription) {
-    return {type: types.ON_ADD_INPUT_FIELDS, pictures: pictures, pictureDescription: pictureDescription}
-}
-
 export function onAddInputField(pictures, pictureDescription) {
     return function (dispatch) {
-        dispatch(onAddInputFieldType(pictures, pictureDescription))
+        dispatch({type: types.ON_ADD_INPUT_FIELDS, pictures: pictures, pictureDescription: pictureDescription})
     }
 }
-// ---
 
 // Handle remove input field for pictures
-export function onRemoveInputFieldType(pictures, index) {
-    return {type: types.ON_REMOVE_INPUT_FIELDS, pictures: pictures, index: index}
-}
-
 export function onRemoveInputField(pictures, index) {
     return function (dispatch) {
-        dispatch(onRemoveInputFieldType(pictures, index))
+        dispatch({type: types.ON_REMOVE_INPUT_FIELDS, pictures: pictures, index: index})
     }
 }
-// ---
 
 // Handle save collection initiate
-export function onSaveCollectionInitiateType(collectionName, collectionDescriptionRaw, pictures) {
+export function onSaveCollectionInitiate(collectionName, collectionDescriptionRaw, pictures) {
     return {
         type: types.ON_SAVE_COLLECTION_INITIATE,
         collectionName: collectionName,
@@ -103,10 +68,9 @@ export function onSaveCollectionInitiateType(collectionName, collectionDescripti
         message: "Data sent"
     }
 }
-// ---
 
 // Handle save collection success
-export function onSaveCollectionSuccessType(success) {
+export function onSaveCollectionSuccess(success) {
 
     // The Redux Store should update
     socket.emit("updateCollectionsStore");
@@ -116,10 +80,9 @@ export function onSaveCollectionSuccessType(success) {
         successCreation: success
     }
 }
-// ---
 
 // Handle save collection failure
-export function onSaveCollectionFailureType(success, errors, pictureNameError, pictureLinkError, pictureDescriptionError, message) {
+export function onSaveCollectionFailure(success, errors, pictureNameError, pictureLinkError, pictureDescriptionError, message) {
     return {
         type: types.ON_SAVE_COLLECTION_FAILURE,
         successCreation: success,
@@ -130,12 +93,11 @@ export function onSaveCollectionFailureType(success, errors, pictureNameError, p
         message: message
     }
 }
-// ---
 
 // Handle onClick the save button
 export function onSaveCollection(collectionName, collectionDescriptionRaw, pictures) {
     return function (dispatch) {
-        dispatch(onSaveCollectionInitiateType(collectionName, collectionDescriptionRaw, pictures));
+        dispatch(onSaveCollectionInitiate(collectionName, collectionDescriptionRaw, pictures));
         return axios({
             method: 'post',
             url: '/crud/create',
@@ -149,7 +111,7 @@ export function onSaveCollection(collectionName, collectionDescriptionRaw, pictu
                 'picturesArray': pictures
             })
         }).then((response) => {
-            dispatch(onSaveCollectionSuccessType(response.data.success))
+            dispatch(onSaveCollectionSuccess(response.data.success))
         }).catch((err) => {
 
             const errPath = err.response.data;
@@ -170,7 +132,7 @@ export function onSaveCollection(collectionName, collectionDescriptionRaw, pictu
                 return i.pictureDescriptionRaw
             });
 
-            dispatch(onSaveCollectionFailureType(errPath.success, errPath.errors, pictureNameError, pictureLinkError, pictureDescriptionError, errPath.message))
+            dispatch(onSaveCollectionFailure(errPath.success, errPath.errors, pictureNameError, pictureLinkError, pictureDescriptionError, errPath.message))
         })
     }
 }

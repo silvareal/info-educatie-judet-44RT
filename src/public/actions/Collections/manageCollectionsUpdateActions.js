@@ -74,7 +74,7 @@ export function onMountUpdate(collectionId, textEditorState) {
 
 // Slide Index change handler
 export function onSlideIndexChangeType(stepIndex) {
-    return {type: types.ON_SLIDE_INDEX_CHANGE, stepIndex: stepIndex}
+    return {type: types.ON_SLIDE_INDEX_CHANGE_UPDATE, stepIndex: stepIndex}
 }
 
 export function onSlideIndexChange(stepIndex) {
@@ -85,7 +85,7 @@ export function onSlideIndexChange(stepIndex) {
 
 // Handle collectionName change
 export function onCollectionNameChangeType(collectionName) {
-    return {type: types.ON_COLLECTION_NAME_CHANGE, collectionName: collectionName}
+    return {type: types.ON_COLLECTION_NAME_CHANGE_UPDATE, collectionName: collectionName}
 }
 
 export function onCollectionNameChange(collectionName) {
@@ -98,7 +98,7 @@ export function onCollectionNameChange(collectionName) {
 // Handle collectionDescription change
 export function onCollectionDescriptionChangeType(collectionDescription, __html) {
     return {
-        type: types.ON_COLLECTION_DESCRIPTION_CHANGE,
+        type: types.ON_COLLECTION_DESCRIPTION_CHANGE_UPDATE,
         collectionDescription: collectionDescription,
         __html: __html
     }
@@ -113,7 +113,7 @@ export function onCollectionDescriptionChange(collectionDescription, __html) {
 
 // Handle changes in the pictures array
 export function onPicturesArrayChangeType(pictures) {
-    return {type: types.ON_PICTURES_ARRAY_CHANGE, pictures: pictures}
+    return {type: types.ON_PICTURES_ARRAY_CHANGE_UPDATE, pictures: pictures}
 }
 
 export function onPicturesArrayChange(pictures) {
@@ -125,7 +125,7 @@ export function onPicturesArrayChange(pictures) {
 
 // Handle add input fields for pictures
 export function onAddInputFieldType(pictures, pictureDescription) {
-    return {type: types.ON_ADD_INPUT_FIELDS, pictures: pictures, pictureDescription: pictureDescription}
+    return {type: types.ON_ADD_INPUT_FIELDS_UPDATE, pictures: pictures, pictureDescription: pictureDescription}
 }
 
 export function onAddInputField(pictures, pictureDescription) {
@@ -137,7 +137,7 @@ export function onAddInputField(pictures, pictureDescription) {
 
 // Handle remove input field for pictures
 export function onRemoveInputFieldType(pictures, index) {
-    return {type: types.ON_REMOVE_INPUT_FIELDS, pictures: pictures, index: index}
+    return {type: types.ON_REMOVE_INPUT_FIELDS_UPDATE, pictures: pictures, index: index}
 }
 
 export function onRemoveInputField(pictures, index) {

@@ -136,34 +136,33 @@ class CreateView extends Component {
 
         //Verify if the Redux Store has filled up initial state
         if (typeof this.props.UIState.collectionName === 'string')
-        return (
-            <Create
-                collectionName={this.props.UIState.collectionName}
-                onCollectionNameChange={this.onCollectionNameChange}
-                collectionDescription={this.props.UIState.collectionDescription}
-                onCollectionDescriptionChange={this.onCollectionDescriptionChange}
-                __html={this.props.UIState.__html}
-                getHTML={this.getHTML}
-                pictures={this.props.UIState.pictures}
-                handlePicturesNameChange={this.handlePicturesNameChange}
-                handlePicturesLinkChange={this.handlePicturesLinkChange}
-                handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
-                handleAddPictures={this.handleAddPictures}
-                handleRemovePictures={this.handleRemovePictures}
-                onSave={this.onSave}
-                message={this.props.UIState.message}
-                successCreation={this.props.UIState.successCreation}
-                errors={this.props.UIState.errors}
-                pictureNameError={this.props.UIState.pictureNameError}
-                pictureDescriptionError={this.props.UIState.pictureDescriptionError}
-                pictureLinkError={this.props.UIState.pictureLinkError}
-            />);
+            return (
+                <Create
+                    collectionName={this.props.UIState.collectionName}
+                    onCollectionNameChange={this.onCollectionNameChange}
+                    collectionDescription={this.props.UIState.collectionDescription}
+                    onCollectionDescriptionChange={this.onCollectionDescriptionChange}
+                    __html={this.props.UIState.__html}
+                    getHTML={this.getHTML}
+                    pictures={this.props.UIState.pictures}
+                    handlePicturesNameChange={this.handlePicturesNameChange}
+                    handlePicturesLinkChange={this.handlePicturesLinkChange}
+                    handlePicturesDescriptionChange={this.handlePicturesDescriptionChange}
+                    handleAddPictures={this.handleAddPictures}
+                    handleRemovePictures={this.handleRemovePictures}
+                    onSave={this.onSave}
+                    message={this.props.UIState.message}
+                    successCreation={this.props.UIState.successCreation}
+                    errors={this.props.UIState.errors}
+                    pictureNameError={this.props.UIState.pictureNameError}
+                    pictureDescriptionError={this.props.UIState.pictureDescriptionError}
+                    pictureLinkError={this.props.UIState.pictureLinkError}
+                />);
         else return <LoadingIndicator/>
     }
 }
 
 CreateView.propTypes = {
-    userName: PropTypes.string,
     profilePictureLink: PropTypes.string,
     guest: PropTypes.bool,
     finished: PropTypes.bool,
@@ -180,24 +179,19 @@ CreateView.propTypes = {
 };
 
 const credentials = (state) => {
-    if (state.userReducer.fetching === true) {
+    if (state.userReducer.fetching === true)
         return {
             guest: false,
             finished: false
-        }
-    }
-    else if (state.userReducer.data) {
-        const response = state.userReducer.data;
+        };
+    else if (state.userReducer.data)
         return {
-            userName: response.userName,
-            profilePictureLink: response.profilePictureLink,
-            guest: false,
+            guest: state.userReducer.data.guest,
             finished: true
         };
-    }
     else if (state.userReducer.fetched === false)
         return {
-            guest: true,
+            guest: state.userReducer.data.guest,
             finished: true
         };
 };

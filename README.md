@@ -540,3 +540,4 @@ npm install bcrypt
 // Working notes: when you log in, the store should retrieve credentials.
 // look at the crud.js top of file
 // SearchView needs to check if shouldUpdate is set to true and fetch collectionNamesReducer again if so
+// Update reducer for manage should use different action names or it will conflict with Create -- FIXED

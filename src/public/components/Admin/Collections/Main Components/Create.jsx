@@ -1,12 +1,12 @@
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 import {Link} from "react-router";
-
+import {connect} from 'react-redux';
+import * as createActions from '../../../../actions/Admin/Collections/manageCollectionsCreateActionsAdmin.js';
 import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
-
-import QRCode from 'qrcode.react';
 
 import {
     RaisedButton,
@@ -23,28 +23,38 @@ import {
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
 
+let createHandler = function (dispatch) {
+
+    let onSlideIndexChange = function (stepIndex) {
+        dispatch(createActions.onSlideIndexChange(stepIndex))
+    };
+
+    return {
+        onSlideIndexChange
+    }
+};
+
 class Create extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            stepIndex: 0,
-        };
+        this.handlers = createHandler(this.props.dispatch);
     }
 
     handleNext = () => {
-        const {stepIndex} = this.state;
+        let stepIndex = this.props.stepIndex;
         if (stepIndex < 2) {
-            this.setState({stepIndex: stepIndex + 1});
+            stepIndex++;
+            this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
     };
 
     handlePrev = () => {
-        const {stepIndex} = this.state;
+        let stepIndex = this.props.stepIndex;
         if (stepIndex > 0) {
-            this.setState({stepIndex: stepIndex - 1});
+            stepIndex--;
+            this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
     };
@@ -103,12 +113,12 @@ class Create extends Component {
                 return (
                     <div>
                         <div>
-                            {this.props.collectionName.length > 100 ?
+                            {(this.props.collectionName && this.props.collectionName.length > 100) ?
                                 <div>
                                     Please use a name that is shorter than 100 characters
                                 </div> : null}
                             <TextField
-                                hintText="Owner id"
+                                hintText="Owner's id"
                                 value={this.props.userId}
                                 onChange={this.props.onUserIdChange}
                                 errorText={this.props.errors.userId}
@@ -123,8 +133,8 @@ class Create extends Component {
 
                             <TextField
                                 hintText="Owner's userName"
-                                value={this.props.userNameToAdd}
-                                onChange={this.props.onUserNameToAddChange}
+                                value={this.props.userName}
+                                onChange={this.props.onUserNameChange}
                                 errorText={this.props.errors.userName}
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
@@ -136,8 +146,8 @@ class Create extends Component {
 
                             <TextField
                                 hintText="Owner's profile picture"
-                                value={this.props.userProfilePictureLink}
-                                onChange={this.props.onUserProfilePictureLinkChange}
+                                value={this.props.profilePictureLink}
+                                onChange={this.props.onProfilePictureLinkChange}
                                 errorText={this.props.errors.profilePictureLink}
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
@@ -150,8 +160,8 @@ class Create extends Component {
                             <TextField
                                 hintText="Give your collection a cool title"
                                 value={this.props.collectionName}
-                                onChange={this.props.onCollectionChange}
-                                errorText={this.props.errors.collectionName}
+                                onChange={this.props.onCollectionNameChange}
+                                errorText={this.props.message === "Another collection with the same name exists" ? this.props.message : this.props.errors.collectionName}
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
@@ -161,12 +171,12 @@ class Create extends Component {
                             />
                         </div>
                         <div>
-                            {this.props.__html.length > 5000 ?
+                            {this.props.__html && this.props.__html.length > 5000 ?
                                 <div>
                                     Write less, keep it simple !
                                 </div> : null
                             }
-                            {this.props.errors.collectionDescriptionRaw ?
+                            {this.props.errors && this.props.errors.collectionDescriptionRaw ?
                                 <div style={{color: 'red'}}>{this.props.errors.collectionDescriptionRaw}</div> : null}
                             <RichTextEditor
                                 value={this.props.collectionDescription}
@@ -180,26 +190,6 @@ class Create extends Component {
             case 1:
                 return (
                     <div>
-                        <div>
-                            <TextField hintText="Link embeded in QR code"
-                                       value={this.props.qrLink}
-                                       onChange={this.props.onQRLinkChange}
-                                       errorText={this.props.errors.qrLink}
-                                       onKeyDown={this.handleKeyPress}
-                                       autoFocus={true}
-                                       multiLine={true}
-                                       className="step-textfields"
-                                       inputStyle={{color: "#000000"}}
-                                       floatingLabelStyle={{color: "#ee6e73"}}
-                                       underlineFocusStyle={{borderColor: "#ee6e73"}}
-                            />
-                            <div className="qr-restrict-desktop">
-                            <QRCode value={this.props.qrLink} size={512}/>
-                            </div>
-                            <div className="qr-allow-mobile">
-                                <QRCode value={this.props.qrLink} size={128}/>
-                            </div>
-                        </div>
                         {this.props.pictures.map((picture, i) => (
                             <div key={i}>
                                 <div className="input-field">
@@ -207,7 +197,7 @@ class Create extends Component {
                                         <div>
                                             Please use a name that is shorter than 100 characters
                                         </div> : null}
-                                    {this.props.pictureNameError[i] === "Please use a valid name for this picture" ?
+                                    {this.props.pictureNameError && this.props.pictureNameError[i] === "Please use a valid name for this picture" ?
                                         <TextField hintText="Give your pictures a cool name"
                                                    value={picture.pictureName}
                                                    onChange={this.props.handlePicturesNameChange(i)}
@@ -233,7 +223,7 @@ class Create extends Component {
                                     }
                                 </div>
                                 <div className="input-field">
-                                    {this.props.pictureLinkError[i] === "Please use a link for the picture" ?
+                                    {this.props.pictureLinkError && this.props.pictureLinkError[i] === "Please use a link for the picture" ?
                                         <TextField hintText="Give us the link of your work of art"
                                                    value={picture.pictureLink}
                                                    onChange={this.props.handlePicturesLinkChange(i)}
@@ -267,8 +257,7 @@ class Create extends Component {
                                             Please use a description that is shorther than 5000 characters
                                         </div> : null
                                     }
-                                    {this.props.pictureDescriptionError[i] === "Please use a valid description for this picture" ?
-
+                                    {this.props.pictureDescriptionError && this.props.pictureDescriptionError[i] === "Please use a valid description for this picture" ?
                                         <div>
                                             {this.props.pictureDescriptionError[i]}
                                             <RichTextEditor
@@ -317,13 +306,38 @@ class Create extends Component {
         }
     }
 
+    checkForErrors = (message) => {
+        return message === "Check the specified fields for errors"
+    };
+
+    checkStepOneErrors = (errors) => {
+        if (errors && Object.keys(errors).length === 0)
+            return false;
+        return true
+    };
+
+    checkStepTwoErrors = (pictureNameError, pictureLinkError) => {
+        let flag = false;
+        if (pictureNameError)
+        Object.keys(pictureNameError).map((key) => {
+            if (pictureNameError[key] === "Please use a valid name for this picture")
+                flag = true;
+        });
+        if (pictureLinkError)
+        Object.keys(pictureLinkError).map((key) => {
+            if (pictureLinkError[key] === "Please use a link for the picture")
+                flag = true;
+        });
+        return flag;
+    };
+
     resetScroll = () => {
         window.scrollTo(0, 0);
     };
 
     render() {
 
-        const {stepIndex} = this.state;
+        const {stepIndex} = this.props;
 
         return (
             <div className="parallax-collections-create">
@@ -337,8 +351,8 @@ class Create extends Component {
                                         <Stepper linear={false} activeStep={stepIndex}>
                                             <Step>
                                                 <StepButton
-                                                    onClick={() => this.setState({stepIndex: 0})}
-                                                    icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                    onClick={() => this.handlers.onSlideIndexChange(0)}
+                                                    icon={this.checkStepOneErrors(this.props.errors) ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
                                                         <FontIcon className="material-icons">mode_edit</FontIcon>}
@@ -347,8 +361,8 @@ class Create extends Component {
                                             </Step>
                                             <Step>
                                                 <StepButton
-                                                    onClick={() => this.setState({stepIndex: 1})}
-                                                    icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                    onClick={() => this.handlers.onSlideIndexChange(1)}
+                                                    icon={this.checkStepTwoErrors(this.props.pictureNameError, this.props.pictureLinkError) ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
                                                         <FontIcon className="material-icons">add_a_photo</FontIcon>}
@@ -356,8 +370,8 @@ class Create extends Component {
                                                 </StepButton>
                                             </Step>
                                             <Step>
-                                                <StepButton onClick={() => this.setState({stepIndex: 2})}
-                                                            icon={this.props.pictureLinkError[0] === "Please use a link for the picture" ?
+                                                <StepButton onClick={() => this.handlers.onSlideIndexChange(2)}
+                                                            icon={this.checkForErrors(this.props.message) ?
                                                                 <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
                                                                 <FontIcon className="material-icons">done</FontIcon>}
                                                 >
@@ -378,12 +392,12 @@ class Create extends Component {
                                     />
                                 </Link>
                             </div> : null}
-                        {this.props.errorMessage !== '' ?
+                        {this.props.message !== '' ?
                             <div className="errors-collections">
-                                {this.props.errorMessage}
+                                {this.props.message}
                             </div> : null
                         }
-                        {this.props.errors.summary ?
+                        {this.props.errors && this.props.errors.summary ?
                             <div className="errors-collections">
                                 {this.props.errors.summary}
                             </div> : null
@@ -419,4 +433,14 @@ class Create extends Component {
     }
 }
 
-export default Create;
+Create.propTypes = {
+    stepIndex: PropTypes.number
+};
+
+const mapStateToProps = (state) => {
+    return {
+        stepIndex: state.manageCollectionsCreateReducerAdmin.stepIndex
+    }
+};
+
+export default connect(mapStateToProps)(Create);

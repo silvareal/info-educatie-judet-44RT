@@ -219,7 +219,6 @@ class Create extends Component {
                                         </div> : null
                                     }
                                     {this.props.pictureDescriptionError && this.props.pictureDescriptionError[i] === "Please use a valid description for this picture" ?
-
                                         <div>
                                             {this.props.pictureDescriptionError[i]}
                                             <RichTextEditor

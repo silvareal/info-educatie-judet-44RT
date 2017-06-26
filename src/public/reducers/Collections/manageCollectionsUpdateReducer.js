@@ -36,7 +36,7 @@ export default function manageCollectionsUpdateReducer(state = {}, action) {
                 fetching: false
             };
 
-        case types.ON_COLLECTION_NAME_CHANGE:
+        case types.ON_COLLECTION_NAME_CHANGE_UPDATE:
             return {
                 ...state,
                 collection: {
@@ -45,7 +45,7 @@ export default function manageCollectionsUpdateReducer(state = {}, action) {
                 }
             };
 
-        case types.ON_COLLECTION_DESCRIPTION_CHANGE:
+        case types.ON_COLLECTION_DESCRIPTION_CHANGE_UPDATE:
             return {
                 ...state,
                 collection: {
@@ -55,7 +55,7 @@ export default function manageCollectionsUpdateReducer(state = {}, action) {
                 __html: action.__html
             };
 
-        case types.ON_PICTURES_ARRAY_CHANGE:
+        case types.ON_PICTURES_ARRAY_CHANGE_UPDATE:
             return {
                 ...state,
                 collection: {
@@ -65,7 +65,7 @@ export default function manageCollectionsUpdateReducer(state = {}, action) {
 
             };
 
-        case types.ON_ADD_INPUT_FIELDS:
+        case types.ON_ADD_INPUT_FIELDS_UPDATE:
             return {
                 ...state,
                 collection: {
@@ -80,7 +80,7 @@ export default function manageCollectionsUpdateReducer(state = {}, action) {
 
             };
 
-        case types.ON_REMOVE_INPUT_FIELDS:
+        case types.ON_REMOVE_INPUT_FIELDS_UPDATE:
             return {
                 ...state,
                 collection: {
@@ -117,7 +117,7 @@ export default function manageCollectionsUpdateReducer(state = {}, action) {
                 message: action.message
             };
 
-        case types.ON_SLIDE_INDEX_CHANGE:
+        case types.ON_SLIDE_INDEX_CHANGE_UPDATE:
             return {
                 ...state,
                 stepIndex: action.stepIndex
