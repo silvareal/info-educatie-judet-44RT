@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-
 import ViewRow from './ViewRow.jsx';
 
 class ViewTable extends Component {

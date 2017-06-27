@@ -89,16 +89,11 @@ export function onLoadMoreComments(loadAfter, collectionId) {
 }
 
 // Handle onChange event for the comment form
-export function onChangeCommentInputType(comment) {
-    return {type: types.ON_CHANGE_COMMENT_INPUT_BROWSE, comment: comment}
-}
-
 export function onChangeCommentInput(comment) {
     return function (dispatch) {
-        dispatch(onChangeCommentInputType(comment))
+        dispatch({type: types.ON_CHANGE_COMMENT_INPUT_BROWSE, comment: comment})
     }
 }
-// ---
 
 // Initiated the Axios request
 export function onSaveCommentInitiate() {

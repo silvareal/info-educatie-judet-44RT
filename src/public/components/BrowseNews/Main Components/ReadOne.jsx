@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
 import {Card, CardText, CardMedia, CardHeader} from 'material-ui';
-
+import NoCommentsFound from '../Partials Components/NoCommentsFound.jsx';
 import CommentForm from '../Partials Components/CommentForm.jsx';
 import CommentList from '../Partials Components/CommentList.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
@@ -22,7 +22,8 @@ class ReadOne extends Component {
 
     render() {
 
-        const date = new Date(this.props.news.time);
+
+        const date = new Date(this.props.news && this.props.news.time ? this.props.news.time : "");
 
         const formattedDate =
             <div>
@@ -102,9 +103,9 @@ class ReadOne extends Component {
                 }
 
                 <Card className="container-collections" style={{boxShadow: "none", backgroundColor: "whitesmoke"}}>
-                    {parseInt(this.props.commentsCount) !== 0 && this.props.commentsCount !== undefined ?
+                    {parseInt(this.props.comments && this.props.comments.commentsCount ? this.props.comments.commentsCount : 0) !== 0 ?
                         <CardHeader
-                            title={`Comments ` + `(` + this.props.commentsCount + `)`}
+                            title={`Comments ` + `(` + this.props.comments.commentsCount + `)`}
                         />
                         :
                         <CardHeader
@@ -115,27 +116,32 @@ class ReadOne extends Component {
                         <CommentForm
                             userName={this.props.userName}
                             profilePictureLink={this.props.profilePictureLink}
-                            comment={this.props.comment}
+                            comment={this.props.comments && this.props.comments.comment ? this.props.comments.comment : ""}
                             handleKeyPress={this.handleKeyPress}
                             onCommentChange={this.props.onCommentChange}
                             onSave={this.props.onSave}
-                            commentAdded={this.props.commentAdded}
+                            commentAdded={this.props.comments && this.props.comments.commentAdded ? this.props.comments.commentAdded : ""}
                         />
                         :
                         null
                     }
-                    {this.props.fetchedComments ?
+                    {this.props.comments && this.props.comments.fetchedComments && this.props.comments.fetchingComments === false ?
                         <CommentList
                             userName={this.props.userName}
                             profilePictureLink={this.props.profilePictureLink}
-                            commentsRows={this.props.commentsRows}
-                            comment={this.props.comment}
+                            commentsRows={this.props.comments.commentsRows}
+                            comment={this.props.comments && this.props.comments.comment ? this.props.comments.comment : ""}
                             onCommentChange={this.props.onCommentChange}
                             onSave={this.props.onSave}
-                            commentAdded={this.props.commentAdded}
+                            commentAdded={this.props.comments && this.props.comments.commentAdded ? this.props.comments.commentAdded : ""}
                         />
                         :
-                        <LoadingIndicator/>
+                        null
+                    }
+                    {this.props.comments && this.props.comments.fetchedComments === false && this.props.comments.fetchingComments === false ?
+                        <NoCommentsFound/>
+                        :
+                        null
                     }
 
                 </Card>

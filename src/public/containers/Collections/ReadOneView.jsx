@@ -95,8 +95,6 @@ class ReadOneView extends Component {
     };
 
     render() {
-        if (this.props.collection.fetchedCollection === "Error")
-            return <NotFoundView/>;
         return (
             <ReadOne
                 finished={this.props.comments.finished}

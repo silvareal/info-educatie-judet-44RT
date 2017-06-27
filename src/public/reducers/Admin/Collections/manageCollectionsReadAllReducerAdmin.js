@@ -35,13 +35,27 @@ export default function manageCollectionsReadAllReducerAdmin(state = {}, action)
         case types.ON_LOAD_MORE_SUCCESS_ADMIN_COLLECTIONS: {
             let newCollections = state.collections.data.collections;
 
-            Object.keys(action.collections).map((key) => {
-                newCollections.push(action.collections[key])
-            });
-            // Check if the list has finished aka if there are no more collections to load
-            if (newCollections && newCollections.length % 10 === 0) {
-                return {
+            if (action.collections) {
+                Object.keys(action.collections).map((key) => {
+                    newCollections.push(action.collections[key])
+                });
+                // Check if the list has finished aka if there are no more collections to load
+                if (newCollections && newCollections.length % 10 === 0) {
+                    return {
+                        ...state,
+                        requesting: false,
+                        collections: {
+                            ...state.collections,
+                            data: {
+                                ...state.collections.data,
+                                collections: newCollections
+                            }
+                        }
+                    }
+                }
+                else return {
                     ...state,
+                    finished: true,
                     requesting: false,
                     collections: {
                         ...state.collections,
@@ -55,14 +69,7 @@ export default function manageCollectionsReadAllReducerAdmin(state = {}, action)
             else return {
                 ...state,
                 finished: true,
-                requesting: false,
-                collections: {
-                    ...state.collections,
-                    data: {
-                        ...state.collections.data,
-                        collections: newCollections
-                    }
-                }
+                requesting: false
             }
         }
 

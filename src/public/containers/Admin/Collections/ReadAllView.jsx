@@ -6,7 +6,7 @@ import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndic
 import {connect} from 'react-redux';
 import * as readActions from '../../../actions/Admin/Collections/manageCollectionsReadAllActionsAdmin.js';
 import * as collectionsHomeViewActions from '../../../actions/collectionsHomeViewActions.js';
-import * as collectionsBrowseActions from '../../../actions/Browse/browseCollectionsReadAllActions.js';
+import * as collectionsBrowseActions from '../../../actions/BrowseCollections/browseCollectionsReadAllActions.js';
 import * as collectionsManageActions from '../../../actions/Collections/manageCollectionsReadAllActions.js';
 import * as shouldUpdateActions from '../../../actions/shouldUpdateActions.js';
 

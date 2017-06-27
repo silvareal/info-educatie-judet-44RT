@@ -17,6 +17,31 @@ class ViewRow extends Component {
                         <img src={this.props.news.newsCoverLink}/>
                     </CardMedia>
                 </Link>
+                {this.props.admin === true ?
+                    <CardActions>
+                        <Link to={`/admin/${this.props.userId}/news/update/${this.props.news._id}`}
+                              target="_blank">
+                            <RaisedButton
+                                type="button"
+                                primary={true}
+                                label="Update"
+                                buttonStyle={{backgroundColor: "#9b9b9b"}}
+                            />
+                        </Link>
+                        <Link to={`/admin/${this.props.userId}/news/delete/${this.props.news._id}`}
+                              target="_blank">
+                            <RaisedButton
+                                type="button"
+                                secondary={true}
+                                label="Delete"
+                                buttonStyle={{backgroundColor: "#ee6e73"}}
+                            />
+                        </Link>
+                    </CardActions>
+                    :
+                    null
+                }
+
             </Card>
         );
     }

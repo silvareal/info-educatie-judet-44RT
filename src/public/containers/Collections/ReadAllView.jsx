@@ -4,7 +4,7 @@ import ReadAll from '../../components/Collections/Main Components/ReadAll.jsx';
 import {connect} from 'react-redux';
 import * as collectionsActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
 import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
-import * as collectionsBrowseActions from '../../actions/Browse/browseCollectionsReadAllActions.js';
+import * as collectionsBrowseActions from '../../actions/BrowseCollections/browseCollectionsReadAllActions.js';
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
 
 let createHandler = function (dispatch) {

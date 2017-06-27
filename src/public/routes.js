@@ -16,8 +16,6 @@ import ProfileView from './containers/Profile/ProfileView.jsx';
 import AdminView from './containers/Admin/Main Component/AdminView.jsx';
 import UsersView from './containers/Admin/Users/UsersView.jsx';
 import CreateViewNews from './containers/Admin/News/CreateView.jsx';
-import ReadAllViewNews from './containers/Admin/News/ReadAllView.jsx';
-import ReadOneViewNews from './containers/Admin/News/ReadOneView.jsx';
 import UpdateViewNews from './containers/Admin/News/UpdateView.jsx';
 import DeleteViewNews from './containers/Admin/News/DeleteView.jsx';
 import CreateViewAdminControl from './containers/Admin/Collections/CreateView.jsx';
@@ -183,16 +181,6 @@ const routes = {
             }
         },
 
-        {
-            path: '/admin/:_id/news',
-            getComponent: (location, callback) => {
-                if (Auth.isUserAuthenticated()) {
-                    callback(null, ReadAllViewNews);
-                } else {
-                    callback(null, LoginView);
-                }
-            }
-        },
 
         {
             path: '/admin/:_id/news/create',
@@ -205,31 +193,16 @@ const routes = {
             }
         },
 
-        //these 2 are the same, replace the links to use the latter
-
-        {
-            path: '/admin/:_id/news/readOne/:_newsId',
-            getComponent: (location, callback) => {
-                if (Auth.isUserAuthenticated()) {
-                    callback(null, ReadOneViewNews);
-                } else {
-                    callback(null, LoginView);
-                }
-            }
-        },
-
         {
             path: '/news/:_newsId',
             getComponent: (location, callback) => {
                 if (Auth.isUserAuthenticated()) {
-                    callback(null, ReadOneViewNews);
+                    callback(null, ReadOneViewBrowseNews);
                 } else {
                     callback(null, LoginView);
                 }
             }
         },
-
-        //-----------------------------
 
         {
             path: '/admin/:_id/news/update/:_newsId',

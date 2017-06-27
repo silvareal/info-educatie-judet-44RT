@@ -11,11 +11,12 @@ import routes from './routes.js';
 import configureStore from './store/configureStore.js';
 import {getCredentials} from './actions/userCredentialsActions.js';
 import {getCollectionsHomeView} from './actions/collectionsHomeViewActions.js';
-import {setShouldUpdate} from './actions/shouldUpdateActions.js';
 import {getAllCollections} from './actions/Collections/manageCollectionsReadAllActions.js';
-import * as browseReadAllActions from './actions/Browse/browseCollectionsReadAllActions.js';
+import * as browseReadAllActions from './actions/BrowseCollections/browseCollectionsReadAllActions.js';
 import * as getAllCollectionNames from './actions/AppBar/collectionNamesActions.js';
 import * as getCollectionsAdmin from './actions/Admin/Collections/manageCollectionsReadAllActionsAdmin';
+import * as browseNEwsReadAllActions from './actions/BrowseNews/browseNewsReadAllActions.js';
+import * as setUpdate from './actions/shouldUpdateActions.js';
 
 import {Provider} from 'react-redux';
 
@@ -25,10 +26,16 @@ const store = configureStore();
 // Does not need the user to be authenticated
 store.dispatch(getAllCollectionNames.getAllCollections());
 store.dispatch(browseReadAllActions.getAllCollections());
+store.dispatch(browseNEwsReadAllActions.getAllNews());
 store.dispatch(getCollectionsHomeView());
 store.dispatch(getCredentials());
+
 socket.on("updateCollectionsStore", () => {
-    store.dispatch(setShouldUpdate());
+    store.dispatch(setUpdate.setShouldUpdate());
+});
+
+socket.on("updateNewsStore", () => {
+    store.dispatch(setUpdate.setShouldUpdateNews())
 });
 
 if (Auth.isUserAuthenticated()) {

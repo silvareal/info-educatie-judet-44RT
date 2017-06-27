@@ -55,7 +55,7 @@ class AdminPage extends Component {
                             </Link>
                         </CardMedia>
                         <CardMedia style={styles.cardMedia}>
-                            <Link to={`/admin/${this.props.adminId}/news`}>
+                            <Link to={`/news`}>
                                 <div className="icons-content-admin-cp">
                                     <ActionAnnouncement/>
                                 </div>

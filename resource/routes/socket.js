@@ -25,4 +25,7 @@ module.exports = function (socket) {
     socket.on("getCredentials", function () {
         socket.broadcast.emit("getCredentials");
     });
+    socket.on("updateNewsStore", function() {
+        socket.broadcast.emit("updateNewsStore");
+    })
 };

@@ -1,54 +1,53 @@
 import * as types from '../../actions/actionTypes.js';
 
-export default function manageCollectionsReadAllReducer(state = {}, action) {
+export default function browseNewsReadAllReducer(state = {}, action) {
     switch (action.type) {
-        case types.READ_ALL_COLLECTIONS_INITIATED:
+        case types.READ_ALL_NEWS_BROWSE_INITIATED:
             return {
                 fetching: true,
                 fetched: null
             };
 
-        case types.READ_ALL_COLLECTIONS_SUCCESS:
+        case types.READ_ALL_NEWS_BROWSE_SUCCESS:
             return {
                 ...state,
                 fetched: true,
                 fetching: false,
-                collections: action.collections,
+                news: action.news,
                 loadAfter: 10,
                 finished: false,
                 requesting: false
             };
 
-        case types.READ_ALL_COLLECTIONS_FAILURE:
+        case types.READ_ALL_NEWS_BROWSE_FAILURE:
             return {
-                ...state,
                 fetched: false
             };
 
-        case types.ON_LOAD_MORE_INITIATE:
+        case types.ON_LOAD_MORE_BROWSE_NEWS_INITIATE:
             return {
                 ...state,
-                requesting: true,
+                requesting: false,
                 finished: false
             };
 
-        case types.ON_LOAD_MORE_SUCCESS: {
-            let newCollections = state.collections.data.collections;
+        case types.ON_LOAD_MORE_BROWSE_NEWS_SUCCESS: {
+            let newNews = state.news.data.news;
 
-            if (action.collections) {
-                Object.keys(action.collections).map((key) => {
-                    newCollections.push(action.collections[key])
+
+            if (action.news) {
+                Object.keys(action.news).map((key) => {
+                    newNews.push(action.news[key])
                 });
-                // Check if the list has finished aka if there are no more collections to load
-                if (newCollections && newCollections.length % 10 === 0) {
+
+                if (newNews && newNews.length % 10 === 0) {
                     return {
                         ...state,
-                        requesting: false,
-                        collections: {
-                            ...state.collections,
+                        news: {
+                            ...state.news,
                             data: {
-                                ...state.collections.data,
-                                collections: newCollections
+                                ...state.news.data,
+                                news: newNews
                             }
                         }
                     }
@@ -57,11 +56,11 @@ export default function manageCollectionsReadAllReducer(state = {}, action) {
                     ...state,
                     finished: true,
                     requesting: false,
-                    collections: {
-                        ...state.collections,
+                    news: {
+                        ...state.news,
                         data: {
-                            ...state.collections.data,
-                            collections: newCollections
+                            ...state.news.data,
+                            news: newNews
                         }
                     }
                 }
@@ -73,13 +72,13 @@ export default function manageCollectionsReadAllReducer(state = {}, action) {
             }
         }
 
-        case types.ITERATE_LOAD_AFTER:
+        case types.ITERATE_LOAD_AFTER_BROWSE_NEWS:
             return {
                 ...state,
                 loadAfter: action.loadAfter + 10
             };
 
-        case types.ON_LOAD_MORE_FAILURE:
+        case types.ON_LOAD_MORE_BROWSE_NEWS_FAILURE:
             return {
                 ...state,
                 requesting: false,

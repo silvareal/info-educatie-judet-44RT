@@ -173,7 +173,7 @@ class Update extends Component {
                         <div className="top-bar-spacing"/>
                         <Card className="container-collections" style={{backgroundColor: 'none'}}>
                             <Card>
-                                <Link to={`/admin/${this.props.adminId}/news`}>
+                                <Link to={`/news`}>
                                     <RaisedButton
                                         type="button"
                                         secondary={true}
@@ -239,7 +239,7 @@ class Update extends Component {
                                 }
                                 {this.props.errorMessage === 'The news article has been successfully updated' ?
                                     <div className="success-collections-create">
-                                        <Link to={`/admin/${this.props.adminId}/news`}>
+                                        <Link to={`/news`}>
                                             <RaisedButton
                                                 label="Finish"
                                                 secondary={true}
@@ -252,7 +252,7 @@ class Update extends Component {
                                 <div className="step-style">{this.getStepContent(stepIndex)}</div>
                                 <CardActions className="step-actions">
                                     {stepIndex === 0 ?
-                                        <Link to={`/admin/${this.props.adminId}/news`}>
+                                        <Link to={`/news`}>
                                             <RaisedButton
                                                 label="Cancel"
                                                 buttonStyle={{backgroundColor: "#ee6e73"}}

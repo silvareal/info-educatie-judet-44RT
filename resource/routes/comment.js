@@ -117,15 +117,18 @@ router.post("/postCommentNews", (req, res) => {
         }
 
         const userId = decoded.sub;
+        const userName = decoded.userName;
+        const profilePictureLink = decoded.profilePictureLink;
+        const firstName = decoded.firstName;
 
         if (validationResult.success) {
             const commentData = {
                 newsId: req.body.newsId,
                 userId: userId,
-                userName: req.body.userName,
-                firstName: req.body.firstName,
+                userName: userName,
+                firstName: firstName,
                 comment: req.body.comment,
-                profilePictureLink: req.body.profilePictureLink
+                profilePictureLink: profilePictureLink
             };
 
             const newComment = new CommentNews(commentData);

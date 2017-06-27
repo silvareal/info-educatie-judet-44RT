@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import ReadAll from '../../components/BrowseCollections/Main Components/ReadAll.jsx';
-import * as collectionsActions from '../../actions/Browse/browseCollectionsReadAllActions.js';
+import * as collectionsActions from '../../actions/BrowseCollections/browseCollectionsReadAllActions.js';
 import * as collectionsManageActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
 import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
@@ -38,7 +38,7 @@ class ReadAllView extends Component {
 
     onScroll = () => {
         if (this.props.collections.finished === false && document.title === "Browse collections" && this.props.collections.requesting === false) {
-            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
+            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 1000) {
                 this.handlers.loadMore(this.props.collections.loadAfter);
             }
         }
@@ -114,7 +114,7 @@ const collections = (state) => {
 };
 
 // Map shouldUpdate
-const shouldUpdateFunction = (state) => {
+const shouldUpdateCollections = (state) => {
     if (state.shouldUpdateCollectionsReducer) {
         const response = state.shouldUpdateCollectionsReducer;
         return {
@@ -125,7 +125,7 @@ const shouldUpdateFunction = (state) => {
 
 const mapStateToProps = (state) => ({
     collections: collections(state),
-    shouldUpdateCollections: shouldUpdateFunction(state)
+    shouldUpdateCollections: shouldUpdateCollections(state)
 });
 
 export default connect(mapStateToProps)(ReadAllView)

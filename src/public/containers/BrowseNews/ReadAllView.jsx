@@ -1,67 +1,50 @@
 import React, {Component} from 'react';
-
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import ReadAll from '../../components/BrowseNews/Main Components/ReadAll.jsx';
+import * as newsActions from '../../actions/BrowseNews/browseNewsReadAllActions.js';
+import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
+
+let createHandler = function (dispatch) {
+    let updateNewsStore = function () {
+        dispatch(newsActions.getAllNews());
+    };
+
+    let removeShouldUpdate = function () {
+        dispatch(shouldUpdateActions.removeShouldUpdateNews())
+    };
+
+    let loadMore = function (loadAfter) {
+        dispatch(newsActions.onLoadMore(loadAfter))
+    };
+
+    return {
+        updateNewsStore,
+        removeShouldUpdate,
+        loadMore
+    }
+};
 
 class ReadAllView extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            errorMessage: '',
-            news: [],
-            loadAfter: 0,
-            finished: false,
-            searchErrorMessage: '',
-            newsPreSearch: [],
-            searchQuery: '',
-            searching: false,
-            fetchedNews: false
-        };
-    };
-
-    getNews = () => {
-        this.setState({
-            errorMessage: 'Fetching'
-        });
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/browse/readAllNews');
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                this.setState({
-                    errorMessage: 'Fetched news',
-                    news: xhr.response.news,
-                    newsPreSearch: xhr.response.news,
-                    fetchedNews: true
-                });
-            }
-            else if (xhr.status === 404) {
-                this.setState({
-                    errorMessage: xhr.response.message,
-                    fetchedNews: true
-                });
-            }
-            else {
-                this.setState({
-                    errorMessage: 'Please contact an administrator',
-                    fetchedNews: true
-                })
-            }
-        });
-
-        xhr.send();
+        this.handlers = createHandler(this.props.dispatch);
     };
 
     onScroll = () => {
-        if (this.state.finished === false && document.title === "Browse news" && this.state.searching === false)
-            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
-                this.loadMore();
+        if (this.props.news.finished === false && document.title === "Browse news" && this.props.news.requesting === false) {
+            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 1000) {
+                this.handlers.loadMore(this.props.news.loadAfter);
             }
+        }
     };
 
     componentDidMount() {
-        this.getNews();
+        if (this.props.shouldUpdateNews && this.props.shouldUpdateNews.shouldUpdateNews) {
+            this.handlers.updateNewsStore();
+            this.handlers.removeShouldUpdate();
+        }
 
         //the load more event listener
         window.addEventListener('scroll', this.onScroll);
@@ -71,112 +54,104 @@ class ReadAllView extends Component {
         window.removeEventListener('scroll', this.onScroll);
     }
 
-    loadMore = () => {
-        if (this.state.finished === false) {
-            this.loadAndAppendNews(this.state.loadAfter + 10);
-            this.setState({loadAfter: this.state.loadAfter + 10})
-        }
-    };
-
-    loadAndAppendNews = (loadAfter) => {
-
-        if (this.state.finished === false) {
-            const loadAfterParam = encodeURIComponent(loadAfter);
-
-            const formData = `loadAfter=${loadAfterParam}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('post', '/browse/loadMoreNews');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-
-                    if (xhr.response.message === "NoNews"){
-                        this.setState({finished: true});
-                    }
-                    else {
-                        //Do this to not mutate state
-                        let newNews = this.state.news;
-
-                        Object.keys(xhr.response.news).map((key) => {
-                            newNews.push(xhr.response.news[key]);
-                        });
-
-                        this.setState({news: newNews, newsPreSearch: newNews});
-                    }
-                }
-            });
-            xhr.send(formData);
-        }
-    };
-
-    onQueryChange = (e) => {
-        if (e.target.value.length === 0) {
-            this.setState({searchQuery: e.target.value, searching: false, news: this.state.newsPreSearch})
-        }
-        else
-            this.setState({searchQuery: e.target.value});
-    };
-
-    handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            this.onSearch();
-        }
-    };
-
-    onSearch = () => {
-
-        //if the search box is not empty
-        if (this.state.searchQuery){
-
-            const searchQuery = encodeURIComponent(this.state.searchQuery);
-
-            const formData = `searchQuery=${searchQuery}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('post', '/browse/searchNews');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200){
-
-                    //no news found
-                    if (xhr.response.errorMessage) {
-                        this.setState({searchErrorMessage: xhr.response.errorMessage, news:[]});
-                    }
-                    else {
-                        this.setState({news: xhr.response.news})
-                    }
-                }
-            });
-
-            if (this.state.searchErrorMessage.length === 0)
-                xhr.send(formData);
-            this.setState({searching: true});
-        }
-        else {
-            this.setState({news: this.state.newsPreSearch});
-        }
-    };
-
     render() {
         document.title = "Browse news";
-        return (
-            <div>
-                <ReadAll
-                    fetchedNews={this.state.fetchedNews}
-                    userId={this.props.params._id}
-                    news={this.state.news}
-                    errorMessage={this.state.errorMessage}
-                    handleKeyPress={this.handleKeyPress}
-                    onQueryChange={this.onQueryChange}
-                    searchQuery={this.state.searchQuery}
-                    onSearch={this.onSearch}
-                />
-            </div>
-        );
+        return <ReadAll
+            fetchedNews={this.props.news.fetchedNews}
+            fetchingNews={this.props.news.fetchingNews}
+            news={this.props.news.news}
+            admin={this.props.credentials.admin}
+            userId={this.props.credentials.userId}
+        />;
     }
 }
 
-export default ReadAllView
+ReadAllView.propTypes = {
+    credentials: React.PropTypes.shape({
+        admin: PropTypes.bool,
+        userId: PropTypes.string,
+        fetched: PropTypes.bool,
+        fetching: PropTypes.bool
+    }),
+    news: React.PropTypes.shape({
+        news: PropTypes.array,
+        fetchedNews: PropTypes.bool,
+        fetchingNews: PropTypes.bool,
+        loadAfter: PropTypes.number,
+        finished: PropTypes.bool,
+        requesting: PropTypes.bool
+    }),
+    shouldUpdateNews: React.PropTypes.shape({
+        shouldUpdateNews: PropTypes.bool
+    })
+};
+
+// Map credentials
+const credentials = (state) => {
+    if (state.userReducer.fetching === true)
+        return {
+            fetching: true,
+            fetched: false,
+            admin: null,
+            userId: ""
+        };
+    else if (state.userReducer.data) {
+        return {
+            fetching: false,
+            fetched: true,
+            admin: state.userReducer.data.admin,
+            userId: state.userReducer.data.userId
+        }
+    }
+    else return {
+            fetched: true,
+            fetching: false,
+            admin: false,
+            userId: ""
+        }
+};
+
+// Map news
+const news = (state) => {
+    if (state.browseNewsReadAllReducer.fetching === true) {
+        return {
+            fetchingNews: true,
+            fetchedNews: false
+        }
+    }
+    else if (state.browseNewsReadAllReducer.news) {
+        const response = state.browseNewsReadAllReducer.news.data;
+        return {
+            news: response.news,
+            fetchedNews: true,
+            fetchingNews: false,
+            loadAfter: state.browseNewsReadAllReducer.loadAfter,
+            finished: state.browseNewsReadAllReducer.finished,
+            requesting: state.browseNewsReadAllReducer.requesting
+        }
+    }
+    else if (state.browseNewsReadAllReducer.fetched === false) {
+        return {
+            fetchedNews: false,
+            fetchingNews: false
+        }
+    }
+};
+
+// Map shouldUpdate - same reducer as collections as I couldn't bother to write more reducers
+const shouldUpdateNews = (state) => {
+    if (state.shouldUpdateCollectionsReducer) {
+        const response = state.shouldUpdateCollectionsReducer;
+        return {
+            shouldUpdateNews: response.shouldUpdateNews
+        }
+    }
+};
+
+const mapStateToProps = (state) => ({
+    credentials: credentials(state),
+    news: news(state),
+    shouldUpdateNews: shouldUpdateNews(state)
+});
+
+export default connect(mapStateToProps)(ReadAllView)

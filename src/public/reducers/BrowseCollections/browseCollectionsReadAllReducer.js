@@ -34,13 +34,27 @@ export default function browseCollectionsReadAllReducer(state = {}, action) {
         case types.ON_LOAD_MORE_BROWSE_SUCCESS: {
             let newCollections = state.collections.data.collections;
 
-            Object.keys(action.collections).map((key) => {
-                newCollections.push(action.collections[key])
-            });
+            if (action.collections) {
+                Object.keys(action.collections).map((key) => {
+                    newCollections.push(action.collections[key])
+                });
 
-            if (newCollections && newCollections.length % 10 === 0) {
-                return {
+                if (newCollections && newCollections.length % 10 === 0) {
+                    return {
+                        ...state,
+                        collections: {
+                            ...state.collections,
+                            data: {
+                                ...state.collections.data,
+                                collections: newCollections
+                            }
+                        }
+                    }
+                }
+                else return {
                     ...state,
+                    finished: true,
+                    requesting: false,
                     collections: {
                         ...state.collections,
                         data: {
@@ -53,14 +67,7 @@ export default function browseCollectionsReadAllReducer(state = {}, action) {
             else return {
                 ...state,
                 finished: true,
-                requesting: false,
-                collections: {
-                    ...state.collections,
-                    data: {
-                        ...state.collections.data,
-                        collections: newCollections
-                    }
-                }
+                requesting: false
             }
         }
 

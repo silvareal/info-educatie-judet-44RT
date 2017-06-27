@@ -199,7 +199,7 @@ class Create extends Component {
                         {this.props.successCreation === true ?
                             <div className="success-collections-create">
                                 <div>Item was added</div>
-                                <Link to={`/admin/${this.props.adminId}/news`}>
+                                <Link to={`/news`}>
                                     <RaisedButton label="Return"
                                                   primary={true}
                                                   onTouchTap={this.resetScroll}
@@ -220,7 +220,7 @@ class Create extends Component {
                         <div className="step-style">{this.getStepContent(stepIndex)}</div>
                         <CardActions className="step-actions">
                             {stepIndex === 0 ?
-                                <Link to={`/admin/${this.props.adminId}/news`}>
+                                <Link to={`/news`}>
                                     <RaisedButton
                                         label="Cancel"
                                         secondary={true}

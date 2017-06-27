@@ -7,6 +7,7 @@ class ViewRow extends Component {
         return (
             <Card className="picture-separator">
                     <CardMedia
+                        style={{cursor: 'pointer'}}
                         onClick={() => this.props.onClickCollection(this.props.collection._id)}
                         mediaStyle={{minHeight: 300}}
                         overlay={<CardTitle title={this.props.collection.collectionName}

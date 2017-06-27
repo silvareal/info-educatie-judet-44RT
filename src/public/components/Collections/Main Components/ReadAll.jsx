@@ -4,7 +4,7 @@ import TopActions from '../Partials Components/TopActions.jsx';
 import ViewTable from '../Partials Components/ViewTable.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
 import NoCollectionsFound from '../Partials Components/NoCollectionsFound.jsx';
-import {Card, Dialog} from 'material-ui';
+import {Card, Dialog, RaisedButton} from 'material-ui';
 import ReadOneView from '../../../containers/Collections/ReadOneView.jsx';
 import * as readOneActions from '../../../actions/Collections/manageCollectionsReadOneActions.js';
 
@@ -67,6 +67,7 @@ class ReadAll extends Component {
                     <TopActions/>
                     {modeComponent}
                     <Dialog
+                        actions={<RaisedButton onClick={this.handleClose} label="Close me" primary={true}/>}
                         contentStyle={{width: "90%", height: "90%", maxWidth: 'none', maxHeight: 'none'}}
                         modal={false}
                         open={this.state.open}

@@ -7,7 +7,7 @@ import {stateToHTML} from 'draft-js-export-html';
 import PictureRow from "../../components/BrowseCollections/Partials Components/PictureRow.jsx";
 import Comment from '../../components/BrowseCollections/Partials Components/Comment.jsx';
 import NotFoundView from "../Error/NotFoundView.jsx";
-import * as readOneActions from '../../actions/Browse/browseCollectionsReadOneActions.js';
+import * as readOneActions from '../../actions/BrowseCollections/browseCollectionsReadOneActions.js';
 
 let socket = io.connect();
 
@@ -65,7 +65,7 @@ class ReadOneView extends Component {
     };
 
     onScroll = () => {
-        if (this.props.comments.finished === false && document.title === this.props.collection.collectionName && this.props.comments.requesting === false)
+        if (this.props.comments.finished === false && this.props.comments.requesting === false)
             if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
                 this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.params._id)
             }
@@ -97,12 +97,6 @@ class ReadOneView extends Component {
     };
 
     render() {
-
-        if (this.props.collection.collectionName && this.props.collection.collectionName)
-            document.title = this.props.collection.collectionName;
-        else document.title = "404 not found";
-        if (this.props.collection.fetchedCollection === false && this.props.collection.fetchingCollection === false)
-            return <NotFoundView/>;
         return (
             <ReadOne
                 guest={this.props.credentials.guest}

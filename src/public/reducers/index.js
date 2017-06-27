@@ -6,7 +6,7 @@ import manageCollectionsCreateReducer from './Collections/manageCollectionsCreat
 import manageCollectionsDeleteReducer from './Collections/manageCollectionsDeleteReducer.js';
 import manageCollectionsReadAllReducer from './Collections/manageCollectionsReadAllReducer.js';
 import searchReducer from './AppBar/searchReducer.js'
-import browseCollectionsReadAllReducer from './Browse/browseCollectionsReadAllReducer.js';
+import browseCollectionsReadAllReducer from './BrowseCollections/browseCollectionsReadAllReducer.js';
 import collectionNamesReducer from './AppBar/collectionNamesReducer.js';
 import manageCollectionsReadOneReducer from './Collections/manageCollectionsReadOneReducer.js';
 import manageCollectionsUpdateReducer from './Collections/manageCollectionsUpdateReducer.js';
@@ -14,11 +14,13 @@ import signUpReducer from './Authentication/signUpReducer.js';
 import loginReducer from './Authentication/loginReducer.js';
 import profileReducer from './Profile/profileReducer.js';
 import contactReducer from './Contact/contactReducer.js';
-import browseCollectionsReadOneReducer from './Browse/browseCollectionsReadOneReducer.js';
+import browseCollectionsReadOneReducer from './BrowseCollections/browseCollectionsReadOneReducer.js';
 import manageCollectionsCreateReducerAdmin from './Admin/Collections/manageCollectionsCreateReducerAdmin.js';
 import manageCollectionsDeleteReducerAdmin from './Admin/Collections/manageCollectionsDeleteReducerAdmin.js';
 import manageCollectionsReadAllReducerAdmin from './Admin/Collections/manageCollectionsReadAllReducerAdmin.js';
 import manageCollectionsUpdateReducerAdmin from './Admin/Collections/manageCollectionsUpdateReducerAdmin.js';
+import browseNewsReadAllReducer from './BrowseNews/browseNewsReadAllReducer.js';
+import browseNewsReadOneReducer from './BrowseNews/browseNewsReadOneReducer.js';
 
 const rootReducer = combineReducers({
     signUpReducer: signUpReducer,
@@ -40,7 +42,9 @@ const rootReducer = combineReducers({
     manageCollectionsCreateReducerAdmin: manageCollectionsCreateReducerAdmin,
     manageCollectionsDeleteReducerAdmin: manageCollectionsDeleteReducerAdmin,
     manageCollectionsReadAllReducerAdmin: manageCollectionsReadAllReducerAdmin,
-    manageCollectionsUpdateReducerAdmin: manageCollectionsUpdateReducerAdmin
+    manageCollectionsUpdateReducerAdmin: manageCollectionsUpdateReducerAdmin,
+    browseNewsReadAllReducer: browseNewsReadAllReducer,
+    browseNewsReadOneReducer: browseNewsReadOneReducer
 });
 
 export default rootReducer
