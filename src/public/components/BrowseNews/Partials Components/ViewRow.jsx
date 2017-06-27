@@ -19,8 +19,7 @@ class ViewRow extends Component {
                 </Link>
                 {this.props.admin === true ?
                     <CardActions>
-                        <Link to={`/admin/${this.props.userId}/news/update/${this.props.news._id}`}
-                              target="_blank">
+                        <Link to={`/admin/${this.props.userId}/news/update/${this.props.news._id}`}>
                             <RaisedButton
                                 type="button"
                                 primary={true}
@@ -28,8 +27,7 @@ class ViewRow extends Component {
                                 buttonStyle={{backgroundColor: "#9b9b9b"}}
                             />
                         </Link>
-                        <Link to={`/admin/${this.props.userId}/news/delete/${this.props.news._id}`}
-                              target="_blank">
+                        <Link to={`/admin/${this.props.userId}/news/delete/${this.props.news._id}`}>
                             <RaisedButton
                                 type="button"
                                 secondary={true}

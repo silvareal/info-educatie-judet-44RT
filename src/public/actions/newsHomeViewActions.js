@@ -4,58 +4,60 @@ import Auth from '../modules/Auth.js';
 import qs from 'qs';
 
 // Initiated the Axios request
-export function getCollectionsInitiated() {
-    return {type: types.READ_COLLECTIONS_HOME_INITIATED}
+export function getNewsInitiated() {
+    return {type: types.READ_NEWS_HOME_INITIATED}
 }
 
-// Successfully retrieved the collections
-export function getCollectionsSuccess(collections) {
-    return {type: types.READ_COLLECTIONS_HOME_SUCCESS, collections: collections}
+// Successfully retrieved the news
+export function getNewsSuccess(news) {
+    return {type: types.READ_NEWS_HOME_SUCCESS, news: news}
 }
 
-// Failed to retrieve the collections
-export function getCollectionsFailure() {
-    return {type: types.READ_COLLECTIONS_HOME_FAILURE}
+// Failed to retrieve the news
+export function getNewsFailure() {
+    return {type: types.READ_NEWS_HOME_FAILURE}
 }
 
-// Function for retrieving the collections
-export function getCollectionsHomeView() {
+// Function for retrieving the news
+export function getNews() {
     return function (dispatch) {
-        dispatch(getCollectionsInitiated());
-        return axios({
+        dispatch(getNewsInitiated());
+        return axios ({
             method: 'get',
-            url: '/home/collections',
-            headers: {'Authorization': `bearer ${Auth.getToken()}`}
+            url: '/home/news',
+            headers: {
+                'Authorization': `bearer ${Auth.getToken()}`
+            }
+        }).then((response) => {
+            dispatch(getNewsSuccess(response.data.news))
+        }).catch(() => {
+            dispatch(getNewsFailure())
         })
-            .then((response) => {
-                dispatch(getCollectionsSuccess(response));
-            }).catch((err) => {
-                dispatch(getCollectionsFailure());
-            });
     }
 }
 
 // Handle comment change
-export function onCommentChange(comment, collectionId, key) {
+export function onCommentChange(comment, newsId, key) {
     return function (dispatch) {
-        dispatch({type: types.ON_COMMENT_CHANGE_COLLECTIONS_HOME, comment: comment, collectionId: collectionId, key: key})
+        dispatch({type: types.ON_COMMENT_CHANGE_NEWS_HOME, comment: comment, newsId: newsId, key: key})
     }
 }
 
 // Initiated the Axios request
 export function onSaveCommentInitiate() {
-    return {type: types.ON_SAVE_COMMENT_COLLECTIONS_HOME_INITIATE}
+    return {type: types.ON_SAVE_COMMENT_NEWS_HOME_INITIATE}
 }
 
 // Successfully saved the comment
 export function onSaveCommentSuccess() {
-    return {type: types.ON_SAVE_COMMENT_COLLECTIONS_HOME_SUCCESS}
+    return {type: types.ON_SAVE_COMMENT_NEWS_HOME_SUCCESS}
 }
 
 // Failed to save the comment
 export function onSaveCommentFailure() {
-    return {type: types.ON_SAVE_COMMENT_COLLECTIONS_HOME_FAILURE}
+    return {type: types.ON_SAVE_COMMENT_NEWS_HOME_FAILURE}
 }
+
 
 // Handle open SnackBar
 export function onOpenSnackBar() {
@@ -67,25 +69,33 @@ export function onOpenSnackBar() {
     }
 }
 
+// Handle close SnackBar
+export function onCloseSnackBar() {
+    return function (dispatch) {
+        dispatch({type: types.ON_CLOSE_SNACK_BAR_HOME_VIEW})
+    }
+}
+
 // Function for saving the comment
-export function onSave(comment, collectionId, key) {
+export function onSave(comment, newsId, key) {
     return function (dispatch) {
         dispatch(onSaveCommentInitiate());
         return axios({
             method: 'post',
-            url: '/comment/postCommentCollections',
+            url: '/comment/postCommentNews',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded',
                 'Authorization': `bearer ${Auth.getToken()}`
             },
             data: qs.stringify({
-                'collectionId': collectionId,
+                'newsId': newsId,
                 'comment': comment
             })
         }).then(() => {
             dispatch(onCommentChange("", "", key));
             dispatch(onSaveCommentSuccess());
             dispatch(onOpenSnackBar());
+
         }).catch(() => {
             dispatch(onSaveCommentFailure())
         })

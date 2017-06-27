@@ -35,7 +35,7 @@ class Delete extends Component {
                                     </CardHeader>
                                     <CardActions>
                                         <div className="delete-actions">
-                                            <Link to={`/admin/${this.props.adminId}/news`}>
+                                            <Link to={`/news`}>
                                                 <RaisedButton label="Finish"
                                                               secondary={true}
                                                               buttonStyle={{backgroundColor: "#42ab9e"}}/>
@@ -60,7 +60,7 @@ class Delete extends Component {
                                                     label="Yes"/>
                                             </div>
                                             <div style={{padding: 20}}>
-                                                <Link to={`/admin/${this.props.adminId}/news`}>
+                                                <Link to={`/news`}>
                                                     <RaisedButton
                                                         secondary={true}
                                                         label="No"

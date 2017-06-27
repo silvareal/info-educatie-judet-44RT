@@ -15,8 +15,9 @@ import {getAllCollections} from './actions/Collections/manageCollectionsReadAllA
 import * as browseReadAllActions from './actions/BrowseCollections/browseCollectionsReadAllActions.js';
 import * as getAllCollectionNames from './actions/AppBar/collectionNamesActions.js';
 import * as getCollectionsAdmin from './actions/Admin/Collections/manageCollectionsReadAllActionsAdmin';
-import * as browseNEwsReadAllActions from './actions/BrowseNews/browseNewsReadAllActions.js';
+import * as browseNewsReadAllActions from './actions/BrowseNews/browseNewsReadAllActions.js';
 import * as setUpdate from './actions/shouldUpdateActions.js';
+import * as getNewsHomeView from './actions/newsHomeViewActions.js';
 
 import {Provider} from 'react-redux';
 
@@ -26,9 +27,10 @@ const store = configureStore();
 // Does not need the user to be authenticated
 store.dispatch(getAllCollectionNames.getAllCollections());
 store.dispatch(browseReadAllActions.getAllCollections());
-store.dispatch(browseNEwsReadAllActions.getAllNews());
+store.dispatch(browseNewsReadAllActions.getAllNews());
 store.dispatch(getCollectionsHomeView());
 store.dispatch(getCredentials());
+store.dispatch(getNewsHomeView.getNews());
 
 socket.on("updateCollectionsStore", () => {
     store.dispatch(setUpdate.setShouldUpdate());

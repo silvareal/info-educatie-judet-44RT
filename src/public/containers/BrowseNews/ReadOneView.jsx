@@ -61,7 +61,9 @@ class ReadOneView extends Component {
         //the load more event listener
         window.addEventListener('scroll', this.onScroll);
 
-        socket.on('send:commentNews', this.handlers.getComments(this.props.params._newsId));
+        socket.on('send:commentNews', () => {
+            this.handlers.getComments(this.props.params._newsId
+        )});
     };
 
     onScroll = () => {

@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
-
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import * as updateActions from '../../../../actions/Admin/News/manageNewsUpdateActionsAdmin.js';
 import RichTextEditor from 'react-rte';
-import PictureRow from '../Partials Components/PictureRow.jsx';
-
+import NotFoundView from '../../../../containers/Error/NotFoundView.jsx';
 import {
     RaisedButton,
     Step,
@@ -21,28 +22,38 @@ import {red500} from 'material-ui/styles/colors';
 
 import LoadingIndicator from '../../../Loading Indicator/LoadingIndicator.jsx';
 
+let createHandler = function (dispatch) {
+
+    let onSlideIndexChange = function (stepIndex) {
+        dispatch(updateActions.onSlideIndexChange(stepIndex))
+    };
+
+    return {
+        onSlideIndexChange
+    }
+};
+
 class Update extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            stepIndex: 0,
-        };
+        this.handlers = createHandler(this.props.dispatch);
     }
 
     handleNext = () => {
-        const {stepIndex} = this.state;
+        let stepIndex = this.props.stepIndex;
         if (stepIndex < 2) {
-            this.setState({stepIndex: stepIndex + 1});
+            stepIndex++;
+            this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
     };
 
     handlePrev = () => {
-        const {stepIndex} = this.state;
+        let stepIndex = this.props.stepIndex;
         if (stepIndex > 0) {
-            this.setState({stepIndex: stepIndex - 1});
+            stepIndex--;
+            this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
     };
@@ -54,22 +65,6 @@ class Update extends Component {
     };
 
     getStepContent(stepIndex) {
-
-        let newsPictures = this.props.newsPictures;
-
-        let rows;
-
-        if (newsPictures) {
-            rows = Object.keys(newsPictures).map((key) => {
-                return (
-                    <PictureRow
-                        key={key}
-                        pictureLink={newsPictures[key].pictureLink}
-                    />
-                )
-            });
-        }
-
         const toolbarConfig = {
             // Optionally specify the groups to display (displayed in the order listed).
             display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
@@ -150,7 +145,6 @@ class Update extends Component {
                             <img src={this.props.newsCoverLink}/>
                         </CardMedia>
                         <div dangerouslySetInnerHTML={this.props.getHTML()}/>
-                        {rows}
                     </div>
                 );
             default:
@@ -158,133 +152,133 @@ class Update extends Component {
         }
     }
 
+    checkForErrors = (message) => {
+        return message === "Check the specified fields for errors"
+    };
+
+    checkStepOneErrors = (errors) => {
+        if (Object.keys(errors).length === 0)
+            return false;
+        return true
+    };
+
     resetScroll = () => {
         window.scrollTo(0, 0);
     };
 
     render() {
 
-        const {stepIndex} = this.state;
-
-        if (this.props.fetched) {
-            if (this.props.errorMessage === "The item you are searching for does not exist")
-                return (
-                    <div className="parallax-collections-create">
-                        <div className="top-bar-spacing"/>
-                        <Card className="container-collections" style={{backgroundColor: 'none'}}>
-                            <Card>
-                                <Link to={`/news`}>
-                                    <RaisedButton
-                                        type="button"
-                                        secondary={true}
-                                        label="Return"
-                                    />
-                                </Link>
-                                <div>
-                                    {this.props.errorMessage}
+        const {stepIndex} = this.props;
+        if (this.props.fetchedNews === true && this.props.fetchingNews === false) {
+            return (
+                <div className="parallax-collections-create">
+                    <div className="top-bar-spacing"/>
+                    <Card className="container-collections" style={{backgroundColor: 'none'}}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle
+                                    title={
+                                        <div className="top-actions-create">
+                                            <Stepper linear={false} activeStep={stepIndex}>
+                                                <Step>
+                                                    <StepButton
+                                                        onClick={() => this.handlers.onSlideIndexChange(0)}
+                                                        icon={this.checkStepOneErrors(this.props.errors) ?
+                                                            <FontIcon className="material-icons"
+                                                                      color={red500}>warning</FontIcon> :
+                                                            <FontIcon
+                                                                className="material-icons">mode_edit</FontIcon>}
+                                                    >
+                                                    </StepButton>
+                                                </Step>
+                                                <Step>
+                                                    <StepButton onClick={() => this.handlers.onSlideIndexChange(1)}
+                                                                icon={this.checkForErrors(this.props.message) ?
+                                                                    <FontIcon className="material-icons"
+                                                                              color={red500}>warning</FontIcon> :
+                                                                    <FontIcon
+                                                                        className="material-icons">done</FontIcon>}
+                                                    >
+                                                    </StepButton>
+                                                </Step>
+                                            </Stepper>
+                                        </div>
+                                    }/>
+                            </CardHeader>
+                            {this.props.successUpdate === true ?
+                                <div className="success-collections">
+                                    Collection was successfully updated
+                                </div> :
+                                <div className="errors-collections">
+                                    {this.props.message}
                                 </div>
-                            </Card>
-                        </Card>
-
-                    </div>
-                );
-            else
-                return (
-                    <div className="parallax-collections-create">
-                        <div className="top-bar-spacing"/>
-                        <Card className="container-collections" style={{backgroundColor: 'none'}}>
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle
-                                        title={
-                                            <div className="top-actions-create">
-                                                <Stepper linear={false} activeStep={stepIndex}>
-                                                    <Step>
-                                                        <StepButton
-                                                            onClick={() => this.setState({stepIndex: 0})}
-                                                            icon={this.props.errors.newsTitle || this.props.errors.newsCoverLink || this.props.errors.newsDescriptionRaw ?
-                                                                <FontIcon className="material-icons"
-                                                                          color={red500}>warning</FontIcon> :
-                                                                <FontIcon
-                                                                    className="material-icons">mode_edit</FontIcon>}
-                                                        >
-                                                        </StepButton>
-                                                    </Step>
-                                                    <Step>
-                                                        <StepButton onClick={() => this.setState({stepIndex: 1})}
-                                                                    icon={this.props.errors.newsTitle || this.props.errors.newsCoverLink || this.props.errors.newsDescriptionRaw ?
-                                                                        <FontIcon className="material-icons"
-                                                                                  color={red500}>warning</FontIcon> :
-                                                                        <FontIcon
-                                                                            className="material-icons">done</FontIcon>}
-                                                        >
-                                                        </StepButton>
-                                                    </Step>
-                                                </Stepper>
-                                            </div>
-                                        }/>
-                                </CardHeader>
-                                {this.props.errorMessage !== '' && this.props.errorMessage !== 'The news article has been successfully updated' && this.props.errorMessage !== "Fetched news" ?
-                                    <div className="errors-collections">
-                                        {this.props.errorMessage}
-                                    </div> :
-                                    <div className="success-collections">
-                                        {this.props.errorMessage}
-                                    </div>
-                                }
-                                {this.props.errors.summary ?
-                                    <div className="errors-collections">
-                                        {this.props.errors.summary}
-                                    </div> : null
-                                }
-                                {this.props.errorMessage === 'The news article has been successfully updated' ?
-                                    <div className="success-collections-create">
-                                        <Link to={`/news`}>
-                                            <RaisedButton
-                                                label="Finish"
-                                                secondary={true}
-                                                onTouchTap={this.resetScroll}
-                                                buttonStyle={{backgroundColor: "#42ab9e"}}
-                                            />
-                                        </Link>
-                                    </div> : null
-                                }
-                                <div className="step-style">{this.getStepContent(stepIndex)}</div>
-                                <CardActions className="step-actions">
-                                    {stepIndex === 0 ?
-                                        <Link to={`/news`}>
-                                            <RaisedButton
-                                                label="Cancel"
-                                                buttonStyle={{backgroundColor: "#ee6e73"}}
-                                                secondary={true}/>
-                                        </Link>
-                                        :
+                            }
+                            {this.props.errors.summary ?
+                                <div className="errors-collections">
+                                    {this.props.errors.summary}
+                                </div> : null
+                            }
+                            {this.props.successUpdate === true ?
+                                <div className="success-collections-create">
+                                    <Link to={`/news`}>
                                         <RaisedButton
-                                            label="Back"
-                                            primary={true}
+                                            label="Finish"
+                                            buttonStyle={{backgroundColor: "#42ab9e"}}
+                                            secondary={true}
+                                            onTouchTap={this.resetScroll}
+                                        />
+                                    </Link>
+                                </div> : null
+                            }
+                            <div className="step-style">{this.getStepContent(stepIndex)}</div>
+                            <CardActions className="step-actions">
+                                {stepIndex === 0 ?
+                                    <Link to={`/news`}>
+                                        <RaisedButton
+                                            label="Cancel"
                                             buttonStyle={{backgroundColor: "#ee6e73"}}
-                                            disabled={stepIndex === 0}
-                                            onTouchTap={this.handlePrev}/>
-                                    }
-
+                                            secondary={true}/>
+                                    </Link>
+                                    :
                                     <RaisedButton
-                                        label={stepIndex === 1 ? "Save" : "Next"}
+                                        label="Back"
                                         primary={true}
-                                        onTouchTap={stepIndex === 1 ? this.props.onSave : this.handleNext}
-                                        buttonStyle={{backgroundColor: "#42ab9e"}}/>
-                                </CardActions>
-                            </Card>
+                                        buttonStyle={{backgroundColor: "#ee6e73"}}
+                                        disabled={stepIndex === 0}
+                                        onTouchTap={this.handlePrev}/>
+                                }
+
+                                <RaisedButton
+                                    label={stepIndex === 1 ? "Save" : "Next"}
+                                    primary={true}
+                                    onTouchTap={stepIndex === 1 ? this.props.onSave : this.handleNext}
+                                    buttonStyle={{backgroundColor: "#42ab9e"}}/>
+                            </CardActions>
                         </Card>
-                    </div>
-                )
+                    </Card>
+                </div>
+            )
         }
-        else return (
-            <div className="parallax-collections-create">
-                <div className="top-bar-spacing"/>
-                <LoadingIndicator/>
-            </div>
-        )
+        else if (this.props.fetchedNews === false && this.props.fetchingNews === true)
+            return (
+                <div className="parallax-collections-create">
+                    <div className="top-bar-spacing"/>
+                    <LoadingIndicator/>
+                </div>
+            );
+        else if (this.props.fetchedNews === false && this.props.fetchingNews === false)
+            return <NotFoundView/>
     }
 }
 
-export default Update
+Update.propTypes = {
+    stepIndex: PropTypes.number
+};
+
+const mapStateToProps = (state) => {
+    return {
+        stepIndex: state.manageNewsUpdateReducerAdmin.stepIndex
+    }
+};
+
+export default connect(mapStateToProps)(Update)

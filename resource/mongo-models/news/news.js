@@ -16,13 +16,6 @@ const NewsSchema = new mongoose.Schema({
     newsDescriptionRaw: {
         type: String,
     },
-    picturesArray: [
-        {
-            newsPictureLink: {
-                type: String,
-            }
-        }
-    ],
     time: { type: Date, default: Date.now },
 });
 

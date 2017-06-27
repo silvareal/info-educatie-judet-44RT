@@ -2,20 +2,51 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router';
 import Home from '../../components/Home/Main Components/Home.jsx';
-import Auth from '../../modules/Auth.js'
 import {Card, CardMedia, CardTitle, CardActions, TextField, ListItem, List, Avatar} from 'material-ui';
 import ContentSend from 'material-ui/svg-icons/content/send';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import {connect} from 'react-redux';
 import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
 import * as collectionsActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
+import * as readActions from '../../actions/Admin/Collections/manageCollectionsReadAllActionsAdmin.js';
+import * as collectionsBrowseActions from '../../actions/BrowseCollections/browseCollectionsReadAllActions.js';
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
+import * as newsBrowseActions from '../../actions/BrowseNews/browseNewsReadAllActions.js';
+import * as newsActionsHomeView from '../../actions/newsHomeViewActions.js';
+
 let socket = io.connect();
 
 let createHandler = function (dispatch) {
     let updateCollectionsStore = function () {
         dispatch(collectionsHomeViewActions.getCollectionsHomeView());
         dispatch(collectionsActions.getAllCollections());
+        dispatch(readActions.getAllCollections());
+        dispatch(collectionsBrowseActions.getAllCollections());
+    };
+
+    let updateNewsStore = function () {
+        dispatch(newsBrowseActions.getAllNews());
+        dispatch(newsActionsHomeView.getNews());
+    };
+
+    let onCommentNewsChange = function (comment, newsId,  key) {
+        dispatch(newsActionsHomeView.onCommentChange(comment, newsId, key))
+    };
+
+    let onCommentCollectionsChange = function (comment, collectionId, key) {
+        dispatch(collectionsHomeViewActions.onCommentChange(comment, collectionId, key))
+    };
+
+    let onSaveCommentNews = function (comment, newsId, key) {
+        dispatch(newsActionsHomeView.onSave(comment, newsId, key))
+    };
+
+    let onSaveCommentCollections = function (comment, collectionId, key) {
+        dispatch(collectionsHomeViewActions.onSave(comment, collectionId, key))
+    };
+
+    let removeShouldUpdateNews = function () {
+        dispatch(shouldUpdateActions.removeShouldUpdateNews());
     };
 
     let removeShouldUpdate = function () {
@@ -24,6 +55,12 @@ let createHandler = function (dispatch) {
 
     return {
         updateCollectionsStore,
+        updateNewsStore,
+        onCommentNewsChange,
+        onCommentCollectionsChange,
+        onSaveCommentNews,
+        onSaveCommentCollections,
+        removeShouldUpdateNews,
         removeShouldUpdate
     }
 };
@@ -31,253 +68,213 @@ let createHandler = function (dispatch) {
 class HomeView extends Component {
     constructor(props) {
         super(props);
-
         this.handlers = createHandler(this.props.dispatch);
-
-        this.state = {
-            news: [],
-            collectionId: "",
-            newsId: "",
-            fetchedNews: false,
-            profilePictureLink: '',
-            //Due to concat not working or myself not using it correctly, I've manually set the initial state of this array
-            comments: [
-                {value: ''}, {value: ''}, {value: ''}, {value: ''},
-                {value: ''}, {value: ''}, {value: ''}, {value: ''},
-            ]
-        };
     }
 
-    getNews = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/home/news');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                this.setState({
-                    news: xhr.response.news,
-                    fetchedNews: true
-                })
-            }
-        });
-        xhr.send();
-    };
-
     componentDidMount() {
-        this.getNews();
         if (this.props.shouldUpdateCollections && this.props.shouldUpdateCollections.shouldUpdateCollections) {
             this.handlers.updateCollectionsStore();
             this.handlers.removeShouldUpdate();
         }
+        if (this.props.shouldUpdateCollections && this.props.shouldUpdateCollections.shouldUpdateNews) {
+            this.handlers.updateNewsStore();
+            this.handlers.removeShouldUpdateNews();
+        }
     };
 
-    onCommentChange = (i) => (e) => {
-        const newComments = this.state.comments.map((comment, j) => {
-            if (parseInt(i) !== j) return comment;
-            return {...comment, value: e.target.value}
+    onCommentNewsChange = (i, newsId) => (e) => {
+        this.handlers.onCommentNewsChange(e.target.value, newsId, i);
+    };
+
+    onCommentCollectionsChange = (i, collectionId) => (e) => {
+        this.handlers.onCommentCollectionsChange(e.target.value, collectionId, i)
+    };
+
+    onSaveNewsComments = (i) => () => {
+        this.handlers.onSaveCommentNews(this.props.news.comments[i].value, this.props.news.comments[i].newsId, i);
+
+        socket.emit('send:commentNews', {
+            comment: this.props.news.comments[i].value,
+            newsId: this.props.news.comments[i].newsId,
+            userName: this.props.credentials.userName,
+            firstName: this.props.credentials.firstName,
+            userId: this.props.credentials.userId,
+            profilePictureLink: this.props.credentials.profilePictureLink
         });
-        this.setState({comments: newComments})
     };
 
-    getCollectionId = (i) => () => {
-        this.setState({
-            collectionId: this.props.collections.collections[i]._id
-        })
-    };
+    onSaveCollectionsComments = (i) => ()  => {
+        this.handlers.onSaveCommentCollections(this.props.collections.comments[i].value, this.props.collections.comments[i].collectionId, i);
 
-    getNewsId = (i) => () => {
-        this.setState({
-            newsId: this.state.news[i]._id
-        })
-    };
-
-    onSave = (i) => () => {
-
-        if (i >= 4) {
-            const collectionId = encodeURIComponent(this.state.collectionId);
-            const userName = encodeURIComponent(this.props.credentials.userName);
-            const firstName = encodeURIComponent(this.props.firstName);
-            const comment = encodeURIComponent(this.state.comments[i].value);
-            const profilePictureLink = encodeURIComponent(this.props.credentials.profilePictureLink);
-
-            const formData = `profilePictureLink=${profilePictureLink}&collectionId=${collectionId}&userName=${userName}&firstName=${firstName}&comment=${comment}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open("post", "/comment/postCommentCollections");
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-
-                    this.setState({
-                        commentAdded: xhr.response.commentAdded
-                    });
-
-                    const newComments = this.state.comments.map((comment, j) => {
-                        if (i !== j) return comment;
-                        return {...comment, value: ""}
-                    });
-                    this.setState({comments: newComments})
-
-                }
-                else {
-                    this.setState({
-                        commentAdded: false
-                    })
-                }
-            });
-
-            xhr.send(formData);
-
-            socket.emit('send:comment', {
-                comment: this.state.comments[i].value,
-                collectionId: this.state.collectionId,
-                userName: this.props.credentials.userName,
-                firstName: this.props.firstName,
-                userId: this.props.credentials.userId,
-                profilePictureLink: this.props.credentials.profilePictureLink
-            });
-        }
-        else {
-            const newsId = encodeURIComponent(this.state.newsId);
-            const userName = encodeURIComponent(this.props.credentials.userName);
-            const firstName = encodeURIComponent(this.props.firstName);
-            const comment = encodeURIComponent(this.state.comments[i].value);
-            const profilePictureLink = encodeURIComponent(this.props.credentials.profilePictureLink);
-
-            const formData = `profilePictureLink=${profilePictureLink}&newsId=${newsId}&userName=${userName}&firstName=${firstName}&comment=${comment}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open("post", "/comment/postCommentNews");
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-
-                    this.setState({
-                        commentAdded: xhr.response.commentAdded
-                    });
-
-                    const newComments = this.state.comments.map((comment, j) => {
-                        if (i !== j) return comment;
-                        return {...comment, value: ""}
-                    });
-                    this.setState({comments: newComments})
-
-                }
-                else {
-                    this.setState({
-                        commentAdded: false
-                    })
-                }
-            });
-
-            xhr.send(formData);
-
-            socket.emit('send:commentNews', {
-                comment: this.state.comments[i].value,
-                newsId: this.state.newsId,
-                userName: this.props.credentials.userName,
-                firstName: this.props.firstName,
-                userId: this.props.credentials.userId,
-                profilePictureLink: this.props.credentials.profilePictureLink
-            });
-        }
+        socket.emit('send:comment', {
+            comment: this.props.news.comments[i].value,
+            newsId: this.props.news.comments[i].newsId,
+            userName: this.props.credentials.userName,
+            firstName: this.props.credentials.firstName,
+            userId: this.props.credentials.userId,
+            profilePictureLink: this.props.credentials.profilePictureLink
+        });
     };
 
     render() {
 
-        let news = this.state.news;
+        let news = this.props.news.news;
 
         let rowsNews1, rowsNews2, rowsNews3;
 
-        rowsNews1 = Object.keys(news).map((key) => {
-            key = parseInt(key);
-            if (key % 2 === 0)
-                return (
-                    <li className="left-news"
-                        key={key}
-                        onMouseEnter={this.getNewsId(key)}
-                    >
-                        <Card>
-                            <Link to={`/news/${news[key]._id}`}
-                                  target="_blank">
-                                <CardMedia overlay={<CardTitle title={news[key].newsTitle}/>}>
-                                    <img src={news[key].newsCoverLink}/>
-                                </CardMedia>
-                            </Link>
-                            {this.props.credentials.finished === true && this.props.credentials.guest === false && this.props.credentials.profilePictureLink ?
-                                <CardActions>
-                                    <List style={{paddingTop: 0, paddingBottom: 0}}>
-                                        <div className="avatar-cells-home">
+        if (this.props.news && this.props.news.news) {
+
+            rowsNews1 = Object.keys(news).map((key) => {
+                key = parseInt(key);
+                if (key % 2 === 0)
+                    return (
+                        <li className="left-news"
+                            key={key}
+                        >
+                            <Card>
+                                <Link to={`/news/${news[key]._id}`}
+                                      target="_blank">
+                                    <CardMedia overlay={<CardTitle title={news[key].newsTitle}/>}>
+                                        <img src={news[key].newsCoverLink}/>
+                                    </CardMedia>
+                                </Link>
+                                {this.props.credentials.finished === true && this.props.credentials.guest === false && this.props.credentials.profilePictureLink ?
+                                    <CardActions>
+                                        <List style={{paddingTop: 0, paddingBottom: 0}}>
+                                            <div className="avatar-cells-home">
+                                                <ListItem disabled={true}
+                                                          leftAvatar={
+                                                              <Link to={`/profile/${this.props.credentials.userName}`}>
+                                                                  <Avatar
+                                                                      src={this.props.credentials.profilePictureLink}/>
+                                                              </Link>}
+                                                          rightIcon={<ContentSend onClick={this.onSaveNewsComments(key)}
+                                                                                  hoverColor="#f3989b"
+                                                                                  color="#eb7077"/>}
+                                                          style={{paddingTop: 0, paddingBottom: 0}}
+                                                >
+                                                    <TextField name="commentNewsLeft"
+                                                               value={this.props.news.comments[key].value}
+                                                               onChange={this.onCommentNewsChange(key, news[key]._id)}
+                                                               style={{width: "100%"}}
+                                                               multiLine={true}
+                                                               rowsMax={2}
+                                                    />
+                                                </ListItem>
+                                            </div>
+                                        </List>
+                                    </CardActions>
+                                    : null
+                                }
+
+                                {this.props.credentials.guest === false && this.props.credentials.finished === true && !this.props.credentials.profilePictureLink  ?
+                                    <CardActions>
+                                        <List style={{paddingTop: 0, paddingBottom: 0}}>
+                                            <div className="avatar-cells-home">
+                                                <ListItem disabled={true}
+                                                          leftIcon={
+                                                              <Link to={`/profile/${this.props.credentials.userName}`}>
+                                                                  <ActionAccountCircle/>
+                                                              </Link>}
+                                                          rightIcon={<ContentSend onClick={this.onSaveNewsComments(key)}
+                                                                                  hoverColor="#f3989b"
+                                                                                  color="#eb7077"/>}
+                                                          style={{paddingTop: 0, paddingBottom: 0}}
+                                                >
+                                                    <TextField name="commentNewsLeft"
+                                                               value={this.props.news.comments[key].value}
+                                                               onChange={this.onCommentNewsChange(key, news[key]._id)}
+                                                               style={{width: "100%"}}
+                                                               multiLine={true}
+                                                               rowsMax={2}
+                                                    />
+                                                </ListItem>
+                                            </div>
+                                        </List>
+                                    </CardActions>
+                                    : null
+                                }
+
+                            </Card>
+                        </li>
+                    )
+            });
+
+            rowsNews2 = Object.keys(news).map((key) => {
+                key = parseInt(key);
+                if (key % 2 === 1)
+                    return (
+                        <li className="right-news"
+                            key={key}
+                        >
+                            <Card>
+                                <Link to={`/news/${news[key]._id}`}
+                                      target="_blank">
+                                    <CardMedia overlay={<CardTitle title={news[key].newsTitle}/>}>
+                                        <img src={news[key].newsCoverLink}/>
+                                    </CardMedia>
+                                </Link>
+                                {this.props.credentials.finished === true && this.props.credentials.guest === false && this.props.credentials.profilePictureLink ?
+                                    <CardActions className="avatar-cells-home">
+                                        <List style={{paddingTop: 0, paddingBottom: 0}}>
                                             <ListItem disabled={true}
                                                       leftAvatar={
                                                           <Link to={`/profile/${this.props.credentials.userName}`}>
                                                               <Avatar
                                                                   src={this.props.credentials.profilePictureLink}/>
                                                           </Link>}
-                                                      rightIcon={<ContentSend onClick={this.onSave(key)}
+                                                      rightIcon={<ContentSend onClick={this.onSaveNewsComments(key)}
                                                                               hoverColor="#f3989b"
                                                                               color="#eb7077"/>}
                                                       style={{paddingTop: 0, paddingBottom: 0}}
                                             >
-                                                <TextField name="commentNewsLeft"
-                                                           value={this.state.comments[key].value}
-                                                           onChange={this.onCommentChange(key)}
+                                                <TextField name="commentNewsRight"
+                                                           value={this.props.news.comments[key].value}
+                                                           onChange={this.onCommentNewsChange(key, news[key]._id)}
                                                            style={{width: "100%"}}
                                                            multiLine={true}
                                                            rowsMax={2}
                                                 />
                                             </ListItem>
-                                        </div>
-                                    </List>
-                                </CardActions>
-                                : null
-                            }
+                                        </List>
+                                    </CardActions>
+                                    : null}
 
-                            {!this.props.credentials.profilePictureLink && this.props.credentials.finished === true && this.props.credentials.guest === false ?
-                                <CardActions>
-                                    <List style={{paddingTop: 0, paddingBottom: 0}}>
-                                        <div className="avatar-cells-home">
+                                {!this.props.credentials.profilePictureLink && this.props.credentials.finished === true && this.props.credentials.guest === false ?
+                                    <CardActions className="avatar-cells-home">
+                                        <List style={{paddingTop: 0, paddingBottom: 0}}>
                                             <ListItem disabled={true}
                                                       leftIcon={
                                                           <Link to={`/profile/${this.props.credentials.userName}`}>
                                                               <ActionAccountCircle/>
                                                           </Link>}
-                                                      rightIcon={<ContentSend onClick={this.onSave(key)}
+                                                      rightIcon={<ContentSend onClick={this.onSaveNewsComments(key)}
                                                                               hoverColor="#f3989b"
                                                                               color="#eb7077"/>}
                                                       style={{paddingTop: 0, paddingBottom: 0}}
                                             >
-                                                <TextField name="commentNewsLeft"
-                                                           value={this.state.comments[key].value}
-                                                           onChange={this.onCommentChange(key)}
+                                                <TextField name="commentNewsRight"
+                                                           value={this.props.news.comments[key].value}
+                                                           onChange={this.onCommentNewsChange(key, news[key]._id)}
                                                            style={{width: "100%"}}
                                                            multiLine={true}
                                                            rowsMax={2}
                                                 />
                                             </ListItem>
-                                        </div>
-                                    </List>
-                                </CardActions>
-                                : null
-                            }
+                                        </List>
+                                    </CardActions>
+                                    : null
+                                }
+                            </Card>
+                        </li>
+                    )
+            });
+            //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {}
 
-                        </Card>
-                    </li>
-                )
-        });
-
-        rowsNews2 = Object.keys(news).map((key) => {
-            key = parseInt(key);
-            if (key % 2 === 1)
+            rowsNews3 = Object.keys(news).map((key) => {
+                key = parseInt(key);
                 return (
-                    <li className="right-news"
-                        key={key}
-                        onMouseEnter={this.getNewsId(key)}
+                    <li key={key}
                     >
                         <Card>
                             <Link to={`/news/${news[key]._id}`}
@@ -286,99 +283,30 @@ class HomeView extends Component {
                                     <img src={news[key].newsCoverLink}/>
                                 </CardMedia>
                             </Link>
-                            {this.props.credentials.finished === true && this.props.credentials.guest === false && this.props.credentials.profilePictureLink ?
-                                <CardActions className="avatar-cells-home">
+                            {this.props.credentials.finished === true && this.props.credentials.guest === false ?
+                                <CardActions>
                                     <List style={{paddingTop: 0, paddingBottom: 0}}>
                                         <ListItem disabled={true}
-                                                  leftAvatar={
-                                                      <Link to={`/profile/${this.props.credentials.userName}`}>
-                                                          <Avatar
-                                                              src={this.props.credentials.profilePictureLink}/>
-                                                      </Link>}
-                                                  rightIcon={<ContentSend onClick={this.onSave(key)}
+                                                  rightIcon={<ContentSend onClick={this.onSaveNewsComments(key)}
                                                                           hoverColor="#f3989b"
                                                                           color="#eb7077"/>}
                                                   style={{paddingTop: 0, paddingBottom: 0}}
                                         >
-                                            <TextField name="commentNewsRight"
-                                                       value={this.state.comments[key].value}
-                                                       onChange={this.onCommentChange(key)}
+                                            <TextField name="commentNewsMobile"
+                                                       value={this.props.news.comments[key].value}
+                                                       onChange={this.onCommentNewsChange(key, news[key]._id)}
                                                        style={{width: "100%"}}
                                                        multiLine={true}
-                                                       rowsMax={2}
                                             />
                                         </ListItem>
                                     </List>
                                 </CardActions>
                                 : null}
-
-                            {!this.props.credentials.profilePictureLink && this.props.credentials.finished === true && this.props.credentials.guest === false ?
-                                <CardActions className="avatar-cells-home">
-                                    <List style={{paddingTop: 0, paddingBottom: 0}}>
-                                        <ListItem disabled={true}
-                                                  leftIcon={
-                                                      <Link to={`/profile/${this.props.credentials.userName}`}>
-                                                          <ActionAccountCircle/>
-                                                      </Link>}
-                                                  rightIcon={<ContentSend onClick={this.onSave(key)}
-                                                                          hoverColor="#f3989b"
-                                                                          color="#eb7077"/>}
-                                                  style={{paddingTop: 0, paddingBottom: 0}}
-                                        >
-                                            <TextField name="commentNewsRight"
-                                                       value={this.state.comments[key].value}
-                                                       onChange={this.onCommentChange(key)}
-                                                       style={{width: "100%"}}
-                                                       multiLine={true}
-                                                       rowsMax={2}
-                                            />
-                                        </ListItem>
-                                    </List>
-                                </CardActions>
-                                : null
-                            }
                         </Card>
                     </li>
                 )
-        });
-        //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {}
-
-        rowsNews3 = Object.keys(news).map((key) => {
-            key = parseInt(key);
-            return (
-                <li key={key}
-                    onClick={this.getNewsId(key)}
-                >
-                    <Card>
-                        <Link to={`/news/${news[key]._id}`}
-                              target="_blank">
-                            <CardMedia overlay={<CardTitle title={news[key].newsTitle}/>}>
-                                <img src={news[key].newsCoverLink}/>
-                            </CardMedia>
-                        </Link>
-                        {this.props.credentials.finished === true && this.props.credentials.guest === false ?
-                            <CardActions>
-                                <List style={{paddingTop: 0, paddingBottom: 0}}>
-                                    <ListItem disabled={true}
-                                              rightIcon={<ContentSend onClick={this.onSave(key)}
-                                                                      hoverColor="#f3989b"
-                                                                      color="#eb7077"/>}
-                                              style={{paddingTop: 0, paddingBottom: 0}}
-                                    >
-                                        <TextField name="commentNewsMobile"
-                                                   value={this.state.comments[key].value}
-                                                   onChange={this.onCommentChange(key)}
-                                                   style={{width: "100%"}}
-                                                   multiLine={true}
-                                        />
-                                    </ListItem>
-                                </List>
-                            </CardActions>
-                            : null}
-                    </Card>
-                </li>
-            )
-        });
+            });
+        }
 
         //----------------------
 
@@ -394,7 +322,6 @@ class HomeView extends Component {
                     return (
                         <li className="left-news"
                             key={key}
-                            onMouseEnter={this.getCollectionId(key)}
                         >
                             <Card>
                                 <Link to={`/collections/${collections[key]._id}`}
@@ -413,14 +340,14 @@ class HomeView extends Component {
                                                               <Avatar
                                                                   src={this.props.credentials.profilePictureLink}/>
                                                           </Link>}
-                                                      rightIcon={<ContentSend onClick={this.onSave(key + 4)}
+                                                      rightIcon={<ContentSend onClick={this.onSaveCollectionsComments(key)}
                                                                               hoverColor="#f3989b"
                                                                               color="#eb7077"/>}
                                                       style={{paddingTop: 0, paddingBottom: 0}}
                                             >
                                                 <TextField name="commentNewsLeft"
-                                                           value={this.state.comments[key + 4].value}
-                                                           onChange={this.onCommentChange(key + 4)}
+                                                           value={this.props.collections.comments[key].value}
+                                                           onChange={this.onCommentCollectionsChange(key, collections[key]._id)}
                                                            style={{width: "100%"}}
                                                            multiLine={true}
                                                            rowsMax={2}
@@ -438,14 +365,14 @@ class HomeView extends Component {
                                                           <Link to={`/profile/${this.props.credentials.userName}`}>
                                                               <ActionAccountCircle/>
                                                           </Link>}
-                                                      rightIcon={<ContentSend onClick={this.onSave(key + 4)}
+                                                      rightIcon={<ContentSend onClick={this.onSaveCollectionsComments(key)}
                                                                               hoverColor="#f3989b"
                                                                               color="#eb7077"/>}
                                                       style={{paddingTop: 0, paddingBottom: 0}}
                                             >
                                                 <TextField name="commentNewsLeft"
-                                                           value={this.state.comments[key + 4].value}
-                                                           onChange={this.onCommentChange(key + 4)}
+                                                           value={this.props.collections.comments[key].value}
+                                                           onChange={this.onCommentCollectionsChange(key, collections[key]._id)}
                                                            style={{width: "100%"}}
                                                            multiLine={true}
                                                            rowsMax={2}
@@ -465,7 +392,6 @@ class HomeView extends Component {
                     return (
                         <li className="right-news"
                             key={key}
-                            onMouseEnter={this.getCollectionId(key)}
                         >
                             <Card>
                                 <Link to={`/collections/${collections[key]._id}`}
@@ -483,14 +409,14 @@ class HomeView extends Component {
                                                               <Avatar
                                                                   src={this.props.credentials.profilePictureLink}/>
                                                           </Link>}
-                                                      rightIcon={<ContentSend onClick={this.onSave(key + 4)}
+                                                      rightIcon={<ContentSend onClick={this.onSaveCollectionsComments(key)}
                                                                               hoverColor="#f3989b"
                                                                               color="#eb7077"/>}
                                                       style={{paddingTop: 0, paddingBottom: 0}}
                                             >
                                                 <TextField name="commentNewsLeft"
-                                                           value={this.state.comments[key + 4].value}
-                                                           onChange={this.onCommentChange(key + 4)}
+                                                           value={this.props.collections.comments[key].value}
+                                                           onChange={this.onCommentCollectionsChange(key, collections[key]._id)}
                                                            style={{width: "100%"}}
                                                            multiLine={true}
                                                            rowsMax={2}
@@ -508,14 +434,14 @@ class HomeView extends Component {
                                                           <Link to={`/profile/${this.props.credentials.userName}`}>
                                                               <ActionAccountCircle/>
                                                           </Link>}
-                                                      rightIcon={<ContentSend onClick={this.onSave(key + 4)}
+                                                      rightIcon={<ContentSend onClick={this.onSaveCollectionsComments(key)}
                                                                               hoverColor="#f3989b"
                                                                               color="#eb7077"/>}
                                                       style={{paddingTop: 0, paddingBottom: 0}}
                                             >
                                                 <TextField name="commentNewsLeft"
-                                                           value={this.state.comments[key + 4].value}
-                                                           onChange={this.onCommentChange(key + 4)}
+                                                           value={this.props.collections.comments[key].value}
+                                                           onChange={this.onCommentCollectionsChange(key, collections[key]._id)}
                                                            style={{width: "100%"}}
                                                            multiLine={true}
                                                            rowsMax={2}
@@ -533,7 +459,6 @@ class HomeView extends Component {
                 key = parseInt(key);
                 return (
                     <li key={key}
-                        onClick={this.getCollectionId(key)}
                     >
                         <Card>
                             <Link to={`/collections/${collections[key]._id}`}
@@ -546,14 +471,14 @@ class HomeView extends Component {
                                 <CardActions className="avatar-cells-home">
                                     <List style={{paddingTop: 0, paddingBottom: 0}}>
                                         <ListItem disabled={true}
-                                                  rightIcon={<ContentSend onClick={this.onSave(key + 4)}
+                                                  rightIcon={<ContentSend onClick={this.onSaveCollectionsComments(key)}
                                                                           hoverColor="#f3989b"
                                                                           color="#eb7077"/>}
                                                   style={{paddingTop: 0, paddingBottom: 0}}
                                         >
                                             <TextField name="commentNewsLeft"
-                                                       value={this.state.comments[key + 4].value}
-                                                       onChange={this.onCommentChange(key + 4)}
+                                                       value={this.props.collections.comments[key].value}
+                                                       onChange={this.onCommentCollectionsChange(key, collections[key]._id)}
                                                        style={{width: "100%"}}
                                                        multiLine={true}
                                             />
@@ -573,9 +498,12 @@ class HomeView extends Component {
 
         return (
             <Home
-                fetchedNews={this.state.fetchedNews}
+                successCommentCollections={this.props.successCommentCollections}
+                successCommentNews={this.props.news.successCommentNews}
                 fetchingCollections={this.props.collections.fetchingCollections}
                 fetchedCollections={this.props.collections.fetchedCollections}
+                fetchedNews={this.props.news.fetchedNews}
+                fetchingNews={this.props.news.fetchedNews}
                 userName={this.props.credentials.userName}
                 userId={this.props.credentials.userId}
                 rowsNews1={rowsNews1}
@@ -599,13 +527,15 @@ HomeView.propTypes = {
         guest: PropTypes.bool,
         finished: PropTypes.bool
     }),
+    news: PropTypes.object,
     collections: React.PropTypes.shape({
         collections: PropTypes.array,
         fetchedCollections: PropTypes.bool,
         fetchingCollections: PropTypes.bool
     }),
     shouldUpdateCollections: React.PropTypes.shape({
-        shouldUpdateCollections: PropTypes.bool
+        shouldUpdateCollections: PropTypes.bool,
+        shouldUpdateNews: PropTypes.bool
     })
 };
 
@@ -613,7 +543,7 @@ HomeView.propTypes = {
 const credentials = (state) => {
     if (state.userReducer.fetching === true) {
         return {
-            guest: false,
+            guest: true,
             finished: false
         }
     }
@@ -624,7 +554,7 @@ const credentials = (state) => {
             userName: response.userName,
             profilePictureLink: response.profilePictureLink,
             firstName: response.firstName,
-            guest: false,
+            guest: response.guest,
             finished: true
         };
     }
@@ -642,18 +572,46 @@ const collections = (state) => {
             fetchingCollections: true
         }
     }
-    else if (state.collectionsHomeViewReducer.data) {
-        const response = state.collectionsHomeViewReducer.data;
+    else if (state.collectionsHomeViewReducer.fetched === true && state.collectionsHomeViewReducer.fetching === false) {
+        const response = state.collectionsHomeViewReducer.collections.data;
         return {
             collections: response.collections,
             fetchedCollections: true,
-            fetchingCollections: false
+            fetchingCollections: false,
+            comments: state.collectionsHomeViewReducer.comments,
+            successCommentCollections: state.collectionsHomeViewReducer.successCommentCollections
         }
     }
-    else if (state.collectionsHomeViewReducer.fetched === false) {
+    else if (state.collectionsHomeViewReducer.fetched === false && state.collectionsHomeViewReducer.fetching === false) {
         return {
             fetchedCollections: false,
             fetchingCollections: false
+        }
+    }
+};
+
+// Map news
+const news = (state) => {
+    if (state.newsHomeViewReducer.fetching === true) {
+        return {
+            fetchingNews: true,
+            fetchedNews: false
+        }
+    }
+    else if (state.newsHomeViewReducer.fetched === true && state.newsHomeViewReducer.fetching === false) {
+        const statePath = state.newsHomeViewReducer;
+        return {
+            news: statePath.news,
+            fetchedNews: true,
+            fetchingNews: false,
+            comments: statePath.comments,
+            successCommentNews: statePath.successCommentNews
+        }
+    }
+    else if (state.newsHomeViewReducer.fetched === false) {
+        return {
+            fetchedNews: false,
+            fetchingNews: false
         }
     }
 };
@@ -663,7 +621,8 @@ const shouldUpdateFunction = (state) => {
     if (state.shouldUpdateCollectionsReducer) {
         const response = state.shouldUpdateCollectionsReducer;
         return {
-            shouldUpdateCollections: response.shouldUpdate
+            shouldUpdateCollections: response.shouldUpdate,
+            shouldUpdateNews: response.shouldUpdateNews
         }
     }
 };
@@ -671,6 +630,7 @@ const shouldUpdateFunction = (state) => {
 const mapStateToProps = (state) => ({
     credentials: credentials(state),
     collections: collections(state),
+    news: news(state),
     shouldUpdateCollections: shouldUpdateFunction(state)
 });
 

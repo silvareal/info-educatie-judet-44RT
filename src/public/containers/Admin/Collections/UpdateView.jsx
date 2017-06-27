@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 import Update from '../../../components/Admin/Collections/Main Components/Update.jsx';
 import * as updateActions from '../../../actions/Admin/Collections/manageCollectionsUpdateActionsAdmin.js';
 import NotAuthorizedView from "../../Error/NotAuthorizedView.jsx";
-import NotFoundView from "../../Error/NotFoundView.jsx";
 import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 let createHandler = function (dispatch) {
@@ -155,7 +154,6 @@ class UpdateView extends Component {
                 this.handlers.onPicturesArrayChange(newPictures);
             }
 
-            //converting collectionDescription to collectionDescriptionRaw
             let editorState = this.props.collection.collectionDescription.getEditorState();
             let contentState = editorState.getCurrentContent();
             let rawContentState = window.rawContentState = convertToRaw(contentState);
@@ -177,8 +175,6 @@ class UpdateView extends Component {
             this.handlers.onUpdate(userId, userName, profilePictureLink, userIdOld, userNameOld, profilePictureLinkOld, collectionId, collectionName, collectionDescription, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld);
         }
     };
-
-    //Finish showing errors on update fields and then look into trying to update non-existent collections
 
     render() {
         if (this.props.collection.collectionName)
@@ -284,7 +280,6 @@ const collection = (state) => {
         }
     }
     else if (state.manageCollectionsUpdateReducerAdmin.fetched === true && state.manageCollectionsUpdateReducerAdmin.fetching === false) {
-
         const statePath = state.manageCollectionsUpdateReducerAdmin;
         const collection = state.manageCollectionsUpdateReducerAdmin.collection;
         return {

@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import ReadAll from '../../components/BrowseNews/Main Components/ReadAll.jsx';
 import * as newsActions from '../../actions/BrowseNews/browseNewsReadAllActions.js';
+import * as newsActionsHomeView from '../../actions/newsHomeViewActions.js'
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
 
 let createHandler = function (dispatch) {
     let updateNewsStore = function () {
         dispatch(newsActions.getAllNews());
+        dispatch(newsActionsHomeView.getNews());
     };
 
     let removeShouldUpdate = function () {

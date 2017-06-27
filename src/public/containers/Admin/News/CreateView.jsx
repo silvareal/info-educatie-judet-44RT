@@ -1,171 +1,167 @@
 import React, {Component} from 'react'
-
+import PropTypes from 'prop-types';
 import RichTextEditor from 'react-rte';
 import {stateToHTML} from 'draft-js-export-html';
 import {convertToRaw} from 'draft-js';
-
+import {connect} from 'react-redux';
 import Create from '../../../components/Admin/News/Main Components/Create.jsx'
-import Auth from '../../../modules/Auth.js';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
+import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
+import * as createActions from '../../../actions/Admin/News/manageNewsCreateActionsAdmin.js';
+
+let createHandler = function (dispatch) {
+    let getInitialState = function (newsDescription) {
+        dispatch(createActions.onCreateInitiate(newsDescription))
+    };
+
+    let onNewsTitleChange = function (newsTitle) {
+        dispatch(createActions.onNewsTitleChange(newsTitle))
+    };
+
+    let onNewsDescriptionChange = function (newsDescription, __html) {
+        dispatch(createActions.onNewsDescriptionChange(newsDescription, __html))
+    };
+
+    let onNewsCoverLinkChange = function (newsCoverLink) {
+        dispatch(createActions.onNewsCoverLinkChange(newsCoverLink))
+    };
+
+    let onSave = function (newsTitle, newsDescriptionRaw, newsCoverLink) {
+        dispatch(createActions.onSaveNews(newsTitle, newsDescriptionRaw, newsCoverLink))
+    };
+
+    return {
+        getInitialState,
+        onNewsTitleChange,
+        onNewsDescriptionChange,
+        onNewsCoverLinkChange,
+        onSave
+    }
+};
 
 class CreateView extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            userId: '',
-            successCreation: '',
-            inputCount: 1,
-            errorMessage: '',
-            errors: {},
-            newsTitle: '',
-            newsCoverLink: '',
-            newsDescription: RichTextEditor.createEmptyValue(),
-            newsPictureLinkError: '',
-            isAdmin: false,
-            __html: '',
-            userName: '',
-            profilePictureLink: ''
-        };
-    };
-
-    getUser = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open("get", "/comment/getUserCredentials");
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                if (xhr.response.guest !== true)
-                    this.setState({
-                        userName: xhr.response.userName,
-                        userId: xhr.response.userId,
-                        profilePictureLink: xhr.response.profilePictureLink
-                    });
-                else this.setState({
-                    guest: true
-                })
-            }
-        });
-        xhr.send();
-    };
-
-    adminAuth = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/adminAuthentication');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //User is an admin
-                this.setState({
-                    isAdmin: true
-                })
-            }
-            else this.setState({isAdmin: false})
-        });
-        xhr.send();
+        this.handlers = createHandler(this.props.dispatch);
     };
 
     componentDidMount() {
-        this.adminAuth();
-        this.getUser();
+        this.handlers.getInitialState(RichTextEditor.createEmptyValue());
     }
 
+    onNewsTitleChange = (e) => {
+        this.handlers.onNewsTitleChange(e.target.value);
+    };
+
+    onNewsCoverLinkChange = (e) => {
+        this.handlers.onNewsCoverLinkChange(e.target.value);
+    };
+
+    onNewsDescriptionChange = (value) => {
+        this.handlers.onNewsDescriptionChange(value, stateToHTML(value.getEditorState().getCurrentContent()));
+    };
+
     getHTML = () => {
-        let editorState = this.state.newsDescription.getEditorState();
+        let editorState = this.props.UIState.newsDescription.getEditorState();
         let contentState = editorState.getCurrentContent();
         let __html = stateToHTML(contentState);
         if (__html.search("/script") === -1 && __html.search("script") === -1)
             return {__html: __html};
     };
 
-    onNewsTitleChange = (e) => {
-        this.setState({newsTitle: e.target.value});
-    };
-
-    onNewsCoverLinkChange = (e) => {
-        this.setState({newsCoverLink: e.target.value});
-    };
-
-    onNewsDescriptionChange = (value) => {
-        this.setState({newsDescription: value, __html: stateToHTML(value.getEditorState().getCurrentContent())});
-    };
-
     onSave = () => {
 
-        //converting collectionDescription to collectionDescriptionRaw
-        let editorState = this.state.newsDescription.getEditorState();
+        let editorState = this.props.UIState.newsDescription.getEditorState();
         let contentState = editorState.getCurrentContent();
         let rawContentState = window.rawContentState = convertToRaw(contentState);
 
-        //The next few lines will define the HTTP body message
-        const newsTitle = encodeURIComponent(this.state.newsTitle);
-        const newsCoverLink = encodeURIComponent(this.state.newsCoverLink);
-        const newsDescriptionRaw = encodeURIComponent(JSON.stringify(rawContentState));
-        const userName = encodeURIComponent(this.state.userName);
-        const profilePictureLink = encodeURIComponent(this.state.profilePictureLink);
+        const newsTitle = this.props.UIState.newsTitle;
+        const newsDescriptionRaw = JSON.stringify(rawContentState);
+        const newsCoverLink = this.props.UIState.newsCoverLink;
 
-        const formData = `profilePictureLink=${profilePictureLink}&userName=${userName}&newsTitle=${newsTitle}&newsCoverLink=${newsCoverLink}&newsDescriptionRaw=${newsDescriptionRaw}`;
-
-        //AJAX
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/admin/create');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-
-                //We will display a Success! message if the entry was added to the DB
-                //We will also reset the fields
-                this.setState({
-                    errors: {},
-                    successCreation: true,
-                    errorMessage: '',
-                    newsTitle : '',
-                    newsCoverLink: '',
-                    newsDescription: RichTextEditor.createEmptyValue(),
-                });
-            }
-            else if (xhr.status === 400) {
-
-                const errors = xhr.response.errors ? xhr.response.errors : {};
-                errors.summary = xhr.response.message;
-
-                this.setState({
-                    successCreation: false,
-                    errors
-                });
-            }
-        });
-
-        //Send the data for insertion into the DB
-        xhr.send(formData);
+        this.handlers.onSave(newsTitle, newsDescriptionRaw, newsCoverLink);
     };
 
     render() {
         document.title = "Create an article - Admin Controlled";
-        if (this.state.isAdmin === true)
+        if (this.props.credentials.admin === true)
         {
             return (
                 <Create
-                    getHTML={this.getHTML}
-                    __html={this.state.__html}
-                    adminId={this.props.params._id}
-                    newsTitle={this.state.newsTitle}
-                    newsCoverLink={this.state.newsCoverLink}
-                    newsDescription={this.state.newsDescription}
+                    newsTitle={this.props.UIState.newsTitle}
                     onNewsTitleChange={this.onNewsTitleChange}
-                    onNewsCoverLinkChange={this.onNewsCoverLinkChange}
+                    newsDescription={this.props.UIState.newsDescription}
                     onNewsDescriptionChange={this.onNewsDescriptionChange}
-                    errorMessage={this.state.errorMessage}
+                    newsCoverLink={this.props.UIState.newsCoverLink}
+                    onNewsCoverLinkChange={this.onNewsCoverLinkChange}
+                    getHTML={this.getHTML}
+                    __html={this.props.UIState.__html}
                     onSave={this.onSave}
-                    successCreation={this.state.successCreation}
-                    errors={this.state.errors}
+                    successCreation={this.props.UIState.successCreation}
+                    errors={this.props.UIState.errors}
+                    message={this.props.UIState.message}
                 />)
         }
-        else return <NotAuthorizedView/>
+        else if (this.props.credentials.admin === false) return <NotAuthorizedView/>;
+        else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
     }
 }
 
-export default CreateView;
+CreateView.propTypes = {
+    credentials: React.PropTypes.shape({
+        admin: PropTypes.bool,
+        fetched: PropTypes.bool,
+        fetching: PropTypes.bool
+    }),
+    UIState: React.PropTypes.shape({
+        newsTitle: PropTypes.string,
+        newsDescription: PropTypes.object,
+        newsCoverLink: PropTypes.string,
+        successCreation: PropTypes.bool,
+        errors: PropTypes.object,
+        message: PropTypes.string
+    })
+};
+
+const credentials = (state) => {
+    if (state.userReducer.fetching === true)
+        return {
+            fetching: true,
+            fetched: false,
+            admin: null
+        };
+    else if (state.userReducer.data) {
+        return {
+            fetching: false,
+            fetched: true,
+            admin: state.userReducer.data.admin
+        }
+    }
+    else return {
+            fetched: true,
+            fetching: false,
+            admin: false
+        }
+};
+
+const UIState = (state) => {
+    if (state.manageNewsCreateReducerAdmin) {
+        const statePath = state.manageNewsCreateReducerAdmin;
+        return {
+            newsTitle: statePath.newsTitle,
+            newsDescription: statePath.newsDescription,
+            newsCoverLink: statePath.newsCoverLink,
+            __html: statePath.__html,
+            successCreation: statePath.successCreation,
+            errors: statePath.errors,
+            message: statePath.message
+        }
+    }
+};
+
+const mapStateToProps = (state) => ({
+    credentials: credentials(state),
+    UIState: UIState(state)
+});
+
+export default connect(mapStateToProps)(CreateView)

@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import Delete from '../../../components/Admin/Collections/Main Components/Delete.jsx';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
-import NotFoundView from '../../Error/NotFoundView.jsx';
 import {connect} from 'react-redux';
 import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 import * as deleteActions from '../../../actions/Admin/Collections/manageCollectionsDeleteActionsAdmin.js';
@@ -34,7 +33,6 @@ class DeleteView extends Component {
 
     onDelete = () => {
         if (this.props.collection.response === true) {
-            this.resetScroll();
             const collectionId = this.props.params._collectionId;
             const ownerId = this.props.collection.userId;
             const userName = this.props.collection.userName;
@@ -50,8 +48,6 @@ class DeleteView extends Component {
         if (this.props.collection.collectionName)
             document.title = "Delete - " + this.props.collection.collectionName;
         else document.title = "404 not found";
-        if (this.props.collection.response === "Error")
-            return <NotFoundView/>;
         if (this.props.credentials.admin === true)
             return <Delete
                 response={this.props.collection.response}

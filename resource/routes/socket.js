@@ -1,23 +1,9 @@
 module.exports = function (socket) {
-    socket.on('send:comment', function (data) {
-        socket.broadcast.emit('send:comment', {
-            collectionId: data.collectionId,
-            comment: data.comment,
-            userName: data.userName,
-            firstName: data.firstName,
-            userId: data.userId,
-            profilePictureLink: data.profilePictureLink
-        });
+    socket.on('send:comment', function () {
+        socket.broadcast.emit('send:comment');
     });
-    socket.on('send:commentNews', function (data) {
-        socket.broadcast.emit('send:commentNews', {
-            newsId: data.newsId,
-            comment: data.comment,
-            userName: data.userName,
-            firstName: data.firstName,
-            userId: data.userId,
-            profilePictureLink: data.profilePictureLink
-        });
+    socket.on('send:commentNews', function () {
+        socket.broadcast.emit('send:commentNews');
     });
     socket.on("updateCollectionsStore", function () {
         socket.broadcast.emit("updateCollectionsStore");

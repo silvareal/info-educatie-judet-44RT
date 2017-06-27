@@ -2,34 +2,31 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {RaisedButton, Snackbar} from 'material-ui';
 import LoadingIndicator from '../../../components/Loading Indicator/LoadingIndicator.jsx';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import * as homeViewActions from '../../../actions/newsHomeViewActions.js';
+
+let createHandler = function (dispatch) {
+
+    let onCloseSnackBar = function () {
+        dispatch(homeViewActions.onCloseSnackBar())
+    };
+
+    return {
+        onCloseSnackBar
+    }
+};
 
 class Home extends Component {
+
     constructor(props) {
         super(props);
-
-        this.state = {
-            open: false
-        }
+        this.handlers = createHandler(this.props.dispatch);
     }
 
-    //the notification system here is a demonstration of how it must be used therefore not the place or final form of the notification Snackbar
-
-    handleNotification = () => {
-        this.setState({
-            open: true
-        });
+    onCloseSnackBar = () => {
+        this.handlers.onCloseSnackBar();
     };
-
-    handleRequestClose = () => {
-        this.setState({
-            open: false
-        });
-    };
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.shouldUpdateCollections !== nextProps.shouldUpdateCollections && nextProps.shouldUpdateCollections === true)
-            this.handleNotification();
-    }
 
     render() {
         return (
@@ -37,7 +34,7 @@ class Home extends Component {
                 <div className="top-bar-spacing"/>
                 <div className="section-title">Latest news</div>
 
-                {this.props.fetchedNews ?
+                {this.props.fetchedNews === true ?
                     <div className="container-home">
                         <div className="news-desktop">
                             <ul>
@@ -60,11 +57,25 @@ class Home extends Component {
                         </div>
                     </div>
                     :
-                    <LoadingIndicator/>
+                    null
+                }
+                {
+                    this.props.fetchedNews === false && this.props.fetchingNews === true ?
+                        <LoadingIndicator/>
+                        :
+                        null
+                }
+                {
+                    this.props.fetchedNews === false && this.props.fetchingNews === true ?
+                        <div>
+                            No news around
+                        </div>
+                        :
+                        null
                 }
 
                 <div className="section-title">Latest collections</div>
-                {!this.props.fetchingCollections && this.props.fetchedCollections ?
+                {this.props.fetchedCollections === true ?
                     <div className="container-home">
                         <div className="news-desktop">
                             <ul>
@@ -87,13 +98,27 @@ class Home extends Component {
                         </div>
                     </div>
                     :
-                    <LoadingIndicator/>
+                    null
+                }
+                {
+                    this.props.fetchingCollections === true && this.props.fetchedCollections === false ?
+                        <LoadingIndicator/>
+                        :
+                        null
+                }
+                {
+                    this.props.fetchingCollections === false && this.props.fetchedCollections === false ?
+                        <div>
+                            No collections so far
+                        </div>
+                        :
+                        null
                 }
 
-                <Snackbar open={this.state.open}
-                          message="Times have changed, refresh to see the future"
+                <Snackbar message="Comment successfully added"
+                          open={this.props.openSnackBar}
                           autoHideDuration={6000}
-                          onRequestClose={this.handleRequestClose}
+                          onRequestClose={this.onCloseSnackBar}
                 />
 
             </div>
@@ -101,4 +126,14 @@ class Home extends Component {
     }
 }
 
-export default Home;
+Home.propTypes = {
+    openSnackBar: PropTypes.bool
+};
+
+const mapStateToProps = (state) => {
+    return {
+        openSnackBar: state.newsHomeViewReducer.openSnackBar
+    }
+};
+
+export default connect(mapStateToProps)(Home)

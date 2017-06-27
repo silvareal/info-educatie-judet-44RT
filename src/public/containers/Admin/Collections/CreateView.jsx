@@ -157,7 +157,6 @@ class CreateView extends Component {
     };
 
     render() {
-        // make sure to check if user is admin
         document.title = "Create collections - Admin Controlled";
         if (this.props.credentials.admin === true)
             return (
@@ -182,7 +181,7 @@ class CreateView extends Component {
                     handleAddPictures={this.handleAddPictures}
                     handleRemovePictures={this.handleRemovePictures}
                     onSave={this.onSave}
-                    message={this.props.UIState.errorMessage}
+                    message={this.props.UIState.message}
                     successCreation={this.props.UIState.successCreation}
                     errors={this.props.UIState.errors}
                     pictureNameError={this.props.UIState.pictureNameError}

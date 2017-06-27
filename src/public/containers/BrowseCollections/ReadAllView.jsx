@@ -5,6 +5,7 @@ import ReadAll from '../../components/BrowseCollections/Main Components/ReadAll.
 import * as collectionsActions from '../../actions/BrowseCollections/browseCollectionsReadAllActions.js';
 import * as collectionsManageActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
 import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
+import * as readActions from '../../actions/Admin/Collections/manageCollectionsReadAllActionsAdmin.js';
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
 
 let createHandler = function (dispatch) {
@@ -12,6 +13,7 @@ let createHandler = function (dispatch) {
         dispatch(collectionsActions.getAllCollections());
         dispatch(collectionsManageActions.getAllCollections());
         dispatch(collectionsHomeViewActions.getCollectionsHomeView());
+        dispatch(readActions.getAllCollections());
     };
 
     let removeShouldUpdate = function () {

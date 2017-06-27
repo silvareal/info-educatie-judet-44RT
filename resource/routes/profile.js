@@ -2,7 +2,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('mongoose').model('User');
 const Collection = require('mongoose').model('Collection');
+const News = require('mongoose').model('News');
 const UpdateProfileLogs = require('mongoose').model('UpdateProfileLogs');
+const CommentCollection = require('mongoose').model("CommentCollection");
+const CommentNews = require('mongoose').model("CommentNews");
 const config = require('../../config');
 
 const router = new express.Router();
@@ -185,6 +188,30 @@ router.post('/profile-edit', (req, res) => {
         if (userId === req.body.userId && userId === req.body.viewerId)
         {
             //if anybody tries to hack somebody else's profile, they will end up "hacking" their own profile :P
+
+            Collection.updateMany({userId: {$eq: userId}}, {
+                $set: {
+                    profilePictureLink: req.body.profilePictureLink
+                }
+            }, () => {});
+
+            News.updateMany({userId: {$eq: userId}}, {
+                $set: {
+                    profilePictureLink: req.body.profilePictureLink
+                }
+            }, () => {});
+
+            CommentNews.updateMany({userId: {$eq: userId}}, {
+                $set: {
+                    profilePictureLink: req.body.profilePictureLink
+                }
+            }, () => {});
+
+            CommentCollection.updateMany({userId: {$eq: userId}}, {
+                $set: {
+                    profilePictureLink: req.body.profilePictureLink
+                }
+            }, () => {});
 
             User.updateOne({_id: {$eq: userId}}, {
                 $set: {

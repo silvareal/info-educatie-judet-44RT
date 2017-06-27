@@ -516,7 +516,9 @@ router.post("/create", (req, res) => {
 
         //here to be used for logs
         const userId = decoded.sub;
-        let isAdmin = decoded.isAdmin;
+        const isAdmin = decoded.isAdmin;
+        const userName = decoded.userName;
+        const profilePictureLink = decoded.profilePictureLink;
 
         if (isAdmin === true) {
             const newsData = {
@@ -524,8 +526,8 @@ router.post("/create", (req, res) => {
                 newsTitle: req.body.newsTitle,
                 newsCoverLink: req.body.newsCoverLink,
                 newsDescriptionRaw: req.body.newsDescriptionRaw,
-                userName: req.body.userName,
-                profilePictureLink: req.body.profilePictureLink
+                userName: userName,
+                profilePictureLink: profilePictureLink
             };
 
             const logData = {
@@ -758,7 +760,7 @@ router.post('/updateSave', (req, res) => {
             })
         }
 
-        let isAdmin = decoded.isAdmin;
+        const isAdmin = decoded.isAdmin;
 
         if (isAdmin === true) {
 
@@ -887,18 +889,21 @@ router.post('/delete', (req, res) => {
             })
         }
 
-        let isAdmin = decoded.isAdmin;
+        const isAdmin = decoded.isAdmin;
+        const userId = decoded.sub;
+        const profilePictureLink = decoded.profilePictureLink;
+        const userName = decoded.userName;
 
         if (isAdmin === true) {
 
             const logData = {
                 newsId: req.body.newsId,
                 newsTitle: req.body.newsTitle,
-                userName: req.body.userName,
-                profilePictureLink: req.body.profilePictureLink,
+                userName: userName,
+                userId: userId,
+                profilePictureLink: profilePictureLink,
                 newsDescriptionRaw: req.body.newsDescriptionRaw,
-                newsCoverLink: req.body.newsCoverLink,
-                picturesArray: JSON.parse(req.body.newsPictures)
+                newsCoverLink: req.body.newsCoverLink
             };
 
             const newLog = new DeleteNewsLogs(logData);

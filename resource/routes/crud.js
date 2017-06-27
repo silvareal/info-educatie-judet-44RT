@@ -1,15 +1,3 @@
-
-
-
-
-// take userName and profilePicture link from jwt
-// update all collections when user updates profilePicture to match change
-
-
-
-
-
-
 const express = require('express');
 const Collection = require('mongoose').model('Collection');
 const CreateCollectionLogs = require('mongoose').model('CreateCollectionLogs');

@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types';
 import {Link} from 'react-router';
-
+import {connect} from 'react-redux';
+import * as createActions from '../../../../actions/Admin/News/manageNewsCreateActionsAdmin.js';
 import RichTextEditor from 'react-rte';
 import PictureRow from '../Partials Components/PictureRow.jsx';
 
@@ -19,28 +21,38 @@ import {
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
 
+let createHandler = function (dispatch) {
+
+    let onSlideIndexChange = function (stepIndex) {
+        dispatch(createActions.onSlideIndexChange(stepIndex))
+    };
+
+    return {
+        onSlideIndexChange
+    }
+};
+
 class Create extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            stepIndex: 0,
-        };
+        this.handlers = createHandler(this.props.dispatch);
     }
 
     handleNext = () => {
-        const {stepIndex} = this.state;
+        let stepIndex = this.props.stepIndex;
         if (stepIndex < 2) {
-            this.setState({stepIndex: stepIndex + 1});
+            stepIndex++;
+            this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
     };
 
     handlePrev = () => {
-        const {stepIndex} = this.state;
+        let stepIndex = this.props.stepIndex;
         if (stepIndex > 0) {
-            this.setState({stepIndex: stepIndex - 1});
+            stepIndex--;
+            this.handlers.onSlideIndexChange(stepIndex);
         }
         this.resetScroll();
     };
@@ -52,22 +64,6 @@ class Create extends Component {
     };
 
     getStepContent(stepIndex) {
-
-        let newsPictures = this.props.newsPictures;
-
-        let rows;
-
-        if (newsPictures) {
-            rows = Object.keys(newsPictures).map((key) => {
-                return (
-                    <PictureRow
-                        key={key}
-                        pictureLink={newsPictures[key].pictureLink}
-                    />
-                )
-            });
-        }
-
         const toolbarConfig = {
             // Optionally specify the groups to display (displayed in the order listed).
             display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
@@ -148,7 +144,6 @@ class Create extends Component {
                             <img src={this.props.newsCoverLink}/>
                         </CardMedia>
                         <div dangerouslySetInnerHTML={this.props.getHTML()}/>
-                        {rows}
                     </div>
                 );
             default:
@@ -156,13 +151,23 @@ class Create extends Component {
         }
     }
 
+    checkForErrors = (message) => {
+        return message === "Check the specified fields for errors"
+    };
+
+    checkStepOneErrors = (errors) => {
+        if (errors && Object.keys(errors).length === 0)
+            return false;
+        return true
+    };
+
     resetScroll = () => {
         window.scrollTo(0, 0);
     };
 
     render() {
 
-        const {stepIndex} = this.state;
+        const {stepIndex} = this.props;
 
         return (
             <div className="parallax-collections-create">
@@ -176,8 +181,8 @@ class Create extends Component {
                                         <Stepper linear={false} activeStep={stepIndex}>
                                             <Step>
                                                 <StepButton
-                                                    onClick={() => this.setState({stepIndex: 0})}
-                                                    icon={this.props.errors.newsTitle || this.props.errors.newsCoverLink || this.props.newsDescriptionRaw ?
+                                                    onClick={() => this.handlers.onSlideIndexChange(0)}
+                                                    icon={this.checkStepOneErrors(this.props.errors) ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
                                                         <FontIcon className="material-icons">mode_edit</FontIcon>}
@@ -185,8 +190,8 @@ class Create extends Component {
                                                 </StepButton>
                                             </Step>
                                             <Step>
-                                                <StepButton onClick={() => this.setState({stepIndex: 1})}
-                                                            icon={this.props.errors.newsTitle || this.props.errors.newsCoverLink || this.props.newsDescriptionRaw ?
+                                                <StepButton onClick={() => this.handlers.onSlideIndexChange(1)}
+                                                            icon={this.checkForErrors(this.props.message) ?
                                                                 <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
                                                                 <FontIcon className="material-icons">done</FontIcon>}
                                                 >
@@ -207,12 +212,12 @@ class Create extends Component {
                                     />
                                 </Link>
                             </div> : null}
-                        {this.props.errorMessage !== '' ?
+                        {this.props.message !== '' ?
                             <div className="errors-collections">
-                                {this.props.errorMessage}
+                                {this.props.message}
                             </div> : null
                         }
-                        {this.props.errors.summary ?
+                        {this.props.errors && this.props.errors.summary ?
                             <div className="errors-collections">
                                 {this.props.errors.summary}
                             </div> : null
@@ -248,4 +253,14 @@ class Create extends Component {
     }
 }
 
-export default Create;
+Create.propTypes = {
+    stepIndex: PropTypes.number
+};
+
+const mapStateToProps = (state) => {
+    return {
+        stepIndex: state.manageNewsCreateReducerAdmin.stepIndex
+    }
+};
+
+export default connect(mapStateToProps)(Create);

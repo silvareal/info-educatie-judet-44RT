@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 import userReducer from './userReducer.js';
 import collectionsHomeViewReducer from './collectionsHomeViewReducer.js';
+import newsHomeViewReducer from './newsHomeViewReducer.js';
 import shouldUpdateCollectionsReducer from './shouldUpdateCollectionsReducer.js';
 import manageCollectionsCreateReducer from './Collections/manageCollectionsCreateReducer.js';
 import manageCollectionsDeleteReducer from './Collections/manageCollectionsDeleteReducer.js';
@@ -21,6 +22,9 @@ import manageCollectionsReadAllReducerAdmin from './Admin/Collections/manageColl
 import manageCollectionsUpdateReducerAdmin from './Admin/Collections/manageCollectionsUpdateReducerAdmin.js';
 import browseNewsReadAllReducer from './BrowseNews/browseNewsReadAllReducer.js';
 import browseNewsReadOneReducer from './BrowseNews/browseNewsReadOneReducer.js';
+import manageNewsCreateReducerAdmin from './Admin/News/manageNewsCreateReducerAdmin.js';
+import manageNewsDeleteReducerAdmin from './Admin/News/manageNewsDeleteReducerAdmin.js';
+import manageNewsUpdateReducerAdmin from './Admin/News/manageNewsUpdateReducerAdmin.js';
 
 const rootReducer = combineReducers({
     signUpReducer: signUpReducer,
@@ -31,6 +35,7 @@ const rootReducer = combineReducers({
     collectionNamesReducer: collectionNamesReducer,
     shouldUpdateCollectionsReducer: shouldUpdateCollectionsReducer,
     collectionsHomeViewReducer: collectionsHomeViewReducer,
+    newsHomeViewReducer: newsHomeViewReducer,
     manageCollectionsCreateReducer: manageCollectionsCreateReducer,
     manageCollectionsDeleteReducer: manageCollectionsDeleteReducer,
     manageCollectionsReadAllReducer: manageCollectionsReadAllReducer,
@@ -44,7 +49,10 @@ const rootReducer = combineReducers({
     manageCollectionsReadAllReducerAdmin: manageCollectionsReadAllReducerAdmin,
     manageCollectionsUpdateReducerAdmin: manageCollectionsUpdateReducerAdmin,
     browseNewsReadAllReducer: browseNewsReadAllReducer,
-    browseNewsReadOneReducer: browseNewsReadOneReducer
+    browseNewsReadOneReducer: browseNewsReadOneReducer,
+    manageNewsCreateReducerAdmin: manageNewsCreateReducerAdmin,
+    manageNewsDeleteReducerAdmin: manageNewsDeleteReducerAdmin,
+    manageNewsUpdateReducerAdmin: manageNewsUpdateReducerAdmin
 });
 
 export default rootReducer

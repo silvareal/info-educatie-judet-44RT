@@ -66,7 +66,7 @@ class ReadOneView extends Component {
         this.handlers.getCollection(this.props.collectionId);
         this.handlers.getCommentsCount(this.props.collectionId);
 
-        socket.on('send:comment', this.handlers.getComments(this.props.collectionId));
+        socket.on('send:comment', () => {this.handlers.getComments(this.props.collectionId)});
     };
 
     componentWillUnmount() {

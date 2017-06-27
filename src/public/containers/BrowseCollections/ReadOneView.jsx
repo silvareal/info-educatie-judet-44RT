@@ -17,7 +17,8 @@ let createHandler = function (dispatch) {
     };
 
     let getComments = function (collectionId) {
-        dispatch(readOneActions.getComments(collectionId))
+        dispatch(readOneActions.getComments(collectionId));
+        console.log("I happen");
     };
 
     let loadMoreComments = function (loadAfter, collectionId) {
@@ -61,7 +62,9 @@ class ReadOneView extends Component {
         //the load more event listener
         window.addEventListener('scroll', this.onScroll);
 
-        socket.on('send:comment', this.handlers.getComments(this.props.params._id));
+        socket.on('send:comment',() => {
+            this.handlers.getComments(this.props.params._id);
+        });
     };
 
     onScroll = () => {
