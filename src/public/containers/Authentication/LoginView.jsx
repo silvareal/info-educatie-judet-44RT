@@ -65,6 +65,8 @@ const mapStateToProps = (state) => {
     let errors = state.loginReducer.errors;
     if (errors)
         errors = {...errors, summary: state.loginReducer.message};
+    if (state.loginReducer.message === "User is banned")
+        errors = {...errors, summary: "Oops, seems like you are banned"};
     return {
         user: state.loginReducer.user,
         errors: errors,

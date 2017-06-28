@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {RaisedButton, Snackbar} from 'material-ui';
-import LoadingIndicator from '../../../components/Loading Indicator/LoadingIndicator.jsx';
+import LoadingIndicator from '../Loading Indicator/LoadingIndicator.jsx';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import * as homeViewActions from '../../../actions/newsHomeViewActions.js';
+import * as homeViewActions from '../../actions/newsHomeViewActions.js';
 
 let createHandler = function (dispatch) {
 

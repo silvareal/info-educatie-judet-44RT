@@ -1,145 +1,146 @@
 import React, {Component} from 'react'
-
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import Users from '../../../components/Admin/Users/Main Components/Users.jsx';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 import UsersRowsMobile from '../../../components/Admin/Users/Partials Components/UsersRowsMobile.jsx';
-import Auth from '../../../modules/Auth.js';
-
-import {TableRow, TableRowColumn, Card} from 'material-ui';
+import * as usersActions from '../../../actions/Admin/Users/manageUsersActionsAdmin.js';
 import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 
-let selectedUserId = [];
-let clicked = [];
+let createHandler = function (dispatch) {
+    let getAllUsers = function () {
+        dispatch(usersActions.getAllUsers())
+    };
+
+    let onGetRows = function (rowsModerators, rowsBan) {
+        dispatch(usersActions.onGetRows(rowsModerators, rowsBan))
+    };
+
+    let onAddModerators = function (userId) {
+        dispatch(usersActions.onAddModerators(userId))
+    };
+
+    let onBanUser = function (userId) {
+        dispatch(usersActions.onBanUser(userId))
+    };
+
+    let onChangeAppMode = function (newMode) {
+        dispatch(usersActions.onChangeAppMode(newMode))
+    };
+
+    let onSearchQueryChange = function (searchQuery) {
+        dispatch(usersActions.onSearchQueryChange(searchQuery))
+    };
+
+    let onSearchUser = function (searchQuery, users) {
+        dispatch(usersActions.onSearchUser(searchQuery, users))
+    };
+
+    let onGetRowsFound = function (rowsModeratorsFound, rowsBanFound) {
+        dispatch(usersActions.onGetRowsFound(rowsModeratorsFound, rowsBanFound))
+    };
+
+    return {
+        getAllUsers,
+        onGetRows,
+        onAddModerators,
+        onBanUser,
+        onChangeAppMode,
+        onSearchQueryChange,
+        onSearchUser,
+        onGetRowsFound
+    }
+};
 
 class UsersView extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            isAdmin: false,
-            users: {},
-            message: '',
-            fetchedUsers: false,
-            rows1: '',
-            rows2: '',
-            searchQuery: '',
-            searched: '',
-            rows3: '',
-            rows4: '',
-            userIdToBan: '',
-            currentMode: 'Moderators'
-        };
+        this.handlers = createHandler(this.props.dispatch);
     }
 
-    adminAuth = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/adminAuthentication');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //User is an admin
-                if (xhr.response.message === "Welcome admin")
-                    this.setState({
-                        isAdmin: true
+    onBanUser = (userId) => () => {
+        this.handlers.onBanUser(userId);
+
+        // Give the Store time to update
+        setTimeout(() => {
+            this.handlers.getAllUsers();
+            setTimeout(() => {
+                let users = this.props.users.users;
+                if (users) {
+                    let rowsModerators = Object.keys(users).map((i) => {
+                        return <UsersRowsMobile key={i}
+                                                user={users[i]}
+                                                onAddModerator={this.onAddModerator}/>
                     });
-                else {
-                    this.setState({
-                        isAdmin: false
+
+                    let rowsBan = Object.keys(users).map((i) => {
+                        return <UsersRowsMobile key={i}
+                                                user={users[i]}
+                                                onBanUser={this.onBanUser}/>
                     });
+
+                    this.handlers.onGetRows(rowsModerators, rowsBan);
+                    this.onSearchUser();
                 }
-            }
-        });
-        xhr.send();
+            }, 200)
+        }, 300);
+    };
+
+    onAddModerator = (userId) => () => {
+        this.handlers.onAddModerators(userId);
+
+        // Give the Store time to update
+        setTimeout(() => {
+            this.handlers.getAllUsers();
+            setTimeout(() => {
+                let users = this.props.users.users;
+                if (users) {
+                    let rowsModerators = Object.keys(users).map((i) => {
+                        return <UsersRowsMobile key={i}
+                                                user={users[i]}
+                                                onAddModerator={this.onAddModerator}/>
+                    });
+
+                    let rowsBan = Object.keys(users).map((i) => {
+                        return <UsersRowsMobile key={i}
+                                                user={users[i]}
+                                                onBanUser={this.onBanUser}/>
+                    });
+
+                    this.handlers.onGetRows(rowsModerators, rowsBan);
+                    this.onSearchUser();
+                }
+            }, 200)
+        }, 300);
     };
 
     componentDidMount() {
-        this.adminAuth();
-        this.showAddedModerators();
+        this.handlers.getAllUsers();
+
+        setTimeout(() => {
+            let users = this.props.users.users;
+            if (users) {
+                let rowsModerators = Object.keys(users).map((i) => {
+                    return <UsersRowsMobile key={i}
+                                            user={users[i]}
+                                            onAddModerator={this.onAddModerator}/>
+                });
+
+                let rowsBan = Object.keys(users).map((i) => {
+                    return <UsersRowsMobile key={i}
+                                            user={users[i]}
+                                            onBanUser={this.onBanUser}/>
+                });
+
+                this.handlers.onGetRows(rowsModerators, rowsBan);
+            }
+        }, 500)
     }
 
-    cellClick = (rowNumber) => {
-        selectedUserId[rowNumber] = this.state.users[rowNumber]._id;
-    };
-
-    cellDeclick = (rowNumber) => {
-        selectedUserId[rowNumber] = undefined;
-    };
-
-    mobileAddModerators = (i) => () => {
-        selectedUserId[0] = this.state.users[i]._id;
-        this.onSaveModerators();
-        this.showAddedModerators();
-    };
-
-    mobileBanUser = (userId) => () => {
-        this.onBanUser(userId);
-        this.showAddedModerators();
-    };
-
-    onBanUser = (userId) => {
-
-        this.setState({
-            fetchedUsers: false
-        });
-
-        const userIdToBan = encodeURIComponent(userId);
-
-        const formData = `userIdToBan=${userIdToBan}`;
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/admin/banUser');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                this.setState({
-                    message: xhr.response.message
-                })
-            }
-        });
-        xhr.send(formData);
-    };
-
-    onSaveModerators = () => {
-
-        this.setState({
-            fetchedUsers: false
-        });
-
-        const selectedUserIdInsert = encodeURIComponent(JSON.stringify(selectedUserId));
-        const formData = `moderators=${selectedUserIdInsert}`;
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/admin/makeModerators');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-
-                //specified users were given or revoked moderator permissions
-                this.setState({
-                    message: xhr.response.message
-                });
-            }
-            else {
-                this.setState({
-                    message: xhr.response.message
-                });
-            }
-        });
-        xhr.send(formData);
-        //reset checkboxes
-        selectedUserId.length = 0;
-        clicked.length = 0;
-    };
-
     onSearchQueryChange = (e) => {
-        this.setState({
-            searchQuery: e.target.value
-        })
+        this.handlers.onSearchQueryChange(e.target.value);
+        if (e.target.value === "")
+            this.handlers.onGetRowsFound("", "")
     };
 
     handleKeyPress = (e) => {
@@ -149,246 +150,131 @@ class UsersView extends Component {
     };
 
     onSearchUser = () => {
-        let users = this.state.users;
+        this.handlers.onSearchUser(this.props.users.searchQuery, this.props.users.users);
 
-        if (this.state.searchQuery)
-            this.setState({
-                searched: true
-            });
-        else this.setState({
-            searched: false
-        });
-
-        let j = 0;
-
-        let rows1 = Object.keys(users).map((i) => {
-            if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery) || users[i]._id === this.state.searchQuery) {
-                j++;
-                return (
-                    <TableRow key={i}>
-                        <TableRowColumn>{users[i].email}</TableRowColumn>
-                        <TableRowColumn>{users[i].moderator === true ? "Y" : "N"}</TableRowColumn>
-                    </TableRow>
-                )
-            }
-        });
-
-        j = 0;
-
-        let rows2 = Object.keys(users).map((i) => {
-            if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery)) {
-                j++;
-                return (
-                    <UsersRowsMobile key={j}
-                                     index={i}
-                                     user={users[i]}
-                                     mobileAddModerators={this.mobileAddModerators}/>
-                )
-            }
-        });
-
-        j = 0;
-
-        let rows3 = Object.keys(users).map((i) => {
-            if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery)) {
-                j++;
-                return (
-                    <UsersRowsMobile key={j}
-                                     index={i}
-                                     user={users[i]}
-                                     userId={users[i]._id}
-                                     mobileBanUser={this.mobileBanUser}/>
-                )
-            }
-        });
-
-        this.setState({
-            rows1, rows2, rows3
-        })
-    };
-
-    //also used for showing banned users
-    //will change name in 0.0.4
-    showAddedModerators = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/showUsers');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //User is an admin
-                this.setState({
-                    users: xhr.response.data,
-                    fetchedUsers: true
+        setTimeout(() => {
+            let users = this.props.users.usersFound;
+            if (users) {
+                let rowsModeratorsFound = Object.keys(users).map((i) => {
+                    if (users[i] && (users[i].email.includes(this.props.users.searchQuery) || users[i].name.includes(this.props.users.searchQuery) || users[i]._id === this.props.users.searchQuery)) {
+                        return <UsersRowsMobile key={i}
+                                                user={users[i]}
+                                                onAddModerator={this.onAddModerator}/>
+                    }
                 });
 
-                let users = this.state.users;
+                let rowsBanFound = Object.keys(users).map((i) => {
+                    if (users[i] && (users[i].email.includes(this.props.users.searchQuery) || users[i].name.includes(this.props.users.searchQuery) || users[i]._id === this.props.users.searchQuery)) {
+                        return <UsersRowsMobile key={i}
+                                                user={users[i]}
+                                                onBanUser={this.onBanUser}/>
+                    }
+                });
 
-                if (!this.state.searchQuery) {
-
-                    let rows1 = Object.keys(users).map((i) => (
-                        <TableRow key={i}>
-                            <TableRowColumn>{users[i].email}</TableRowColumn>
-                            <TableRowColumn>{users[i].moderator === true ? "Y" : "N"}</TableRowColumn>
-                        </TableRow>
-                    ));
-
-                    let rows2 = Object.keys(users).map((i) => (
-                        <UsersRowsMobile key={i}
-                                         index={i}
-                                         user={users[i]}
-                                         mobileAddModerators={this.mobileAddModerators}/>
-                    ));
-
-                    let rows3 = Object.keys(users).map((i) => (
-                        <UsersRowsMobile key={i}
-                                         index={i}
-                                         user={users[i]}
-                                         userId={users[i]._id}
-                                         mobileBanUser={this.mobileBanUser}/>
-                    ));
-
-
-                    this.setState({
-                        rows1, rows2, rows3
-                    })
-                }
-
-                else {
-
-                    let j = 0;
-
-                    let rows1 = Object.keys(users).map((i) => {
-                        if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery) || users[i]._id === this.state.searchQuery) {
-                            j++;
-                            return (
-                                <TableRow key={i}>
-                                    <TableRowColumn>{users[i].email}</TableRowColumn>
-                                    <TableRowColumn>{users[i].moderator === true ? "Y" : "N"}</TableRowColumn>
-                                </TableRow>
-                            )
-                        }
-                    });
-
-                    j = 0;
-
-                    let rows2 = Object.keys(users).map((i) => {
-                        if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery)) {
-                            j++;
-                            return (
-                                <UsersRowsMobile key={j}
-                                                 index={i}
-                                                 user={users[i]}
-                                                 mobileAddModerators={this.mobileAddModerators}/>
-                            )
-                        }
-                    });
-
-                    j = 0;
-
-                    let rows3 = Object.keys(users).map((i) => {
-                        if (users[i].email.includes(this.state.searchQuery) || users[i].name.includes(this.state.searchQuery)) {
-                            j++;
-                            return (
-                                <UsersRowsMobile key={j}
-                                                 index={i}
-                                                 user={users[i]}
-                                                 userId={users[i]._id}
-                                                 mobileBanUser={this.mobileBanUser}/>
-                            )
-                        }
-                    });
-
-                    this.setState({
-                        rows1, rows2, rows3
-                    });
-                }
+                this.handlers.onGetRowsFound(rowsModeratorsFound, rowsBanFound)
             }
-            else {
-                this.setState({
-                    message: xhr.response.message,
-                    fetchedUsers: true
-                })
-            }
-        });
-        xhr.send();
-    };
-
-    addModerators = () => {
-        this.onSaveModerators();
-        this.showAddedModerators();
+        }, 500)
     };
 
     changeAppMode = (newMode) => {
-        this.setState({
-            currentMode: newMode
-        });
+        this.handlers.onChangeAppMode(newMode);
     };
 
     render() {
 
         document.title = "User management";
-        if (this.state.isAdmin !== true && this.state.fetchedUsers === false) {
-            return <div>
-                <div className="top-bar-spacing"/>
-                <Card className="container-manage-users" style={{boxShadow: "none"}}>
-                    <LoadingIndicator/>
-                </Card>
-            </div>
-        }
-        if (this.state.isAdmin === true) {
 
-            let modeComponent =
-                <Users
-                    currentMode={this.state.currentMode}
-                    searched={this.state.searched}
+        if (this.props.credentials.admin === true) {
+            if (this.props.users.fetchedUsers === true)
+                return <Users
+                    rowsModeratorsFound={this.props.users.rowsModeratorsFound}
+                    rowsBanFound={this.props.users.rowsBanFound}
+                    rowsModerators={this.props.users.rowsModerators}
+                    rowsBan={this.props.users.rowsBan}
+                    users={this.props.users.users}
+                    currentMode={this.props.users.currentMode}
                     handleKeyPress={this.handleKeyPress}
-                    onSearchUser={this.onSearchUser}
-                    searchQuery={this.state.searchQuery}
+                    searchQuery={this.props.users.searchQuery}
                     onSearchQueryChange={this.onSearchQueryChange}
-                    rows1={this.state.rows1}
-                    rows2={this.state.rows2}
-                    mobileAddModerators={this.mobileAddModerators}
-                    fetchedUsers={this.state.fetchedUsers}
-                    userId={this.props.params._id}
-                    users={this.state.users}
-                    message={this.state.message}
-                    clicked={clicked}
-                    cellClick={this.cellClick}
-                    cellDeclick={this.cellDeclick}
-                    addModerators={this.addModerators}
+                    onSearchUser={this.onSearchUser}
                     changeAppMode={this.changeAppMode}/>;
-
-            switch (this.state.currentMode) {
-                case 'Moderators':
-                    break;
-                case 'Ban':
-                    modeComponent =
-                        <Users
-                            currentMode={this.state.currentMode}
-                            searched={this.state.searched}
-                            handleKeyPress={this.handleKeyPress}
-                            onSearchUser={this.onSearchUser}
-                            searchQuery={this.state.searchQuery}
-                            onSearchQueryChange={this.onSearchQueryChange}
-                            rows3={this.state.rows3}
-                            mobileAddModerators={this.mobileAddModerators}
-                            fetchedUsers={this.state.fetchedUsers}
-                            userId={this.props.params._id}
-                            users={this.state.users}
-                            message={this.state.message}
-                            clicked={clicked}
-                            cellClick={this.cellClick}
-                            cellDeclick={this.cellDeclick}
-                            addModerators={this.addModerators}
-                            changeAppMode={this.changeAppMode}/>;
-            }
-
-            return (
-                modeComponent
-            )
+            else if (this.props.users.fetchedUsers === false && this.props.users.fetchingUsers === true)
+                return <LoadingIndicator/>;
+            else if (this.props.users.fetchingUsers === false && this.props.users.fetchedUsers === false)
+                return (
+                    <div>
+                        No users found
+                    </div>
+                )
         }
-        else return <NotAuthorizedView/>
+        else if (this.props.credentials.admin === false) return <NotAuthorizedView/>;
+        else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
     }
 }
-export default UsersView;
+
+UsersView.propTypes = {};
+
+const credentials = (state) => {
+    if (state.userReducer.fetching === true)
+        return {
+            fetching: true,
+            fetched: false,
+            admin: null
+        };
+    else if (state.userReducer.data) {
+        return {
+            fetching: false,
+            fetched: true,
+            admin: state.userReducer.data.admin
+        }
+    }
+    else return {
+            fetched: true,
+            fetching: false,
+            admin: false
+        }
+};
+
+const users = (state) => {
+    if (state.manageUsersReducerAdmin.fetching === true)
+        return {
+            fetchingUsers: true,
+            fetchedUsers: false,
+            users: {}
+        };
+    else if (state.manageUsersReducerAdmin.fetched === true && state.manageUsersReducerAdmin.fetching === false) {
+        return {
+            fetchedUsers: true,
+            fetchingUsers: false,
+            users: state.manageUsersReducerAdmin.users,
+            currentMode: state.manageUsersReducerAdmin.currentMode,
+            searchQuery: state.manageUsersReducerAdmin.searchQuery,
+            addedModerator: state.manageUsersReducerAdmin.addedModerator,
+            bannedUser: state.manageUsersReducerAdmin.bannedUser,
+            usersFound: state.manageUsersReducerAdmin.usersFound,
+            rowsModerators: state.manageUsersReducerAdmin.rowsModerators,
+            rowsBan: state.manageUsersReducerAdmin.rowsBan,
+            rowsModeratorsFound: state.manageUsersReducerAdmin.rowsModeratorsFound,
+            rowsBanFound: state.manageUsersReducerAdmin.rowsBanFound
+        }
+    }
+    else if (state.manageUsersReducerAdmin.fetched === false && state.manageUsersReducerAdmin.fetching === false) {
+        return {
+            fetchedUsers: false,
+            fetchingUsers: false
+        }
+    }
+    else if (state.manageUsersReducerAdmin.fetched === null && state.manageUsersReducerAdmin.fetching === null) {
+        return {
+            fetchedUsers: false,
+            fetchingUsers: true
+        }
+    }
+};
+
+const mapStateToProps = (state) => ({
+    credentials: credentials(state),
+    users: users(state)
+});
+
+export default connect(mapStateToProps)(UsersView)

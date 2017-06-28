@@ -25,6 +25,7 @@ import browseNewsReadOneReducer from './BrowseNews/browseNewsReadOneReducer.js';
 import manageNewsCreateReducerAdmin from './Admin/News/manageNewsCreateReducerAdmin.js';
 import manageNewsDeleteReducerAdmin from './Admin/News/manageNewsDeleteReducerAdmin.js';
 import manageNewsUpdateReducerAdmin from './Admin/News/manageNewsUpdateReducerAdmin.js';
+import manageUsersReducerAdmin from './Admin/Users/manageUsersReducerAdmin.js';
 
 const rootReducer = combineReducers({
     signUpReducer: signUpReducer,
@@ -52,7 +53,8 @@ const rootReducer = combineReducers({
     browseNewsReadOneReducer: browseNewsReadOneReducer,
     manageNewsCreateReducerAdmin: manageNewsCreateReducerAdmin,
     manageNewsDeleteReducerAdmin: manageNewsDeleteReducerAdmin,
-    manageNewsUpdateReducerAdmin: manageNewsUpdateReducerAdmin
+    manageNewsUpdateReducerAdmin: manageNewsUpdateReducerAdmin,
+    manageUsersReducerAdmin: manageUsersReducerAdmin
 });
 
 export default rootReducer

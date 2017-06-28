@@ -56,7 +56,7 @@ export function onMountUpdate(newsId, textEditorState) {
 // Slide Index change handler
 export function onSlideIndexChange(stepIndex) {
     return function (dispatch) {
-        dispatch({type: types.ON_SLIDE_INDEX_CHANGE_ADMIN_NEWS, stepIndex: stepIndex})
+        dispatch({type: types.ON_SLIDE_INDEX_CHANGE_UPDATE_ADMIN_NEWS, stepIndex: stepIndex})
     }
 }
 

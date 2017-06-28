@@ -1,13 +1,9 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import * as usersActions from '../../../../actions/Admin/Users/manageUsersActionsAdmin.js';
 import {
-    RaisedButton,
     Card,
-    Table,
-    TableHeader,
-    TableBody,
-    TableRow,
-    TableHeaderColumn,
-    Snackbar,
     TextField,
     IconButton,
     Tabs,
@@ -17,165 +13,81 @@ import {
 import ActionSearch from 'material-ui/svg-icons/action/search';
 import ContentRemoveCircle from 'material-ui/svg-icons/content/remove-circle';
 import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact-calendar';
-import LoadingIndicator from '../../../Loading Indicator/LoadingIndicator.jsx';
+
+let createHandler = function (dispatch) {
+    let onOpenSnackBar = function () {
+        dispatch(usersActions.onOpenSnackBar())
+    };
+
+    let onCloseSnackBar = function () {
+        dispatch(usersActions.onCloseSnackBar())
+    };
+
+    return {
+        onOpenSnackBar,
+        onCloseSnackBar
+    }
+};
 
 class Users extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            open: false,
-            openSnack: true
-        };
+        this.handlers = createHandler(this.props.dispatch);
     }
 
-    handleToggle = () => {
-        this.setState({open: !this.state.open});
+    onOpenSnackBar = () => {
+        this.handlers.onOpenSnackBar();
     };
 
-    handleCellClick = (rowNumber) => {
-        if (this.props.clicked[rowNumber] !== true) {
-            this.props.cellClick(rowNumber);
-            this.props.clicked[rowNumber] = true;
-        }
-        else {
-            if (this.props.clicked[rowNumber] === true) {
-                this.props.cellDeclick(rowNumber);
-                this.props.clicked[rowNumber] = undefined;
-            }
-        }
+    onCloseSnackBar = () => {
+        this.handlers.onCloseSnackBar();
     };
-
 
     render() {
-
-        if (this.props.fetchedUsers && this.props.rows1 && this.props.rows2) {
-            return (
-                <div>
-                    <div className="top-bar-spacing"/>
-                    <Card className="container-manage-users" style={{boxShadow: "none"}}>
-                        <Tabs initialSelectedIndex={this.props.currentMode === 'Ban' ? 1 : 2}
-                              inkBarStyle={{color: "#ee6e73", backgroundColor: "#ee6e73"}}
-                              tabItemContainerStyle={{backgroundColor: "#42ab9e"}}>
-                            <Tab icon={<ActionPermContactCalendar/>}
-                                 onClick={() => this.props.changeAppMode('Moderators')}/>
-                            <Tab icon={<ContentRemoveCircle/>} onClick={() => this.props.changeAppMode('Ban')}/>
-                        </Tabs>
-                        <div className="top-actions">
-                            <div className="capsules">
-                                <TextField hintText="Email, username or id"
-                                           value={this.props.searchQuery}
-                                           onChange={this.props.onSearchQueryChange}
-                                           onKeyDown={this.props.handleKeyPress}
-                                           inputStyle={{color: "#000000"}}
-                                           floatingLabelStyle={{color: "#ee6e73"}}
-                                           underlineFocusStyle={{borderColor: "#ee6e73"}}
-                                />
-                                <IconButton onTouchTap={this.props.onSearchUser}>
-                                    <ActionSearch/>
-                                </IconButton>
-                            </div>
+        return (
+            <div>
+                <div className="top-bar-spacing"/>
+                <Card className="container-manage-users" style={{boxShadow: "none"}}>
+                    <Tabs initialSelectedIndex={this.props.currentMode === 'Ban' ? 1 : 2}
+                          inkBarStyle={{color: "#ee6e73", backgroundColor: "#ee6e73"}}
+                          tabItemContainerStyle={{backgroundColor: "#42ab9e"}}>
+                        <Tab icon={<ActionPermContactCalendar/>}
+                             onClick={() => this.props.changeAppMode('Moderators')}/>
+                        <Tab icon={<ContentRemoveCircle/>} onClick={() => this.props.changeAppMode('Ban')}/>
+                    </Tabs>
+                    <div className="top-actions">
+                        <div className="capsules">
+                            <TextField hintText="Email, username or id"
+                                       value={this.props.searchQuery}
+                                       onChange={this.props.onSearchQueryChange}
+                                       onKeyDown={this.props.handleKeyPress}
+                                       inputStyle={{color: "#000000"}}
+                                       floatingLabelStyle={{color: "#ee6e73"}}
+                                       underlineFocusStyle={{borderColor: "#ee6e73"}}
+                            />
+                            <IconButton onTouchTap={this.props.onSearchUser}>
+                                <ActionSearch/>
+                            </IconButton>
                         </div>
-                        <form>
-                            <div className="manage-users-desktop">
-                                {this.props.searched ?
-                                    <div className="center-users-mobile">
-                                        <div>
-                                            {this.props.rows2}
-                                        </div>
-                                    </div>
-                                    :
-                                    <div>
-                                        <Table multiSelectable={true} onCellClick={this.handleCellClick}>
-                                            <TableHeader displaySelectAll={false}
-                                                         adjustForCheckbox={false}>
-                                                <TableRow>
-                                                    <TableHeaderColumn colSpan="2" style={{textAlign: 'center'}}>
-                                                        Manage users
-                                                    </TableHeaderColumn>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableHeaderColumn>Id</TableHeaderColumn>
-                                                    <TableHeaderColumn>Is moderator</TableHeaderColumn>
-                                                </TableRow>
-                                            </TableHeader>
-                                            <TableBody>
-                                                {this.props.rows1}
-                                            </TableBody>
-                                        </Table>
-                                        <Snackbar
-                                            open={this.state.openSnack}
-                                            onRequestClose={() => {
-                                            }}
-                                            onActionTouchTap={() => {
-                                            }}
-                                            message={<RaisedButton type="button" primary={true}
-                                                                   style={{backgroundColor: "transparent"}}
-                                                                   label="Give/Revoke moderator permissions"
-                                                                   onTouchTap={this.props.addModerators}
-                                                                   buttonStyle={{backgroundColor: "#eb7077"}}
-                                                                   labelStyle={{color: "#ffffff"}}
-                                            />}/>
-                                    </div>
-                                }
-
-                            </div>
+                    </div>
+                    <form>
+                        {this.props.currentMode === 'Moderators' ?
                             <div className="center-users-mobile">
-                                <div className="manage-users-mobile">
-                                    {this.props.rows2}
+                                <div>
+                                    {this.props.searchQuery !== "" && this.props.rowsModeratorsFound ? this.props.rowsModeratorsFound : this.props.rowsModerators}
                                 </div>
                             </div>
-                        </form>
-                    </Card>
-                </div>
-            )
-        }
-        else if (this.props.fetchedUsers && this.props.rows3) {
-            return (
-                <div>
-                    <div className="top-bar-spacing"/>
-                    <Card className="container-manage-users" style={{boxShadow: "none"}}>
-                        <Tabs initialSelectedIndex={this.props.currentMode === 'Ban' ? 1 : 2}
-                              inkBarStyle={{color: "#ee6e73", backgroundColor: "#ee6e73"}}
-                              tabItemContainerStyle={{backgroundColor: "#42ab9e"}}>
-                            <Tab icon={<ActionPermContactCalendar/>}
-                                 onClick={() => this.props.changeAppMode('Moderators')}/>
-                            <Tab icon={<ContentRemoveCircle/>} onClick={() => this.props.changeAppMode('Ban')}/>
-                        </Tabs>
-                        <div className="top-actions">
-                            <div className="capsules">
-                                <TextField hintText="Email, username or id"
-                                           value={this.props.searchQuery}
-                                           onChange={this.props.onSearchQueryChange}
-                                           onKeyDown={this.props.handleKeyPress}
-                                           inputStyle={{color: "#000000"}}
-                                           floatingLabelStyle={{color: "#ee6e73"}}
-                                           underlineFocusStyle={{borderColor: "#ee6e73"}}
-                                />
-                                <IconButton onTouchTap={this.props.onSearchUser}>
-                                    <ActionSearch/>
-                                </IconButton>
-                            </div>
-                        </div>
-                        <form>
-                            <div className="center-users-ban">
-                                <div className="manage-users-ban">
-                                    {this.props.rows3}
+                            :
+                            <div className="center-users-mobile">
+                                <div>
+                                    {this.props.searchQuery !== "" && this.props.rowsBanFound ? this.props.rowsBanFound : this.props.rowsBan}
                                 </div>
                             </div>
-                        </form>
-                    </Card>
-                </div>
-            )
-        }
-        else return (
-                <div>
-                    <div className="top-bar-spacing"/>
-                    <Card className="container-manage-users" style={{boxShadow: "none"}}>
-                        <LoadingIndicator/>
-                    </Card>
-                </div>
-            )
+                        }
+                    </form>
+                </Card>
+            </div>
+        )
     }
 }
 

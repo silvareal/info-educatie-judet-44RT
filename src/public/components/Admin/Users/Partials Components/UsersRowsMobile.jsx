@@ -1,28 +1,27 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-
 import {Card, CardHeader, CardActions, RaisedButton, Dialog, List, ListItem} from 'material-ui';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 
+// Implementation with Redux was awkward so we kept state in the component instead
 class UsersRowsMobile extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
-            isOpen: false
+            open: false
         }
     }
 
     handleOpen = () => {
         this.setState({
-            isOpen: true
+            open: true
         })
     };
 
     handleClose = () => {
         this.setState({
-            isOpen: false
+            open: false
         })
     };
 
@@ -37,7 +36,7 @@ class UsersRowsMobile extends Component {
 
         return (
             <Card style={{backgroundColor: "transparent", boxShadow: "none"}}>
-                {this.props.mobileAddModerators ?
+                {this.props.onAddModerator ?
                     <CardHeader
                         className="mobile-header-users"
                         title={
@@ -70,11 +69,11 @@ class UsersRowsMobile extends Component {
                 }
 
                 <CardActions>
-                    {this.props.mobileAddModerators ?
+                    {this.props.onAddModerator ?
                         <RaisedButton primary={true}
                                       style={{backgroundColor: "transparent", boxShadow: "none"}}
                                       label="Give/Revoke moderator permissions"
-                                      onTouchTap={this.props.mobileAddModerators(this.props.index)}
+                                      onTouchTap={this.props.onAddModerator(this.props.user._id)}
                                       className="action-buttons-users"
                                       buttonStyle={{backgroundColor: "#eb7077"}}
                                       labelStyle={{color: "#ffffff"}}
@@ -83,7 +82,7 @@ class UsersRowsMobile extends Component {
                         <RaisedButton primary={true}
                                       style={{backgroundColor: "transparent", boxShadow: "none"}}
                                       label="Ban/Unban user"
-                                      onTouchTap={this.props.mobileBanUser(this.props.userId)}
+                                      onTouchTap={this.props.onBanUser(this.props.user._id)}
                                       className="action-buttons-users"
                                       buttonStyle={{backgroundColor: "#eb7077"}}
                                       labelStyle={{color: "#ffffff"}}
@@ -102,31 +101,36 @@ class UsersRowsMobile extends Component {
                 <Dialog
                     title={<div className="dialog-break-word">{"Details about: " + this.props.user.email}</div>}
                     modal={false}
-                    open={this.state.isOpen}
+                    open={this.state.open}
                     onRequestClose={this.handleClose}
                     autoScrollBodyContent={true}
                 >
                     <List>
-                        <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.user.firstName}</div>}
+                        <ListItem disabled={true}
+                                  primaryText={<div className="dialog-break-word">{this.props.user.firstName}</div>}
                                   secondaryText="First name"/>
-                        <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.user.lastName}</div>}
+                        <ListItem disabled={true}
+                                  primaryText={<div className="dialog-break-word">{this.props.user.lastName}</div>}
                                   secondaryText="Last name"/>
                         <ListItem disabled={true} primaryText={formattedDate}
                                   secondaryText="Birthday"/>
-                        <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.user.profession}</div>}
+                        <ListItem disabled={true}
+                                  primaryText={<div className="dialog-break-word">{this.props.user.profession}</div>}
                                   secondaryText="Job"/>
-                        <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.user.companyName}</div>}
+                        <ListItem disabled={true}
+                                  primaryText={<div className="dialog-break-word">{this.props.user.companyName}</div>}
                                   secondaryText="Company name"/>
-                        <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.user.city}</div>}
+                        <ListItem disabled={true}
+                                  primaryText={<div className="dialog-break-word">{this.props.user.city}</div>}
                                   secondaryText="Lives in"/>
-                        <ListItem disabled={true} primaryText={<div className="dialog-break-word">{this.props.user.country}</div>}
+                        <ListItem disabled={true}
+                                  primaryText={<div className="dialog-break-word">{this.props.user.country}</div>}
                                   secondaryText="Located in"/>
                     </List>
                 </Dialog>
             </Card>
         )
     }
-
 }
 
-export default UsersRowsMobile;
+export default UsersRowsMobile

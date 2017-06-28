@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import AdminPage from '../../../components/Admin/Main Component/Admin.jsx';
 import Auth from '../../../modules/Auth.js';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
@@ -7,72 +8,19 @@ import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 class AdminView extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            isAdmin: false,
-            message: '',
-            userName: '',
-            firstName: '',
-            profilePictureLink: '',
-            adminId: ''
-        };
-    }
-
-    adminAuth = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/adminAuthentication');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //User is an admin
-                if (xhr.response.message === "Welcome admin")
-                this.setState({
-                    isAdmin: true,
-                    message: xhr.response.message
-                })
-            }
-        });
-        xhr.send();
-    };
-
-    getUser = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open("get", "/comment/getUserCredentials");
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                this.setState({
-                    userName: xhr.response.userName,
-                    firstName: xhr.response.firstName,
-                    profilePictureLink: xhr.response.profilePictureLink,
-                    adminId: xhr.response.userId
-                });
-            }
-        });
-
-        xhr.send();
-    };
-
-    //Check if the user that requests this page is an admin or not
-    componentDidMount() {
-        this.adminAuth();
-        this.getUser();
     }
 
     render() {
         document.title = "Admin panel";
-        if (this.state.isAdmin) {
+        if (this.props.admin) {
             return (
                 <div>
                     <AdminPage
-                        adminId={this.state.adminId}
-                        userName={this.state.userName}
-                        firstName={this.state.firstName}
-                        profilePictureLink={this.state.profilePictureLink}
+                        adminId={this.props.adminId}
+                        userName={this.props.userName}
+                        firstName={this.props.firstName}
+                        profilePictureLink={this.props.profilePictureLink}
                         userId={this.props.params._id}
-                        message={this.state.message}
                     />
                 </div>
             )
@@ -81,4 +29,39 @@ class AdminView extends Component {
     }
 }
 
-export default AdminView;
+AdminView.propTypes = {
+    admin: PropTypes.bool,
+    userName: PropTypes.string,
+    firstName: PropTypes.string,
+    profilePictureLink: PropTypes.string,
+    adminId: PropTypes.string
+};
+
+// Map credentials
+const mapStateToProps = (state) => {
+    if (state.userReducer.fetching === true) {
+        return {
+            guest: true,
+            finished: false
+        }
+    }
+    else if (state.userReducer.data) {
+        const response = state.userReducer.data;
+        return {
+            admin: response.admin,
+            adminId: response.userId,
+            userName: response.userName,
+            profilePictureLink: response.profilePictureLink,
+            firstName: response.firstName,
+            guest: response.guest,
+            finished: true
+        };
+    }
+    else if (state.userReducer.fetched === false)
+        return {
+            guest: true,
+            finished: true
+        };
+};
+
+export default connect(mapStateToProps)(AdminView)

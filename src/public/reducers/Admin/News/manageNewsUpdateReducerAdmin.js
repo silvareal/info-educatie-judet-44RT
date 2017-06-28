@@ -83,7 +83,7 @@ export default function manageNewsUpdateReducerAdmin(state = {}, action) {
                 message: action.message
             };
 
-        case types.ON_SLIDE_INDEX_CHANGE_ADMIN_NEWS:
+        case types.ON_SLIDE_INDEX_CHANGE_UPDATE_ADMIN_NEWS:
             return {
                 ...state,
                 stepIndex: action.stepIndex

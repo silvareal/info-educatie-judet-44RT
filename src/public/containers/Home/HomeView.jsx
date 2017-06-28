@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router';
-import Home from '../../components/Home/Main Components/Home.jsx';
+import Home from '../../components/Home/Home.jsx';
 import {Card, CardMedia, CardTitle, CardActions, TextField, ListItem, List, Avatar} from 'material-ui';
 import ContentSend from 'material-ui/svg-icons/content/send';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';

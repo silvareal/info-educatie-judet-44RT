@@ -163,22 +163,6 @@ function validateUpdateCollectionsForm(payload) {
     };
 }
 
-function validateMakeModeratorsForm(payload) {
-    // transforms the array from the request body to avoid empty indexes
-    let i = 0;
-    let makeModerators = [];
-    payload.moderators = JSON.parse(payload.moderators);
-    for (let j = 0; j <= payload.moderators.length; j++) {
-        if (payload.moderators[j] !== undefined) {
-            makeModerators[i] = payload.moderators[i];
-            i++;
-        }
-    }
-    return {
-        makeModerators: makeModerators
-    }
-}
-
 function validateCreateNewsForm(payload) {
     const errors = {};
     let isFormValid = true;
@@ -304,7 +288,7 @@ router.get("/showUsers", (req, res) => {
 
         if (isAdmin === true) {
             User.find({admin: false}, (err, users) => {
-                res.json({data: users})
+                res.json({users: users})
             });
         }
         else
@@ -408,78 +392,45 @@ router.post('/makeModerators', (req, res) => {
         const userId = decoded.sub;
         let isAdmin = decoded.isAdmin;
 
-        const validationResult = validateMakeModeratorsForm(req.body);
-
         if (isAdmin === true) {
-            for (let i = 0; i < validationResult.makeModerators.length; i++) {
-                if (validationResult.makeModerators[i] !== null) {
-                    User.findOne({_id: validationResult.makeModerators[i]}, (err, user) => {
+            User.findOne({_id: req.body.userId}, (err, user) => {
 
-                            if (err) {
-                                return res.status(400).json({
-                                    message: "Database error"
-                                });
-                            }
-
-                            if (!user) {
-                                return res.status(404).json({
-                                    message: "User not found"
-                                });
-                            }
-
-                            //if the user by id is not a moderator yet
-                            if (user.moderator === false) {
-                                User.updateOne({_id: {$eq: validationResult.makeModerators[i]}}, {
-                                    $set: {
-                                        moderator: true
-                                    }
-                                }, (err, user) => {
-                                    if (err) {
-                                        return res.status(400).json({
-                                            message: "Database error"
-                                        });
-                                    }
-
-                                    if (!user) {
-                                        return res.status(404).json({
-                                            message: "User not found"
-                                        })
-                                    }
-                                })
-                            }
-                            else {
-                                if (user.moderator === true) {
-                                    User.updateOne({_id: {$eq: validationResult.makeModerators[i]}}, {
-                                        $set: {
-                                            moderator: false
-                                        }
-                                    }, (err, user) => {
-                                        if (err) {
-                                            return res.status(400).json({
-                                                message: "Database error"
-                                            });
-                                        }
-
-                                        if (!user) {
-                                            return res.status(404).json({
-                                                message: "User not found"
-                                            })
-                                        }
-                                    });
-                                }
-                            }
-
-                        }
-                    );
-                }
-                if (i === validationResult.makeModerators.length - 1) {
-                    res.json({
-                        message: "All okay"
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
                     });
                 }
-            }
+
+                if (!user) {
+                    return res.status(404).json({
+                        message: "User not found"
+                    });
+                }
+
+                User.updateOne({_id: req.body.userId}, {
+                    $set : {
+                        moderator: !user.moderator
+                    }
+                }, (err, user) => {
+
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Database error"
+                        });
+                    }
+
+                    if (!user) {
+                        return res.status(404).json({
+                            message: "User not found"
+                        })
+                    }
+
+                    res.json({
+                        success: true
+                    })
+                })
+            })
         }
-        else return res.status(401).end();
     });
 });
 

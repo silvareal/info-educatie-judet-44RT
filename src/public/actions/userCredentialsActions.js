@@ -29,6 +29,7 @@ export function getCredentials() {
             .then((response) => {
                 dispatch(getCredentialsSuccess(response));
             }).catch((err) => {
+            console.log(err);
                 dispatch(getCredentialsFailure());
             });
     }
