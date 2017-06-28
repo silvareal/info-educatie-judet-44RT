@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
+import {stateToHTML} from 'draft-js-export-html';
+import {convertFromRaw} from 'draft-js';
 import {
     RaisedButton,
     Card,
@@ -29,9 +31,15 @@ class LogsCollectionsUpdate extends Component {
         };
 
         let rows = Object.keys(this.props.logs).map((i) => {
-            let counter = 0;
+            let counter1 = 0, counter2 = 0;
             let date = new Date(this.props.logs[i].time);
             if (date != "Invalid Date") {
+
+                let contentState = convertFromRaw(JSON.parse(this.props.logs[i].collectionDescriptionRaw));
+                const html = stateToHTML(contentState);
+                let contentStateOld = convertFromRaw(JSON.parse(this.props.logs[i].collectionDescriptionRawOld));
+                const htmlOld = stateToHTML(contentStateOld);
+
                 return (
                     <div key={i}>
                         <ListItem primaryText={this.props.logs[i].collectionId}
@@ -47,27 +55,28 @@ class LogsCollectionsUpdate extends Component {
                         <ListItem primaryText={this.props.logs[i].collectionName}
                                   secondaryText="Collection's name"
                                   disabled={true}/>
-                        <ListItem primaryText={this.props.logs[i].collectionDescriptionRaw}
-                                  secondaryText="Collection's description in raw format"
+                        <ListItem primaryText={<div dangerouslySetInnerHTML={{__html: html}}/>}
+                                  secondaryText="Collection's description"
                                   disabled={true}/>
                         {Object.keys(this.props.logs[i].picturesArray).map((j) => {
-                            counter++;
+                            counter1++;
+                            let contentState = convertFromRaw(JSON.parse(this.props.logs[i].picturesArray[j].pictureDescriptionRaw));
+                            const html = stateToHTML(contentState);
                             return (
                                 <div key={j}>
                                     <Divider/>
                                     <ListItem primaryText={this.props.logs[i].picturesArray[j].pictureName}
-                                              secondaryText={"Picture's " + counter + " name"}
+                                              secondaryText={"Picture's " + counter1 + " name"}
                                               disabled={true}/>
                                     <ListItem primaryText={this.props.logs[i].picturesArray[j].pictureLink}
-                                              secondaryText={"Picture's " + counter + " link"}
+                                              secondaryText={"Picture's " + counter1 + " link"}
                                               disabled={true}/>
-                                    <ListItem primaryText={this.props.logs[i].picturesArray[j].pictureDescriptionRaw}
-                                              secondaryText={"Picture's " + counter + " description in raw format"}
+                                    <ListItem primaryText={<div dangerouslySetInnerHTML={{__html: html}}/>}
+                                              secondaryText={"Picture's " + counter1 + " description"}
                                               disabled={true}/>
                                 </div>
                             )
                         })}
-                        {counter = 0}
                         <Divider/>
                         <ListItem primaryText="Collection's old information"
                                   disabled={true}/>
@@ -78,22 +87,24 @@ class LogsCollectionsUpdate extends Component {
                         <ListItem primaryText={this.props.logs[i].collectionNameOld}
                                   secondaryText="Collection's name"
                                   disabled={true}/>
-                        <ListItem primaryText={this.props.logs[i].collectionDescriptionRawOld}
-                                  secondaryText="Collection's description in raw format"
+                        <ListItem primaryText={<div dangerouslySetInnerHTML={{__html: htmlOld}}/>}
+                                  secondaryText="Collection's description"
                                   disabled={true}/>
                         {Object.keys(this.props.logs[i].picturesArrayOld).map((j) => {
-                            counter++;
+                            counter2++;
+                            let contentState = convertFromRaw(JSON.parse(this.props.logs[i].picturesArrayOld[j].pictureDescriptionRaw));
+                            const html = stateToHTML(contentState);
                             return (
                                 <div key={j}>
                                     <Divider/>
                                     <ListItem primaryText={this.props.logs[i].picturesArrayOld[j].pictureName}
-                                              secondaryText={"Picture's " + counter + " name"}
+                                              secondaryText={"Picture's " + counter2 + " name"}
                                               disabled={true}/>
                                     <ListItem primaryText={this.props.logs[i].picturesArrayOld[j].pictureLink}
-                                              secondaryText={"Picture's " + counter + " link"}
+                                              secondaryText={"Picture's " + counter2 + " link"}
                                               disabled={true}/>
-                                    <ListItem primaryText={this.props.logs[i].picturesArrayOld[j].pictureDescriptionRaw}
-                                              secondaryText={"Picture's " + counter + " description in raw format"}
+                                    <ListItem primaryText={<div dangerouslySetInnerHTML={{__html: html}}/>}
+                                              secondaryText={"Picture's " + counter2 + " description"}
                                               disabled={true}/>
                                 </div>
                             )

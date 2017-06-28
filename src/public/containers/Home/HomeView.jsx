@@ -13,6 +13,7 @@ import * as collectionsBrowseActions from '../../actions/BrowseCollections/brows
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
 import * as newsBrowseActions from '../../actions/BrowseNews/browseNewsReadAllActions.js';
 import * as newsActionsHomeView from '../../actions/newsHomeViewActions.js';
+import * as collectionNamesActions from '../../actions/AppBar/collectionNamesActions';
 
 let socket = io.connect();
 
@@ -22,6 +23,7 @@ let createHandler = function (dispatch) {
         dispatch(collectionsActions.getAllCollections());
         dispatch(readActions.getAllCollections());
         dispatch(collectionsBrowseActions.getAllCollections());
+        dispatch(collectionNamesActions.getAllCollections());
     };
 
     let updateNewsStore = function () {

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
+import {stateToHTML} from 'draft-js-export-html';
+import {convertFromRaw} from 'draft-js';
 import {
     RaisedButton,
     List,
@@ -12,7 +14,6 @@ import {
 
 class LogsCollectionsDelete extends Component {
     render() {
-
         const styles = {
             cardHeader: {
                 textAlign: "center"
@@ -32,6 +33,8 @@ class LogsCollectionsDelete extends Component {
             let counter = 0;
             let date = new Date(this.props.logs[i].time);
             if (date != "Invalid Date") {
+                let contentState = convertFromRaw(JSON.parse(this.props.logs[i].collectionDescriptionRaw));
+                const html = stateToHTML(contentState);
                 return (
                     <div key={i}>
                         <ListItem primaryText={this.props.logs[i].userId}
@@ -46,11 +49,13 @@ class LogsCollectionsDelete extends Component {
                         <ListItem primaryText={this.props.logs[i].collectionName}
                                   secondaryText="Collection's name"
                                   disabled={true}/>
-                        <ListItem primaryText={this.props.logs[i].collectionDescriptionRaw}
-                                  secondaryText="Collection's description in raw format"
+                        <ListItem primaryText={<div dangerouslySetInnerHTML={{__html: html}}/>}
+                                  secondaryText="Collection's description"
                                   disabled={true}/>
                         {Object.keys(this.props.logs[i].picturesArray).map((j) => {
                             counter++;
+                            let contentState = convertFromRaw(JSON.parse(this.props.logs[i].picturesArray[j].pictureDescriptionRaw));
+                            const html = stateToHTML(contentState);
                             return (
                                 <div key={j}>
                                     <Divider/>
@@ -60,8 +65,8 @@ class LogsCollectionsDelete extends Component {
                                     <ListItem primaryText={this.props.logs[i].picturesArray[j].pictureLink}
                                               secondaryText={"Picture's " + counter + " link"}
                                               disabled={true}/>
-                                    <ListItem primaryText={this.props.logs[i].picturesArray[j].pictureDescriptionRaw}
-                                              secondaryText={"Picture's " + counter + " description in raw format"}
+                                    <ListItem primaryText={<div dangerouslySetInnerHTML={{__html: html}}/>}
+                                              secondaryText={"Picture's " + counter + " description"}
                                               disabled={true}/>
                                 </div>
                             )

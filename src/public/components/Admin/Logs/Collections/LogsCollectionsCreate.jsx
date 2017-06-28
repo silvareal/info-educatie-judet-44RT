@@ -11,7 +11,6 @@ import {
 } from 'material-ui';
 
 class LogsCollectionsCreate extends Component {
-
     render() {
 
         const styles = {

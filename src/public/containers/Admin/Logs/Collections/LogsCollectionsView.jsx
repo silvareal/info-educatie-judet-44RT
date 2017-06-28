@@ -1,45 +1,47 @@
 import React, {Component} from 'react';
-
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import LogsCollections from '../../../../components/Admin/Logs/Collections/LogsCollections.jsx';
-import NotAuthorizedPage from '../../../Error/NotAuthorizedView.jsx';
-import Auth from '../../../../modules/Auth.js'
+import NotAuthorizedView from '../../../Error/NotAuthorizedView.jsx';
+import LoadingIndicator from "../../../../components/Loading Indicator/LoadingIndicator.jsx";
 
 class LogsCollectionsView extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-
-        this.state = {
-            isAdmin: false,
-        }
-    }
-
-    componentDidMount() {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/adminAuthentication');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //User is an admin
-                this.setState({
-                    isAdmin: true
-                })
-            }
-            else this.setState({isAdmin: false})
-        });
-        xhr.send();
     }
 
     render() {
         document.title = "Logs - Collections Overview";
-        if (this.state.isAdmin === true)
-        {
-            return (
-                <LogsCollections userId={this.props.params._id} />
-            )
-        }
-        else return <NotAuthorizedPage/>
+        if (this.props.admin === true)
+            return <LogsCollections userId={this.props.params._id}/>;
+        else if (this.props.fetching === true) return <LoadingIndicator/>;
+        else if (this.props.admin === false) return <NotAuthorizedView/>;
     }
 }
 
-export default LogsCollectionsView;
+LogsCollectionsView.propTypes = {
+    admin: PropTypes.bool
+};
+
+const mapStateToProps = (state) => {
+    if (state.userReducer.fetching === true)
+        return {
+            fetching: true,
+            fetched: false,
+            admin: null
+        };
+    else if (state.userReducer.data) {
+        return {
+            fetching: false,
+            fetched: true,
+            admin: state.userReducer.data.admin
+        }
+    }
+    else return {
+            fetched: true,
+            fetching: false,
+            admin: false
+        }
+};
+
+export default connect(mapStateToProps)(LogsCollectionsView)

@@ -11,7 +11,6 @@ import {
     Card,
     CardHeader,
     CardActions,
-    List,
     ListItem,
     Divider
 } from 'material-ui';

@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import * as collectionsActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
 import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
 import * as collectionsBrowseActions from '../../actions/BrowseCollections/browseCollectionsReadAllActions.js';
+import * as collectionNamesActions from '../../actions/AppBar/collectionNamesActions.js';
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
 
 let createHandler = function (dispatch) {
@@ -12,6 +13,7 @@ let createHandler = function (dispatch) {
         dispatch(collectionsActions.getAllCollections());
         dispatch(collectionsBrowseActions.getAllCollections());
         dispatch(collectionsHomeViewActions.getCollectionsHomeView());
+        dispatch(collectionNamesActions.getAllCollections());
     };
 
     let removeShouldUpdate = function () {

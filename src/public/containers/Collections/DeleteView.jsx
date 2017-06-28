@@ -32,7 +32,6 @@ class DeleteView extends Component {
 
     onDelete = () => {
         if (this.props.response === true) {
-            this.resetScroll();
             const collectionId = this.props.params._id;
             const collectionName = this.props.collectionName;
             const collectionDescriptionRaw = this.props.collectionDescriptionRaw;

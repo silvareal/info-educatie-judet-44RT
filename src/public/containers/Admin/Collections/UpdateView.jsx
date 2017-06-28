@@ -296,7 +296,7 @@ const collection = (state) => {
             collectionNameOld: statePath.collectionNameOld,
             collectionDescription: collection.collectionDescription,
             collectionDescriptionRaw: collection.collectionDescriptionRaw,
-            collectionDescriptionRawOld: statePath.collectionDescriptionRaw,
+            collectionDescriptionRawOld: statePath.collectionDescriptionRawOld,
             pictures: collection.picturesArray,
             picturesOld: statePath.picturesArrayOld,
             __html: statePath.__html,

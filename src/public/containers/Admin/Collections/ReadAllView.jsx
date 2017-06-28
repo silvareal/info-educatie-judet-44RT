@@ -8,6 +8,7 @@ import * as readActions from '../../../actions/Admin/Collections/manageCollectio
 import * as collectionsHomeViewActions from '../../../actions/collectionsHomeViewActions.js';
 import * as collectionsBrowseActions from '../../../actions/BrowseCollections/browseCollectionsReadAllActions.js';
 import * as collectionsManageActions from '../../../actions/Collections/manageCollectionsReadAllActions.js';
+import * as collectionNamesActions from '../../../actions/AppBar/collectionNamesActions.js';
 import * as shouldUpdateActions from '../../../actions/shouldUpdateActions.js';
 
 let createHandler = function (dispatch) {
@@ -16,6 +17,7 @@ let createHandler = function (dispatch) {
         dispatch(collectionsManageActions.getAllCollections());
         dispatch(collectionsBrowseActions.getAllCollections());
         dispatch(collectionsHomeViewActions.getCollectionsHomeView());
+        dispatch(collectionNamesActions.getAllCollections());
     };
 
     let removeShouldUpdate = function () {

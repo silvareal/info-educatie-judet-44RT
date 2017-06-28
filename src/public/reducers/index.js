@@ -26,6 +26,12 @@ import manageNewsCreateReducerAdmin from './Admin/News/manageNewsCreateReducerAd
 import manageNewsDeleteReducerAdmin from './Admin/News/manageNewsDeleteReducerAdmin.js';
 import manageNewsUpdateReducerAdmin from './Admin/News/manageNewsUpdateReducerAdmin.js';
 import manageUsersReducerAdmin from './Admin/Users/manageUsersReducerAdmin.js';
+import logsCreateCollectionsReducer from './Admin/Logs/Collections/logsCreateCollectionsReducer.js';
+import logsDeleteCollectionsReducer from './Admin/Logs/Collections/logsDeleteCollectionsReducer.js';
+import logsUpdateCollectionsReducer from './Admin/Logs/Collections/logsUpdateCollectionsReducer.js';
+import logsLoginReducer from './Admin/Logs/Login/logsLoginReducer.js';
+import logsSignUpReducer from './Admin/Logs/Signup/logsSignUpReducer.js';
+import logsProfileReducer from './Admin/Logs/Profile/logsProfileReducer.js';
 
 const rootReducer = combineReducers({
     signUpReducer: signUpReducer,
@@ -54,7 +60,13 @@ const rootReducer = combineReducers({
     manageNewsCreateReducerAdmin: manageNewsCreateReducerAdmin,
     manageNewsDeleteReducerAdmin: manageNewsDeleteReducerAdmin,
     manageNewsUpdateReducerAdmin: manageNewsUpdateReducerAdmin,
-    manageUsersReducerAdmin: manageUsersReducerAdmin
+    manageUsersReducerAdmin: manageUsersReducerAdmin,
+    logsCreateCollectionsReducer: logsCreateCollectionsReducer,
+    logsDeleteCollectionsReducer: logsDeleteCollectionsReducer,
+    logsUpdateCollectionsReducer: logsUpdateCollectionsReducer,
+    logsLoginReducer: logsLoginReducer,
+    logsSignUpReducer: logsSignUpReducer,
+    logsProfileReducer: logsProfileReducer
 });
 
 export default rootReducer

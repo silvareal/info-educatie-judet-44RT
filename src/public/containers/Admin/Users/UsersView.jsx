@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Users from '../../../components/Admin/Users/Main Components/Users.jsx';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
@@ -211,8 +210,6 @@ class UsersView extends Component {
         else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
     }
 }
-
-UsersView.propTypes = {};
 
 const credentials = (state) => {
     if (state.userReducer.fetching === true)

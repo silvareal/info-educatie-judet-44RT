@@ -1,85 +1,97 @@
 import React, {Component} from 'react';
-
-import Auth from '../../../../modules/Auth.js';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import * as logsActions from '../../../../actions/Admin/Logs/Signup/logsSignUpActions.js';
 import LogsSignup from '../../../../components/Admin/Logs/Signup/LogsSignup.jsx';
 import NotAuthorizedView from '../../../Error/NotAuthorizedView.jsx';
 import LoadingIndicator from "../../../../components/Loading Indicator/LoadingIndicator.jsx";
 
-import {Card} from 'material-ui';
+let createHandler = function (dispatch) {
+    let getLogs = function () {
+        dispatch(logsActions.onGetLogs())
+    };
 
+    return {
+        getLogs
+    }
+};
 class LogsSignupView extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-
-        this.state = {
-            logs: [{}],
-            isAdmin: false,
-            fetched: false
-        }
+        this.handlers = createHandler(this.props.dispatch);
     }
 
-    adminAuth = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/adminAuthentication');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                //User is an admin
-                this.setState({
-                    isAdmin: true
-                })
-            }
-            else this.setState({isAdmin: false})
-        });
-        xhr.send();
-    };
-
-    getLogs = () => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', '/admin/logsSignup');
-        xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                this.setState({
-                    logs: xhr.response.logs,
-                    fetched: true
-                });
-            }
-        });
-
-        xhr.send();
-    };
-
     componentDidMount() {
-        this.adminAuth();
-        this.getLogs();
+        this.handlers.getLogs();
     }
 
     render() {
         document.title = "Logs - Signup";
-        if (this.state.fetched === false && this.state.isAdmin !== true)
-            return (
-                <div>
-                    <div className="top-bar-spacing"/>
-                    <Card className="container-logs" style={{boxShadow: "none"}}>
-                        <LoadingIndicator/>
-                    </Card>
-                </div>
-            );
-        if (this.state.isAdmin === true)
-        {
-            return (
-                <LogsSignup
-                    logs={this.state.logs}
-                    userId={this.props.params._id}
-                />
-            )
-        }
-        else return <NotAuthorizedView/>
+        if (this.props.logs && this.props.credentials.admin === true && this.props.logs.fetchedLogs === true)
+            return <LogsSignup logs={this.props.logs.logs}
+                               userId={this.props.params._id}/>;
+        else if (this.props.credentials.fetching === true || (this.props.logs && this.props.logs.fetchingLogs)) return <LoadingIndicator/>;
+        else if (this.props.credentials.admin === false) return <NotAuthorizedView/>;
+        else if (!this.props.logs) return <LoadingIndicator/>;
     }
-
 }
 
-export default LogsSignupView;
+LogsSignupView.propTypes = {
+    credentials: React.PropTypes.shape({
+        admin: PropTypes.bool,
+        fetching: PropTypes.bool,
+        fetched: PropTypes.bool
+    }),
+    logs: React.PropTypes.shape({
+        fetchingLogs: PropTypes.bool,
+        fetchedLogs: PropTypes.bool,
+        logs: PropTypes.array
+    })
+};
+
+const credentials = (state) => {
+    if (state.userReducer.fetching === true)
+        return {
+            fetching: true,
+            fetched: false,
+            admin: null
+        };
+    else if (state.userReducer.data) {
+        return {
+            fetching: false,
+            fetched: true,
+            admin: state.userReducer.data.admin
+        }
+    }
+    else return {
+            fetched: true,
+            fetching: false,
+            admin: false
+        }
+};
+
+const logs = (state) => {
+    if (state.logsSignUpReducer.fetching === true)
+        return {
+            fetchingLogs: true,
+            fetchedLogs: false
+        };
+    else if (state.logsSignUpReducer.fetched === true && state.logsSignUpReducer.fetching === false)
+        return {
+            logs: state.logsSignUpReducer.logs,
+            fetchedLogs: true,
+            fetchingLogs: false
+        };
+    else if (state.logsSignUpReducer.fetched === false && state.logsSignUpReducer.fetching === false)
+        return {
+            fetchedLogs: false,
+            fetchingLogs: false
+        };
+};
+
+const mapStateToProps = (state) => ({
+    credentials: credentials(state),
+    logs: logs(state)
+});
+
+export default connect(mapStateToProps)(LogsSignupView)
