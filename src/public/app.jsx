@@ -9,15 +9,20 @@ import {browserHistory, Router} from 'react-router';
 import routes from './routes.js';
 
 import configureStore from './store/configureStore.js';
-import {getCredentials} from './actions/userCredentialsActions.js';
-import {getCollectionsHomeView} from './actions/collectionsHomeViewActions.js';
+import * as userActions from './actions/userCredentialsActions.js';
+
 import {getAllCollections} from './actions/Collections/manageCollectionsReadAllActions.js';
 import * as browseReadAllActions from './actions/BrowseCollections/browseCollectionsReadAllActions.js';
-import * as getAllCollectionNames from './actions/AppBar/collectionNamesActions.js';
-import * as getCollectionsAdmin from './actions/Admin/Collections/manageCollectionsReadAllActionsAdmin';
+
 import * as browseNewsReadAllActions from './actions/BrowseNews/browseNewsReadAllActions.js';
 import * as setUpdate from './actions/shouldUpdateActions.js';
+
+// HomeView
 import * as getNewsHomeView from './actions/newsHomeViewActions.js';
+import * as getCollectionsHomeView from './actions/collectionsHomeViewActions.js'
+
+// For search and not only
+import * as getAllCollectionNames from './actions/AppBar/collectionNamesActions.js';
 
 import {Provider} from 'react-redux';
 
@@ -28,8 +33,8 @@ const store = configureStore();
 store.dispatch(getAllCollectionNames.getAllCollections());
 store.dispatch(browseReadAllActions.getAllCollections());
 store.dispatch(browseNewsReadAllActions.getAllNews());
-store.dispatch(getCollectionsHomeView());
-store.dispatch(getCredentials());
+store.dispatch(getCollectionsHomeView.getCollectionsHomeView());
+store.dispatch(userActions.getCredentials());
 store.dispatch(getNewsHomeView.getNews());
 
 socket.on("updateCollectionsStore", () => {
@@ -41,17 +46,15 @@ socket.on("updateNewsStore", () => {
 });
 
 if (Auth.isUserAuthenticated()) {
-    store.dispatch(getCredentials());
+    store.dispatch(userActions.getCredentials());
     store.dispatch(getAllCollections());
-    store.dispatch(getCollectionsAdmin.getAllCollections());
 }
 
 socket.on("getCredentials", () => {
     // Requires the user to be authenticated
     if (Auth.isUserAuthenticated()) {
-        store.dispatch(getCredentials());
+        store.dispatch(userActions.getCredentials());
         store.dispatch(getAllCollections());
-        store.dispatch(getCollectionsAdmin.getAllCollections());
     }
 });
 

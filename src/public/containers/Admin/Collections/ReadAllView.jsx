@@ -12,6 +12,10 @@ import * as collectionNamesActions from '../../../actions/AppBar/collectionNames
 import * as shouldUpdateActions from '../../../actions/shouldUpdateActions.js';
 
 let createHandler = function (dispatch) {
+    let getCollections = function () {
+        dispatch(readActions.getAllCollections())
+    };
+
     let updateCollectionsStore = function () {
         dispatch(readActions.getAllCollections());
         dispatch(collectionsManageActions.getAllCollections());
@@ -29,6 +33,7 @@ let createHandler = function (dispatch) {
     };
 
     return {
+        getCollections,
         updateCollectionsStore,
         removeShouldUpdate,
         loadMore
@@ -51,6 +56,9 @@ class ReadAllView extends Component {
     };
 
     componentDidMount() {
+        // To avoid unauthorized error for non-admins, we only fetch all collections for ReadAll admin here
+        this.handlers.getCollections();
+
         if (this.props.shouldUpdateCollections && this.props.shouldUpdateCollections.shouldUpdateCollections) {
             this.handlers.updateCollectionsStore();
             this.handlers.removeShouldUpdate();

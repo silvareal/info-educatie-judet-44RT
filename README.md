@@ -537,14 +537,14 @@ npm install bcrypt
 <h5>Cristiana Lazar</h5>
 
 
-// Working notes: when you log in, the store should retrieve credentials.
-// look at the crud.js top of file
+// Working notes: when you log in, the store should retrieve credentials. - done
+// look at the crud.js top of file - done
 // SearchView needs to check if shouldUpdate is set to true and fetch collectionNamesReducer again if so
 // Update reducer for manage should use different action names or it will conflict with Create -- FIXED
 // ideea for readOne for the final product: have it in a modal, 90% width 90% height of the page and scrollable. use a function to retrieve all needed stuff based on collectionId and have it pop over ReadAll. that way, scroll doesn t need to be preserved since the page is the same and there will be no need to use target _blank to avoid "THE BUG"
 // added above ideea. pending feedback from Cristiana . Note: ReadOne as it is must still be kept for instant share links
 // for profile: if profile picture updated we must fetch everything again. use a flag as shouldUpdate fr the componentWillUnmount lifecycle
-// abandoned the ideea to fetch all collections for all pages. reconsider working on that full priority.
+// abandoned the ideea to fetch all collections for all pages. reconsider working on that full priority. - fixed, only removed reading all collections ALSO for admin when user is not admin.
 // instead of nothing when user is not logged, use a disabled textfield on readOne - commentInput
 // look into making a loading between pages animation with transition if possible or if not simply with the fetching property of the NEXT REDUCER of the page called
 // apparently, in production its just the react router transition. customize that!

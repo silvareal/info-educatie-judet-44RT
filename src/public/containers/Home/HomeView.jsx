@@ -8,7 +8,6 @@ import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import {connect} from 'react-redux';
 import * as collectionsHomeViewActions from '../../actions/collectionsHomeViewActions.js';
 import * as collectionsActions from '../../actions/Collections/manageCollectionsReadAllActions.js';
-import * as readActions from '../../actions/Admin/Collections/manageCollectionsReadAllActionsAdmin.js';
 import * as collectionsBrowseActions from '../../actions/BrowseCollections/browseCollectionsReadAllActions.js';
 import * as shouldUpdateActions from '../../actions/shouldUpdateActions.js';
 import * as newsBrowseActions from '../../actions/BrowseNews/browseNewsReadAllActions.js';
@@ -21,7 +20,6 @@ let createHandler = function (dispatch) {
     let updateCollectionsStore = function () {
         dispatch(collectionsHomeViewActions.getCollectionsHomeView());
         dispatch(collectionsActions.getAllCollections());
-        dispatch(readActions.getAllCollections());
         dispatch(collectionsBrowseActions.getAllCollections());
         dispatch(collectionNamesActions.getAllCollections());
     };
