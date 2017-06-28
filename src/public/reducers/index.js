@@ -32,6 +32,9 @@ import logsUpdateCollectionsReducer from './Admin/Logs/Collections/logsUpdateCol
 import logsLoginReducer from './Admin/Logs/Login/logsLoginReducer.js';
 import logsSignUpReducer from './Admin/Logs/Signup/logsSignUpReducer.js';
 import logsProfileReducer from './Admin/Logs/Profile/logsProfileReducer.js';
+import logsCreateNewsReducer from './Admin/Logs/News/logsCreateNewsReducer.js';
+import logsDeleteNewsReducer from './Admin/Logs/News/logsDeleteNewsReducer.js';
+import logsUpdateNewsReducer from './Admin/Logs/News/logsUpdateNewsReducer.js';
 
 const rootReducer = combineReducers({
     signUpReducer: signUpReducer,
@@ -66,7 +69,10 @@ const rootReducer = combineReducers({
     logsUpdateCollectionsReducer: logsUpdateCollectionsReducer,
     logsLoginReducer: logsLoginReducer,
     logsSignUpReducer: logsSignUpReducer,
-    logsProfileReducer: logsProfileReducer
+    logsProfileReducer: logsProfileReducer,
+    logsCreateNewsReducer: logsCreateNewsReducer,
+    logsDeleteNewsReducer: logsDeleteNewsReducer,
+    logsUpdateNewsReducer: logsUpdateNewsReducer
 });
 
 export default rootReducer

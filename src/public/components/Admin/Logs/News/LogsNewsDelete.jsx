@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
+import {stateToHTML} from 'draft-js-export-html';
+import {convertFromRaw} from 'draft-js';
 import {
     RaisedButton,
     Card,
@@ -31,6 +33,8 @@ class LogsNewsDelete extends Component {
         let rows = Object.keys(this.props.logs).map((i) => {
             let date = new Date(this.props.logs[i].time);
             if (date != "Invalid Date") {
+                let contentState = convertFromRaw(JSON.parse(this.props.logs[i].newsDescriptionRaw));
+                const html = stateToHTML(contentState);
                 return (
                     <div key={i}>
                         <ListItem primaryText={this.props.logs[i].newsId}
@@ -39,8 +43,8 @@ class LogsNewsDelete extends Component {
                         <ListItem primaryText={this.props.logs[i].newsTitle}
                                   secondaryText="Article's title"
                                   disabled={true}/>
-                        <ListItem primaryText={this.props.logs[i].newsDescriptionRaw}
-                                  secondaryText="Article's description in raw format"
+                        <ListItem primaryText={<div dangerouslySetInnerHTML={{__html: html}}/>}
+                                  secondaryText="Article's description"
                                   disabled={true}/>
                         <ListItem primaryText={this.props.logs[i].newsCoverLink}
                                   secondaryText="Article's cover photo link"

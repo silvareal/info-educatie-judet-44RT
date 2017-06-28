@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
+import {stateToHTML} from 'draft-js-export-html';
+import {convertFromRaw} from 'draft-js';
 import {
     RaisedButton,
     Card,
@@ -31,6 +33,10 @@ class LogsNewsUpdate extends Component {
         let rows = Object.keys(this.props.logs).map((i) => {
             let date = new Date(this.props.logs[i].time);
             if (date != "Invalid Date") {
+                let contentState = convertFromRaw(JSON.parse(this.props.logs[i].newsDescriptionRaw));
+                const html = stateToHTML(contentState);
+                let contentStateOld = convertFromRaw(JSON.parse(this.props.logs[i].newsDescriptionRawOld));
+                const htmlOld = stateToHTML(contentStateOld);
                 return (
                     <div key={i}>
                         <ListItem primaryText={this.props.logs[i].newsId}
@@ -43,8 +49,8 @@ class LogsNewsUpdate extends Component {
                         <ListItem primaryText={this.props.logs[i].newsTitle}
                                   secondaryText="Article's title"
                                   disabled={true}/>
-                        <ListItem primaryText={this.props.logs[i].newsDescriptionRaw}
-                                  secondaryText="Article's description in raw format"
+                        <ListItem primaryText={<div dangerouslySetInnerHTML={{__html: html}}/>}
+                                  secondaryText="Article's description"
                                   disabled={true}/>
                         <ListItem primaryText={this.props.logs[i].newsCoverLink}
                                   secondaryText="Article's cover photo link"
@@ -57,7 +63,7 @@ class LogsNewsUpdate extends Component {
                         <ListItem primaryText={this.props.logs[i].newsTitleOld}
                                   secondaryText="Article's title"
                                   disabled={true}/>
-                        <ListItem primaryText={this.props.logs[i].newsDescriptionRawOld}
+                        <ListItem primaryText={<div dangerouslySetInnerHTML={{__html: htmlOld}}/>}
                                   secondaryText="Article's description in raw format"
                                   disabled={true}/>
                         <ListItem primaryText={this.props.logs[i].newsCoverLinkOld}
