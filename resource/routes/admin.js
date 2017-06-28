@@ -18,6 +18,10 @@ const jwt = require('jsonwebtoken');
 
 const router = new express.Router();
 
+// Redis
+const redis = require('redis');
+const client = redis.createClient();
+
 function validateSearchForm(payload) {
     let isFormValid = true;
 
@@ -408,7 +412,7 @@ router.post('/makeModerators', (req, res) => {
                 }
 
                 User.updateOne({_id: req.body.userId}, {
-                    $set : {
+                    $set: {
                         moderator: !user.moderator
                     }
                 }, (err, user) => {
@@ -1791,7 +1795,7 @@ router.get("/logsNewsDelete", (req, res) => {
     });
 });
 
-router.get("/logsProfile", (req, res) => {
+function logsProfile(req, res) {
 
     if (!req.headers.authorization) {
         return res.status(401).end();
@@ -1830,12 +1834,57 @@ router.get("/logsProfile", (req, res) => {
                     });
                 }
 
+                client.set("logsProfile", JSON.stringify(logs));
+
                 res.json({
-                    logs: logs
+                    logs: logs,
+                    fromCache: false
                 });
             }).sort({time: -1});
         }
     });
-});
+}
+
+function logsProfileRedis(req, res, next) {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+            if (err) {
+                return res.status(401).json({
+                    message: "Not authorized"
+                })
+            }
+
+            if (!decoded) {
+                return res.status(400).json({
+                    message: "Internal error"
+                })
+            }
+
+            let isAdmin = decoded.isAdmin;
+            if (isAdmin === true) {
+                client.get("logsProfile", (err, logs) => {
+                    if (logs !== null) {
+                        res.json({
+                            logs: JSON.parse(logs),
+                            fromCache: true
+                        })
+                    }
+                    else {
+                        next();
+                    }
+                });
+            }
+        }
+    )
+}
+
+router.get("/logsProfile", logsProfileRedis, logsProfile);
 
 module.exports = router;

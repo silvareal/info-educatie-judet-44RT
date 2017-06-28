@@ -10,6 +10,9 @@ const config = require('../../config');
 
 const router = new express.Router();
 
+const redis = require('redis');
+const client = redis.createClient();
+
 function validateProfileForm(payload) {
     const errors = {};
     let isFormValid = true;
@@ -237,6 +240,16 @@ router.post('/profile-edit', (req, res) => {
                         message: "User not found"
                     });
                 }
+
+                client.del("logsProfile");
+
+                const UpdateProfileLogs = require('mongoose').model('UpdateProfileLogs');
+
+                UpdateProfileLogs.find({}, (err, logs) => {
+                     if (logs) {
+                         client.set("logsProfile", JSON.stringify(logs));
+                     }
+                });
 
                 const logData = {
                     userId: userId,
