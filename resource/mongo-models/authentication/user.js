@@ -25,6 +25,7 @@ const UserSchema = new mongoose.Schema({
     admin: { type: Boolean, default: false },
     banned: { type: Boolean, default: false},
     moderator: { type: Boolean, default: false },
+    liked: {type: Array, default: []},
     time: { type: Date, default: Date.now }
 });
 

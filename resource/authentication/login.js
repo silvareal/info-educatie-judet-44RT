@@ -59,6 +59,7 @@ module.exports = new PassportLocalStrategy(
                 const payload = {
                     sub: user._id,
                     isAdmin: user.admin,
+                    isModerator: user.moderator,
                     profilePictureLink: user.profilePictureLink,
                     userName: user.name,
                     firstName: user.firstName

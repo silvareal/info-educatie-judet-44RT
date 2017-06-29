@@ -224,7 +224,7 @@ class AppBarPersonal extends Component {
                                                                       leftIcon={<ImageCollections/>}
                                                             />
                                                     </Link>
-                                                    <Link to={`/admin/${this.props.userId}/news`}
+                                                    <Link to={`/news`}
                                                           activeClassName="active-link-classname"
                                                           onClick={this.props.resetScroll}
                                                     >

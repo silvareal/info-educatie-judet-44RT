@@ -524,12 +524,14 @@ npm install bcrypt
 <h3><i>TODO for v0.0.4</i></h3>
 
 <ul>
-<li>All of our AJAX requests need to be rewritten with <a href="https://github.com/mzabriskie/axios">Axios</a></li>
-<li><a href="https://github.com/reactjs/redux/">Redux</a> is required to increase performance ( a.k.a. reduce the number of AJAX requests )</li>
-<li>Implementation of a Like/Favourite System</li>
-<li>Implementation of Actions for Moderators (delete comments, hide offensive collections etc)</li>
-<li>Implementation of an upload system</li>
-<li>OPTIONAL: Rework the backend in <a href="http://hacklang.org/">Hacklang</a></li>
+<li>All of our AJAX requests need to be rewritten with <a href="https://github.com/mzabriskie/axios">Axios</a> - DONE</li>
+<li><a href="https://github.com/reactjs/redux/">Redux</a> is required to increase performance ( a.k.a. reduce the number of AJAX requests ) - 95% DONE</li>
+<li>Implementation of a Like/Favourite System - SYSTEM FUNCTIONAL ON MANAGE COLLECTIONS AT THIS TIME</li>
+<li>Implementation of Actions for Moderators (delete comments, hide offensive collections etc) - SYSTEM FUNCTIONAL ON MANAGE READ ONE FOR BOTH ADMIN AND MODS AT THIS TIME</li>
+<li><strike>Implementation of an upload system</strike> REMOVED</li>
+<li><strike>OPTIONAL: Rework the backend in Hacklang</strike> REMOVED</li>
+<li>Add tags to collections</li>
+<li>Add Redis to the application - IN PROGRESS</li>
 </ul>
 
 <h1>Creators:</h1>
@@ -537,15 +539,7 @@ npm install bcrypt
 <h5>Cristiana Lazar</h5>
 
 
-// Working notes: when you log in, the store should retrieve credentials. - done
-// look at the crud.js top of file - done
-// SearchView needs to check if shouldUpdate is set to true and fetch collectionNamesReducer again if so
-// Update reducer for manage should use different action names or it will conflict with Create -- FIXED
-// ideea for readOne for the final product: have it in a modal, 90% width 90% height of the page and scrollable. use a function to retrieve all needed stuff based on collectionId and have it pop over ReadAll. that way, scroll doesn t need to be preserved since the page is the same and there will be no need to use target _blank to avoid "THE BUG"
-// added above ideea. pending feedback from Cristiana . Note: ReadOne as it is must still be kept for instant share links
-// for profile: if profile picture updated we must fetch everything again. use a flag as shouldUpdate fr the componentWillUnmount lifecycle
-// abandoned the ideea to fetch all collections for all pages. reconsider working on that full priority. - fixed, only removed reading all collections ALSO for admin when user is not admin.
-// instead of nothing when user is not logged, use a disabled textfield on readOne - commentInput
-// look into making a loading between pages animation with transition if possible or if not simply with the fetching property of the NEXT REDUCER of the page called
-// apparently, in production its just the react router transition. customize that!
 
+// SearchView needs to check if shouldUpdate is set to true and fetch collectionNamesReducer again if so
+// for profile: if profile picture updated we must fetch everything again. use a flag as shouldUpdate fr the componentWillUnmount lifecycle - for when, say, user wants to add a collection, their old profile pic will be used unless you do this
+// instead of nothing when user is not logged, use a disabled textfield on readOne - commentInput

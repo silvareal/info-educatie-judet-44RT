@@ -26,6 +26,7 @@ import * as getAllCollectionNames from './actions/AppBar/collectionNamesActions.
 
 import {Provider} from 'react-redux';
 
+
 let socket = io.connect();
 
 const store = configureStore();
@@ -56,6 +57,16 @@ socket.on("getCredentials", () => {
         store.dispatch(userActions.getCredentials());
         store.dispatch(getAllCollections());
     }
+});
+
+socket.on("onLike", (data) => {
+    store.dispatch(userActions.onLikeSuccess());
+    store.dispatch(userActions.onLikeAllUsers(data.likedId))
+});
+
+socket.on("onUnlike", (data) => {
+    store.dispatch(userActions.onUnlikeSuccess());
+    store.dispatch(userActions.onUnlikeAllUsers(data.likedId))
 });
 
 injectTapEventPlugin();

@@ -187,6 +187,9 @@ a {
   padding: 0 16px;
   color: deepskyblue; }
 
+.heart-red-color svg {
+  fill: red !important; }
+
 .parallax-login {
   width: auto;
   height: 100%;

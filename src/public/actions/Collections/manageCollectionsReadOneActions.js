@@ -3,6 +3,8 @@ import axios from 'axios';
 import Auth from '../../modules/Auth.js';
 import qs from 'qs';
 
+let socket = io.connect();
+
 export function getCollection(collectionId) {
     return function (dispatch) {
         dispatch({type: types.READ_ONE_COLLECTION, collectionId: collectionId})
@@ -142,7 +144,7 @@ export function onSaveComment(collectionId, comment) {
 
 // Retrieve the comment count for the specific collection
 export function getCommentsCount(collectionId) {
-    return function (dispatch){
+    return function (dispatch) {
         return axios({
             method: 'post',
             url: '/comment/commentsCount',
@@ -162,5 +164,39 @@ export function getCommentsCount(collectionId) {
 export function resetReducer() {
     return function (dispatch) {
         dispatch({type: types.RESET_READ_ONE_REDUCER_COLLECTIONS})
+    }
+}
+
+export function onDeleteCommentInitiate() {
+    return {type: types.ON_DELETE_COMMENT_INITIATE}
+}
+
+export function onDeleteCommentSuccess() {
+    return {type: types.ON_DELETE_COMMENT_SUCCESS}
+}
+
+export function onDeleteCommentFailure() {
+    return {type: types.ON_DELETE_COMMENT_FAILURE}
+}
+
+export function onDeleteComment(commentId) {
+    return function (dispatch) {
+        dispatch(onDeleteCommentInitiate());
+        return axios({
+            method: 'post',
+            url: '/comment/deleteCommentCollections',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded',
+                'Authorization': `bearer ${Auth.getToken()}`
+            },
+            data: qs.stringify({
+                'commentId': commentId
+            })
+        }).then(() => {
+            socket.emit("send:comment");
+            dispatch(onDeleteCommentSuccess());
+        }).catch(() => {
+            dispatch(onDeleteCommentFailure());
+        })
     }
 }

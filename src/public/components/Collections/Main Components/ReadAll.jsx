@@ -4,7 +4,7 @@ import TopActions from '../Partials Components/TopActions.jsx';
 import ViewTable from '../Partials Components/ViewTable.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
 import NoCollectionsFound from '../Partials Components/NoCollectionsFound.jsx';
-import {Card, Dialog, RaisedButton} from 'material-ui';
+import {Card, Dialog, RaisedButton, Snackbar} from 'material-ui';
 import ReadOneView from '../../../containers/Collections/ReadOneView.jsx';
 import * as readOneActions from '../../../actions/Collections/manageCollectionsReadOneActions.js';
 
@@ -53,11 +53,21 @@ class ReadAll extends Component {
                 <ViewTable
                     collections={this.props.collections}
                     onClickCollection={this.onClickCollection}
+                    liked={this.props.liked}
+                    onLike={this.props.onLike}
+                    onUnlike={this.props.onUnlike}
                 />
         }
         else if (this.props.fetchingCollections === false && this.props.fetchedCollections === false) {
             modeComponent = <NoCollectionsFound/>
         }
+
+        let openSnackBarLikes;
+
+        if (typeof this.props.openSnackBarLikes === 'undefined')
+            openSnackBarLikes = false;
+        else if (typeof this.props.openSnackBarLikes !== 'undefined')
+            openSnackBarLikes = this.props.openSnackBarLikes;
 
         return (
             <div className="parallax-collections">
@@ -74,8 +84,14 @@ class ReadAll extends Component {
                         onRequestClose={this.handleClose}
                         autoScrollBodyContent={true}
                     >
-                        <ReadOneView collectionId={this.state.collectionId}/>
+                        <ReadOneView collectionId={this.state.collectionId}
+                                     dispatch={this.props.dispatch}
+                        />
                     </Dialog>
+                    <Snackbar message="Oops, something went wrong"
+                              open={openSnackBarLikes}
+                              onRequestClose={this.props.onCloseSnackBar}
+                    />
                 </Card>
             </div>
         );

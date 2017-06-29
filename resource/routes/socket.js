@@ -13,5 +13,11 @@ module.exports = function (socket) {
     });
     socket.on("updateNewsStore", function() {
         socket.broadcast.emit("updateNewsStore");
+    });
+    socket.on("onLike", function (data) {
+        socket.broadcast.emit("onLike", data);
+    });
+    socket.on("onUnlike", function (data) {
+        socket.broadcast.emit("onUnlike", data);
     })
 };

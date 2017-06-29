@@ -75,12 +75,12 @@ class ReadAllView extends Component {
     render() {
         document.title = "Manage collections - Admin Controlled";
         if (this.props.credentials.admin === true)
-        return <ReadAll
-            fetchedCollections={this.props.collections.fetchedCollections}
-            fetchingCollections={this.props.collections.fetchingCollections}
-            collections={this.props.collections.collections}
-            adminId={this.props.params._id}
-        />;
+            return <ReadAll
+                fetchedCollections={this.props.collections.fetchedCollections}
+                fetchingCollections={this.props.collections.fetchingCollections}
+                collections={this.props.collections.collections}
+                adminId={this.props.params._id}
+            />;
         else if (this.props.credentials.admin === false) return <NotAuthorizedView/>;
         else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
     }
@@ -152,6 +152,10 @@ const collections = (state) => {
             fetchingCollections: false
         }
     }
+    else return {
+            fetchedCollections: false,
+            fetchingCollections: true
+        }
 };
 
 // Map shouldUpdate

@@ -28,6 +28,7 @@ const CollectionSchema = new mongoose.Schema({
             },
         }
     ],
+    likes: {type: Number, default: 0},
     time: { type: Date, default: Date.now },
 });
 

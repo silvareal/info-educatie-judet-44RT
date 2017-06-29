@@ -4,6 +4,7 @@ const config = require('../../config');
 const CommentCollection = require('mongoose').model("CommentCollection");
 const CommentNews = require('mongoose').model("CommentNews");
 const User = require('mongoose').model('User');
+const Collection = require('mongoose').model('Collection');
 
 const router = new express.Router();
 
@@ -27,6 +28,326 @@ function validateCommentForm(payload) {
         message
     };
 }
+
+router.get("/getLikes", (req, res) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        const userId = decoded.sub;
+
+        User.findOne({_id: userId}, (err, user) => {
+
+            if (err) {
+                res.status(400).json({
+                    message: "Database error"
+                });
+            }
+
+            if (!user) {
+                res.status(404).json({
+                    message: "Not a valid user"
+                })
+            }
+
+            res.json({
+                liked: user.liked
+            })
+
+        });
+    })
+});
+
+router.post("/like", (req, res) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        const userId = decoded.sub;
+
+        User.findOne({_id: userId}, (err, user) => {
+
+            if (err) {
+                res.status(400).json({
+                    message: "Database error",
+                    successLike: true
+                });
+            }
+
+            if (!user) {
+                res.status(404).json({
+                    message: "Not a valid user",
+                    successLike: true
+                })
+            }
+
+            // likedId = id of collection or news article liked by the person
+            let newLiked = user.liked.concat(req.body.likedId);
+
+            User.updateOne({_id: user._id}, {
+                $set: {
+                    liked: newLiked
+                }
+            }, (err, user) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error",
+                        successLike: false
+                    });
+                }
+
+                if (!user) {
+                    res.status(404).json({
+                        message: "Not a valid user",
+                        successLike: false
+                    })
+                }
+
+                Collection.findOne({_id: req.body.likedId}, (err, collection) => {
+
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Database error in /crud/updateSave while updating entry",
+                            successLike: true
+                        });
+                    }
+
+                    if (!collection) {
+                        return res.status(404).json({
+                            message: "Collection does not exist",
+                            successLike: true
+                        })
+                    }
+
+                    Collection.updateOne({_id: req.body.likedId}, {
+                        $set: {
+                            likes: collection.likes + 1
+                        }
+                    }, (err, collection) => {
+
+                        if (err) {
+                            return res.status(400).json({
+                                message: "Database error in /crud/updateSave while updating entry",
+                                successLike: false
+                            });
+                        }
+
+                        if (!collection) {
+                            return res.status(404).json({
+                                message: "Collection does not exist",
+                                successLike: false
+                            })
+                        }
+
+                        res.json({
+                            successLike: true
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+router.post("/unlike", (req, res) => {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        const userId = decoded.sub;
+
+        User.findOne({_id: userId}, (err, user) => {
+
+            if (err) {
+                res.status(400).json({
+                    message: "Database error",
+                    successLike: true
+                });
+            }
+
+            if (!user) {
+                res.status(404).json({
+                    message: "Not a valid user",
+                    successLike: true
+                })
+            }
+
+            // likedId = id of the collection or news that is getting unliked
+            let newLiked = user.liked.filter((liked) => {
+                return liked !== req.body.likedId;
+            });
+
+            User.updateOne({_id: {$eq: userId}}, {
+                $set: {
+                    liked: newLiked
+                }
+            }, (err, user) => {
+
+                if (err) {
+                    res.status(400).json({
+                        message: "Database error",
+                        successLike: false
+                    });
+                }
+
+                if (!user) {
+                    res.status(404).json({
+                        message: "Not a valid user",
+                        successLike: false
+                    })
+                }
+
+                Collection.findOne({_id: req.body.likedId}, (err, collection) => {
+
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Database error in /crud/updateSave while updating entry",
+                            successLike: true
+                        });
+                    }
+
+                    if (!collection) {
+                        return res.status(404).json({
+                            message: "Collection does not exist",
+                            successLike: true
+                        })
+                    }
+
+                    Collection.updateOne({_id: req.body.likedId}, {
+                        $set: {
+                            likes: collection.likes - 1
+                        }
+                    }, (err, collection) => {
+
+                        if (err) {
+                            return res.status(400).json({
+                                message: "Database error in /crud/updateSave while updating entry",
+                                successLike: false
+                            });
+                        }
+
+                        if (!collection) {
+                            return res.status(404).json({
+                                message: "Collection does not exist",
+                                successLike: false
+                            })
+                        }
+
+                        res.json({
+                            successLike: true
+                        });
+                    });
+                });
+            })
+
+        });
+    });
+});
+
+router.post("/deleteCommentCollections", (req, res) => {
+
+    console.log(req.headers.authorization);
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        const isAdmin = decoded.isAdmin;
+        const isModerator = decoded.isModerator;
+
+        if (isAdmin === true || isModerator === true) {
+            CommentCollection.deleteOne({_id: req.body.commentId}, (err, comment) => {
+
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
+                    })
+                }
+
+                if (!comment) {
+                    return res.status(404).json({
+                        message: "The comment doesn't exist"
+                    })
+                }
+
+                return res.json({
+                    message: "Comment deleted"
+                });
+
+            });
+        }
+        else return res.status(401).json({
+            message: "Not authorized"
+        })
+    });
+});
 
 router.post("/retrieveNewsComments", (req, res) => {
     CommentNews.find({newsId: req.body.newsId}, (err, comments) => {

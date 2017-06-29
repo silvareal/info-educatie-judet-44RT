@@ -6,7 +6,6 @@ import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 import PictureRow from "../../components/Collections/Partials Components/PictureRow.jsx";
 import Comment from '../../components/Collections/Partials Components/Comment.jsx';
-import NotFoundView from "../Error/NotFoundView.jsx";
 import * as readOneActions from '../../actions/Collections/manageCollectionsReadOneActions.js';
 
 let socket = io.connect();
@@ -40,6 +39,10 @@ let createHandler = function (dispatch) {
         dispatch(readOneActions.resetReducer())
     };
 
+    let onDeleteComment = function (commentId) {
+        dispatch(readOneActions.onDeleteComment(commentId));
+    };
+
     return {
         getCollection,
         getComments,
@@ -47,7 +50,8 @@ let createHandler = function (dispatch) {
         onCommentInputChange,
         getCommentsCount,
         onSaveComment,
-        resetReducer
+        resetReducer,
+        onDeleteComment
     }
 };
 
@@ -66,7 +70,10 @@ class ReadOneView extends Component {
         this.handlers.getCollection(this.props.collectionId);
         this.handlers.getCommentsCount(this.props.collectionId);
 
-        socket.on('send:comment', () => {this.handlers.getComments(this.props.collectionId)});
+        socket.on('send:comment', () => {
+            this.handlers.getComments(this.props.collectionId);
+            this.handlers.getCommentsCount(this.props.collectionId);
+        });
     };
 
     componentWillUnmount() {
@@ -110,6 +117,7 @@ class ReadOneView extends Component {
                 onSave={this.onSave}
                 userName={this.props.credentials.userName}
                 profilePictureLink={this.props.credentials.profilePictureLink}
+                onDeleteComment={this.handlers.onDeleteComment}
             />
         );
     }
@@ -242,7 +250,7 @@ const collection = (state) => {
     }
 };
 
-const comments = (state) => {
+const comments = (state, ownProps) => {
     if (state.manageCollectionsReadOneReducer.fetching === true)
         return {
             fetchedComments: false,
@@ -265,16 +273,18 @@ const comments = (state) => {
                         {date.getHours().toString() + ":" + date.getMinutes().toString() + " " + date.getDate().toString() + '.' + (date.getMonth() + 1).toString() + '.' + date.getFullYear().toString()}
                     </div>;
 
-                return (
-                    <Comment
+                    let handler = createHandler(ownProps.dispatch);
+
+                return <Comment
                         key={key}
+                        _id={comments[key]._id}
                         comment={comments[key].comment}
                         date={formattedDate}
                         firstName={comments[key].firstName}
                         userName={comments[key].userName}
+                        handler={handler}
                         profilePictureLink={comments[key].profilePictureLink}
-                    />
-                )
+                    />;
             });
 
             return {
@@ -302,10 +312,10 @@ const comments = (state) => {
         }
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
     credentials: credentials(state),
     collection: collection(state),
-    comments: comments(state)
+    comments: comments(state, ownProps)
 });
 
 export default connect(mapStateToProps)(ReadOneView)
