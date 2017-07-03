@@ -181,7 +181,7 @@ export function onUpdateFailure(success, errors, pictureNameError, pictureLinkEr
 // ---
 
 // Handle onClick the update button
-export function onUpdate(collectionId, collectionName, collectionDescriptionRaw, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld) {
+export function onUpdate(collectionId, collectionName, collectionDescriptionRaw, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld, tags, tagsOld) {
     return function (dispatch) {
         dispatch(onUpdateInitiate());
         return axios({
@@ -198,7 +198,9 @@ export function onUpdate(collectionId, collectionName, collectionDescriptionRaw,
                 'picturesArray': pictures,
                 'collectionNameOld': collectionNameOld,
                 'collectionDescriptionRawOld': collectionDescriptionRawOld,
-                'picturesArrayOld': picturesOld
+                'picturesArrayOld': picturesOld,
+                'tags': tags,
+                'tagsOld': tagsOld
             })
         }).then((response) => {
             dispatch(onUpdateSuccess(response.data.success))

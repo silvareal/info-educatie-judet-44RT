@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 import MainApp from './MainApp.jsx';
 
+// Important
+window.onbeforeunload = () => {
+    window.scrollTo(0, 0);
+};
+
 // Scroll algorithm from a tutorial, modified to work with React by us
 function currentYPosition() {
     // Firefox, Chrome, Opera, Safari
@@ -44,6 +49,7 @@ function smoothScroll() {
 }
 
 class ScrollToTop extends Component {
+
     componentDidUpdate(prevProps) {
         if (this.props.location !== prevProps.location) {
             smoothScroll();

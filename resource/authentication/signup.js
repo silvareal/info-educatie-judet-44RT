@@ -2,6 +2,10 @@ const User = require('mongoose').model('User');
 const SignupLogs = require('mongoose').model('SignupLogs');
 const PassportLocalStrategy = require('passport-local').Strategy;
 
+// Redis
+const redis = require('redis');
+const client = redis.createClient();
+
 module.exports = new PassportLocalStrategy(
     {
         usernameField: 'email',
@@ -35,15 +39,18 @@ module.exports = new PassportLocalStrategy(
             userName: req.body.name.trim()
         };
 
+        client.del("logsSignup");
+        client.del("users");
+
         // save the data in the database
         const newLog = new SignupLogs(logData);
-        newLog.save((err) => {
+        newLog.save(() => {
             // error
-            if (err) {
-                return res.status(400).json({
-                    message: "Error while logging"
-                })
-            }
+            SignupLogs.find({}, (err, logs) => {
+                if (logs) {
+                    client.set("logsSignup", JSON.stringify(logs))
+                }
+            }).sort({time: -1});
         });
 
         //Insert the new user into the MongoDB

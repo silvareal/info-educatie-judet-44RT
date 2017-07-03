@@ -78,6 +78,18 @@ class LogsCollectionsUpdate extends Component {
                             )
                         })}
                         <Divider/>
+                        {this.props.logs[i].tags ?
+                            this.props.logs[i].tags.map((data, i) => {
+                                return <ListItem
+                                    key={i}
+                                    primaryText={data.value}
+                                                 secondaryText="New tags"
+                                                 disabled={true}/>
+                            })
+                            :
+                            null
+                        }
+                        <Divider/>
                         <ListItem primaryText="Collection's old information"
                                   disabled={true}/>
                         <Divider/>
@@ -109,6 +121,18 @@ class LogsCollectionsUpdate extends Component {
                                 </div>
                             )
                         })}
+                        <Divider/>
+                        {this.props.logs[i].tagsOld ?
+                            this.props.logs[i].tagsOld.map((data, i) => {
+                                return <ListItem
+                                    key={i}
+                                    primaryText={data.value}
+                                    secondaryText="Old tags"
+                                    disabled={true}/>
+                            })
+                            :
+                            null
+                        }
                         <Divider/>
                         <ListItem primaryText={date.toString()}
                                   secondaryText="Date and time"

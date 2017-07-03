@@ -23,6 +23,13 @@ const DeleteCollectionLogsSchema = new mongoose.Schema({
             }
         }
     ],
+    tags: [
+        {
+            value: {
+                type: String
+            }
+        }
+    ],
     deletedByAdmin: {
         type: Boolean,
         default: false

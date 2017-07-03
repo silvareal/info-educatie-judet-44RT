@@ -95,7 +95,7 @@ export function onSaveCollectionFailure(success, errors, pictureNameError, pictu
 }
 
 // Handle onClick the save button
-export function onSaveCollection(collectionName, collectionDescriptionRaw, pictures) {
+export function onSaveCollection(collectionName, collectionDescriptionRaw, pictures, tags) {
     return function (dispatch) {
         dispatch(onSaveCollectionInitiate(collectionName, collectionDescriptionRaw, pictures));
         return axios({
@@ -108,7 +108,8 @@ export function onSaveCollection(collectionName, collectionDescriptionRaw, pictu
             data: qs.stringify({
                 'collectionName': collectionName,
                 'collectionDescriptionRaw': collectionDescriptionRaw,
-                'picturesArray': pictures
+                'picturesArray': pictures,
+                'tags': tags
             })
         }).then((response) => {
             dispatch(onSaveCollectionSuccess(response.data.success))

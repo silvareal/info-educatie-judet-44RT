@@ -525,13 +525,22 @@ npm install bcrypt
 
 <ul>
 <li>All of our AJAX requests need to be rewritten with <a href="https://github.com/mzabriskie/axios">Axios</a> - DONE</li>
-<li><a href="https://github.com/reactjs/redux/">Redux</a> is required to increase performance ( a.k.a. reduce the number of AJAX requests ) - 95% DONE</li>
+<li><a href="https://github.com/reactjs/redux/">Redux</a> is required to increase performance ( a.k.a. reduce the number of AJAX requests ) - DONE</li>
 <li>Implementation of a Like/Favourite System - SYSTEM FUNCTIONAL ON MANAGE COLLECTIONS AT THIS TIME</li>
 <li>Implementation of Actions for Moderators (delete comments, hide offensive collections etc) - SYSTEM FUNCTIONAL ON MANAGE READ ONE FOR BOTH ADMIN AND MODS AT THIS TIME</li>
 <li><strike>Implementation of an upload system</strike> REMOVED</li>
 <li><strike>OPTIONAL: Rework the backend in Hacklang</strike> REMOVED</li>
-<li>Add tags to collections</li>
-<li>Add Redis to the application - IN PROGRESS</li>
+<li>Add tags to collections - DONE</li>
+<li>Add Redis to the application - DONE</li>
+</ul>
+
+<h1>Version 0.0.4 is live, in regards of features</h1>
+
+<h3>TODO for v0.0.5</h3>
+
+<ul>
+<li>Finish the final design</li>
+<li>Add all the features from 0.0.4 to all pages of collections/news management</li>
 </ul>
 
 <h1>Creators:</h1>

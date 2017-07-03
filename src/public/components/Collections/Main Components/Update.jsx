@@ -114,6 +114,14 @@ class Update extends Component {
                 return (
                     <div>
                         <div>
+
+                            {this.props.mappedChips}
+
+                            <TextField hintText="Type a tag and press Enter to add it !"
+                                       value={this.props.chipInput}
+                                       onChange={this.props.onChipInputChange}
+                                       onKeyDown={this.props.onAddTag}/>
+
                             {this.props.collectionName.length > 100 ?
                                 <div>
                                     Please use a name that is shorter than 100 characters

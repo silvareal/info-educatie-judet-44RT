@@ -47,6 +47,20 @@ const UpdateCollectionLogsSchema = new mongoose.Schema({
 
     // Basic info
     collectionId: String,
+    tags: [
+        {
+            value: {
+                type: String
+            }
+        }
+    ],
+    tagsOld: [
+        {
+            value: {
+                type: String
+            }
+        }
+    ],
     updatedByAdmin: {
         type: Boolean,
         default: false

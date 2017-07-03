@@ -23,7 +23,7 @@ class ReadAllView extends Component {
 
     componentDidMount() {
         if (typeof this.props.collections === 'undefined' && this.props.params._searchQuery) {
-            this.handlers.searchAllCollections(this.props.params._searchQuery)
+            this.handlers.searchAllCollections(this.props.params._searchQuery);
         }
         else if (typeof this.props.params._searchQuery === 'undefined' && typeof this.props.collections === 'undefined') {
             this.context.router.replace('/collections');

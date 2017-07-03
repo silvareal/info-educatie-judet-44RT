@@ -9,6 +9,10 @@ const jwt = require('jsonwebtoken');
 
 const router = new express.Router();
 
+// Redis
+const redis = require('redis');
+const client = redis.createClient();
+
 //Retrieves data for the profile page link
 //Links use user's name as a parameter
 //Same implementation as authentication-check, but it returns userName instead of next()
@@ -76,7 +80,19 @@ router.get('/credentials', (req, res) => {
     }
 });
 
-router.get('/news', (req, res) => {
+function newsRedis(req, res, next) {
+    client.get("newsHome", (err, news) => {
+        if (news) {
+            return res.json({
+                news: JSON.parse(news),
+                fromCache: true
+            })
+        }
+        else return next();
+    });
+}
+
+function news(req, res) {
     News.find({}, (err, news) => {
         if (err) {
             return res.status(400).json({
@@ -90,13 +106,29 @@ router.get('/news', (req, res) => {
             })
         }
 
+        client.set("newsHome", JSON.stringify(news));
+
         return res.json({
             news: news
         });
-    }).sort({creationDate: -1}).limit(4);
-});
+    }).sort({time: -1}).limit(4);
+}
 
-router.get('/collections', (req, res) => {
+router.get("/news", newsRedis, news);
+
+function collectionsRedis(req, res, next) {
+    client.get("collectionsHome", (err, collections) => {
+        if (collections) {
+            return res.json({
+                collections: JSON.parse(collections),
+                fromCache: true
+            })
+        }
+        else return next();
+    });
+}
+
+function collections(req, res) {
     Collection.find({}, (err, collections) => {
         if (err) {
             return res.status(400).json({
@@ -110,11 +142,16 @@ router.get('/collections', (req, res) => {
             })
         }
 
+        client.set("collectionsHome", JSON.stringify(collections));
+
         return res.json({
-            collections: collections
+            collections: collections,
+            fromCache: false
         });
     }).sort({time: -1}).limit(4);
-});
+}
+
+router.get("/collections", collectionsRedis, collections);
 
 router.post('/contact', (req, res) => {
 

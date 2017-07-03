@@ -233,38 +233,48 @@ function validateUpdateNewsForm(payload) {
     };
 }
 
-router.get('/adminAuthentication', (req, res) => {
-
-    if (req.headers.authorization && req.headers.authorization.split(' ')[1].toString() !== "null") {
-
-        const token = req.headers.authorization.split(' ')[1];
-
-        return jwt.verify(token, config.jwtSecret, (err, decoded) => {
-
-            // error
-            if (err) {
-                return res.status(401).end();
-            }
-
-            // jwt that was decoded is not valid
-            if (!decoded) {
-                return res.status(401).end();
-            }
-
-            // use the admin property from the jwt to check admin identity
-            const isAdmin = decoded.isAdmin;
-
-            if (isAdmin === true)
-                res.json({message: "Welcome admin"});
-            else
-                res.json({message: "Not an admin"});
-        });
+function showUsersRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
     }
-    else return res.status(401).end();
-});
 
-router.get("/showUsers", (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
 
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        // error
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        // jwt that was decoded is not valid
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        // use the admin property from the jwt to check admin identity
+        const isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            client.get("users", (err, users) => {
+                if (users) {
+                    return res.json({
+                        users: JSON.parse(users),
+                        fromCache: true
+                    })
+                }
+                else return next();
+            })
+        }
+        else return res.status(401).end();
+    })
+}
+
+function showUsers(req, res) {
     if (!req.headers.authorization) {
         return res.status(401).end();
     }
@@ -292,13 +302,18 @@ router.get("/showUsers", (req, res) => {
 
         if (isAdmin === true) {
             User.find({admin: false}, (err, users) => {
-                res.json({users: users})
+                client.set("users", JSON.stringify(users));
+                res.json({
+                    users: users,
+                    fromCache: false
+                })
             });
         }
-        else
-            return res.status(401).end();
+        else return res.status(401).end();
     });
-});
+}
+
+router.get("/showUsers", showUsersRedis, showUsers);
 
 router.post('/banUser', (req, res) => {
 
@@ -357,6 +372,8 @@ router.post('/banUser', (req, res) => {
                                 message: "User not found"
                             })
                         }
+
+                        client.del("users");
 
                         res.json({
                             success: true
@@ -429,6 +446,8 @@ router.post('/makeModerators', (req, res) => {
                         })
                     }
 
+                    client.del("users");
+
                     res.json({
                         success: true
                     })
@@ -476,6 +495,7 @@ router.post("/create", (req, res) => {
         const profilePictureLink = decoded.profilePictureLink;
 
         if (isAdmin === true) {
+
             const newsData = {
                 userId: userId,
                 newsTitle: req.body.newsTitle,
@@ -485,19 +505,6 @@ router.post("/create", (req, res) => {
                 profilePictureLink: profilePictureLink
             };
 
-            const logData = {
-                newsTitle: req.body.newsTitle
-            };
-
-            const newLog = new CreateNewsLogs(logData);
-            newLog.save((err) => {
-                if (err) {
-                    return res.status(400).json({
-                        message: "Error while logging"
-                    })
-                }
-            });
-
             const newNews = new News(newsData);
             newNews.save((err) => {
                 if (err) {
@@ -506,58 +513,34 @@ router.post("/create", (req, res) => {
                     })
                 }
 
+                client.del("logsNewsCreate");
+                client.del("newsBrowse");
+                client.del("newsHome");
+
+                const logData = {
+                    newsTitle: req.body.newsTitle
+                };
+
+                const newLog = new CreateNewsLogs(logData);
+                newLog.save((err) => {
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Error while logging"
+                        })
+                    }
+
+                    CreateNewsLogs.find({}, (err, logs) => {
+                        if (logs) {
+                            client.set("logsNewsCreate", JSON.stringify(logs))
+                        }
+                    }).sort({time: -1});
+
+                });
+
                 return res.json({
                     success: true
                 });
             });
-        }
-        else return res.status(401).end();
-    });
-});
-
-router.get("/readAll", (req, res) => {
-
-    if (!req.headers.authorization) {
-        return res.status(401).end();
-    }
-
-    const token = req.headers.authorization.split(' ')[1];
-
-    jwt.verify(token, config.jwtSecret, (err, decoded) => {
-
-        if (err) {
-            return res.status(401).json({
-                message: "Not authorized"
-            })
-        }
-
-        if (!decoded) {
-            return res.status(400).json({
-                message: "Internal error"
-            })
-        }
-
-        let isAdmin = decoded.isAdmin;
-
-        if (isAdmin === true) {
-
-            News.find({}, (err, news) => {
-                if (err) {
-                    return res.status(400).json({
-                        message: "Database error"
-                    });
-                }
-
-                if (news.length === 0) {
-                    return res.status(404).json({
-                        message: "No news added so far"
-                    })
-                }
-
-                return res.json({
-                    news: news
-                });
-            }).sort({time: -1}).limit(10);
         }
         else return res.status(401).end();
     });
@@ -582,35 +565,6 @@ router.post('/loadMoreNews', (req, res) => {
             news: news
         })
     }).sort({time: -1}).limit(10).skip(parseInt(req.body.loadAfter));
-});
-
-router.post('/searchNews', (req, res) => {
-
-    const validationResult = validateSearchForm(req.body);
-    if (!validationResult.success) {
-        return res.status(400).json({
-            success: false
-        });
-    }
-
-    News.find({newTitle: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, news) => {
-
-        if (err) {
-            return res.status(400).json({
-                message: "Database error"
-            })
-        }
-
-        if (!news) {
-            return res.status(404).json({
-                message: "NoRecordsError"
-            })
-        }
-
-        res.json({
-            news: news
-        })
-    }).sort({time: -1});
 });
 
 router.post("/readOne", (req, res) => {
@@ -740,6 +694,10 @@ router.post('/updateSave', (req, res) => {
                     })
                 }
 
+                client.del("logsNewsUpdate");
+                client.del("newsBrowse");
+                client.del("newsHome");
+
                 const logData = {
                     newsId: req.body.newsId,
                     newsTitle: req.body.newsTitle,
@@ -759,6 +717,13 @@ router.post('/updateSave', (req, res) => {
                             message: "Error while logging"
                         })
                     }
+
+                    UpdateNewsLogs.find({}, (err, logs) => {
+                        if (logs) {
+                            client.set("logsNewsUpdate", JSON.stringify(logs))
+                        }
+                    }).sort({time: -1});
+
                 });
 
                 return res.json({
@@ -851,25 +816,6 @@ router.post('/delete', (req, res) => {
 
         if (isAdmin === true) {
 
-            const logData = {
-                newsId: req.body.newsId,
-                newsTitle: req.body.newsTitle,
-                userName: userName,
-                userId: userId,
-                profilePictureLink: profilePictureLink,
-                newsDescriptionRaw: req.body.newsDescriptionRaw,
-                newsCoverLink: req.body.newsCoverLink
-            };
-
-            const newLog = new DeleteNewsLogs(logData);
-            newLog.save((err) => {
-                if (err) {
-                    return res.status(400).json({
-                        message: "Error while logging"
-                    })
-                }
-            });
-
             News.deleteOne({_id: req.body.newsId}, (err, news) => {
                 if (err) {
                     return res.status(400).json({
@@ -882,6 +828,36 @@ router.post('/delete', (req, res) => {
                         message: "The item you are searching for does not exist"
                     })
                 }
+
+                client.del("logsNewsDelete");
+                client.del("Comments of:" + req.body.newsId);
+                client.del("newsBrowse");
+                client.del("newsHome");
+
+                const logData = {
+                    newsId: req.body.newsId,
+                    newsTitle: req.body.newsTitle,
+                    userName: userName,
+                    userId: userId,
+                    profilePictureLink: profilePictureLink,
+                    newsDescriptionRaw: req.body.newsDescriptionRaw,
+                    newsCoverLink: req.body.newsCoverLink
+                };
+
+                const newLog = new DeleteNewsLogs(logData);
+                newLog.save((err) => {
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Error while logging"
+                        })
+                    }
+
+                    DeleteNewsLogs.find({}, (err, logs) => {
+                        if (logs) {
+                            client.set("logsNewsDelete", JSON.stringify(logs))
+                        }
+                    }).sort({time: -1});
+                });
 
                 return res.json({
                     message: "News article deleted"
@@ -966,6 +942,19 @@ router.post("/createCollection", (req, res) => {
                     })
                 }
 
+                client.del("collectionsAdmin");
+                client.del("logsCollectionsCreate");
+                client.del("Collections of:" + req.body.userId);
+                client.del("collectionsBrowse");
+                client.del("collectionsSearch");
+                client.del("collectionsHome");
+
+                CreateCollectionLogs.find({}, (err, logs) => {
+                    if (logs) {
+                        client.set("logsCollectionsCreate", JSON.stringify(logs))
+                    }
+                }).sort({time: -1});
+
                 return res.json({
                     success: true
                 });
@@ -975,8 +964,46 @@ router.post("/createCollection", (req, res) => {
     });
 });
 
-router.get("/readAllCollections", (req, res) => {
+function readAllCollectionsRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
 
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            client.get("collectionsAdmin", (err, collections) =>{
+                if (collections) {
+                    return res.json({
+                        collections: JSON.parse(collections),
+                        fromCache: true
+                    });
+                }
+                else
+                    return next();
+            })
+        }
+        else return res.status(401).end();
+    })
+}
+
+function readAllCollections(req, res) {
     if (!req.headers.authorization) {
         return res.status(401).end();
     }
@@ -1013,14 +1040,19 @@ router.get("/readAllCollections", (req, res) => {
                     })
                 }
 
+                client.set("collectionsAdmin", JSON.stringify(collections));
+
                 return res.json({
-                    collections: collections
+                    collections: collections,
+                    fromCache: false
                 });
             }).sort({time: -1}).limit(10);
         }
         else return res.status(401).end();
-    });
-});
+    })
+}
+
+router.get("/readAllCollections", readAllCollectionsRedis, readAllCollections);
 
 router.post('/loadMoreCollections', (req, res) => {
     Collection.find({}, (err, collections) => {
@@ -1229,6 +1261,14 @@ router.post('/updateSaveCollections', (req, res) => {
                     })
                 }
 
+                client.del("collectionsAdmin");
+                client.del("logsCollectionsUpdate");
+                client.del("Collections of:" + req.body.userIdOld);
+                client.del("Collections of:" + req.body.userId);
+                client.del("collectionsBrowse");
+                client.del("collectionsSearch");
+                client.del("collectionsHome");
+
                 const logData = {
                     collectionId: req.body.collectionId,
                     userId: req.body.userId,
@@ -1255,6 +1295,13 @@ router.post('/updateSaveCollections', (req, res) => {
                             message: "Error while logging"
                         })
                     }
+
+                    UpdateCollectionLogs.find({}, (err, logs) => {
+                        if (logs) {
+                            client.set("logsCollectionsUpdate", JSON.stringify(logs))
+                        }
+                    }).sort({time: -1});
+
                 });
 
                 return res.json({
@@ -1370,6 +1417,40 @@ router.post("/deleteCollection", (req, res) => {
                 deletedByAdmin: true
             };
 
+            Collection.deleteOne({_id: req.body.collectionId}, (err, collection) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "The item you are searching for does not exist"
+                    })
+                }
+
+                if (!collection) {
+                    return res.status(404).json({
+                        message: "The item you are searching for does not exist"
+                    })
+                }
+
+                client.del("collectionsAdmin");
+                client.del("logsCollectionsDelete");
+                client.del("Collections of:" + req.body.ownerId);
+                client.del("Comments of:" + req.body.collectionId);
+                client.del("collectionsBrowse");
+                client.del("collectionsSearch");
+                client.del("collectionsHome");
+
+                return res.json({
+                    message: "Collection was successfully deleted"
+                });
+            });
+
+            CommentCollection.deleteMany({collectionId: req.body.collectionId}, (err) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
+                    })
+                }
+            });
+
             const newLog = new DeleteCollectionLogs(logData);
             newLog.save((err) => {
                 if (err) {
@@ -1378,31 +1459,11 @@ router.post("/deleteCollection", (req, res) => {
                     })
                 }
 
-                Collection.deleteOne({_id: req.body.collectionId}, (err, collection) => {
-                    if (err) {
-                        return res.status(400).json({
-                            message: "The item you are searching for does not exist"
-                        })
+                DeleteCollectionLogs.find({}, (err, logs) => {
+                    if (logs) {
+                        client.set("logsCollectionsDelete", JSON.stringify(logs))
                     }
-
-                    if (!collection) {
-                        return res.status(404).json({
-                            message: "The item you are searching for does not exist"
-                        })
-                    }
-
-                    return res.json({
-                        message: "Collection was successfully deleted"
-                    });
-                });
-
-                CommentCollection.deleteMany({collectionId: req.body.collectionId}, (err) => {
-                    if (err) {
-                        return res.status(400).json({
-                            message: "Database error"
-                        })
-                    }
-                });
+                }).sort({time: -1});
 
             });
         }
@@ -1410,8 +1471,47 @@ router.post("/deleteCollection", (req, res) => {
     });
 });
 
-router.get("/logsLogin", (req, res) => {
+function logsLoginRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
 
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            client.get("logsLogin", (err, logs) => {
+                if (logs !== null) {
+                    res.json({
+                        logs: JSON.parse(logs),
+                        fromCache: true
+                    })
+                }
+                else {
+                    next();
+                }
+            })
+        }
+        else return res.status(401).end();
+    })
+}
+
+function logsLogin(req, res) {
     if (!req.headers.authorization) {
         return res.status(401).end();
     }
@@ -1449,18 +1549,62 @@ router.get("/logsLogin", (req, res) => {
                     });
                 }
 
+                client.set("logsLogin", JSON.stringify(logs));
+
                 res.json({
-                    logs: logs
+                    logs: logs,
+                    fromCache: false
                 });
 
             }).sort({time: -1});
         }
         else return res.status(401).end();
-    });
-});
+    })
+}
 
-router.get("/logsSignup", (req, res) => {
+router.get("/logsLogin", logsLoginRedis, logsLogin);
 
+function logsSignupRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            client.get("logsSignup", (err, logs) => {
+                if (logs !== null) {
+                    res.json({
+                        logs: JSON.parse(logs),
+                        fromCache: true
+                    })
+                }
+                else {
+                    next();
+                }
+            })
+        }
+        else return res.status(401).end();
+    })
+}
+
+function logsSignup(req, res) {
     if (!req.headers.authorization) {
         return res.status(401).end();
     }
@@ -1498,18 +1642,62 @@ router.get("/logsSignup", (req, res) => {
                     });
                 }
 
+                client.set("logsSignup", JSON.stringify(logs));
+
                 res.json({
-                    logs: logs
+                    logs: logs,
+                    fromCache: false
                 });
 
             }).sort({time: -1});
         }
         else return res.status(401).end();
-    });
-});
+    })
+}
 
-router.get("/logsCollectionsCreate", (req, res) => {
+router.get("/logsSignup", logsSignupRedis, logsSignup);
 
+function logsCollectionsCreateRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            client.get("logsCollectionsCreate", (err, logs) => {
+                if (logs !== null) {
+                    res.json({
+                        logs: JSON.parse(logs),
+                        fromCache: true
+                    })
+                }
+                else {
+                    next();
+                }
+            });
+        }
+        else return res.status(401).end();
+    })
+}
+
+function logsCollectionsCreate(req, res) {
     if (!req.headers.authorization) {
         return res.status(401).end();
     }
@@ -1547,17 +1735,61 @@ router.get("/logsCollectionsCreate", (req, res) => {
                     });
                 }
 
+                client.set("logsCollectionsCreate", JSON.stringify(logs));
+
                 res.json({
-                    logs: logs
+                    logs: logs,
+                    fromCache: false
                 });
             }).sort({time: -1});
         }
         else return res.status(401).end();
-    });
-});
+    })
+}
 
-router.get("/logsCollectionsDelete", (req, res) => {
+router.get("/logsCollectionsCreate", logsCollectionsCreateRedis, logsCollectionsCreate);
 
+function logsCollectionsDeleteRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            client.get("logsCollectionsDelete", (err, logs) => {
+                if (logs !== null) {
+                    res.json({
+                        logs: JSON.parse(logs),
+                        fromCache: true
+                    })
+                }
+                else {
+                    next();
+                }
+            });
+        }
+        else return res.status(401).end();
+    })
+}
+
+function logsCollectionsDelete(req, res) {
     if (!req.headers.authorization) {
         return res.status(401).end();
     }
@@ -1595,16 +1827,61 @@ router.get("/logsCollectionsDelete", (req, res) => {
                     });
                 }
 
+                client.set("logsCollectionsDelete", JSON.stringify(logs));
+
                 res.json({
-                    logs: logs
+                    logs: logs,
+                    fromCache: false
                 });
             }).sort({time: -1});
         }
         else return res.status(401).end();
-    });
-});
+    })
+}
 
-router.get("/logsCollectionsUpdate", (req, res) => {
+router.get("/logsCollectionsDelete", logsCollectionsDeleteRedis, logsCollectionsDelete);
+
+function logsCollectionsUpdateRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            client.get("logsCollectionsUpdate", (err, logs) => {
+                if (logs !== null) {
+                    res.json({
+                        logs: JSON.parse(logs),
+                        fromCache: true
+                    })
+                }
+                else {
+                    next();
+                }
+            })
+        }
+        else return res.status(401).end();
+    })
+}
+
+function logsCollectionsUpdate(req, res) {
 
     if (!req.headers.authorization) {
         return res.status(401).end();
@@ -1643,17 +1920,61 @@ router.get("/logsCollectionsUpdate", (req, res) => {
                     });
                 }
 
+                client.set("logsCollectionsUpdate", JSON.stringify(logs));
+
                 res.json({
-                    logs: logs
+                    logs: logs,
+                    fromCache: false
                 });
             }).sort({time: -1});
         }
         else return res.status(401).end();
-    });
-});
+    })
+}
 
-router.get("/logsNewsUpdate", (req, res) => {
+router.get("/logsCollectionsUpdate", logsCollectionsUpdateRedis, logsCollectionsUpdate);
 
+function logsNewsUpdateRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            client.get("logsNewsUpdate", (err, logs) => {
+                if (logs !== null) {
+                    res.json({
+                        logs: JSON.parse(logs),
+                        fromCache: true
+                    })
+                }
+                else {
+                    next();
+                }
+            });
+        }
+        else return res.status(401).end();
+    })
+}
+
+function logsNewsUpdate(req, res) {
     if (!req.headers.authorization) {
         return res.status(401).end();
     }
@@ -1691,17 +2012,61 @@ router.get("/logsNewsUpdate", (req, res) => {
                     });
                 }
 
+                client.set("logsNewsUpdate", JSON.stringify(logs));
+
                 res.json({
-                    logs: logs
+                    logs: logs,
+                    fromCache: false
                 });
             }).sort({time: -1});
         }
         else return res.status(401).end();
-    });
-});
+    })
+}
 
-router.get("/logsNewsCreate", (req, res) => {
+router.get("/logsNewsUpdate", logsNewsUpdateRedis, logsNewsUpdate);
 
+function logsNewsCreateRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            client.get("logsNewsCreate", (err, logs) => {
+                if (logs !== null) {
+                    res.json({
+                        logs: JSON.parse(logs),
+                        fromCache: true
+                    })
+                }
+                else {
+                    next();
+                }
+            })
+        }
+        else return res.status(401).end();
+    })
+}
+
+function logsNewsCreate(req, res) {
     if (!req.headers.authorization) {
         return res.status(401).end();
     }
@@ -1739,17 +2104,61 @@ router.get("/logsNewsCreate", (req, res) => {
                     });
                 }
 
+                client.set("logsNewsCreate", JSON.stringify(logs));
+
                 res.json({
-                    logs: logs
+                    logs: logs,
+                    fromCache: false
                 });
             }).sort({time: -1});
         }
         else return res.status(401).end();
-    });
-});
+    })
+}
 
-router.get("/logsNewsDelete", (req, res) => {
+router.get("/logsNewsCreate", logsNewsCreateRedis, logsNewsCreate);
 
+function logsNewsDeleteRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        let isAdmin = decoded.isAdmin;
+
+        if (isAdmin === true) {
+            client.get("logsNewsDelete", (err, logs) => {
+                if (logs !== null) {
+                    res.json({
+                        logs: JSON.parse(logs),
+                        fromCache: true
+                    })
+                }
+                else {
+                    next();
+                }
+            })
+        }
+        else return res.status(401).end();
+    })
+}
+
+function logsNewsDelete(req, res) {
     if (!req.headers.authorization) {
         return res.status(401).end();
     }
@@ -1787,13 +2196,60 @@ router.get("/logsNewsDelete", (req, res) => {
                     });
                 }
 
+                client.set("logsNewsDelete", JSON.stringify(logs));
+
                 res.json({
-                    logs: logs
+                    logs: logs,
+                    fromCache: false
                 });
             }).sort({time: -1});
         }
-    });
-});
+        else return res.status(401).end();
+    })
+}
+
+router.get("/logsNewsDelete", logsNewsDeleteRedis, logsNewsDelete);
+
+function logsProfileRedis(req, res, next) {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+            if (err) {
+                return res.status(401).json({
+                    message: "Not authorized"
+                })
+            }
+
+            if (!decoded) {
+                return res.status(400).json({
+                    message: "Internal error"
+                })
+            }
+
+            let isAdmin = decoded.isAdmin;
+            if (isAdmin === true) {
+                client.get("logsProfile", (err, logs) => {
+                    if (logs !== null) {
+                        res.json({
+                            logs: JSON.parse(logs),
+                            fromCache: true
+                        })
+                    }
+                    else {
+                        next();
+                    }
+                });
+            }
+            else return res.status(401).end();
+        }
+    )
+}
 
 function logsProfile(req, res) {
 
@@ -1842,47 +2298,8 @@ function logsProfile(req, res) {
                 });
             }).sort({time: -1});
         }
+        else return res.status(401).end();
     });
-}
-
-function logsProfileRedis(req, res, next) {
-
-    if (!req.headers.authorization) {
-        return res.status(401).end();
-    }
-
-    const token = req.headers.authorization.split(' ')[1];
-
-    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
-
-            if (err) {
-                return res.status(401).json({
-                    message: "Not authorized"
-                })
-            }
-
-            if (!decoded) {
-                return res.status(400).json({
-                    message: "Internal error"
-                })
-            }
-
-            let isAdmin = decoded.isAdmin;
-            if (isAdmin === true) {
-                client.get("logsProfile", (err, logs) => {
-                    if (logs !== null) {
-                        res.json({
-                            logs: JSON.parse(logs),
-                            fromCache: true
-                        })
-                    }
-                    else {
-                        next();
-                    }
-                });
-            }
-        }
-    )
 }
 
 router.get("/logsProfile", logsProfileRedis, logsProfile);

@@ -188,33 +188,36 @@ router.post('/profile-edit', (req, res) => {
 
         const userId = decoded.sub;
 
-        if (userId === req.body.userId && userId === req.body.viewerId)
-        {
+        if (userId === req.body.userId && userId === req.body.viewerId) {
             //if anybody tries to hack somebody else's profile, they will end up "hacking" their own profile :P
 
             Collection.updateMany({userId: {$eq: userId}}, {
                 $set: {
                     profilePictureLink: req.body.profilePictureLink
                 }
-            }, () => {});
+            }, () => {
+            });
 
             News.updateMany({userId: {$eq: userId}}, {
                 $set: {
                     profilePictureLink: req.body.profilePictureLink
                 }
-            }, () => {});
+            }, () => {
+            });
 
             CommentNews.updateMany({userId: {$eq: userId}}, {
                 $set: {
                     profilePictureLink: req.body.profilePictureLink
                 }
-            }, () => {});
+            }, () => {
+            });
 
             CommentCollection.updateMany({userId: {$eq: userId}}, {
                 $set: {
                     profilePictureLink: req.body.profilePictureLink
                 }
-            }, () => {});
+            }, () => {
+            });
 
             User.updateOne({_id: {$eq: userId}}, {
                 $set: {
@@ -242,14 +245,6 @@ router.post('/profile-edit', (req, res) => {
                 }
 
                 client.del("logsProfile");
-
-                const UpdateProfileLogs = require('mongoose').model('UpdateProfileLogs');
-
-                UpdateProfileLogs.find({}, (err, logs) => {
-                     if (logs) {
-                         client.set("logsProfile", JSON.stringify(logs));
-                     }
-                });
 
                 const logData = {
                     userId: userId,
@@ -280,6 +275,12 @@ router.post('/profile-edit', (req, res) => {
                             message: "Error while logging"
                         })
                     }
+
+                    UpdateProfileLogs.find({}, (err, logs) => {
+                        if (logs) {
+                            client.set("logsProfile", JSON.stringify(logs));
+                        }
+                    });
                 });
 
                 return res.json({

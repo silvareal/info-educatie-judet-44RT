@@ -71,6 +71,17 @@ class LogsCollectionsDelete extends Component {
                                 </div>
                             )
                         })}
+                        {this.props.logs[i].tags ?
+                            this.props.logs[i].tags.map((data, i) => {
+                                return <ListItem
+                                    key={i}
+                                    primaryText={data.value}
+                                    secondaryText="Tag"
+                                    disabled={true}/>
+                            })
+                            :
+                            null
+                        }
                         <Divider/>
                         <ListItem primaryText={date.toString()}
                                   secondaryText="Date and time"

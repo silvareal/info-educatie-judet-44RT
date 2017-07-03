@@ -4,6 +4,10 @@ const News = require('mongoose').model('News');
 
 const router = new express.Router();
 
+// Redis
+const redis = require('redis');
+const client = redis.createClient();
+
 function validateSearchForm(payload) {
     let isFormValid = true;
 
@@ -16,7 +20,19 @@ function validateSearchForm(payload) {
     }
 }
 
-router.get('/readAllCollections', (req, res) => {
+function readAllCollectionsRedis(req, res, next) {
+    client.get("collectionsBrowse", (err, collections) => {
+        if (collections) {
+            return res.json({
+                collections: JSON.parse(collections),
+                fromCache: true
+            })
+        }
+        else return next();
+    });
+}
+
+function readAllCollections(req, res) {
     Collection.find({}, (err, collections) => {
 
         if (err) {
@@ -31,12 +47,17 @@ router.get('/readAllCollections', (req, res) => {
             })
         }
 
+        client.set("collectionsBrowse", JSON.stringify(collections));
+
         return res.json({
-            collections: collections
+            collections: collections,
+            fromCache: false
         });
 
     }).sort({time: -1}).limit(10);
-});
+}
+
+router.get("/readAllCollections", readAllCollectionsRedis, readAllCollections);
 
 router.post('/loadMoreCollections', (req, res) => {
     Collection.find({}, (err, collections) => {
@@ -59,8 +80,19 @@ router.post('/loadMoreCollections', (req, res) => {
     }).sort({time: -1}).limit(10).skip(parseInt(req.body.loadAfter));
 });
 
-// retrieve all collection names for suggestions
-router.get('/getCollectionsForSearch', (req, res) => {
+function getCollectionsForSearchRedis(req, res, next) {
+    client.get("collectionsSearch", (err, collections) => {
+        if (collections) {
+            return res.json({
+                collections: JSON.parse(collections),
+                fromCache: true
+            })
+        }
+        else return next();
+    });
+}
+
+function getCollectionsForSearch(req, res) {
     Collection.find({}, (err, collections) => {
 
         if (err) {
@@ -75,11 +107,16 @@ router.get('/getCollectionsForSearch', (req, res) => {
             })
         }
 
+        client.set("collectionsSearch", JSON.stringify(collections));
+
         return res.json({
-            collections: collections
+            collections: collections,
+            fromCache: false
         })
     }).sort({time: -1});
-});
+}
+
+router.get("/getCollectionsForSearch", getCollectionsForSearchRedis, getCollectionsForSearch);
 
 // all collections
 router.post("/searchCollections", (req, res) => {
@@ -90,8 +127,8 @@ router.post("/searchCollections", (req, res) => {
             success: false
         });
     }
-
-    Collection.find({collectionName: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, collections) => {
+    //{collectionName: {$regex: req.body.searchQuery.trim(), $options: 'si'}}
+    Collection.find({}, (err, collections) => {
 
         if (err) {
             return res.status(400).json({
@@ -105,13 +142,41 @@ router.post("/searchCollections", (req, res) => {
             })
         }
 
+        // The search function by tags or collectionName
+        let foundCollections = [];
+        for (let i = 0; i < collections.length; i++) {
+            let data = collections[i];
+            if ((data.collectionName).toUpperCase().includes((req.body.searchQuery).toUpperCase().trim()))
+                foundCollections = foundCollections.concat(data);
+            else if (data.tags) {
+                for (let j = 0; j < data.tags.length; j++) {
+                    if ((data.tags[j].value).toUpperCase().includes((req.body.searchQuery).toUpperCase().trim())) {
+                        foundCollections = foundCollections.concat(data);
+                        break;
+                    }
+                }
+            }
+        }
+
         res.json({
-            collections: collections
+            collections: foundCollections
         })
     }).sort({time: -1});
 });
 
-router.get("/readAllNews", (req, res) => {
+function readAllNewsRedis(req, res, next) {
+    client.get("newsBrowse", (err, news) => {
+        if (news) {
+            return res.json({
+                news: JSON.parse(news),
+                fromCache: true
+            })
+        }
+        else return next();
+    });
+}
+
+function readAllNews(req, res) {
     News.find({}, (err, news) => {
         if (err) {
             return res.status(400).json({
@@ -119,17 +184,22 @@ router.get("/readAllNews", (req, res) => {
             });
         }
 
-        if (news.length == 0) {
+        if (news.length === 0) {
             return res.status(404).json({
                 message: "NoNews"
             })
         }
 
+        client.set("newsBrowse", JSON.stringify(news));
+
         return res.json({
-            news: news
+            news: news,
+            fromCache: false
         });
     }).sort({time: -1}).limit(10);
-});
+}
+
+router.get("/readAllNews", readAllNewsRedis, readAllNews);
 
 router.post('/loadMoreNews', (req, res) => {
     News.find({}, (err, news) => {
@@ -150,36 +220,6 @@ router.post('/loadMoreNews', (req, res) => {
             news: news
         })
     }).sort({time: -1}).limit(10).skip(parseInt(req.body.loadAfter));
-});
-
-router.post('/searchNews', (req, res) => {
-
-    const validationResult = validateSearchForm(req.body);
-    if (!validationResult.success) {
-        return res.status(400).json({
-            success: false
-        });
-    }
-
-    News.find({newsTitle: {$regex: req.body.searchQuery.trim(), $options: 'si'}}, (err, news) => {
-
-
-        if (err) {
-            return res.status(400).json({
-                message: "Database error"
-            })
-        }
-
-        if (!news) {
-            return res.status(404).json({
-                message: "NoRecordsError"
-            })
-        }
-
-        res.json({
-            news: news
-        })
-    }).sort({time: -1});
 });
 
 module.exports = router;

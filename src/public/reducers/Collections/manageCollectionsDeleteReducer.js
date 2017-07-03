@@ -15,7 +15,8 @@ export default function manageCollectionsDeleteReducer(state = {}, action) {
                 response: action.response,
                 collectionName: action.collectionName,
                 collectionDescriptionRaw: action.collectionDescriptionRaw,
-                pictures: action.pictures
+                pictures: action.pictures,
+                tags: action.tags
             };
 
         case types.ON_DELETE_INITIATE_FAILURE:

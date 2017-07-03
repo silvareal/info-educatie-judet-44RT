@@ -8,6 +8,10 @@ const Collection = require('mongoose').model('Collection');
 
 const router = new express.Router();
 
+// Redis
+const redis = require('redis');
+const client = redis.createClient();
+
 function validateCommentForm(payload) {
     let isFormValid = true;
     let message = '';
@@ -174,6 +178,9 @@ router.post("/like", (req, res) => {
                             })
                         }
 
+                        client.del("collectionsAdmin");
+                        client.del("Collections of:" + userId);
+
                         res.json({
                             successLike: true
                         });
@@ -284,6 +291,9 @@ router.post("/unlike", (req, res) => {
                             })
                         }
 
+                        client.del("collectionsAdmin");
+                        client.del("Collections of:" + userId);
+
                         res.json({
                             successLike: true
                         });
@@ -296,8 +306,6 @@ router.post("/unlike", (req, res) => {
 });
 
 router.post("/deleteCommentCollections", (req, res) => {
-
-    console.log(req.headers.authorization);
 
     if (!req.headers.authorization) {
         return res.status(401).end();
@@ -323,7 +331,8 @@ router.post("/deleteCommentCollections", (req, res) => {
         const isModerator = decoded.isModerator;
 
         if (isAdmin === true || isModerator === true) {
-            CommentCollection.deleteOne({_id: req.body.commentId}, (err, comment) => {
+
+            CommentCollection.findOne({_id: req.body.commentId}, (err, comment) => {
 
                 if (err) {
                     return res.status(400).json({
@@ -337,10 +346,20 @@ router.post("/deleteCommentCollections", (req, res) => {
                     })
                 }
 
-                return res.json({
-                    message: "Comment deleted"
-                });
+                CommentCollection.deleteOne({_id: req.body.commentId}, (err) => {
 
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Database error"
+                        })
+                    }
+
+                    client.del("Comments of:" + comment.collectionId);
+
+                    return res.json({
+                        message: "Comment deleted"
+                    });
+                });
             });
         }
         else return res.status(401).json({
@@ -349,7 +368,20 @@ router.post("/deleteCommentCollections", (req, res) => {
     });
 });
 
-router.post("/retrieveNewsComments", (req, res) => {
+function retrieveNewsCommentsRedis(req, res, next) {
+    client.get("Comments of:" + req.body.newsId, (err, comments) => {
+        if (comments) {
+            return res.json({
+                message: "Retrieved comments",
+                comments: JSON.parse(comments),
+                fromCache: true
+            })
+        }
+        else return next();
+    });
+}
+
+function retrieveNewsComments(req, res) {
     CommentNews.find({newsId: req.body.newsId}, (err, comments) => {
 
         if (err) {
@@ -365,13 +397,18 @@ router.post("/retrieveNewsComments", (req, res) => {
             });
         }
 
+        client.set("Comments of:" + req.body.newsId, JSON.stringify(comments));
+
         res.json({
             message: "Retrieved comments",
-            comments: comments
+            comments: comments,
+            fromCache: false
         });
 
     }).sort({time: -1}).limit(10);
-});
+}
+
+router.post("/retrieveNewsComments", retrieveNewsCommentsRedis, retrieveNewsComments);
 
 router.post("/loadMoreCommentsNews", (req, res) => {
     CommentNews.find({newsId: req.body.newsId}, (err, comments) => {
@@ -459,6 +496,8 @@ router.post("/postCommentNews", (req, res) => {
                         message: "Error while commenting"
                     })
                 }
+
+                client.del("Comments of:" + req.body.newsId);
             });
             res.json({
                 commentAdded: true
@@ -474,57 +513,20 @@ router.post("/postCommentNews", (req, res) => {
     });
 });
 
-router.get("/getUserCredentials", (req, res) => {
+function retrieveCollectionsCommentsRedis(req, res, next) {
+    client.get("Comments of:" + req.body.collectionId, (err, comments) => {
+        if (comments) {
+            return res.json({
+                message: "Retrieved comments",
+                comments: JSON.parse(comments),
+                fromCache: true
+            })
+        }
+        else return next();
+    });
+}
 
-    if (req.headers.authorization.split(' ')[1].toString() !== "null") {
-
-        const token = req.headers.authorization.split(' ')[1];
-
-        return jwt.verify(token, config.jwtSecret, (err, decoded) => {
-
-            if (err) {
-                return res.status(401).json({
-                    message: "Not authorized"
-                })
-            }
-
-            if (!decoded) {
-                return res.status(400).json({
-                    message: "Internal error"
-                })
-            }
-
-            const userId = decoded.sub;
-
-            User.findOne({_id: userId}, (err, user) => {
-
-                if (err) {
-                    res.status(400).json({
-                        message: "Database error"
-                    });
-                }
-
-                if (!user) {
-                    res.status(404).json({
-                        message: "User not found"
-                    })
-                }
-
-                res.json({
-                    userName: user.name,
-                    firstName: user.firstName,
-                    userId: userId,
-                    profilePictureLink: user.profilePictureLink
-                });
-
-            });
-
-        });
-    }
-    else return res.json({guest: true})
-});
-
-router.post("/retrieveCollectionsComments", (req, res) => {
+function retrieveCollectionsComments(req, res) {
     CommentCollection.find({collectionId: req.body.collectionId}, (err, comments) => {
 
         if (err) {
@@ -540,13 +542,18 @@ router.post("/retrieveCollectionsComments", (req, res) => {
             });
         }
 
+        client.set("Comments of:" + req.body.collectionId, JSON.stringify(comments));
+
         res.json({
             message: "Retrieved comments",
-            comments: comments
+            comments: comments,
+            fromCache: false
         });
 
     }).sort({time: -1}).limit(10);
-});
+}
+
+router.post("/retrieveCollectionsComments", retrieveCollectionsCommentsRedis, retrieveCollectionsComments);
 
 router.post("/loadMoreCommentsCollections", (req, res) => {
     CommentCollection.find({collectionId: req.body.collectionId}, (err, comments) => {
@@ -634,6 +641,8 @@ router.post("/postCommentCollections", (req, res) => {
                         message: "Error while commenting"
                     })
                 }
+
+                client.del("Comments of:" + req.body.collectionId)
             });
             res.json({
                 commentAdded: true

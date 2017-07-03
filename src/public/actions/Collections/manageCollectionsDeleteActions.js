@@ -11,14 +11,15 @@ export function onDeleteInitiateType(collectionId) {
     return {type: types.ON_DELETE_INITIATE, collectionId: collectionId}
 }
 
-export function onDeleteInitiateSuccess(message, response, collectionName, collectionDescriptionRaw, pictures) {
+export function onDeleteInitiateSuccess(message, response, collectionName, collectionDescriptionRaw, pictures, tags) {
     return {
         type: types.ON_DELETE_INITIATE_SUCCESS,
         message: message,
         response: response,
         collectionName: collectionName,
         collectionDescriptionRaw: collectionDescriptionRaw,
-        pictures: pictures
+        pictures: pictures,
+        tags: tags
     }
 }
 
@@ -45,7 +46,8 @@ export function onDeleteInitiate(collectionId) {
                 true,
                 response.data.collection.collectionName,
                 response.data.collection.collectionDescriptionRaw,
-                response.data.collection.picturesArray
+                response.data.collection.picturesArray,
+                response.data.collection.tags
             ))
         }).catch((err) => {
             const errPath = err.response.data;
@@ -69,7 +71,7 @@ export function onDeleteExecuteFailure() {
     return {type: types.ON_DELETE_EXECUTE_FAILURE, message: "Error while deleting"}
 }
 
-export function onDeleteExecute(collectionId, collectionName, collectionDescriptionRaw, pictures){
+export function onDeleteExecute(collectionId, collectionName, collectionDescriptionRaw, pictures, tags){
     return function (dispatch) {
         dispatch(onDeleteExecuteInitiate());
         return axios({
@@ -83,7 +85,8 @@ export function onDeleteExecute(collectionId, collectionName, collectionDescript
                 'collectionId': collectionId,
                 'collectionName': collectionName,
                 'collectionDescriptionRaw': collectionDescriptionRaw,
-                'picturesArray': JSON.stringify(pictures)
+                'picturesArray': JSON.stringify(pictures),
+                'tags': JSON.stringify(tags)
             })
         }).then((response) => {
             // The Redux Store should update

@@ -10,8 +10,8 @@ let createHandlers = function (dispatch) {
         dispatch(deleteActions.onDeleteInitiate(collectionId))
     };
 
-    let onDelete = function (collectionId, collectionName, collectionDescriptionRaw, picturesArray) {
-        dispatch(deleteActions.onDeleteExecute(collectionId, collectionName, collectionDescriptionRaw, picturesArray))
+    let onDelete = function (collectionId, collectionName, collectionDescriptionRaw, picturesArray, tags) {
+        dispatch(deleteActions.onDeleteExecute(collectionId, collectionName, collectionDescriptionRaw, picturesArray, tags))
     };
 
     return {
@@ -36,7 +36,8 @@ class DeleteView extends Component {
             const collectionName = this.props.collectionName;
             const collectionDescriptionRaw = this.props.collectionDescriptionRaw;
             const pictures = this.props.pictures;
-            this.handlers.onDelete(collectionId, collectionName, collectionDescriptionRaw, pictures);
+            const tags = this.props.tags;
+            this.handlers.onDelete(collectionId, collectionName, collectionDescriptionRaw, pictures, tags);
         }
     };
 
@@ -79,7 +80,8 @@ const mapStateToProps = (state) => {
         message: statePath.message,
         collectionName: statePath.collectionName,
         collectionDescriptionRaw: statePath.collectionDescriptionRaw,
-        pictures: statePath.pictures
+        pictures: statePath.pictures,
+        tags: statePath.tags
     }
 };
 

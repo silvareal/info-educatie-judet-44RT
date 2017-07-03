@@ -10,6 +10,10 @@ const config = require('../../config');
 
 const router = new express.Router();
 
+// Redis
+const redis = require('redis');
+const client = redis.createClient();
+
 function validateSearchForm(payload) {
     let isFormValid = true;
 
@@ -152,22 +156,14 @@ router.post('/create', (req, res) => {
             profilePictureLink: profilePictureLink,
             collectionName: req.body.collectionName,
             collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-            picturesArray: JSON.parse(req.body.picturesArray)
+            picturesArray: JSON.parse(req.body.picturesArray),
+            tags: JSON.parse(req.body.tags)
         };
 
         const logData = {
             userId: userId,
             collectionName: req.body.collectionName
         };
-
-        const newLog = new CreateCollectionLogs(logData);
-        newLog.save((err) => {
-            if (err) {
-                return res.status(400).json({
-                    message: "Error while logging"
-                })
-            }
-        });
 
         const newCollection = new Collection(collectionData);
         newCollection.save((err) => {
@@ -178,12 +174,116 @@ router.post('/create', (req, res) => {
                 })
             }
 
+            client.del("collectionsAdmin");
+            client.del("logsCollectionsCreate");
+            client.del("Collections of:" + userId);
+            client.del("collectionsBrowse");
+            client.del("collectionsSearch");
+            client.del("collectionsHome");
+
             return res.json({
                 success: true
             });
         });
+
+        const newLog = new CreateCollectionLogs(logData);
+        newLog.save((err) => {
+            if (err) {
+                return res.status(400).json({
+                    message: "Error while logging"
+                })
+            }
+
+           CreateCollectionLogs.find({}, (err, logs) => {
+                if (logs) {
+                    client.set("logsCollectionsCreate", JSON.stringify(logs))
+                }
+           }).sort({time: -1});
+        });
     });
 });
+
+function readAllRedis(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        const userId = decoded.sub;
+        client.get("Collections of:" + userId , (err, collections) => {
+            if (collections){
+                return res.json({
+                    collections: JSON.parse(collections),
+                    fromCache: true
+                });
+            }
+                else return next();
+        })
+    })
+}
+
+function readAll(req, res) {
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        const userId = decoded.sub;
+
+        Collection.find({userId: userId}, (err, collections) => {
+            if (err) {
+                return res.status(400).json({
+                    message: "Database error"
+                });
+            }
+
+            if (collections.length === 0) {
+                return res.status(404).json({
+                    message: "You have not added anything yet"
+                })
+            }
+
+            client.set("Collections of:" + userId , JSON.stringify(collections));
+
+            return res.json({
+                collections: collections,
+                fromCache: false
+            });
+        }).sort({time: -1}).limit(10);
+    })
+}
+
+router.get("/readAll", readAllRedis, readAll);
 
 router.get('/readAll', (req, res) => {
 
@@ -329,8 +429,6 @@ router.post("/searchCollections", (req, res) => {
     })
 });
 
-
-
 router.post('/readOne', (req, res) => {
 
     if (req.headers.authorization.split(' ')[1].toString() !== "null") {
@@ -473,7 +571,8 @@ router.post('/updateSave', (req, res) => {
             $set: {
                 collectionName: req.body.collectionName,
                 collectionDescriptionRaw: req.body.collectionDescriptionRaw,
-                picturesArray: JSON.parse(req.body.picturesArray)
+                picturesArray: JSON.parse(req.body.picturesArray),
+                tags: JSON.parse(req.body.tags)
             }
         }, (err, collection) => {
             if (err) {
@@ -490,6 +589,13 @@ router.post('/updateSave', (req, res) => {
                 })
             }
 
+            client.del("collectionsAdmin");
+            client.del("logsCollectionsUpdate");
+            client.del("Collections of:" + userId);
+            client.del("collectionsBrowse");
+            client.del("collectionsSearch");
+            client.del("collectionsHome");
+
             //this is a non admin page, the owner ID can t be changed
             const logData = {
                 collectionId: req.body.collectionId,
@@ -501,6 +607,8 @@ router.post('/updateSave', (req, res) => {
                 collectionNameOld: req.body.collectionNameOld,
                 collectionDescriptionRawOld: req.body.collectionDescriptionRawOld,
                 picturesArrayOld: JSON.parse(req.body.picturesArrayOld),
+                tags: JSON.parse(req.body.tags),
+                tagsOld: JSON.parse(req.body.tagsOld),
                 updatedByAdmin: false
             };
 
@@ -511,6 +619,12 @@ router.post('/updateSave', (req, res) => {
                         message: "Error while logging"
                     })
                 }
+
+                UpdateCollectionLogs.find({}, (err, logs) => {
+                    if (logs) {
+                        client.set("logsCollectionsUpdate", JSON.stringify(logs))
+                    }
+                }).sort({time: -1});
             });
 
             if (!collection) {
@@ -601,8 +715,43 @@ router.post('/deleteExecute', (req, res) => {
             collectionName: req.body.collectionName,
             collectionDescriptionRaw: req.body.collectionDescriptionRaw,
             picturesArray: JSON.parse(req.body.picturesArray),
+            tags: JSON.parse(req.body.tags),
             deletedByAdmin: false
         };
+
+        Collection.deleteOne({_id: req.body.collectionId, userId: userId}, (err, collection) => {
+            if (err) {
+                return res.status(400).json({
+                    message: "Database error"
+                })
+            }
+
+            if (!collection) {
+                return res.status(404).json({
+                    message: "The item you are searching for does not exist"
+                })
+            }
+
+            client.del("collectionsAdmin");
+            client.del("logsCollectionsDelete");
+            client.del("Collections of:" + userId);
+            client.del("Comments of:" + req.body.collectionId);
+            client.del("collectionsBrowse");
+            client.del("collectionsSearch");
+            client.del("collectionsHome");
+
+            return res.json({
+                message: "Collection was successfully deleted"
+            });
+        });
+
+        CommentCollection.deleteMany({collectionId: req.body.collectionId, userId: userId}, (err) => {
+            if (err) {
+                return res.status(400).json({
+                    message: "Database error"
+                })
+            }
+        });
 
         const newLog = new DeleteCollectionLogs(logData);
         newLog.save((err) => {
@@ -612,31 +761,11 @@ router.post('/deleteExecute', (req, res) => {
                 })
             }
 
-            CommentCollection.deleteMany({collectionId: req.body.collectionId, userId: userId}, (err) => {
-                if (err) {
-                    return res.status(400).json({
-                        message: "Database error"
-                    })
+            DeleteCollectionLogs.find({}, (err, logs) => {
+                if (logs) {
+                    client.set("logsCollectionsDelete", JSON.stringify(logs));
                 }
-            });
-
-            Collection.deleteOne({_id: req.body.collectionId, userId: userId}, (err, collection) => {
-                if (err) {
-                    return res.status(400).json({
-                        message: "Database error"
-                    })
-                }
-
-                if (!collection) {
-                    return res.status(404).json({
-                        message: "The item you are searching for does not exist"
-                    })
-                }
-
-                return res.json({
-                    message: "Collection was successfully deleted"
-                });
-            });
+            }).sort({time: -1});
         });
     });
 });

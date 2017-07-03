@@ -104,7 +104,7 @@ class AppBarPersonal extends Component {
 
     onSearch = () => {
         this.handler.searchAllCollections(this.props.searchFunction.searchQuery);
-        this.context.router.replace(`/search/${this.props.searchFunction.searchQuery}`)
+        this.context.router.push(`/search/${this.props.searchFunction.searchQuery}`)
     };
 
     render() {

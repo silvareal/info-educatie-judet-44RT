@@ -3,11 +3,14 @@ const validator = require('validator');
 const passport = require('passport');
 const User = require('mongoose').model('User');
 const LoginLogs = require('mongoose').model('LoginLogs');
-const SignupLogs = require('mongoose').model('SignupLogs');
 const config = require('../../config');
 const jwt = require('jsonwebtoken');
 
 const router = new express.Router();
+
+// Redis
+const redis = require('redis');
+const client = redis.createClient();
 
 function validateLoginForm(payload) {
     const errors = {};
@@ -114,6 +117,8 @@ router.post('/login', (req, res, next) => {
                 userId: userId
             };
 
+            client.del("logsLogin");
+
             const newLog = new LoginLogs(logData);
             newLog.save((err) => {
                 if (err) {
@@ -121,6 +126,13 @@ router.post('/login', (req, res, next) => {
                         message: "Error while logging"
                     })
                 }
+
+                LoginLogs.find({}, (err, logs) => {
+                     if (logs) {
+                         client.set("logsLogin", JSON.stringify(logs))
+                     }
+                }).sort({time: -1});
+
                 return res.json({
                     success: true,
                     token,
