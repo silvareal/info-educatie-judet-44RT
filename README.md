@@ -1,5 +1,5 @@
 <h1><i>4Art</i></h1>
-<p>v0.0.3</p>
+<p>v0.0.4</p>
 
 <h5>If you are not currently on our GitHub page and are reading a printed version of this documentation, please visit the link below or scan the QR code to access our GitHub page.</h5>
 
