@@ -11,20 +11,73 @@
   }
 }
 
-.appBar {
-  position: fixed !important;
-  transition: top 0.3s;
-  top: 0;
-  left: 0;
-}
-
 .active-link-classname {
-  span {
-    background-color: #8dd2cc !important;
-  }
+  text-decoration: none;
+  border-bottom: 1px solid gray;
 }
 
 .hidden {
   transition: top 0.3s;
   top: -64px;
+}
+
+//----------------------
+
+.logo-wrap-desktop {
+  @include display(flex, 1, center);
+
+  .logo {
+    max-width: 200px !important;
+    max-height: 200px;
+  }
+
+  @media screen and (max-width: 1100px) {
+    display: none;
+  }
+}
+
+.top-bar-actions-desktop {
+  @include display(flex, 1, center);
+  @include box-sizing(border-box);
+  @include padding(25px, 25px, 25px, 25px);
+
+  @media screen and (max-width: 1100px) {
+    display: none;
+  }
+
+  .top-bar-left-actions {
+    @include display(flex, 1, flex-end);
+  }
+
+  .top-bar-right-actions {
+    @include display(flex, 1, flex-start);
+  }
+}
+
+.top-bar-actions-button-style {
+  @include padding(0, 10px, 0 10px);
+}
+
+.top-bar-search {
+  hr {
+    display: none;
+  }
+  padding: 0 !important;
+  padding-left: 50px !important;
+  border: 1px solid gray;
+  border-radius: 40px;
+}
+
+.top-bar-actions-mobile {
+  position: fixed !important;
+
+  @media screen and (min-width: 1100px) {
+    display: none !important;
+  }
+}
+
+.top-bar-search-mobile {
+  padding: 0 !important;
+  padding-left: 50px !important;
+  padding-right: 10px !important;
 }

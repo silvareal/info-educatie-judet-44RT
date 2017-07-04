@@ -15,13 +15,12 @@ class MainApp extends Component {
                 atLeave={{opacity: 0.3}}
                 atActive={{opacity: 1}}
             >
-                <div className="force-parallax">
+                <div>
                     <AppBarPersonal
                         profilePictureLink={this.props.profilePictureLink}
                         userId={this.props.userId}
                         userName={this.props.userName}
                         isAdmin={this.props.admin}
-                        resetScroll={this.resetScroll}
                     />
 
                     {this.props.children}
@@ -30,28 +29,25 @@ class MainApp extends Component {
                     <div className="footer">
                         <ul className="footer-left">
                             <li>
-                                <Link to={`/`}
-                                      onClick={this.resetScroll}>
+                                <Link to={`/`}>
                                     Home
                                 </Link>
                             </li>
                             <li>
-                                <Link to={`/collections`}
-                                      onClick={this.resetScroll}>
+                                <Link to={`/collections`}>
+
                                     Browse all collections
                                 </Link>
                             </li>
                             <li>
-                                <Link to={`/news`}
-                                      onClick={this.resetScroll}>
+                                <Link to={`/news`}>
                                     See all recent news
                                 </Link>
                             </li>
                         </ul>
                         <ul className="footer-right">
                             <li>
-                                <Link to={`/contact`}
-                                      onClick={this.resetScroll}>
+                                <Link to={`/contact`}>
                                     Contact our team
                                 </Link>
                             </li>

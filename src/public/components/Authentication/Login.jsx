@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import {Card, CardText, RaisedButton, TextField} from 'material-ui';
+import {Card, CardText, RaisedButton, TextField, FlatButton} from 'material-ui';
 
 class Login extends Component {
     render() {
         const styles = {
             button: {
-                width: '100%',
+                width: '100%'
             }
         };
         return (
-            <div className="parallax-login">
+            <div>
                 <div className="top-bar-spacing"/>
                 <Card className="container-login" style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
                     <div className="content-login">
@@ -29,9 +29,9 @@ class Login extends Component {
                                         errorText={this.props.errors.email}
                                         autoFocus={true}
                                         style={{minWidth: "100%"}}
-                                        inputStyle={{color: "#ee6e73"}}
-                                        floatingLabelStyle={{color: "#ee6e73"}}
-                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                        inputStyle={{color: "#000000", opacity: 0.8}}
+                                        floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                        underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                                     />
                                 </div>
 
@@ -44,17 +44,18 @@ class Login extends Component {
                                         onChange={this.props.onChange}
                                         errorText={this.props.errors.password}
                                         style={{minWidth: "100%"}}
-                                        inputStyle={{color: "#ee6e73"}}
-                                        floatingLabelStyle={{color: "#ee6e73"}}
-                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                        inputStyle={{color: "#000000", opacity: 0.8}}
+                                        floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                        underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                                     />
                                 </div>
 
                                 <div className="button-login-signup">
                                     <RaisedButton
                                         style={styles.button}
-                                        buttonStyle={{backgroundColor: "#eb7077"}}
-                                        type="submit" label="Log in" primary/>
+                                        labelStyle={{color: "#ffffff"}}
+                                        buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
+                                        type="submit" label="Log in"/>
                                 </div>
 
                                 <CardText>Don t have an account? <Link to='/signup'>Create one</Link>.</CardText>

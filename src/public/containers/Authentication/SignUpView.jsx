@@ -41,14 +41,12 @@ class SignUpView extends Component {
 
     render() {
         document.title = "Signup";
-        return (
-            <SignUp
+        return <SignUp
                 errors={this.props.errors}
                 user={this.props.user}
                 onChange={this.onChange}
                 onSubmit={this.onSubmit}
-            />
-        );
+            />;
     }
 }
 

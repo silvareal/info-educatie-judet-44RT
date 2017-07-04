@@ -52,30 +52,20 @@ class ReadOneView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     }
 
+    onLoadMoreComments = () => {
+        this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.newsId)
+    };
+
     componentDidMount() {
 
-        this.handlers.getComments(this.props.params._newsId);
-        this.handlers.getNews(this.props.params._newsId);
-        this.handlers.getCommentsCount(this.props.params._newsId);
-
-        //the load more event listener
-        window.addEventListener('scroll', this.onScroll);
+        this.handlers.getComments(this.props.newsId);
+        this.handlers.getNews(this.props.newsId);
+        this.handlers.getCommentsCount(this.props.newsId);
 
         socket.on('send:commentNews', () => {
-            this.handlers.getComments(this.props.params._newsId
+            this.handlers.getComments(this.props.newsId
         )});
     };
-
-    onScroll = () => {
-        if (this.props.comments.finished === false && this.props.comments.requesting === false)
-            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
-                this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.params._newsId)
-            }
-    };
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.onScroll);
-    }
 
     onCommentChange = (e) => {
         this.handlers.onCommentInputChange(e.target.value);
@@ -84,13 +74,13 @@ class ReadOneView extends Component {
     onSave = () => {
         if (Auth.isUserAuthenticated()) {
 
-            this.handlers.onSaveComment(this.props.params._newsId, this.props.comments.comment);
-            this.handlers.getComments(this.props.params._newsId);
-            this.handlers.getCommentsCount(this.props.params._newsId);
+            this.handlers.onSaveComment(this.props.newsId, this.props.comments.comment);
+            this.handlers.getComments(this.props.newsId);
+            this.handlers.getCommentsCount(this.props.newsId);
 
             socket.emit('send:commentNews', {
                 comment: this.props.comments.comment,
-                newsId: this.props.params._newsId,
+                newsId: this.props.newsId,
                 userName: this.props.credentials.userName,
                 firstName: this.props.credentials.firstName,
                 userId: this.props.credentials.userId,
@@ -102,8 +92,9 @@ class ReadOneView extends Component {
     render() {
             return (
                 <ReadOne
-                    guest={this.props.credentials.guest}
+                    finished={this.props.comments.finished}
                     onLoadMoreComments={this.onLoadMoreComments}
+                    guest={this.props.credentials.guest}
                     fetchedNews={this.props.news.fetchedNews}
                     news={this.props.news.news}
                     newsDescriptionRaw={this.props.news.newsDescriptionRaw}
@@ -249,6 +240,9 @@ const comments = (state) => {
             finished: false
         }
     }
+    else return {
+            finished: false
+        }
 };
 
 const mapStateToProps = (state) => ({

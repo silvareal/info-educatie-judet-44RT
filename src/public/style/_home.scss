@@ -10,30 +10,26 @@ body, html, main {
   @include widthAndHeight("auto", 100%);
 }
 
-.force-parallax {
-  @include widthAndHeight("auto", 100%);
-  min-height: 100%;
+.footer {
+  @include display(flex, 1, space-around);
+  @include widthAndHeight(100%, auto);
+  @include background-color(#000000);
+  opacity: 0.8;
+  @include padding(20px);
+  @include box-sizing(border-box);
 
-  .footer {
-    @include display(flex, 1, center);
-    @include widthAndHeight(100%, auto);
-    @include background-color(#f6f6f7);
-    @include padding(20px);
-    @include box-sizing(border-box);
+  ul {
+    @include font("", "", "", "", 20px, "", $Roboto, "");
+    list-style: none;
+    li {
+      @include padding(10px);
+      @include box-sizing(border-box);
+      a {
+        color: #ffffff;
+      }
 
-    ul {
-      @include font("", "", "", "", 20px, "", $Roboto, "");
-      list-style: none;
-      li {
-        @include padding(10px);
-        @include box-sizing(border-box);
-        a {
-          color: #9e9e9e;
-        }
-
-        :hover {
-          color: #454545;
-        }
+      :hover {
+        color: gray;
       }
     }
   }
@@ -54,67 +50,134 @@ body, html, main {
   }
 }
 
-.parallax-home {
-  @include widthAndHeight("auto", 100%);
-  @include background-image("images/img6.jpg", fixed, center, repeat, cover);
-  //------------------
+.home-wrap {
 
-  .section-title {
+  .welcome-picture {
+    margin-top: -96px;
+
+    @media screen and (max-width: 750px) {
+      margin-top: 0;
+    }
+
+    .welcome-message {
+      position: relative;
+      top: 200px;
+      @include display(flex, 1, center);
+      color: #ffffff;
+      opacity: 0.8;
+      font-size: 48px;
+      z-index: 2;
+      text-align: center;
+      padding: 10px;
+
+      @media screen and (max-width: 1100px) {
+        top: 150px
+      }
+
+      @media screen and (max-width: 750px) {
+        display: none
+      }
+
+    }
+
+    .welcome-login-button {
+      position: relative;
+      bottom: 250px;
+      @include display(flex, 1, center);
+      @media screen and (max-width: 1100px) {
+        bottom: 175px
+      }
+
+      @media screen and (max-width: 750px) {
+        display: none
+      }
+    }
+  }
+
+  .section-title-news-authenticated {
     @include font("", "", bold, "", 60px, "", $Roboto, "");
     @include padding(90px);
     @include box-sizing(border-box);
-    @include background-color(#42ab9e);
     @include textAlign(center);
-    color: #ffffff;
+    color: black;
+    opacity: 0.8;
 
     @media screen and (max-width: 1200px) {
       @include padding(30px);
     }
   }
 
-  .container-home {
-    @include padding(50px);
+  .section-title-news {
+    @include font("", "", bold, "", 60px, "", $Roboto, "");
+    @include padding(90px);
+    @include box-sizing(border-box);
+    @include textAlign(center);
+    color: black;
+    opacity: 0.8;
+
     @media screen and (max-width: 1200px) {
-      @include padding(0);
+      @include padding(30px);
     }
-    @include display(flex, 1, center);
+  }
+
+  .section-title-authenticated {
+    @include font("", "", bold, "", 60px, "", $Roboto, "");
+    @include padding(90px);
+    @include box-sizing(border-box);
+    @include textAlign(center);
+    color: black;
+    opacity: 0.8;
+
+    @media screen and (max-width: 1200px) {
+      @include padding(30px);
+    }
+  }
+
+  .section-title {
+    @include font("", "", bold, "", 60px, "", $Roboto, "");
+    @include padding(90px);
+    @include box-sizing(border-box);
+    @include textAlign(center);
+    color: black;
+    opacity: 0.8;
+
+    margin-top: -64px;
+
+    @media screen and (max-width: 1200px) {
+      @include padding(30px);
+    }
+
+    @media screen and (max-width: 750px) {
+      margin-top: 0;
+    }
+
+  }
+
+  .container-home {
+    @include background-color(#f4f7f6);
 
     .news-desktop {
       @include display(flex, 1, center);
       @media screen and (max-width: 1200px) {
         @include display(none);
       }
+      padding: 10px;
 
       ul {
-        @include padding(30px);
-        @include display(flex, "", "");
-        @include background-color(#f4f7f6);
-        flex-direction: column;
+        @include display(flex, 1, center);
+        margin: 0;
+        padding: 0;
+        flex-direction: row;
         list-style: none;
         height: auto;
 
-        .left-news {
-          @include widthAndHeight("auto", 450px);
-          @include display(flex, 1, center);
-          flex-direction: column;
-          box-sizing: border-box;
-          max-width: 500px;
-
-          img {
-            min-height: 350px;
-          }
+        li {
+          width: 33%;
+          height: 100%;
+          padding: 10px;
+          @include box-sizing(border-box);
         }
 
-        .right-news {
-          @include widthAndHeight("auto", 450px);
-          @include display(flex, 1, center);
-          flex-direction: column;
-          max-width: 500px;
-
-          img {
-            height: 350px;
-          }
-        }
       }
     }
 
@@ -125,6 +188,7 @@ body, html, main {
   }
 }
 
+// used only for collections
 .news-mobile {
   @media screen and (min-width: 1200px) {
     @include display(none);
@@ -150,4 +214,36 @@ body, html, main {
       }
     }
   }
+}
+
+// used only for news
+.news-mobile-cancel {
+  display: block;
+  @include background-color(#f4f7f6);
+  @include widthAndHeight(100%, 100%);
+  ul {
+    @include background-color(#f4f7f6);
+    @include box-sizing(border-box);
+    @include display(flex, "", center);
+    @include padding(30px);
+    @include widthAndHeight(100%, "auto");
+    list-style: none;
+    flex-direction: column;
+
+    li {
+      @include background-color(#f4f7f6);
+      @include widthAndHeight(100%, "auto");
+      @include box-sizing(border-box);
+      @include padding(10px);
+      img {
+        @include widthAndHeight("auto", "auto");
+        min-height: 180px;
+      }
+    }
+  }
+}
+
+.buttons-home-view {
+  @include display(flex, 1, center);
+  padding-bottom: 20px;
 }

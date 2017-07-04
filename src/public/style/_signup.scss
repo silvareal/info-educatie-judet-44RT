@@ -1,15 +1,10 @@
 @import "./constants/fonts";
 @import "./constants/functions";
 
-.parallax-signup {
-  @include widthAndHeight("auto", 100%);
-  @include background-image("./images/img1.jpg", fixed, center, repeat, cover);
-}
-
 .container-signup {
   @include padding(0, 256px, 64px, 256px);
   @include display(flex, 1, center);
-  min-height: 720px;
+  min-height: 500px;
   @media screen and (max-width: 1200px) {
     min-height: 400px;
     @include padding(1em);
@@ -24,18 +19,12 @@
 }
 
 .content-signup {
-  @include padding(90px);
   @include margin(auto);
   @include display(flex, 1, center);
   @include widthAndHeight(100%, 100%);
   @include box-sizing(border-box);
   flex-direction: column;
   color: #000000;
-  @include background-color(#ffffff);
-
-  @media screen and (max-width: 1200px) {
-    @include padding(20px);
-  }
 }
 
 .signup-header {
@@ -44,6 +33,7 @@
   text-align: center;
   font-family: Roboto, 'sans-serif';
   font-size: 3em;
+  opacity: 0.8;
 
   @media screen and (max-width: 1200px) {
     font-size: 2em;

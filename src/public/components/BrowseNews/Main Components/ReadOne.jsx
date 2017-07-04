@@ -133,6 +133,8 @@ class ReadOne extends Component {
                             comment={this.props.comments && this.props.comments.comment ? this.props.comments.comment : ""}
                             onCommentChange={this.props.onCommentChange}
                             onSave={this.props.onSave}
+                            finished={this.props.finished}
+                            onLoadMoreComments={this.props.onLoadMoreComments}
                             commentAdded={this.props.comments && this.props.comments.commentAdded ? this.props.comments.commentAdded : ""}
                         />
                         :

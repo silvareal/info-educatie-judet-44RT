@@ -41,14 +41,12 @@ class LoginView extends Component {
 
     render() {
         document.title = "Login";
-        return (
-            <Login
-                errors={this.props.errors}
-                user={this.props.user}
-                onChange={this.onChange}
-                onSubmit={this.onSubmit}
-            />
-        );
+        return <Login
+            errors={this.props.errors}
+            user={this.props.user}
+            onChange={this.onChange}
+            onSubmit={this.onSubmit}
+        />;
     }
 }
 
