@@ -4,6 +4,7 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import AppBarPersonal from '../../components/MainApp Partials/AppBar.jsx';
 import {RouteTransition} from 'react-router-transition';
+import ScrollButton from './ScrollToTopButton.jsx'
 
 class MainApp extends Component {
     render() {
@@ -24,6 +25,7 @@ class MainApp extends Component {
                     />
 
                     {this.props.children}
+                    <ScrollButton/>
 
                     <div className="footer">
                         <ul className="footer-left">

@@ -432,6 +432,7 @@ npm install bcrypt
 <ul>
 <li>ReactJS</li>
 <li>DraftJS</li>
+<li>Redux</li>
 </ul>
 
 <h5>Pre-processors used:</h5>
@@ -491,6 +492,7 @@ npm install bcrypt
 <li>Body-parser</li>
 <li>Passport</li>
 <li>Nodemon</li>
+<li>Redis</li>
 </ul>
 
 <h5>General notes:</h5>
@@ -541,6 +543,8 @@ npm install bcrypt
 <ul>
 <li>Finish the final design</li>
 <li>Add all the features from 0.0.4 to all pages of collections/news management</li>
+<li>Add a scroll to top button - DONE</li>
+<li>Add the resume function for Create collections</li>
 </ul>
 
 <h1>Creators:</h1>

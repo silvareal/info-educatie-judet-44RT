@@ -190,6 +190,20 @@ a {
 .heart-red-color svg {
   fill: red !important; }
 
+.scroll {
+  color: #ffffff !important;
+  opacity: 0.3 !important;
+  background-color: aqua !important;
+  width: 40px !important;
+  height: 40px !important;
+  position: fixed !important;
+  bottom: 10px !important;
+  right: 10px !important;
+  border-radius: 5px !important;
+  border: none !important; }
+  .scroll:hover {
+    opacity: 1 !important; }
+
 .parallax-login {
   width: auto;
   height: 100%;
