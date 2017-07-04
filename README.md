@@ -544,7 +544,7 @@ npm install bcrypt
 <li>Finish the final design</li>
 <li>Add all the features from 0.0.4 to all pages of collections/news management</li>
 <li>Add a scroll to top button - DONE</li>
-<li>Add the resume function for Create collections</li>
+<li>Add the resume function for Create collections -DONE</li>
 </ul>
 
 <h1>Creators:</h1>

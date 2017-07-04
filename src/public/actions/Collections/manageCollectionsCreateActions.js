@@ -112,7 +112,11 @@ export function onSaveCollection(collectionName, collectionDescriptionRaw, pictu
                 'tags': tags
             })
         }).then((response) => {
-            dispatch(onSaveCollectionSuccess(response.data.success))
+            dispatch(onSaveCollectionSuccess(response.data.success));
+            localStorage.removeItem("collectionName");
+            localStorage.removeItem("collectionDescription");
+            localStorage.removeItem("pictures");
+            localStorage.removeItem("tags");
         }).catch((err) => {
 
             const errPath = err.response.data;

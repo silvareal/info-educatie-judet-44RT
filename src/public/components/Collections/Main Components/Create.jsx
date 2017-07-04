@@ -392,6 +392,16 @@ class Create extends Component {
                                 primary={true}
                                 onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}
                                 buttonStyle={{backgroundColor: "#42ab9e"}}/>
+
+                            {this.props.canResume === true ?
+                                <RaisedButton label="Resume"
+                                              primary={true}
+                                              onTouchTap={this.props.onResumeCreate}
+                                              buttonStyle={{backgroundColor: "#42ab9e"}}/>
+                                :
+                                null
+                            }
+
                         </CardActions>
                     </Card>
                 </Card>

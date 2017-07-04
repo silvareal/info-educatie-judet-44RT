@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import RichTextEditor from 'react-rte';
 import {stateToHTML} from 'draft-js-export-html';
-import {convertToRaw} from 'draft-js';
+import {convertToRaw, convertFromRaw} from 'draft-js';
 import {connect} from 'react-redux';
 import * as createActions from '../../actions/Collections/manageCollectionsCreateActions.js'
 import Create from '../../components/Collections/Main Components/Create.jsx'
@@ -57,20 +57,97 @@ class CreateView extends Component {
         this.state = {
             chipInput: '',
             chips: [],
-            mappedChips: ''
+            mappedChips: '',
+            localCollectionName: '',
+            localCollectionDescription: '',
+            localPictures: '',
+            localTags: '',
+            localMappedTags: '',
+            canResume: false
         }
     };
 
     componentDidMount() {
+        this.setState({
+            localCollectionName: localStorage.getItem("collectionName"),
+            localCollectionDescription: localStorage.getItem("collectionDescription"),
+            localPictures: localStorage.getItem("pictures"),
+            localTags: localStorage.getItem("tags")
+        });
+
+        if (localStorage.getItem("collectionDescription") || localStorage.getItem("collectionName") || localStorage.getItem("pictures"))
+            this.setState({
+                canResume: true
+            });
+
         this.handlers.getInitialState(RichTextEditor.createEmptyValue(), RichTextEditor.createEmptyValue());
     };
 
+    onResumeCreate = () => {
+
+        if (this.state.localCollectionName)
+            this.handlers.onCollectionNameChange(this.state.localCollectionName);
+
+        if (this.state.localCollectionDescription) {
+
+            let contentState = convertFromRaw(JSON.parse(this.state.localCollectionDescription));
+            let html = stateToHTML(contentState);
+
+            let collectionDescription = RichTextEditor.createEmptyValue();
+            collectionDescription = collectionDescription.setContentFromString(html, 'html');
+
+            this.handlers.onCollectionDescriptionChange(collectionDescription, stateToHTML(collectionDescription.getEditorState().getCurrentContent()));
+        }
+
+        if (this.state.localPictures) {
+            const localPictures = JSON.parse(this.state.localPictures);
+
+            const newPictures = localPictures.map((picture, i) => {
+
+                let contentState = convertFromRaw(JSON.parse(picture.pictureDescriptionRaw));
+                let html = stateToHTML(contentState);
+
+                let pictureDescription = RichTextEditor.createEmptyValue();
+                pictureDescription = pictureDescription.setContentFromString(html, 'html');
+
+                return {...picture, pictureDescription: pictureDescription}
+
+            });
+
+            this.handlers.onPicturesArrayChange(newPictures);
+        }
+
+        if (this.state.localTags) {
+            const localTags = JSON.parse(this.state.localTags);
+
+            const mappedChips = localTags.map((data, i) => {
+                return <Chip key={i}
+                             onRequestDelete={() => this.onDeleteTag(data.value)}>
+                    {data.value}
+                </Chip>
+            });
+
+            this.setState({
+                mappedChips: mappedChips,
+                tags: JSON.parse(this.state.localTags)
+            })
+        }
+
+        this.setState({
+            canResume: false
+        });
+    };
+
     onCollectionNameChange = (e) => {
-        this.handlers.onCollectionNameChange(e.target.value);
+        const value = e.target.value;
+        this.handlers.onCollectionNameChange(value);
+        localStorage.setItem("collectionName", value);
     };
 
     onCollectionDescriptionChange = (value) => {
+        const val = value;
         this.handlers.onCollectionDescriptionChange(value, stateToHTML(value.getEditorState().getCurrentContent()));
+        localStorage.setItem("collectionDescription", JSON.stringify(convertToRaw(val.getEditorState().getCurrentContent())));
     };
 
     getHTML = () => {
@@ -87,6 +164,7 @@ class CreateView extends Component {
             return {...picture, pictureName: e.target.value};
         });
         this.handlers.onPicturesArrayChange(newPictures);
+        localStorage.setItem("pictures", JSON.stringify(newPictures));
     };
 
     handlePicturesLinkChange = (i) => (e) => {
@@ -95,6 +173,7 @@ class CreateView extends Component {
             return {...picture, pictureLink: e.target.value};
         });
         this.handlers.onPicturesArrayChange(newPictures);
+        localStorage.setItem("pictures", JSON.stringify(newPictures));
     };
 
     handlePicturesDescriptionChange = (i) => (value) => {
@@ -107,6 +186,7 @@ class CreateView extends Component {
             return {...picture, pictureDescription: value, pictureDescriptionRaw: JSON.stringify(rawContentState)};
         });
         this.handlers.onPicturesArrayChange(newPictures);
+        localStorage.setItem("pictures", JSON.stringify(newPictures));
     };
 
     handleAddPictures = (i) => () => {
@@ -144,11 +224,13 @@ class CreateView extends Component {
         this.setState({
             chips: currentChips,
             mappedChips: mappedChips
-        })
+        });
+        localStorage.setItem("tags", JSON.stringify(currentChips));
     };
 
     onAddTag = (e) => {
         if (e.key === 'Enter') {
+
             let newChips = this.state.chips.concat({value: e.target.value});
             const mappedChips = newChips.map((data, i) => {
                 return <Chip key={i}
@@ -161,7 +243,8 @@ class CreateView extends Component {
                 chipInput: '',
                 mappedChips: mappedChips,
                 chips: newChips
-            })
+            });
+            localStorage.setItem("tags", JSON.stringify(newChips));
         }
     };
 
@@ -178,6 +261,10 @@ class CreateView extends Component {
         const tags = JSON.stringify(this.state.chips);
 
         this.handlers.onSave(collectionName, collectionDescriptionRaw, pictures, tags);
+
+        this.setState({
+            canResume: false
+        })
     };
 
     render() {
@@ -213,6 +300,8 @@ class CreateView extends Component {
                     onChipInputChange={this.onChipInputChange}
                     onAddTag={this.onAddTag}
                     onDeleteTag={this.onDeleteTag}
+                    canResume={this.state.canResume}
+                    onResumeCreate={this.onResumeCreate}
                 />);
         else return <LoadingIndicator/>
     }
