@@ -4,6 +4,7 @@ export default function browseCollectionsReadAllReducer(state = {}, action) {
     switch (action.type) {
         case types.READ_ALL_COLLECTIONS_BROWSE_INITIATED:
             return {
+                ...state,
                 fetching: true,
                 fetched: null
             };

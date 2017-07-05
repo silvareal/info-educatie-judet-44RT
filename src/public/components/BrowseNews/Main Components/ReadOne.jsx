@@ -1,12 +1,21 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import {Card, CardText, CardMedia, CardHeader} from 'material-ui';
+import {Card, CardText, CardMedia, CardHeader, CardActions, RaisedButton, TextField} from 'material-ui';
 import NoCommentsFound from '../Partials Components/NoCommentsFound.jsx';
 import CommentForm from '../Partials Components/CommentForm.jsx';
 import CommentList from '../Partials Components/CommentList.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 class ReadOne extends Component {
+
+    constructor() {
+        super();
+
+        this.state = {
+            copied: false
+        }
+    }
 
     handleKeyPress = (e) => {
         if (e.key === 'Enter') {
@@ -22,7 +31,6 @@ class ReadOne extends Component {
 
     render() {
 
-
         const date = new Date(this.props.news && this.props.news.time ? this.props.news.time : "");
 
         const formattedDate =
@@ -31,7 +39,7 @@ class ReadOne extends Component {
             </div>;
 
         return (
-            <div className="parallax-collections-readOne">
+            <div>
                 <div className="top-bar-spacing"/>
                 {this.props.fetchedNews ?
                     <Card className="container-news-readOne"
@@ -42,7 +50,8 @@ class ReadOne extends Component {
                                     <ul>
                                         <Card style={{background: "none", boxShadow: "none"}}>
                                             <CardHeader
-                                                title={<div className="collection-header">{this.props.news.newsTitle}</div>}
+                                                title={<div
+                                                    className="collection-header">{this.props.news.newsTitle}</div>}
                                                 subtitle={
                                                     <div >
                                                         By
@@ -96,6 +105,20 @@ class ReadOne extends Component {
                                     </Card>
                                 </div>
                             </div>
+                            <CardActions>
+                                <TextField name="Share"
+                                           disabled={true}
+                                           value={`localhost/news/${this.props.news._id}`}/>
+                                <CopyToClipboard text={`localhost/news/${this.props.news._id}`}
+                                                 onCopy={() => this.setState({copied: true})}>
+                                    <RaisedButton label="Copy share link"
+                                                  primary={this.state.copied}
+                                                  buttonStyle={this.state.copied === false ? {
+                                                      backgroundColor: "#ffffff",
+                                                      opacity: 0.8
+                                                  } : {backgroundColor: "green", opacity: 0.8}}/>
+                                </CopyToClipboard>
+                            </CardActions>
                         </Card>
                     </Card>
                     :

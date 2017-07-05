@@ -70,14 +70,18 @@ class ReadAll extends Component {
             openSnackBarLikes = this.props.openSnackBarLikes;
 
         return (
-            <div className="parallax-collections">
+            <div>
                 <div className="top-bar-spacing"/>
                 <div className="section-title">Manage collections</div>
                 <Card className="container-collections" style={{backgroundColor: 'none'}}>
                     <TopActions/>
                     {modeComponent}
                     <Dialog
-                        actions={<RaisedButton onClick={this.handleClose} label="Close me" primary={true}/>}
+                        actions={<RaisedButton
+                            onClick={this.handleClose}
+                            label="Close me"
+                            primary={true}
+                            buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>}
                         contentStyle={{width: "90%", height: "90%", maxWidth: 'none', maxHeight: 'none'}}
                         modal={false}
                         open={this.state.open}

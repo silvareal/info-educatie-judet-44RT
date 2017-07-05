@@ -179,7 +179,11 @@ router.post("/like", (req, res) => {
                         }
 
                         client.del("collectionsAdmin");
+                        client.del("logsCollectionsCreate");
                         client.del("Collections of:" + userId);
+                        client.del("collectionsBrowse");
+                        client.del("collectionsSearch");
+                        client.del("collectionsHome");
 
                         res.json({
                             successLike: true
@@ -292,7 +296,11 @@ router.post("/unlike", (req, res) => {
                         }
 
                         client.del("collectionsAdmin");
+                        client.del("logsCollectionsCreate");
                         client.del("Collections of:" + userId);
+                        client.del("collectionsBrowse");
+                        client.del("collectionsSearch");
+                        client.del("collectionsHome");
 
                         res.json({
                             successLike: true
@@ -366,6 +374,69 @@ router.post("/deleteCommentCollections", (req, res) => {
             message: "Not authorized"
         })
     });
+});
+
+router.post("/deleteCommentNews", (req, res) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).end();
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+
+        if (!decoded) {
+            return res.status(400).json({
+                message: "Internal error"
+            })
+        }
+
+        const isAdmin = decoded.isAdmin;
+        const isModerator = decoded.isModerator;
+
+        if (isAdmin === true || isModerator === true) {
+            CommentNews.findOne({_id: req.body.commentId}, (err, comment) => {
+
+                if (err) {
+                    return res.status(400).json({
+                        message: "Database error"
+                    })
+                }
+
+                if (!comment) {
+                    return res.status(404).json({
+                        message: "The comment doesn't exist"
+                    })
+                }
+
+                CommentNews.deleteOne({_id: req.body.commentId}, (err) => {
+
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Database error"
+                        })
+                    }
+
+                    client.del("Comments of:" + comment.newsId);
+
+                    return res.json({
+                        message: "Comment deleted"
+                    });
+
+                });
+            })
+        }
+        else return res.status(401).json({
+            message: "Not authorized"
+        })
+    })
 });
 
 function retrieveNewsCommentsRedis(req, res, next) {

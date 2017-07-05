@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-import {Card, List, ListItem, Avatar} from 'material-ui';
+import {Card, List, ListItem, Avatar, FlatButton} from 'material-ui';
 
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 
 class Comment extends Component {
+
     render() {
         return (
             <List>
@@ -21,10 +22,19 @@ class Comment extends Component {
                                         to={`/profile/${this.props.userName}`}>{this.props.firstName}@{this.props.userName}
                                     </Link>
                                     <div>{this.props.date}</div>
+                                    <div><FlatButton label="Delete"
+                                                     onTouchTap={() => this.props.handler.onDeleteComment(this.props._id)}/>
+                                    </div>
                                 </div>
 
                                 :
+                                <div>
                                 <Link to={`/profile/${this.props.userName}`}>{this.props.userName}</Link>
+                                    <div>{this.props.date}</div>
+                                    <div><FlatButton label="Delete"
+                                                     onTouchTap={() => this.props.handler.onDeleteComment(this.props._id)}/>
+                                    </div>
+                                </div>
                             }
                         </ListItem>
                         :
@@ -39,12 +49,18 @@ class Comment extends Component {
                                         to={`/profile/${this.props.userName}`}>{this.props.firstName}@{this.props.userName}
                                     </Link>
                                     <div>{this.props.date}</div>
+                                    <div><FlatButton label="Delete"
+                                                     onTouchTap={() => this.props.handler.onDeleteComment(this.props._id)}/>
+                                    </div>
                                 </div>
 
                                 :
                                 <div>
                                     <Link to={`/profile/${this.props.userName}`}>{this.props.userName}</Link>
                                     <div>{this.props.date}</div>
+                                    <div><FlatButton label="Delete"
+                                                     onTouchTap={() => this.props.handler.onDeleteComment(this.props._id)}/>
+                                    </div>
                                 </div>
                             }
                         </ListItem>

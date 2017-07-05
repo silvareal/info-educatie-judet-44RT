@@ -6,7 +6,6 @@ import Auth from '../../modules/Auth.js';
 import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 import Comment from '../../components/BrowseNews/Partials Components/Comment.jsx';
-import NotFoundView from '../Error/NotFoundView.jsx';
 import * as readOneActions from '../../actions/BrowseNews/browseNewsReadOneActions.js';
 
 let socket = io.connect();
@@ -36,13 +35,18 @@ let createHandler = function (dispatch) {
         dispatch(readOneActions.onSaveComment(newsId, comment))
     };
 
+    let onDeleteComment = function (commentId) {
+        dispatch(readOneActions.onDeleteComment(commentId));
+    };
+
     return {
         getNews,
         getComments,
         loadMoreComments,
         onCommentInputChange,
         getCommentsCount,
-        onSaveComment
+        onSaveComment,
+        onDeleteComment
     }
 };
 
@@ -53,18 +57,19 @@ class ReadOneView extends Component {
     }
 
     onLoadMoreComments = () => {
-        this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.newsId)
+        this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.newsId ? this.props.newsId : this.props.params._newsId)
     };
 
     componentDidMount() {
 
-        this.handlers.getComments(this.props.newsId);
-        this.handlers.getNews(this.props.newsId);
-        this.handlers.getCommentsCount(this.props.newsId);
+        this.handlers.getComments(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+        this.handlers.getNews(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+        this.handlers.getCommentsCount(this.props.newsId ? this.props.newsId : this.props.params._newsId);
 
         socket.on('send:commentNews', () => {
-            this.handlers.getComments(this.props.newsId
-        )});
+            this.handlers.getComments(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+            this.handlers.getCommentsCount(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+        });
     };
 
     onCommentChange = (e) => {
@@ -74,13 +79,13 @@ class ReadOneView extends Component {
     onSave = () => {
         if (Auth.isUserAuthenticated()) {
 
-            this.handlers.onSaveComment(this.props.newsId, this.props.comments.comment);
-            this.handlers.getComments(this.props.newsId);
-            this.handlers.getCommentsCount(this.props.newsId);
+            this.handlers.onSaveComment(this.props.newsId ? this.props.newsId : this.props.params._newsId, this.props.comments.comment);
+            this.handlers.getComments(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+            this.handlers.getCommentsCount(this.props.newsId ? this.props.newsId : this.props.params._newsId);
 
             socket.emit('send:commentNews', {
                 comment: this.props.comments.comment,
-                newsId: this.props.newsId,
+                newsId: this.props.newsId ? this.props.newsId : this.props.params._newsId,
                 userName: this.props.credentials.userName,
                 firstName: this.props.credentials.firstName,
                 userId: this.props.credentials.userId,
@@ -90,21 +95,21 @@ class ReadOneView extends Component {
     };
 
     render() {
-            return (
-                <ReadOne
-                    finished={this.props.comments.finished}
-                    onLoadMoreComments={this.onLoadMoreComments}
-                    guest={this.props.credentials.guest}
-                    fetchedNews={this.props.news.fetchedNews}
-                    news={this.props.news.news}
-                    newsDescriptionRaw={this.props.news.newsDescriptionRaw}
-                    comments={this.props.comments}
-                    onCommentChange={this.onCommentChange}
-                    onSave={this.onSave}
-                    userName={this.props.credentials.userName}
-                    profilePictureLink={this.props.credentials.profilePictureLink}
-                />
-            );
+        return (
+            <ReadOne
+                finished={this.props.comments.finished}
+                onLoadMoreComments={this.onLoadMoreComments}
+                guest={this.props.credentials.guest}
+                fetchedNews={this.props.news.fetchedNews}
+                news={this.props.news.news}
+                newsDescriptionRaw={this.props.news.newsDescriptionRaw}
+                comments={this.props.comments}
+                onCommentChange={this.onCommentChange}
+                onSave={this.onSave}
+                userName={this.props.credentials.userName}
+                profilePictureLink={this.props.credentials.profilePictureLink}
+            />
+        );
     }
 }
 
@@ -185,7 +190,7 @@ const news = (state) => {
     }
 };
 
-const comments = (state) => {
+const comments = (state, ownProps) => {
     if (state.browseNewsReadOneReducer.fetching === true)
         return {
             fetchedComments: false,
@@ -208,13 +213,17 @@ const comments = (state) => {
                         {date.getHours().toString() + ":" + date.getMinutes().toString() + " " + date.getDate().toString() + '.' + (date.getMonth() + 1).toString() + '.' + date.getFullYear().toString()}
                     </div>;
 
+                let handler = createHandler(ownProps.dispatch);
+
                 return (
                     <Comment
                         key={key}
+                        _id={comments[key]._id}
                         comment={comments[key].comment}
                         date={formattedDate}
                         firstName={comments[key].firstName}
                         userName={comments[key].userName}
+                        handler={handler}
                         profilePictureLink={comments[key].profilePictureLink}
                     />
                 )
@@ -245,10 +254,10 @@ const comments = (state) => {
         }
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
     credentials: credentials(state),
     news: news(state),
-    comments: comments(state)
+    comments: comments(state, ownProps)
 });
 
 export default connect(mapStateToProps)(ReadOneView)

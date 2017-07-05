@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Link} from 'react-router';
 import Home from '../../components/Home/Home.jsx';
 import {Card, CardMedia, CardTitle} from 'material-ui';
 import {connect} from 'react-redux';

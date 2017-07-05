@@ -104,10 +104,10 @@ class ReadOneView extends Component {
     render() {
         return (
             <ReadOne
+                collection={this.props.collection.collection}
                 finished={this.props.comments.finished}
                 onLoadMoreComments={this.onLoadMoreComments}
                 fetchedCollection={this.props.collection.fetchedCollection}
-                collection={this.props.collection}
                 collectionDescriptionRaw={this.props.collection.collectionDescriptionRaw}
                 rows1={this.props.collection.rows1}
                 rows2={this.props.collection.rows2}
@@ -131,7 +131,7 @@ ReadOneView.propTypes = {
         profilePictureLink: PropTypes.string
     }),
     collection: React.PropTypes.shape({
-        collection: PropTypes.array,
+        collection: PropTypes.object,
         collectionDescriptionRaw: PropTypes.string,
         rows1: PropTypes.array,
         rows2: PropTypes.array,
@@ -221,6 +221,7 @@ const collection = (state) => {
         });
 
         return {
+            collection: longPath[collectionKey],
             _id: longPath[collectionKey]._id,
             collectionName: longPath[collectionKey].collectionName,
             collectionDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(longPath[collectionKey].collectionDescriptionRaw))),
@@ -237,6 +238,7 @@ const collection = (state) => {
     }
     else return {
         _id: "",
+        collection: {},
         collectionName: "",
         collectionDescriptionRaw: "",
         picturesArray: "",

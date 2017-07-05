@@ -1,12 +1,42 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import {Card, CardText, CardHeader} from 'material-ui';
+import {connect} from 'react-redux';
+import {Card, CardText, CardHeader, CardActions, Checkbox, RaisedButton, TextField} from 'material-ui';
 import NoCommentsFound from '../Partials Components/NoCommentsFound.jsx';
 import CommentForm from '../Partials Components/CommentForm.jsx';
 import CommentList from '../Partials Components/CommentList.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
+import * as userActions from '../../../actions/userCredentialsActions.js';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+let createHandler = function (dispatch) {
+    let onLike = function (likedId) {
+        dispatch(userActions.onLike(likedId))
+    };
+
+    let onUnlike = function (likedId) {
+        dispatch(userActions.onUnlike(likedId))
+    };
+
+    return {
+        onLike,
+        onUnlike
+    }
+};
 
 class ReadOne extends Component {
+
+    constructor(props) {
+        super (props);
+
+        this.handlers = createHandler(this.props.dispatch);
+
+        this.state = {
+            copied: false
+        }
+    }
 
     handleKeyPress = (e) => {
         if (e.key === 'Enter') {
@@ -22,6 +52,14 @@ class ReadOne extends Component {
 
     render() {
 
+        let isLiked = false;
+        for (let i = 0; i < this.props.liked.length; i++) {
+            if (this.props.liked[i].toString() === this.props.collection._id) {
+                isLiked = true;
+                break;
+            }
+        }
+
         const date = new Date(this.props.collection.time);
 
         const formattedDate =
@@ -30,16 +68,16 @@ class ReadOne extends Component {
             </div>;
 
         return (
-            <div className="parallax-collections-readOne">
+            <div>
                 <div className="top-bar-spacing"/>
                 {this.props.fetchedCollection ?
                     <Card className="container-collections-readOne"
-                          style={{backgroundColor: 'none', boxShadow: "none", padding: 0}}>
-                        <Card>
+                          style={{backgroundColor: 'whitesmoke', boxShadow: "transparent", padding: 0}}>
+                        <Card style={{backgroundColor: 'whitesmoke', boxShadow: "transparent"}}>
                             <div>
                                 <div className="collections-content-readOne-desktop">
                                     <ul>
-                                        <Card style={{background: "none", boxShadow: "none"}}>
+                                        <Card style={{background: "whitesmoke", boxShadow: "transparent"}}>
                                             <CardHeader title={<div
                                                 className="collection-header">{this.props.collection.collectionName}</div>}
                                                         subtitle={
@@ -52,6 +90,17 @@ class ReadOne extends Component {
                                                         }
                                                         avatar={this.props.collection.profilePictureLink}
                                             />
+                                            <CardActions>
+                                                <div className="heart-red-color">
+                                                    <Checkbox
+                                                        label={"Likes: " + this.props.collection.likes}
+                                                        checked={isLiked}
+                                                        checkedIcon={<ActionFavorite/>}
+                                                        uncheckedIcon={<ActionFavoriteBorder/>}
+                                                        onClick={isLiked === false ? () => this.handlers.onLike(this.props.collection._id) : () => this.handlers.onUnlike(this.props.collection._id)}
+                                                    />
+                                                </div>
+                                            </CardActions>
                                             <div className="pictures">
                                                 <div className="list-spacing-readOne">{this.props.rows1}</div>
                                                 <div className="list-spacing-readOne">{this.props.rows2}</div>
@@ -59,6 +108,7 @@ class ReadOne extends Component {
                                             <CardText>
                                                 <div
                                                     className="collection-description"
+                                                    style={{wordBreak: "break-all"}}
                                                     dangerouslySetInnerHTML={this.getHTML()}/>
                                             </CardText>
                                         </Card>
@@ -89,6 +139,20 @@ class ReadOne extends Component {
                                     </Card>
                                 </div>
                             </div>
+                            <CardActions>
+                                <TextField name="Share"
+                                           disabled={true}
+                                           value={`localhost/collections/${this.props.collection._id}`}/>
+                                <CopyToClipboard text={`localhost/collections/${this.props.collection._id}`}
+                                                 onCopy={() => this.setState({copied: true})}>
+                                    <RaisedButton label="Copy share link"
+                                                  primary={this.state.copied}
+                                                  buttonStyle={this.state.copied === false ? {
+                                                      backgroundColor: "#ffffff",
+                                                      opacity: 0.8
+                                                  } : {backgroundColor: "green", opacity: 0.8}}/>
+                                </CopyToClipboard>
+                            </CardActions>
                         </Card>
                     </Card>
                     :
@@ -146,4 +210,23 @@ class ReadOne extends Component {
     }
 }
 
-export default ReadOne
+const mapStateToProps = (state) => {
+    if (state.userReducer.fetching === true)
+        return {
+            fetching: true,
+            fetched: false
+        };
+    else if (state.userReducer.data) {
+        return {
+            fetching: false,
+            fetched: true,
+            liked: state.userReducer.data.liked
+        }
+    }
+    else return {
+            fetched: true,
+            fetching: false
+        }
+};
+
+export default connect(mapStateToProps)(ReadOne)

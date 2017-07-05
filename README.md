@@ -552,6 +552,7 @@ npm install bcrypt
 <h5>Cristiana Lazar</h5>
 
 
+// load more is not stable as it is since it does require time from redux to know the request has finished therefore use something like we use on comments, a load more button.
 
 // SearchView needs to check if shouldUpdate is set to true and fetch collectionNamesReducer again if so
 // for profile: if profile picture updated we must fetch everything again. use a flag as shouldUpdate fr the componentWillUnmount lifecycle - for when, say, user wants to add a collection, their old profile pic will be used unless you do this

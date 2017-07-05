@@ -3,6 +3,8 @@ import axios from 'axios';
 import Auth from '../../modules/Auth.js';
 import qs from 'qs';
 
+let socket = io.connect();
+
 export function getNews(newsId) {
     return function (dispatch) {
         dispatch({type: types.READ_ONE_NEWS_BROWSE_INITIATE});
@@ -54,7 +56,6 @@ export function getComments(newsId) {
         }).then((response) => {
             dispatch(getCommentsSuccess(response))
         }).catch((err) => {
-            console.log(err);
             dispatch(getCommentsFailure())
         })
     }
@@ -163,6 +164,41 @@ export function getCommentsCount(newsId) {
             })
         }).then((response) => {
             dispatch({type: types.GET_COMMENTS_COUNT_NEWS_BROWSE, count: response.data.commentsCount})
+        })
+    }
+}
+
+export function onDeleteCommentInitiate() {
+    return {type: types.ON_DELETE_COMMENT_NEWS_INITIATE}
+}
+
+export function onDeleteCommentSuccess() {
+    return {type: types.ON_DELETE_COMMENT_NEWS_SUCCESS}
+}
+
+export function onDeleteCommentFailure() {
+    return {type: types.ON_DELETE_COMMENT_NEWS_FAILURE}
+}
+
+export function onDeleteComment(commentId) {
+    return function (dispatch) {
+        dispatch(onDeleteCommentInitiate());
+        return axios({
+            method: 'post',
+            url: '/comment/deleteCommentNews',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded',
+                'Authorization': `bearer ${Auth.getToken()}`
+            },
+            data: qs.stringify({
+                'commentId': commentId
+            })
+        }).then(() => {
+            socket.emit("send:commentNews");
+            dispatch(onDeleteCommentSuccess());
+        }).catch((err) => {
+            console.log(err);
+            dispatch(onDeleteCommentFailure());
         })
     }
 }

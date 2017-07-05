@@ -245,7 +245,8 @@ class AppBarPersonal extends Component {
                                           style={{
                                               fontSize: 24,
                                               color: "gray",
-                                              lineHeight: 1
+                                              whiteSpace: "nowrap",
+                                              overflow: "hidden"
                                           }}/>
                             </Link>
                             :
@@ -258,8 +259,7 @@ class AppBarPersonal extends Component {
                                           disabled={true}
                                           style={{
                                               fontSize: 24,
-                                              color: "gray",
-                                              lineHeight: 1
+                                              color: "gray"
                                           }}/>
                             </Link>
                             :

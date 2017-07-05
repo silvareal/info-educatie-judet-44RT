@@ -48,7 +48,6 @@
 
 .top-actions {
   @include display(flex, 1, space-between);
-  @include background-color(#ffffff);
   @include box-sizing(border-box);
   @include padding(10px);
   @media screen and(max-width: 1200px) {
@@ -69,11 +68,6 @@
 .parallax-collections-delete {
   @include widthAndHeight("auto", 100%);
   @include background-image("./images/img7.jpg", fixed, center, repeat, cover);
-}
-
-.parallax-collections-readOne {
-  @include widthAndHeight("auto", 100%);
-  @include background-image("./images/img2.jpg", fixed, center, repeat, cover);
 }
 
 .pictures {
@@ -109,7 +103,6 @@
 
 .collections-content-readOne-desktop {
   @include display(flex, 1, space-around);
-  @include background-color(whitesmoke);
   @include margin(0 0 64px 0);
 
   @media screen and(max-width: 1200px) {
@@ -182,9 +175,6 @@
 
   @include display(block);
 
-  .top-actions-create {
-    @include background-color(#ffffff)
-  }
 
   .step-style {
     @include box-sizing(border-box);
@@ -232,97 +222,55 @@
   }
 }
 
-.parallax-collections-create {
-  @include widthAndHeight("auto", 100%);
-  @include background-image("./images/img5.jpg", fixed, center, repeat, cover);
+.section-title {
+  @include font("", "", bold, "", 60px, "", $Roboto, "");
+  @include padding(10px);
+  @include box-sizing(border-box);
+  @include background-color(whitesmoke);
+  @include textAlign(center);
+  color: #000000;
+  opacity: 0.8;
 
-  .section-title {
-    @include font("", "", bold, "", 60px, "", $Roboto, "");
-    @include padding(90px);
-    @include box-sizing(border-box);
-    @include background-color(#42ab9e);
-    @include textAlign(center);
-    color: #ffffff;
-
-    @media screen and (max-width: 1200px) {
-      @include padding(30px);
-    }
-  }
-
-  .view-table {
-    @include box-sizing(border-box);
-    @include padding(50px, 100px, 100px, 100px);
-    @include background-color(#ffffff);
-    @media screen and (max-width: 1200px) {
-      @include padding(10px);
-
-      .view-row-picture {
-        min-width: 100%;
-        min-height: 200px;
-      }
-    }
+  @media screen and (max-width: 1200px) {
+    @include padding(30px);
   }
 }
 
-.parallax-collections {
-  @include widthAndHeight("auto", 100%);
-  @include background-image("./images/img2.jpg", fixed, center, repeat, cover);
-
-  .container-collections {
-    @include padding(64px, 256px, 64px, 256px);
-    min-height: 800px;
-    @media screen and (max-width: 1200px) {
-      min-height: 400px;
-      @include padding(1em);
-      @include box-sizing(border-box);
-    }
-    @include display(block);
-
-  }
-
-  .section-title {
-    @include font("", "", bold, "", 60px, "", $Roboto, "");
-    @include padding(90px);
+.container-collections {
+  @include padding(0, 128px, 64px, 128px);
+  min-height: 800px;
+  @include background-color(whitesmoke);
+  @media screen and (max-width: 1200px) {
+    min-height: 400px;
+    @include padding(1em);
     @include box-sizing(border-box);
-    @include background-color(#42ab9e);
-    @include textAlign(center);
-    color: #ffffff;
-
-    @media screen and (max-width: 1200px) {
-      @include padding(30px);
-    }
   }
+  @include display(block);
 
-  .top-actions {
-    @include display(flex, 1, space-between);
-    @include background-color(#ffffff);
-    @include box-sizing(border-box);
+}
+
+.view-table {
+  @include box-sizing(border-box);
+  @include padding(50px, 50px, 50px, 50px);
+  @media screen and (max-width: 1200px) {
     @include padding(10px);
-    @media screen and(max-width: 1200px) {
-      @include display(block);
-      @include textAlign(center);
-    }
 
-    .capsules {
-      @include display(flex, 1);
-    }
-  }
-
-  .view-table {
-    @include box-sizing(border-box);
-    @include padding(50px, 100px, 100px, 100px);
-    @include background-color(#ffffff);
-    @media screen and (max-width: 1200px) {
-      @include padding(10px);
-
-      .view-row-picture {
-        min-width: 100%;
-        min-height: 200px;
-      }
+    .view-row-picture {
+      min-width: 100%;
+      min-height: 200px;
     }
   }
 }
 
 .picture-separator {
-  @include margin(0, 0, 50px, 0);
+  padding: 20px;
+  background-color: whitesmoke !important;
+}
+
+.collections-break-flex-mobile {
+  @include display(flex, 1, center);
+
+  @media screen and (max-width: 1200px) {
+    display: block;
+  }
 }

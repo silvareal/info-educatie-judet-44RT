@@ -6,8 +6,8 @@ import {convertFromRaw} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 import PictureRow from "../../components/BrowseCollections/Partials Components/PictureRow.jsx";
 import Comment from '../../components/BrowseCollections/Partials Components/Comment.jsx';
-import NotFoundView from "../Error/NotFoundView.jsx";
 import * as readOneActions from '../../actions/BrowseCollections/browseCollectionsReadOneActions.js';
+import * as readOneActionsUniversal from '../../actions/Collections/manageCollectionsReadOneActions.js';
 
 let socket = io.connect();
 
@@ -18,7 +18,6 @@ let createHandler = function (dispatch) {
 
     let getComments = function (collectionId) {
         dispatch(readOneActions.getComments(collectionId));
-        console.log("I happen");
     };
 
     let loadMoreComments = function (loadAfter, collectionId) {
@@ -37,13 +36,23 @@ let createHandler = function (dispatch) {
         dispatch(readOneActions.onSaveComment(collectionId, comment))
     };
 
+    let resetReducer = function () {
+        dispatch(readOneActionsUniversal.resetReducer())
+    };
+
+    let onDeleteComment = function (commentId) {
+        dispatch(readOneActionsUniversal.onDeleteComment(commentId));
+    };
+
     return {
         getCollection,
         getComments,
         loadMoreComments,
         onCommentInputChange,
         getCommentsCount,
-        onSaveComment
+        onSaveComment,
+        resetReducer,
+        onDeleteComment
     }
 };
 
@@ -53,29 +62,24 @@ class ReadOneView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     }
 
+    onLoadMoreComments = () => {
+        this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.collectionId ? this.props.collectionId : this.props.params._id)
+    };
+
     componentDidMount() {
 
-        this.handlers.getComments(this.props.params._id);
-        this.handlers.getCollection(this.props.params._id);
-        this.handlers.getCommentsCount(this.props.params._id);
+        this.handlers.getComments(this.props.collectionId ? this.props.collectionId : this.props.params._id);
+        this.handlers.getCollection(this.props.collectionId ? this.props.collectionId : this.props.params._id);
+        this.handlers.getCommentsCount(this.props.collectionId ? this.props.collectionId : this.props.params._id);
 
-        //the load more event listener
-        window.addEventListener('scroll', this.onScroll);
-
-        socket.on('send:comment',() => {
-            this.handlers.getComments(this.props.params._id);
+        socket.on('send:comment', () => {
+            this.handlers.getComments(this.props.collectionId ? this.props.collectionId : this.props.params._id);
+            this.handlers.getCommentsCount(this.props.collectionId ? this.props.collectionId : this.props.params._id);
         });
     };
 
-    onScroll = () => {
-        if (this.props.comments.finished === false && this.props.comments.requesting === false)
-            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 300) {
-                this.handlers.loadMoreComments(this.props.comments.loadAfter, this.props.params._id)
-            }
-    };
-
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.onScroll);
+        this.handlers.resetReducer();
     }
 
     onCommentChange = (e) => {
@@ -85,13 +89,13 @@ class ReadOneView extends Component {
     //for the comment section
     onSave = () => {
 
-        this.handlers.onSaveComment(this.props.params._id, this.props.comments.comment);
-        this.handlers.getComments(this.props.params._id);
-        this.handlers.getCommentsCount(this.props.params._id);
+        this.handlers.onSaveComment(this.props.collectionId ? this.props.collectionId : this.props.params._id, this.props.comments.comment);
+        this.handlers.getComments(this.props.collectionId ? this.props.collectionId : this.props.params._id);
+        this.handlers.getCommentsCount(this.props.collectionId ? this.props.collectionId : this.props.params._id);
 
         socket.emit('send:comment', {
             comment: this.props.comments.comment,
-            collectionId: this.props.params._id,
+            collectionId: this.props.collectionId ? this.props.collectionId : this.props.params._id,
             userName: this.props.credentials.userName,
             firstName: this.props.credentials.firstName,
             userId: this.props.credentials.userId,
@@ -102,9 +106,11 @@ class ReadOneView extends Component {
     render() {
         return (
             <ReadOne
+                collection={this.props.collection.collection}
+                finished={this.props.comments.finished}
+                onLoadMoreComments={this.onLoadMoreComments}
                 guest={this.props.credentials.guest}
                 fetchedCollection={this.props.collection.fetchedCollection}
-                collection={this.props.collection}
                 collectionDescriptionRaw={this.props.collection.collectionDescriptionRaw}
                 rows1={this.props.collection.rows1}
                 rows2={this.props.collection.rows2}
@@ -120,21 +126,21 @@ class ReadOneView extends Component {
 }
 
 ReadOneView.propTypes = {
-    credentials: React.PropTypes.shape({
+    credentials: PropTypes.shape({
         userName: PropTypes.string,
         firstName: PropTypes.string,
         userId: PropTypes.string,
         profilePictureLink: PropTypes.string,
         guest: PropTypes.bool
     }),
-    collection: React.PropTypes.shape({
-        collection: PropTypes.array,
+    collection: PropTypes.shape({
+        collection: PropTypes.object,
         collectionDescriptionRaw: PropTypes.string,
         rows1: PropTypes.array,
         rows2: PropTypes.array,
         rows3: PropTypes.array
     }),
-    comments: React.PropTypes.shape({
+    comments: PropTypes.shape({
         fetchedComments: PropTypes.bool,
         fetchingComments: PropTypes.bool,
         loadAfter: PropTypes.number,
@@ -171,7 +177,7 @@ const credentials = (state) => {
 };
 
 const collection = (state) => {
-    if (state.collectionNamesReducer.collections && state.collectionNamesReducer.collections.data.collections) {
+    if (state.browseCollectionsReadOneReducer.collectionId && state.collectionNamesReducer.collections && state.collectionNamesReducer.collections.data.collections) {
         let longPath = state.collectionNamesReducer.collections.data.collections;
         let collectionKey;
         Object.keys(longPath).map((key) => {
@@ -219,6 +225,7 @@ const collection = (state) => {
         });
 
         return {
+            collection: longPath[collectionKey],
             _id: longPath[collectionKey]._id,
             collectionName: longPath[collectionKey].collectionName,
             collectionDescriptionRaw: stateToHTML(convertFromRaw(JSON.parse(longPath[collectionKey].collectionDescriptionRaw))),
@@ -236,6 +243,7 @@ const collection = (state) => {
     else return {
         _id: "",
         collectionName: "",
+        collection: {},
         collectionDescriptionRaw: "",
         picturesArray: "",
         profilePictureLink: "",
@@ -248,7 +256,7 @@ const collection = (state) => {
     }
 };
 
-const comments = (state) => {
+const comments = (state, ownProps) => {
     if (state.browseCollectionsReadOneReducer.fetching === true)
         return {
             fetchedComments: false,
@@ -270,13 +278,17 @@ const comments = (state) => {
                         {date.getHours().toString() + ":" + date.getMinutes().toString() + " " + date.getDate().toString() + '.' + (date.getMonth() + 1).toString() + '.' + date.getFullYear().toString()}
                     </div>;
 
+                let handler = createHandler(ownProps.dispatch);
+
                 return (
                     <Comment
                         key={key}
+                        _id={comments[key]._id}
                         comment={comments[key].comment}
                         date={formattedDate}
                         firstName={comments[key].firstName}
                         userName={comments[key].userName}
+                        handler={handler}
                         profilePictureLink={comments[key].profilePictureLink}
                     />
                 )
@@ -301,12 +313,15 @@ const comments = (state) => {
             commentsCount: state.browseCollectionsReadOneReducer.commentsCount
         }
     }
+    else return {
+            finished: false
+        }
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
     collection: collection(state),
     credentials: credentials(state),
-    comments: comments(state)
+    comments: comments(state, ownProps)
 });
 
 export default connect(mapStateToProps)(ReadOneView)

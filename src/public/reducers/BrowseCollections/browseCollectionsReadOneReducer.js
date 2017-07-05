@@ -6,14 +6,11 @@ export default function browseCollectionsReadOneReducer(state = {
     requesting: false,
     comment: "",
     commentAdded: null,
-    commentsCount: 0,
-    collectionId: -1,
-    fetchedCollection: false
+    commentsCount: 0
 }, action) {
     switch (action.type) {
 
         case types.READ_ONE_COLLECTION_BROWSE: {
-
             return {
                 ...state,
                 fetchedCollection: true,

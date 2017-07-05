@@ -14,7 +14,7 @@ class TopActions extends Component {
                             type="button"
                             primary={true}
                             label="Add a new collection"
-                            buttonStyle={{backgroundColor: "#42ab9e"}}
+                            buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
                         />
                     </Link>
                 </div>

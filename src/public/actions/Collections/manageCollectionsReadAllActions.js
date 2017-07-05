@@ -74,6 +74,7 @@ export function onLoadMore(loadAfter) {
             dispatch(onLoadMoreSuccess(response.data.collections));
             dispatch(iterateLoadAfter(loadAfter))
         }).catch((err) => {
+            console.log(err);
             dispatch(onLoadMoreFailure(err.response.data.message))
         })
     }

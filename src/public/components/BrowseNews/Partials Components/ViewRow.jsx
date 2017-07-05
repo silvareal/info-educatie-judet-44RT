@@ -5,18 +5,15 @@ import {Card, CardMedia, CardTitle, CardActions, RaisedButton} from 'material-ui
 class ViewRow extends Component {
     render() {
         return (
-            <Card className="picture-separator">
-                <Link
-                    to={`/news/${this.props.news._id}`}
-                    target="_blank">
-                    <CardMedia
-                        mediaStyle={{minHeight: 300}}
-                        overlay={<CardTitle title={this.props.news.newsTitle}
-                                            subtitle={"by " + this.props.news.userName}/>}
-                    >
-                        <img src={this.props.news.newsCoverLink}/>
-                    </CardMedia>
-                </Link>
+            <Card className="picture-separator" style={{boxShadow: "transparent"}}>
+                <CardMedia
+                    style={{cursor: 'pointer'}}
+                    onClick={() => this.props.onClickNews(this.props.news._id)}
+                    overlay={<CardTitle title={this.props.news.newsTitle}
+                                        subtitle={"by " + this.props.news.userName}/>}
+                >
+                    <img src={this.props.news.newsCoverLink}/>
+                </CardMedia>
                 {this.props.admin === true ?
                     <CardActions>
                         <Link to={`/admin/${this.props.userId}/news/update/${this.props.news._id}`}>

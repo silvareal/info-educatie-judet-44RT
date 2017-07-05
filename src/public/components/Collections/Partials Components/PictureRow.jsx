@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {CardMedia, CardTitle, Dialog} from 'material-ui';
+import {CardMedia, CardTitle, Dialog, RaisedButton} from 'material-ui';
 
 class PictureRow extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -30,16 +30,22 @@ class PictureRow extends Component {
     };
 
     render() {
+
         return (
             <div className="force-image-height">
                 <CardMedia
                     style={{cursor: "pointer"}}
                     onClick={this.handleOpenModal}
-                    overlay={<CardTitle title={this.props.pictureName}/>}
-                >
+                    overlay={<CardTitle title={this.props.pictureName}
+                                        subtitle="Click for more details"/>}>
                     <img src={this.props.pictureLink}/>
                 </CardMedia>
-                <Dialog open={this.state.modalIsOpen}
+                <Dialog actions={<RaisedButton
+                        onClick={this.handleCloseModal}
+                        label="Close me"
+                        primary={true}
+                        buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>}
+                        open={this.state.modalIsOpen}
                         title={this.props.pictureName}
                         autoScrollBodyContent={true}
                         onRequestClose={this.handleCloseModal}>
@@ -52,4 +58,5 @@ class PictureRow extends Component {
         )
     }
 }
-export default PictureRow;
+
+export default PictureRow

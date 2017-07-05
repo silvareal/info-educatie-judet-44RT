@@ -42,16 +42,39 @@ a {
   color: deepskyblue;
 }
 
+.heart-and-tags-container {
+  @include display(flex, 0, space-between);
+  @include box-sizing(border-box);
+  padding: 8px;
+
+  @media screen and (max-width: 1200px) {
+    display: block;
+  }
+}
+
+.tags-container {
+  display: block;
+  @include box-sizing(border-box);
+  padding: 8px;
+  max-width: 100%;
+}
+
 .heart-red-color {
   svg {
     fill: red !important;
+  }
+  @include display(flex, 0, flex-start);
+  @media screen and (max-width: 1200px) {
+    display: block;
+    flex: 0;
+    justify-content: flex-start;
   }
 }
 
 .add {
   color: #ffffff !important;
   opacity: 0.3 !important;
-  background-color: aqua !important;
+  background-color: #000000 !important;
   width: 40px !important;
   height: 40px !important;
   position: fixed !important;
@@ -60,6 +83,7 @@ a {
   border-radius: 5px !important;
   border: none !important;
   cursor: pointer !important;
+  z-index: 9000;
 
   &:hover {
     opacity: 1 !important;
@@ -69,7 +93,7 @@ a {
 .scroll {
   color: #ffffff !important;
   opacity: 0.3 !important;
-  background-color: aqua !important;
+  background-color: #000000 !important;
   width: 40px !important;
   height: 40px !important;
   position: fixed !important;
@@ -78,6 +102,7 @@ a {
   border-radius: 5px !important;
   border: none !important;
   cursor: pointer !important;
+  z-index: 9000;
 
   &:hover {
     opacity: 1 !important;

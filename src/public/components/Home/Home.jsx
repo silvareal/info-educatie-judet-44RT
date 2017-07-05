@@ -11,7 +11,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import * as homeViewActions from '../../actions/newsHomeViewActions.js';
 import Auth from '../../modules/Auth.js';
-import ReadOneView from '../../containers/Collections/ReadOneView.jsx';
+import ReadOneView from '../../containers/BrowseCollections/ReadOneView.jsx';
 import ReadOneViewNews from '../../containers/BrowseNews/ReadOneView.jsx';
 
 let createHandler = function (dispatch) {
@@ -188,9 +188,11 @@ class Home extends Component {
                 }
 
 
-
                 <Dialog
-                    actions={<RaisedButton onClick={this.props.handleCloseCollections} label="Close me" primary={true}/>}
+                    actions={<RaisedButton
+                        onClick={this.props.handleCloseCollections}
+                        label="Close me" primary={true}
+                        buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>}
                     contentStyle={{width: "90%", height: "90%", maxWidth: 'none', maxHeight: 'none'}}
                     modal={false}
                     open={this.props.openCollections}
@@ -203,7 +205,10 @@ class Home extends Component {
                 </Dialog>
 
                 <Dialog
-                    actions={<RaisedButton onClick={this.props.handleCloseNews} label="Close me" primary={true}/>}
+                    actions={<RaisedButton
+                        onClick={this.props.handleCloseNews}
+                        label="Close me" primary={true}
+                        buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>}
                     contentStyle={{width: "90%", height: "90%", maxWidth: 'none', maxHeight: 'none'}}
                     modal={false}
                     open={this.props.openNews}
@@ -211,7 +216,7 @@ class Home extends Component {
                     autoScrollBodyContent={true}
                 >
                     <ReadOneViewNews newsId={this.props.newsId}
-                                 dispatch={this.props.dispatch}
+                                     dispatch={this.props.dispatch}
                     />
                 </Dialog>
 
