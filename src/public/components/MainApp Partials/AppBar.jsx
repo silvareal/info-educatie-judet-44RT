@@ -164,7 +164,9 @@ class AppBarPersonal extends Component {
                                     onKeyDown={this.handleKeyPress}
                                     onNewRequest={() => this.onSearch()}
                                 />}
-                            leftIcon={<ActionSearch/>}
+                            leftIcon={<ActionSearch
+                                style={{cursor: "pointer"}}
+                                onClick={() => this.onSearch()}/>}
                             disabled={true}>
 
                         </ListItem>

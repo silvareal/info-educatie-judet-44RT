@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-
 import ViewRow from './ViewRow.jsx';
+import {RaisedButton} from 'material-ui';
 
 class ViewTable extends Component {
     render() {
@@ -36,6 +36,14 @@ class ViewTable extends Component {
                 <div>
                     {rows}
                 </div>
+                <RaisedButton label={this.props.finished === true ? "No more collections :(" : "Load more collections ..."}
+                              disabled={this.props.finished}
+                              onTouchTap={this.props.onLoadMoreCollections}
+                              primary={true}
+                              fullWidth={true}
+                              labelStyle={{color: "#ffffff"}}
+                              buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
+                />
             </div>
         );
     }

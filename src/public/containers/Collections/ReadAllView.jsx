@@ -55,13 +55,8 @@ class ReadAllView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     };
 
-    onScroll = () => {
-        if (this.props.collections.finished === false && document.title === "Manage collections" && this.props.collections.requesting === false) {
-            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 1000) {
-                this.handlers.loadMore(this.props.collections.loadAfter);
-                this.forceUpdate();
-            }
-        }
+    onLoadMoreCollections = () => {
+        this.handlers.loadMore(this.props.collections.loadAfter);
     };
 
     componentDidMount() {
@@ -69,14 +64,7 @@ class ReadAllView extends Component {
             this.handlers.updateCollectionsStore();
             this.handlers.removeShouldUpdate();
         }
-
-        //the load more event listener
-        window.addEventListener('scroll', this.onScroll);
     };
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.onScroll);
-    }
 
     render() {
         document.title = "Manage collections";
@@ -91,6 +79,8 @@ class ReadAllView extends Component {
                 openSnackBarLikes={this.props.collections.openSnackBarLikes}
                 onCloseSnackBar={this.handlers.onCloseSnackBar}
                 dispatch={this.props.dispatch}
+                onLoadMoreCollections={this.onLoadMoreCollections}
+                finished={this.props.collections.finished}
             />;
         else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
     }

@@ -34,12 +34,8 @@ class ReadAllView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     };
 
-    onScroll = () => {
-        if (this.props.news.finished === false && document.title === "Browse news" && this.props.news.requesting === false) {
-            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 1000) {
-                this.handlers.loadMore(this.props.news.loadAfter);
-            }
-        }
+    onLoadMoreNews = () => {
+        this.handlers.loadMore(this.props.news.loadAfter);
     };
 
     componentDidMount() {
@@ -48,13 +44,7 @@ class ReadAllView extends Component {
             this.handlers.removeShouldUpdate();
         }
 
-        //the load more event listener
-        window.addEventListener('scroll', this.onScroll);
     };
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.onScroll);
-    }
 
     render() {
         document.title = "Browse news";
@@ -64,6 +54,8 @@ class ReadAllView extends Component {
             news={this.props.news.news}
             admin={this.props.credentials.admin}
             userId={this.props.credentials.userId}
+            onLoadMoreNews={this.onLoadMoreNews}
+            finished={this.props.news.finished}
         />;
     }
 }

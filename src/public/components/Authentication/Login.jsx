@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import {Card, CardText, RaisedButton, TextField, FlatButton} from 'material-ui';
+import {Card, CardText, RaisedButton, TextField} from 'material-ui';
 
 class Login extends Component {
+
     render() {
         const styles = {
             button: {
@@ -17,8 +18,13 @@ class Login extends Component {
                         <form action="/" onSubmit={this.props.onSubmit}>
                             <div className="login-header">Login</div>
 
-                            {this.props.errors.summary &&
+                            {this.props.errors && this.props.errors.summary &&
                             <div className="error-message">{this.props.errors.summary}</div>}
+                            {this.props.message ?
+                                <div className="error-message">{this.props.message}</div>
+                                :
+                                null
+                            }
                             <div>
                                 <div className="input-field">
                                     <TextField
@@ -26,7 +32,7 @@ class Login extends Component {
                                         name="email"
                                         value={this.props.user.email}
                                         onChange={this.props.onChange}
-                                        errorText={this.props.errors.email}
+                                        errorText={this.props.errors ? this.props.errors.email : null}
                                         autoFocus={true}
                                         style={{minWidth: "100%"}}
                                         inputStyle={{color: "#000000", opacity: 0.8}}
@@ -42,7 +48,7 @@ class Login extends Component {
                                         name="password"
                                         value={this.props.user.password}
                                         onChange={this.props.onChange}
-                                        errorText={this.props.errors.password}
+                                        errorText={this.props.errors ? this.props.errors.password : null}
                                         style={{minWidth: "100%"}}
                                         inputStyle={{color: "#000000", opacity: 0.8}}
                                         floatingLabelStyle={{color: "#000000", opacity: 0.8}}
@@ -52,10 +58,13 @@ class Login extends Component {
 
                                 <div className="button-login-signup">
                                     <RaisedButton
+                                        onClick={this.props.onSubmit}
                                         style={styles.button}
                                         labelStyle={{color: "#ffffff"}}
                                         buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
-                                        type="submit" label="Log in"/>
+                                        label="Log in"
+                                        type="submit"
+                                    />
                                 </div>
 
                                 <CardText>Don t have an account? <Link to='/signup'>Create one</Link>.</CardText>

@@ -40,10 +40,6 @@ let createHandler = function (dispatch) {
         dispatch(readOneActionsUniversal.resetReducer())
     };
 
-    let onDeleteComment = function (commentId) {
-        dispatch(readOneActionsUniversal.onDeleteComment(commentId));
-    };
-
     return {
         getCollection,
         getComments,
@@ -51,8 +47,7 @@ let createHandler = function (dispatch) {
         onCommentInputChange,
         getCommentsCount,
         onSaveComment,
-        resetReducer,
-        onDeleteComment
+        resetReducer
     }
 };
 
@@ -256,7 +251,7 @@ const collection = (state) => {
     }
 };
 
-const comments = (state, ownProps) => {
+const comments = (state) => {
     if (state.browseCollectionsReadOneReducer.fetching === true)
         return {
             fetchedComments: false,
@@ -278,8 +273,6 @@ const comments = (state, ownProps) => {
                         {date.getHours().toString() + ":" + date.getMinutes().toString() + " " + date.getDate().toString() + '.' + (date.getMonth() + 1).toString() + '.' + date.getFullYear().toString()}
                     </div>;
 
-                let handler = createHandler(ownProps.dispatch);
-
                 return (
                     <Comment
                         key={key}
@@ -288,7 +281,6 @@ const comments = (state, ownProps) => {
                         date={formattedDate}
                         firstName={comments[key].firstName}
                         userName={comments[key].userName}
-                        handler={handler}
                         profilePictureLink={comments[key].profilePictureLink}
                     />
                 )
@@ -318,10 +310,16 @@ const comments = (state, ownProps) => {
         }
 };
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
     collection: collection(state),
     credentials: credentials(state),
-    comments: comments(state, ownProps)
+    comments: comments(state)
 });
 
-export default connect(mapStateToProps)(ReadOneView)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReadOneView)

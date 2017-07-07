@@ -5,6 +5,7 @@ import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 
 class ViewRow extends Component {
+
     render() {
         let isLiked = false;
         for (let i = 0; i < this.props.liked.length; i++) {

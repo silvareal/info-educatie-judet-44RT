@@ -35,18 +35,13 @@ let createHandler = function (dispatch) {
         dispatch(readOneActions.onSaveComment(newsId, comment))
     };
 
-    let onDeleteComment = function (commentId) {
-        dispatch(readOneActions.onDeleteComment(commentId));
-    };
-
     return {
         getNews,
         getComments,
         loadMoreComments,
         onCommentInputChange,
         getCommentsCount,
-        onSaveComment,
-        onDeleteComment
+        onSaveComment
     }
 };
 

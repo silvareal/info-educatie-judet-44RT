@@ -19,7 +19,6 @@ import CreateViewNews from './containers/Admin/News/CreateView.jsx';
 import UpdateViewNews from './containers/Admin/News/UpdateView.jsx';
 import DeleteViewNews from './containers/Admin/News/DeleteView.jsx';
 import CreateViewAdminControl from './containers/Admin/Collections/CreateView.jsx';
-import ReadAllViewAdminControl from './containers/Admin/Collections/ReadAllView.jsx';
 import UpdateViewAdminControl from './containers/Admin/Collections/UpdateView.jsx';
 import DeleteViewAdminControl from './containers/Admin/Collections/DeleteView.jsx';
 import LogsView from './containers/Admin/Logs/Main Component/LogsView.jsx';
@@ -141,7 +140,7 @@ const routes = {
             path: '/admin/:_id/collections',
             getComponent: (location, callback) => {
                 if (Auth.isUserAuthenticated()) {
-                    callback(null, ReadAllViewAdminControl);
+                    callback(null, ReadAllViewBrowseCollections);
                 } else {
                     callback(null, LoginView);
                 }

@@ -55,13 +55,8 @@ class ReadAllView extends Component {
         this.handlers = createHandler(this.props.dispatch);
     };
 
-    onScroll = () => {
-        if (this.props.collections.finished === false && document.title === "Browse collections" && this.props.collections.requesting === false) {
-            if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 1000) {
-                this.handlers.loadMore(this.props.collections.loadAfter);
-                this.forceUpdate();
-            }
-        }
+    onLoadMoreCollections = () => {
+        this.handlers.loadMore(this.props.collections.loadAfter)
     };
 
     componentDidMount() {
@@ -69,29 +64,27 @@ class ReadAllView extends Component {
             this.handlers.updateCollectionsStore();
             this.handlers.removeShouldUpdate();
         }
-
-        //the load more event listener
-        window.addEventListener('scroll', this.onScroll);
     };
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.onScroll);
-    }
 
     render() {
         document.title = "Browse collections";
         if (this.props.credentials.fetched === true)
-        return <ReadAll
-                    fetchedCollections={this.props.collections.fetchedCollections}
-                    fetchingCollections={this.props.collections.fetchingCollections}
-                    collections={this.props.collections.collections}
-                    liked={this.props.credentials.liked}
-                    onLike={this.handlers.onLike}
-                    onUnlike={this.handlers.onUnlike}
-                    openSnackBarLikes={this.props.collections.openSnackBarLikes}
-                    onCloseSnackBar={this.handlers.onCloseSnackBar}
-                    dispatch={this.props.dispatch}
-                />;
+            return <ReadAll
+                fetchedCollections={this.props.collections.fetchedCollections}
+                fetchingCollections={this.props.collections.fetchingCollections}
+                collections={this.props.collections.collections}
+                liked={this.props.credentials.liked}
+                onLike={this.handlers.onLike}
+                onUnlike={this.handlers.onUnlike}
+                openSnackBarLikes={this.props.collections.openSnackBarLikes}
+                onCloseSnackBar={this.handlers.onCloseSnackBar}
+                dispatch={this.props.dispatch}
+                context={this.context}
+                admin={this.props.credentials.admin}
+                userId={this.props.credentials.userId}
+                onLoadMoreCollections={this.onLoadMoreCollections}
+                finished={this.props.collections.finished}
+            />;
         else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
     }
 }
@@ -110,22 +103,32 @@ ReadAllView.propTypes = {
     })
 };
 
+ReadAllView.contextTypes = {
+    router: PropTypes.object.isRequired
+};
+
 const credentials = (state) => {
     if (state.userReducer.fetching === true)
         return {
             fetching: true,
-            fetched: false
+            fetched: false,
+            admin: false,
+            userId: ''
         };
     else if (state.userReducer.data) {
         return {
             fetching: false,
             fetched: true,
-            liked: state.userReducer.data.liked
+            liked: state.userReducer.data.liked,
+            admin: state.userReducer.data.admin,
+            userId: state.userReducer.data.userId
         }
     }
     else return {
             fetched: true,
-            fetching: false
+            fetching: false,
+            admin: false,
+            userId: ''
         }
 };
 

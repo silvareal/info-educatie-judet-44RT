@@ -56,6 +56,8 @@ class ReadAll extends Component {
                     liked={this.props.liked}
                     onLike={this.props.onLike}
                     onUnlike={this.props.onUnlike}
+                    onLoadMoreCollections={this.props.onLoadMoreCollections}
+                    finished={this.props.finished}
                 />
         }
         else if (this.props.fetchingCollections === false && this.props.fetchedCollections === false) {

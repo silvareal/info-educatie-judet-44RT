@@ -1,11 +1,27 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-
+import {connect} from 'react-redux'
+import * as readOneActionsUniversal from '../../../actions/Collections/manageCollectionsReadOneActions.js';
 import {Card, List, ListItem, Avatar, FlatButton} from 'material-ui';
 
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 
+let createHandler = function (dispatch) {
+    let onDeleteComment = function (commentId) {
+        dispatch(readOneActionsUniversal.onDeleteComment(commentId));
+    };
+    return {
+        onDeleteComment
+    }
+};
+
 class Comment extends Component {
+    
+    constructor(props) {
+        super(props);
+        
+        this.handlers = createHandler(this.props.dispatch);
+    }
 
     render() {
         return (
@@ -23,7 +39,7 @@ class Comment extends Component {
                                     </Link>
                                     <div>{this.props.date}</div>
                                     <div><FlatButton label="Delete"
-                                                     onTouchTap={() => this.props.handler.onDeleteComment(this.props._id)}/>
+                                                     onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
                                     </div>
                                 </div>
 
@@ -32,7 +48,7 @@ class Comment extends Component {
                                 <Link to={`/profile/${this.props.userName}`}>{this.props.userName}</Link>
                                     <div>{this.props.date}</div>
                                     <div><FlatButton label="Delete"
-                                                     onTouchTap={() => this.props.handler.onDeleteComment(this.props._id)}/>
+                                                     onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
                                     </div>
                                 </div>
                             }
@@ -50,7 +66,7 @@ class Comment extends Component {
                                     </Link>
                                     <div>{this.props.date}</div>
                                     <div><FlatButton label="Delete"
-                                                     onTouchTap={() => this.props.handler.onDeleteComment(this.props._id)}/>
+                                                     onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
                                     </div>
                                 </div>
 
@@ -59,7 +75,7 @@ class Comment extends Component {
                                     <Link to={`/profile/${this.props.userName}`}>{this.props.userName}</Link>
                                     <div>{this.props.date}</div>
                                     <div><FlatButton label="Delete"
-                                                     onTouchTap={() => this.props.handler.onDeleteComment(this.props._id)}/>
+                                                     onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
                                     </div>
                                 </div>
                             }
@@ -75,4 +91,4 @@ class Comment extends Component {
     }
 }
 
-export default Comment;
+export default connect()(Comment)

@@ -18,14 +18,15 @@ export default function loginReducer(state = {
             user[field] = value;
             return {
                 ...state,
-                user: user
+                user: {
+                    email: user.email,
+                    password: user.password
+                }
             }
         }
 
         case types.ON_LOGIN_INITIATE:
-            return {
-                ...state
-            };
+            return state;
 
         case types.ON_LOGIN_SUCCESS:
             return {
@@ -37,7 +38,8 @@ export default function loginReducer(state = {
             return {
                 ...state,
                 errors: action.errors,
-                message: action.message
+                message: action.message,
+                success: false
             };
 
         default:

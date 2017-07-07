@@ -6,6 +6,7 @@ import NoCollectionsFound from '../Partials Components/NoCollectionsFound.jsx';
 import {Card, Dialog, RaisedButton, Snackbar} from 'material-ui';
 import ReadOneView from '../../../containers/BrowseCollections/ReadOneView.jsx'
 import * as readOneActions from '../../../actions/BrowseCollections/browseCollectionsReadOneActions.js';
+import TopActions from '../Partials Components/TopActions.jsx';
 
 let createHandler = function (dispatch) {
     let getCollection = function (collectionId) {
@@ -50,11 +51,18 @@ class ReadAll extends Component {
         else if (this.props.fetchingCollections === false && this.props.fetchedCollections === true) {
             modeComponent =
                 <ViewTable
+                    guest={this.props.guest}
                     collections={this.props.collections}
                     onClickCollection={this.onClickCollection}
                     liked={this.props.liked}
                     onLike={this.props.onLike}
-                    onUnlike={this.props.onUnlike}/>
+                    onUnlike={this.props.onUnlike}
+                    context={this.props.context}
+                    admin={this.props.admin}
+                    userId={this.props.userId}
+                    onLoadMoreCollections={this.props.onLoadMoreCollections}
+                    finished={this.props.finished}
+                />
         }
         else if (this.props.fetchingCollections === false && this.props.fetchedCollections === false) {
             modeComponent = <NoCollectionsFound/>
@@ -72,6 +80,11 @@ class ReadAll extends Component {
                 <div className="top-bar-spacing"/>
                 <div className="section-title">Browse collections</div>
                 <Card className="container-collections" style={{backgroundColor: 'none'}}>
+                    {this.props.admin === true ?
+                    <TopActions userId={this.props.userId}/>
+                        :
+                        null
+                    }
                     {modeComponent}
                     <Dialog
                         actions={<RaisedButton

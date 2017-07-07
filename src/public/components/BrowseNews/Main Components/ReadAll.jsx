@@ -12,14 +12,14 @@ let createHandler = function (dispatch) {
     let getNews = function (newsId) {
         dispatch(readOneActionsNews.getNews(newsId))
     };
-    
+
     return {
         getNews
     }
 };
 
 class ReadAll extends Component {
-    
+
     constructor(props) {
         super(props);
         this.handlers = createHandler(this.props.dispatch);
@@ -40,7 +40,7 @@ class ReadAll extends Component {
             open: true
         })
     };
-    
+
     render() {
 
         let modeComponent = <LoadingIndicator/>;
@@ -54,7 +54,10 @@ class ReadAll extends Component {
                     news={this.props.news}
                     admin={this.props.admin}
                     userId={this.props.userId}
-                    onClickNews={this.onClickNews}/>
+                    onClickNews={this.onClickNews}
+                    onLoadMoreNews={this.props.onLoadMoreNews}
+                    finished={this.props.finished}
+                />
         }
         else if (this.props.fetchingNews === false && this.props.fetchedNews === false) {
             modeComponent = <NoNewsFound/>
@@ -65,8 +68,12 @@ class ReadAll extends Component {
                 <div className="top-bar-spacing"/>
                 <div className="section-title">Browse articles</div>
                 <Card className="container-collections" style={{backgroundColor: 'none'}}>
-                    <TopActions admin={this.props.admin}
-                                userId={this.props.userId}/>
+                    {this.props.admin === true ?
+                        <TopActions admin={this.props.admin}
+                                    userId={this.props.userId}/>
+                        :
+                        null
+                    }
                     {modeComponent}
                     <Dialog
                         actions={<RaisedButton
@@ -80,7 +87,7 @@ class ReadAll extends Component {
                         autoScrollBodyContent={true}
                     >
                         <ReadOneView newsId={this.state.newsId}
-                                         dispatch={this.props.dispatch}
+                                     dispatch={this.props.dispatch}
                         />
                     </Dialog>
                 </Card>

@@ -27,7 +27,7 @@ class LoginView extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.success === true)
-            this.context.router.replace('/')
+            this.context.router.replace('/');
     }
 
     onChange = (e) => {
@@ -42,6 +42,7 @@ class LoginView extends Component {
     render() {
         document.title = "Login";
         return <Login
+            message={this.props.message}
             errors={this.props.errors}
             user={this.props.user}
             onChange={this.onChange}
@@ -68,7 +69,8 @@ const mapStateToProps = (state) => {
     return {
         user: state.loginReducer.user,
         errors: errors,
-        success: state.loginReducer.success
+        success: state.loginReducer.success,
+        message: state.loginReducer.message
     }
 };
 
