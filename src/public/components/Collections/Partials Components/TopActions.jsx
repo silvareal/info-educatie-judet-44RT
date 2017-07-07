@@ -9,7 +9,7 @@ class TopActions extends Component {
                 <div className="capsules"/>
                 <div className="capsules">
                     <Link
-                        to="/manage/create">
+                        to={`/manage/create`}>
                         <RaisedButton
                             type="button"
                             primary={true}

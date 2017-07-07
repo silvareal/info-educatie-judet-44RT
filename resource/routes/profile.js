@@ -155,6 +155,49 @@ router.post('/profile', (req, res) => {
     });
 });
 
+// From node_redis issues, as suggested for recursive read and delete of keys
+function scanDelComments(cursor, cb) {
+
+    client.scan(cursor, 'MATCH', 'Comments of:*', 'COUNT', 100, (err, resp) => {
+        if (err)
+            return cb(err);
+        let nextCursor = resp[0];
+        let keys = resp[1].length;
+
+        if (nextCursor === 0 && keys.length === 0) 
+            return cb(null);
+
+        client.del(resp[1], function(err) {
+            if (err)
+                return cb(err);
+            if (nextCursor === 0)
+                return cb(null);
+            scanDelComments(nextCursor, cb);
+        });
+    });
+}
+
+function scanDelCollections(cursor, cb) {
+
+    client.scan(cursor, 'MATCH', 'Collections of:*', 'COUNT', 100, (err, resp) => {
+        if (err)
+            return cb(err);
+        let nextCursor = resp[0];
+        let keys = resp[1].length;
+
+        if (nextCursor === 0 && keys.length === 0)
+            return cb(null);
+
+        client.del(resp[1], function(err) {
+            if (err)
+                return cb(err);
+            if (nextCursor === 0)
+                return cb(null);
+            scanDelCollections(nextCursor, cb);
+        });
+    });
+}
+
 router.post('/profile-edit', (req, res) => {
 
     const validationResult = validateProfileForm(req.body);
@@ -191,28 +234,28 @@ router.post('/profile-edit', (req, res) => {
         if (userId === req.body.userId && userId === req.body.viewerId) {
             //if anybody tries to hack somebody else's profile, they will end up "hacking" their own profile :P
 
-            Collection.updateMany({userId: {$eq: userId}}, {
+            Collection.updateMany({userId: userId}, {
                 $set: {
                     profilePictureLink: req.body.profilePictureLink
                 }
             }, () => {
             });
 
-            News.updateMany({userId: {$eq: userId}}, {
+            News.updateMany({userId: userId}, {
                 $set: {
                     profilePictureLink: req.body.profilePictureLink
                 }
             }, () => {
             });
 
-            CommentNews.updateMany({userId: {$eq: userId}}, {
+            CommentNews.updateMany({userId: userId}, {
                 $set: {
                     profilePictureLink: req.body.profilePictureLink
                 }
             }, () => {
             });
 
-            CommentCollection.updateMany({userId: {$eq: userId}}, {
+            CommentCollection.updateMany({userId: userId}, {
                 $set: {
                     profilePictureLink: req.body.profilePictureLink
                 }
@@ -244,8 +287,6 @@ router.post('/profile-edit', (req, res) => {
                     });
                 }
 
-                client.del("logsProfile");
-
                 const logData = {
                     userId: userId,
                     profilePictureLink: req.body.profilePictureLink,
@@ -267,6 +308,21 @@ router.post('/profile-edit', (req, res) => {
                     professionOld: req.body.professionOld,
                     companyNameOld: req.body.companyNameOld
                 };
+
+                client.del("logsProfile");
+                client.del("collectionsAdmin");
+                client.del("logsCollectionsCreate");
+                client.del("Collections of:" + req.body.userId);
+                client.del("collectionsBrowse");
+                client.del("collectionsSearch");
+                client.del("collectionsHome");
+                client.del("logsNewsCreate");
+                client.del("newsBrowse");
+                client.del("newsHome");
+                scanDelComments(0, (err) => {
+                });
+                scanDelCollections(0 ,(err) => {
+                });
 
                 const newLog = new UpdateProfileLogs(logData);
                 newLog.save((err) => {

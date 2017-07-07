@@ -31,7 +31,7 @@
     max-height: 200px;
   }
 
-  @media screen and (max-width: 1210px) {
+  @media screen and (max-width: 1270px) {
     display: none;
   }
 }
@@ -41,7 +41,7 @@
   @include box-sizing(border-box);
   @include padding(25px, 25px, 25px, 25px);
 
-  @media screen and (max-width: 1210px) {
+  @media screen and (max-width: 1270px) {
     display: none;
   }
 
@@ -71,7 +71,7 @@
 .top-bar-actions-mobile {
   position: fixed !important;
 
-  @media screen and (min-width: 1210px) {
+  @media screen and (min-width: 1271px) {
     display: none !important;
   }
 }

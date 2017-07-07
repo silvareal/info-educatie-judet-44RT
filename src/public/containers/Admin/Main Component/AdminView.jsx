@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import AdminPage from '../../../components/Admin/Main Component/Admin.jsx';
-import Auth from '../../../modules/Auth.js';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 
 class AdminView extends Component {

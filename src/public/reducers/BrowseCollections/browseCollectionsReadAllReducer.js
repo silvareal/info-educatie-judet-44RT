@@ -28,7 +28,7 @@ export default function browseCollectionsReadAllReducer(state = {}, action) {
         case types.ON_LOAD_MORE_BROWSE_INITIATE:
             return {
                 ...state,
-                requesting: false,
+                requesting: true,
                 finished: false
             };
 
@@ -43,6 +43,7 @@ export default function browseCollectionsReadAllReducer(state = {}, action) {
                 if (newCollections && newCollections.length % 10 === 0) {
                     return {
                         ...state,
+                        requesting: false,
                         collections: {
                             ...state.collections,
                             data: {

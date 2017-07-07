@@ -10,6 +10,8 @@ import * as userActions from '../../../actions/userCredentialsActions.js';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import NavigationCheck from 'material-ui/svg-icons/navigation/check';
+import SocialShare from 'material-ui/svg-icons/social/share'
 
 let createHandler = function (dispatch) {
     let onLike = function (likedId) {
@@ -29,7 +31,7 @@ let createHandler = function (dispatch) {
 class ReadOne extends Component {
 
     constructor(props) {
-        super (props);
+        super(props);
 
         this.handlers = createHandler(this.props.dispatch);
 
@@ -145,7 +147,10 @@ class ReadOne extends Component {
                                            value={`localhost/collections/${this.props.collection._id}`}/>
                                 <CopyToClipboard text={`localhost/collections/${this.props.collection._id}`}
                                                  onCopy={() => this.setState({copied: true})}>
-                                    <RaisedButton label="Copy share link"
+                                    <RaisedButton label={this.state.copied === false ? "Copy link" : "Success !"}
+                                                  labelPosition="before"
+                                                  icon={this.state.copied === false ? <SocialShare/> :
+                                                      <NavigationCheck/>}
                                                   primary={this.state.copied}
                                                   buttonStyle={this.state.copied === false ? {
                                                       backgroundColor: "#ffffff",
@@ -194,6 +199,7 @@ class ReadOne extends Component {
                             onCommentChange={this.props.onCommentChange}
                             onSave={this.props.onSave}
                             commentAdded={this.props.comments && this.props.comments.commentAdded ? this.props.comments.commentAdded : ""}
+                            requesting={this.props.requesting}
                         />
                         :
                         null

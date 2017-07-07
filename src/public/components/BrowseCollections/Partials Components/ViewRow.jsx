@@ -6,6 +6,11 @@ import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 import Auth from '../../../modules/Auth.js'
 
 class ViewRow extends Component {
+
+    addDefaultPicture = (e) => {
+        e.target.src = "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg"
+    };
+
     render() {
 
         let isLiked = false;
@@ -36,7 +41,7 @@ class ViewRow extends Component {
                     overlay={<CardTitle title={this.props.collection.collectionName}
                                         subtitle={"by " + this.props.collection.userName}/>}
                 >
-                    <img src={this.props.collection.picturesArray[0].pictureLink}/>
+                    <img onError={this.addDefaultPicture} src={this.props.collection.picturesArray[0].pictureLink}/>
                 </CardMedia>
                 <div className="heart-and-tags-container">
                     <div className="heart-red-color">
@@ -57,7 +62,6 @@ class ViewRow extends Component {
                                 onClick={() => this.props.context.router.push('/login')}
                             />
                         }
-
                     </div>
                     <div style={{display: "flex", flex: 1, maxWidth: "100%", overflow: "hidden"}}>
                         <div className="tags-container">

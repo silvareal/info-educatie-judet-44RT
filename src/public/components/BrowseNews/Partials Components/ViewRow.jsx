@@ -3,6 +3,11 @@ import {Link} from 'react-router'
 import {Card, CardMedia, CardTitle, CardActions, RaisedButton} from 'material-ui';
 
 class ViewRow extends Component {
+
+    addDefaultPicture = (e) => {
+        e.target.src = "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg"
+    };
+
     render() {
         return (
             <Card className="picture-separator" style={{boxShadow: "transparent"}}>
@@ -12,7 +17,7 @@ class ViewRow extends Component {
                     overlay={<CardTitle title={this.props.news.newsTitle}
                                         subtitle={"by " + this.props.news.userName}/>}
                 >
-                    <img src={this.props.news.newsCoverLink}/>
+                    <img onError={this.addDefaultPicture} src={this.props.news.newsCoverLink}/>
                 </CardMedia>
                 {this.props.admin === true ?
                     <CardActions>

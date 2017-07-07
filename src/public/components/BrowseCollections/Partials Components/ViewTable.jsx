@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ViewRow from './ViewRow.jsx';
-import {RaisedButton} from 'material-ui';
+import {RaisedButton, CircularProgress} from 'material-ui';
 
 class ViewTable extends Component {
     render() {
@@ -39,12 +39,21 @@ class ViewTable extends Component {
                 else return null;
             }.bind(this));
 
+        let buttonLabel = "Load more collections...";
+
+        if (this.props.requesting)
+            buttonLabel = <CircularProgress size={30} color="red"/>;
+        else if (this.props.requesting === false && this.props.finished === false)
+            buttonLabel = "Load more collections...";
+        else if (this.props.requesting === false && this.props.finished === true)
+            buttonLabel = "No more collections :(";
+
         return (
             <div className="view-table">
                 <div>
                     {rows}
                 </div>
-                <RaisedButton label={this.props.finished === true ? "No more collections :(" : "Load more collections ..."}
+                <RaisedButton label={buttonLabel}
                               disabled={this.props.finished}
                               onTouchTap={this.props.onLoadMoreCollections}
                               primary={true}

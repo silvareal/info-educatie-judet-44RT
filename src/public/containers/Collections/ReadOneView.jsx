@@ -118,6 +118,7 @@ class ReadOneView extends Component {
                 userName={this.props.credentials.userName}
                 profilePictureLink={this.props.credentials.profilePictureLink}
                 onDeleteComment={this.handlers.onDeleteComment}
+                requesting={this.props.comments.requesting}
             />
         );
     }

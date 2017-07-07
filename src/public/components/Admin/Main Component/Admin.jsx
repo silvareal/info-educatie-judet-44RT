@@ -6,6 +6,7 @@ import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ActionAccountBox from 'material-ui/svg-icons/action/account-box';
 import ImageCollections from 'material-ui/svg-icons/image/collections';
 import ActionAnnouncement from 'material-ui/svg-icons/action/announcement';
+import AVLibraryBooks from 'material-ui/svg-icons/av/library-books';
 
 class AdminPage extends Component {
 
@@ -45,12 +46,12 @@ class AdminPage extends Component {
                             </Link>
                         </CardMedia>
                         <CardMedia style={styles.cardMedia}>
-                            <Link to={`/admin/${this.props.adminId}/collections`}>
+                            <Link to={`/collections`}>
                                 <div className="icons-content-admin-cp">
                                     <ImageCollections/>
                                 </div>
                             </Link>
-                            <Link to={`/admin/${this.props.adminId}/collections`}>
+                            <Link to={`/collections`}>
                                 <div className="action-header">Collections management</div>
                             </Link>
                         </CardMedia>
@@ -60,8 +61,18 @@ class AdminPage extends Component {
                                     <ActionAnnouncement/>
                                 </div>
                             </Link>
-                            <Link to={`/admin/${this.props.adminId}/news`}>
+                            <Link to={`/news`}>
                                 <div className="action-header">News management</div>
+                            </Link>
+                        </CardMedia>
+                        <CardMedia style={styles.cardMedia}>
+                            <Link to={`/admin/${this.props.adminId}/logs`}>
+                                <div className="icons-content-admin-cp">
+                                    <AVLibraryBooks/>
+                                </div>
+                            </Link>
+                            <Link to={`/admin/${this.props.adminId}/logs`}>
+                                <div className="action-header">Action logs</div>
                             </Link>
                         </CardMedia>
                     </div>

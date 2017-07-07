@@ -27,7 +27,7 @@ export default function browseNewsReadAllReducer(state = {}, action) {
         case types.ON_LOAD_MORE_BROWSE_NEWS_INITIATE:
             return {
                 ...state,
-                requesting: false,
+                requesting: true,
                 finished: false
             };
 
@@ -43,6 +43,7 @@ export default function browseNewsReadAllReducer(state = {}, action) {
                 if (newNews && newNews.length % 10 === 0) {
                     return {
                         ...state,
+                        requesting: false,
                         news: {
                             ...state.news,
                             data: {

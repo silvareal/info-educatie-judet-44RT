@@ -28,6 +28,40 @@ export default function searchReducer(state = {searchQuery: ''}, action) {
                 message: "NoCollections"
             };
 
+        case types.ON_LIKE_ACTION_FOR_ALL_USERS: {
+            if (state.allCollections) {
+                const newCollections = state.allCollections.map((collection, i) => {
+                    if (state.allCollections[i]._id !== action.likedId) return collection;
+
+                    const currentLikes = state.allCollections[i].likes;
+
+                    return {...collection, likes: currentLikes + 1}
+                });
+                return {
+                    ...state,
+                    allCollections: newCollections
+                };
+            }
+            return state;
+        }
+
+        case types.ON_UNLIKE_ACTION_FOR_ALL_USERS: {
+            if (state.allCollections) {
+                const newCollections = state.allCollections.map((collection, i) => {
+                    if (state.allCollections[i]._id !== action.likedId) return collection;
+
+                    const currentLikes = state.allCollections[i].likes;
+
+                    return {...collection, likes: currentLikes - 1}
+                });
+                return {
+                    ...state,
+                    allCollections: newCollections
+                };
+            }
+            return state;
+        }
+
         default:
             return state;
     }

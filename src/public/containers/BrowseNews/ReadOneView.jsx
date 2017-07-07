@@ -103,6 +103,7 @@ class ReadOneView extends Component {
                 onSave={this.onSave}
                 userName={this.props.credentials.userName}
                 profilePictureLink={this.props.credentials.profilePictureLink}
+                requesting={this.props.comments.requesting}
             />
         );
     }

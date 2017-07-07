@@ -3,10 +3,9 @@
 
 .parallax-profile {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/img1.jpg", fixed, center, repeat, cover);
 
   .container-profile {
-    @include padding(0, 256px, 64px, 256px);
+    @include padding(64px, 128px, 64px, 128px);
     min-height: 800px;
     @media screen and (max-width: 1200px) {
       min-height: 400px;

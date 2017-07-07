@@ -6,16 +6,12 @@ import {} from 'material-ui';
 import * as searchActions from '../../actions/AppBar/searchActions.js';
 import {
     Avatar,
-    IconMenu,
-    IconButton,
     ListItem,
     Divider,
     List,
-    FlatButton,
     AutoComplete,
     Toolbar,
     ToolbarGroup,
-    ToolbarTitle,
     CardMedia,
     Drawer
 } from 'material-ui';
@@ -23,7 +19,6 @@ import ImageCollections from 'material-ui/svg-icons/image/collections';
 import ActionSupervisorAccount from 'material-ui/svg-icons/action/supervisor-account';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import ActionExitToApp from 'material-ui/svg-icons/action/exit-to-app';
-import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert'
 import AVLibraryBooks from 'material-ui/svg-icons/av/library-books';
 import ActionAnnouncement from 'material-ui/svg-icons/action/announcement';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
@@ -155,7 +150,7 @@ class AppBarPersonal extends Component {
                                 <AutoComplete
                                     searchText={this.props.searchFunction.searchQuery}
                                     dataSource={this.props.allCollections.allCollections}
-                                    hintText="Search collections"
+                                    hintText="Search by name or tags"
                                     onUpdateInput={this.onSearchQueryChange}
                                     openOnFocus={!!this.props.searchFunction.searchQuery}
                                     maxSearchResults={10}
@@ -309,7 +304,7 @@ class AppBarPersonal extends Component {
                                     <AutoComplete
                                         searchText={this.props.searchFunction.searchQuery}
                                         dataSource={this.props.allCollections.allCollections}
-                                        hintText="Search collections"
+                                        hintText="Search by name or tags"
                                         onUpdateInput={this.onSearchQueryChange}
                                         openOnFocus={!!this.props.searchFunction.searchQuery}
                                         maxSearchResults={10}

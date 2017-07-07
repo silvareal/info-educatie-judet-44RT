@@ -99,6 +99,10 @@ class HomeView extends Component {
         })
     };
 
+    addDefaultPicture = (e) => {
+        e.target.src = "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg"
+    };
+
     render() {
 
         let news = this.props.news.news;
@@ -118,7 +122,7 @@ class HomeView extends Component {
                                                                subtitle={"by " + news[key].userName}/>}
                                            onClick={() => this.onClickNews(news[key]._id)}
                                            style={{cursor: "pointer"}}>
-                                    <img src={news[key].newsCoverLink}/>
+                                    <img onError={this.addDefaultPicture} src={news[key].newsCoverLink}/>
                                 </CardMedia>
                             </Card>
                         </li>
@@ -144,7 +148,7 @@ class HomeView extends Component {
                                     overlay={<CardTitle title={collections[key].collectionName}
                                                         subtitle={"by " + collections[key].userName}/>}
                                     style={{minHeight: 300, cursor: "pointer"}}>
-                                    <img src={collections[key].picturesArray[0].pictureLink}/>
+                                    <img onError={this.addDefaultPicture} src={collections[key].picturesArray[0].pictureLink}/>
                                 </CardMedia>
                             </Card>
                         </li>
@@ -161,7 +165,7 @@ class HomeView extends Component {
                                 <CardMedia overlay={<CardTitle title={collections[key].collectionName}
                                                                subtitle={"by " + collections[key].userName}/>}
                                            style={{cursor: "pointer"}}>
-                                    <img src={collections[key].picturesArray[0].pictureLink}/>
+                                    <img onError={this.addDefaultPicture} src={collections[key].picturesArray[0].pictureLink}/>
                                 </CardMedia>
                             </Card>
                         </li>

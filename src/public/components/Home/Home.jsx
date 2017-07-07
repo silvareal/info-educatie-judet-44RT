@@ -155,7 +155,7 @@ class Home extends Component {
                             <div className="buttons-home-view">
                                 <Link
                                     to={`/news`}>
-                                    <FlatButton label="All collections"
+                                    <FlatButton label="All news articles"
                                                 labelStyle={{fontSize: 24, color: "black"}}
                                                 style={{
                                                     height: 64,

@@ -104,6 +104,10 @@ class Profile extends Component {
         this.closeProfileCoverModal();
     };
 
+    addDefaultPicture = (e) => {
+        e.target.src = "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg"
+    };
+
     render() {
         const actions1 = [
             <RaisedButton
@@ -152,19 +156,21 @@ class Profile extends Component {
             <div className="parallax-profile">
                 <div className="top-bar-spacing"/>
                 {this.props.profile.fetchedProfile === true && this.props.profile.fetchingProfile === false ?
-                    <Card className="container-profile" style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
-                        <Card className="cover-container">
+                    <Card className="container-profile"
+                          style={{backgroundColor: 'whitesmoke', boxShadow: 'transparent'}}>
+                        <Card className="cover-container"
+                              style={{backgroundColor: 'whitesmoke', boxShadow: 'transparent'}}>
                             <CardMedia
                                 onClick={this.props.profile.ownUser ? this.openProfileCoverModal : null}
                                 className="force-no-overlay-background"
                                 overlay=
                                     {
-                                        <Card style={{backgroundColor: 'transparent', boxShadow: 'none'}}>
+                                        <Card style={{backgroundColor: 'whitesmoke', boxShadow: 'transparent'}}>
                                             <CardMedia className="force-profile-picture-width">
-                                                <img
-                                                    onClick={this.props.profile.ownUser ? this.openProfilePictureModal : null}
-                                                    style={{borderRadius: "50%"}}
-                                                    src={this.props.profile.profilePictureLink ? this.props.profile.profilePictureLink : "/images/img9.jpg"}/>
+                                                <img onError={this.addDefaultPicture}
+                                                     onClick={this.props.profile.ownUser ? this.openProfilePictureModal : null}
+                                                     style={{borderRadius: "50%"}}
+                                                     src={this.props.profile.profilePictureLink ? this.props.profile.profilePictureLink : "/images/img9.jpg"}/>
                                                 <Dialog
                                                     title="Change profile picture"
                                                     actions={actions1}
@@ -174,9 +180,9 @@ class Profile extends Component {
                                                     autoScrollBodyContent={true}
                                                 >
                                                     <CardMedia>
-                                                        <img
-                                                            style={{borderRadius: "50%"}}
-                                                            src={this.props.profile.profilePictureLink ? this.props.profile.profilePictureLink : "/images/img9.jpg"}/>
+                                                        <img onError={this.addDefaultPicture}
+                                                             style={{borderRadius: "50%"}}
+                                                             src={this.props.profile.profilePictureLink ? this.props.profile.profilePictureLink : "/images/img9.jpg"}/>
                                                     </CardMedia>
                                                     <TextField
                                                         floatingLabelText="Profile picture link"
@@ -191,9 +197,9 @@ class Profile extends Component {
                                             </CardMedia>
                                         </Card>
                                     }>
-                                <img
-                                    src={this.props.profile.profileCover ? this.props.profile.profileCover : "/images/img9.jpg"}
-                                    alt=""/>
+                                <img onError={this.addDefaultPicture}
+                                     src={this.props.profile.profileCover ? this.props.profile.profileCover : "/images/img9.jpg"}
+                                     alt=""/>
                                 <Dialog
                                     title="Change cover picture"
                                     actions={actions2}
@@ -203,9 +209,9 @@ class Profile extends Component {
                                     autoScrollBodyContent={true}
                                 >
                                     <CardMedia>
-                                        <img
-                                            style={{borderRadius: "50%"}}
-                                            src={this.props.profile.profileCover ? this.props.profile.profileCover : "/images/img9.jpg"}/>
+                                        <img onError={this.addDefaultPicture}
+                                             style={{borderRadius: "50%"}}
+                                             src={this.props.profile.profileCover ? this.props.profile.profileCover : "/images/img9.jpg"}/>
                                     </CardMedia>
                                     <TextField
                                         type="text"
@@ -231,8 +237,10 @@ class Profile extends Component {
                                 <CardText>
                                     <Tabs onChange={this.onSlideIndexChange}
                                           value={this.props.slideIndex}
-                                          inkBarStyle={{color: "#ee6e73", backgroundColor: "#ee6e73"}}
-                                          tabItemContainerStyle={{backgroundColor: "#42ab9e"}}>
+                                          inkBarStyle={{color: "red", backgroundColor: "red"}}
+                                          tabItemContainerStyle={{backgroundColor: "#000000"}}
+                                          style={{opacity: 0.8}}
+                                    >
                                         <Tab icon={<ImageCameraRoll/>} value={0} onClick={this.props.onCancelEdit}/>
                                         <Tab icon={<ActionAccountBox/>} value={1} onClick={this.props.onCancelEdit}/>
                                         {this.props.profile.ownUser ?
@@ -287,8 +295,8 @@ class Profile extends Component {
                                                                              onChange={this.props.onFirstNameChange}
                                                                              errorText={this.props.profile.errors.firstName}
                                                                              inputStyle={{color: "#000000"}}
-                                                                             floatingLabelStyle={{color: "#ee6e73"}}
-                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
+                                                                             floatingLabelStyle={{color: "#000000"}}
+                                                                             underlineFocusStyle={{borderColor: "#000000"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
@@ -297,8 +305,8 @@ class Profile extends Component {
                                                                              onChange={this.props.onLastNameChange}
                                                                              errorText={this.props.profile.errors.lastName}
                                                                              inputStyle={{color: "#000000"}}
-                                                                             floatingLabelStyle={{color: "#ee6e73"}}
-                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
+                                                                             floatingLabelStyle={{color: "#000000"}}
+                                                                             underlineFocusStyle={{borderColor: "#000000"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
@@ -320,8 +328,8 @@ class Profile extends Component {
                                                                              onChange={this.props.onProfessionChange}
                                                                              errorText={this.props.profile.errors.profession}
                                                                              inputStyle={{color: "#000000"}}
-                                                                             floatingLabelStyle={{color: "#ee6e73"}}
-                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
+                                                                             floatingLabelStyle={{color: "#000000"}}
+                                                                             underlineFocusStyle={{borderColor: "#000000"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
@@ -330,8 +338,8 @@ class Profile extends Component {
                                                                              onChange={this.props.onCompanyNameChange}
                                                                              errorText={this.props.profile.errors.companyName}
                                                                              inputStyle={{color: "#000000"}}
-                                                                             floatingLabelStyle={{color: "#ee6e73"}}
-                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
+                                                                             floatingLabelStyle={{color: "#000000"}}
+                                                                             underlineFocusStyle={{borderColor: "#000000"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
@@ -340,8 +348,8 @@ class Profile extends Component {
                                                                              onChange={this.props.onCityChange}
                                                                              errorText={this.props.profile.errors.city}
                                                                              inputStyle={{color: "#000000"}}
-                                                                             floatingLabelStyle={{color: "#ee6e73"}}
-                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
+                                                                             floatingLabelStyle={{color: "#000000"}}
+                                                                             underlineFocusStyle={{borderColor: "#000000"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
@@ -350,14 +358,15 @@ class Profile extends Component {
                                                                              onChange={this.props.onCountryChange}
                                                                              errorText={this.props.profile.errors.country}
                                                                              inputStyle={{color: "#000000"}}
-                                                                             floatingLabelStyle={{color: "#ee6e73"}}
-                                                                             underlineFocusStyle={{borderColor: "#ee6e73"}}/>}
+                                                                             floatingLabelStyle={{color: "#000000"}}
+                                                                             underlineFocusStyle={{borderColor: "#000000"}}/>}
                                                     />
                                                     <ListItem disabled={true}
                                                               primaryText={
                                                                   <RaisedButton
                                                                       label="Save changes"
-                                                                      buttonStyle={{backgroundColor: "#eb7077"}}
+                                                                      style={{opacity: 0.8}}
+                                                                      buttonStyle={{backgroundColor: "#000000"}}
                                                                       labelStyle={{color: "#ffffff"}}
                                                                       onClick={this.props.onSave}/>}
                                                     />
@@ -427,7 +436,7 @@ class Profile extends Component {
                     : null
                 }
                 {this.props.profile.fetchingProfile === false && this.props.profile.fetchedProfile === true && this.props.profile.successStatus === true ?
-                    <Snackbar message="Profile successfully updated!"
+                    <Snackbar message="Profile successfully updated! Please relog before posting anything!"
                               open={this.props.openSnackBar}
                               autoHideDuration={6000}
                               onRequestClose={() => this.handlers.closeSnackBar()}/>

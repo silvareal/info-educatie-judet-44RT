@@ -56,6 +56,7 @@ class ReadAllView extends Component {
             userId={this.props.credentials.userId}
             onLoadMoreNews={this.onLoadMoreNews}
             finished={this.props.news.finished}
+            requesting={this.props.news.requesting}
         />;
     }
 }

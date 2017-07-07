@@ -273,6 +273,10 @@ ProfileView.propTypes = {
     })
 };
 
+const addDefaultPicture = (e) => {
+    e.target.src = "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg"
+};
+
 const credentials = (state) => {
     if (state.userReducer.fetching === true) {
         return {
@@ -314,7 +318,7 @@ const profile = (state) => {
                                 overlay={<CardTitle
                                     title={pictures[key].collectionName}
                                     subtitle={`By ` + pictures[key].userName}/>}>
-                                <img
+                                <img onError={addDefaultPicture}
                                     src={pictures[key].picturesArray[0].pictureLink}
                                 />
                             </CardMedia>
@@ -334,7 +338,7 @@ const profile = (state) => {
                                 overlay={<CardTitle
                                     title={pictures[key].collectionName}
                                     subtitle={`By ` + pictures[key].userName}/>}>
-                                <img
+                                <img onError={addDefaultPicture}
                                     src={pictures[key].picturesArray[0].pictureLink}
                                 />
                             </CardMedia>

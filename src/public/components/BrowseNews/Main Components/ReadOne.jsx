@@ -6,6 +6,8 @@ import CommentForm from '../Partials Components/CommentForm.jsx';
 import CommentList from '../Partials Components/CommentList.jsx';
 import LoadingIndicator from '../../Loading Indicator/LoadingIndicator.jsx';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import NavigationCheck from 'material-ui/svg-icons/navigation/check';
+import SocialShare from 'material-ui/svg-icons/social/share'
 
 class ReadOne extends Component {
 
@@ -111,7 +113,9 @@ class ReadOne extends Component {
                                            value={`localhost/news/${this.props.news._id}`}/>
                                 <CopyToClipboard text={`localhost/news/${this.props.news._id}`}
                                                  onCopy={() => this.setState({copied: true})}>
-                                    <RaisedButton label="Copy share link"
+                                    <RaisedButton label={this.state.copied === false ? "Copy link" : "Success !"}
+                                                  labelPosition="before"
+                                                  icon={this.state.copied === false ?  <SocialShare/> : <NavigationCheck/>}
                                                   primary={this.state.copied}
                                                   buttonStyle={this.state.copied === false ? {
                                                       backgroundColor: "#ffffff",
@@ -159,6 +163,7 @@ class ReadOne extends Component {
                             finished={this.props.finished}
                             onLoadMoreComments={this.props.onLoadMoreComments}
                             commentAdded={this.props.comments && this.props.comments.commentAdded ? this.props.comments.commentAdded : ""}
+                            requesting={this.props.requesting}
                         />
                         :
                         null
