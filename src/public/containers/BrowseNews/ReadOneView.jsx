@@ -62,8 +62,10 @@ class ReadOneView extends Component {
         this.handlers.getCommentsCount(this.props.newsId ? this.props.newsId : this.props.params._newsId);
 
         socket.on('send:commentNews', () => {
-            this.handlers.getComments(this.props.newsId ? this.props.newsId : this.props.params._newsId);
-            this.handlers.getCommentsCount(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+            setTimeout(() => {
+                this.handlers.getComments(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+                this.handlers.getCommentsCount(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+            }, 500)
         });
     };
 
@@ -75,8 +77,10 @@ class ReadOneView extends Component {
         if (Auth.isUserAuthenticated()) {
 
             this.handlers.onSaveComment(this.props.newsId ? this.props.newsId : this.props.params._newsId, this.props.comments.comment);
-            this.handlers.getComments(this.props.newsId ? this.props.newsId : this.props.params._newsId);
-            this.handlers.getCommentsCount(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+            setTimeout(() => {
+                this.handlers.getComments(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+                this.handlers.getCommentsCount(this.props.newsId ? this.props.newsId : this.props.params._newsId);
+            }, 500);
 
             socket.emit('send:commentNews', {
                 comment: this.props.comments.comment,
@@ -221,6 +225,8 @@ const comments = (state, ownProps) => {
                         userName={comments[key].userName}
                         handler={handler}
                         profilePictureLink={comments[key].profilePictureLink}
+                        admin={state.userReducer.data.admin}
+                        moderator={state.userReducer.data.moderator}
                     />
                 )
             });

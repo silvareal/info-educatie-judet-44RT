@@ -90,7 +90,7 @@ export default function manageCollectionsReadAllReducer(state = {
             };
 
         case types.ON_LIKE_ACTION_FOR_ALL_USERS: {
-            if (state.collections.data.collections) {
+            if (state.collections && state.collections.data.collections) {
                 const newCollections = state.collections.data.collections.map((collection, i) => {
                     if (state.collections.data.collections[i]._id !== action.likedId) return collection;
 
@@ -113,7 +113,7 @@ export default function manageCollectionsReadAllReducer(state = {
         }
 
         case types.ON_UNLIKE_ACTION_FOR_ALL_USERS: {
-            if (state.collections.data.collections) {
+            if (state.collections && state.collections.data.collections) {
                 const newCollections = state.collections.data.collections.map((collection, i) => {
                     if (state.collections.data.collections[i]._id !== action.likedId) return collection;
 

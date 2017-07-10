@@ -29,6 +29,10 @@ class PictureRow extends Component {
         }
     };
 
+    addDefaultPicture = (e) => {
+        e.target.src = "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg"
+    };
+
     render() {
 
         return (
@@ -38,21 +42,24 @@ class PictureRow extends Component {
                     onClick={this.handleOpenModal}
                     overlay={<CardTitle title={this.props.pictureName}
                                         subtitle="Click for more details"/>}>
-                    <img src={this.props.pictureLink}/>
+                    <img onError={this.addDefaultPicture} src={this.props.pictureLink}/>
                 </CardMedia>
-                <Dialog actions={<RaisedButton
+                <Dialog
+                    actions={<RaisedButton
                         onClick={this.handleCloseModal}
                         label="Close me"
                         primary={true}
                         buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>}
                         open={this.state.modalIsOpen}
                         title={this.props.pictureName}
+                        titleStyle={{boxShadow: "transparent"}}
                         autoScrollBodyContent={true}
                         onRequestClose={this.handleCloseModal}>
                     <CardMedia>
-                        <img src={this.props.pictureLink}/>
+                        <img onError={this.addDefaultPicture} src={this.props.pictureLink}/>
                     </CardMedia>
-                    <div dangerouslySetInnerHTML={this.getHTML()}/>
+                    <div dangerouslySetInnerHTML={this.getHTML()}
+                         style={{wordBreak: "break-all"}}/>
                 </Dialog>
             </div>
         )

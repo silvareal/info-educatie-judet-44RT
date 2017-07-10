@@ -13,24 +13,27 @@
   @media screen and (max-width: 1200px) {
     min-height: 400px;
   }
+}
 
-  .delete-header {
-    @include display(flex, 1, center);
-    font-size: 3em;
-    @media screen and (max-width: 1200px) {
-      font-size: 2em;
-    }
+.delete-header {
+  @include display(flex, 1, center);
+  font-size: 3em;
+  @media screen and (max-width: 1200px) {
+    font-size: 2em;
   }
+  @include padding(30px, 30px, 30px, 30px);
+  text-align: center;
+}
 
-  .delete-header-success {
-    @include display(flex, 1, center);
-    font-size: 1em;
-  }
+.delete-header-success {
+  @include display(flex, 1, center);
+  font-size: 1em;
+  @include padding(30px, 30px, 30px, 30px);
+  text-align: center;
+}
 
-  .delete-actions {
-    @include display(flex, 1, center);
-  }
-
+.delete-actions {
+  @include display(flex, 1, center);
 }
 
 .mobile-header {
@@ -67,7 +70,6 @@
 
 .parallax-collections-delete {
   @include widthAndHeight("auto", 100%);
-  @include background-image("./images/img7.jpg", fixed, center, repeat, cover);
 }
 
 .pictures {
@@ -150,7 +152,7 @@
 
 .container-collections {
   @include padding(64px, 256px, 64px, 256px);
-  min-height: 800px;
+  min-height: 500px;
   @media screen and (max-width: 1200px) {
     min-height: 400px;
     @include padding(1em);
@@ -237,8 +239,8 @@
 }
 
 .container-collections {
-  @include padding(0, 128px, 64px, 128px);
-  min-height: 800px;
+  @include padding(64px, 128px, 64px, 128px);
+  min-height: 500px;
   @include background-color(whitesmoke);
   @media screen and (max-width: 1200px) {
     min-height: 400px;

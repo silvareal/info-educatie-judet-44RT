@@ -121,7 +121,7 @@ class Profile extends Component {
                 label="Save"
                 onTouchTap={this.closeProfilePictureModal}
                 onClick={this.props.onSave}
-                buttonStyle={{backgroundColor: "#42ab9e"}}
+                buttonStyle={{backgroundColor: "#9b9b9b"}}
                 labelStyle={{color: "#ffffff"}}
             />,
         ];
@@ -136,7 +136,7 @@ class Profile extends Component {
             />,
             <RaisedButton
                 label="Save"
-                buttonStyle={{backgroundColor: "#42ab9e"}}
+                buttonStyle={{backgroundColor: "#9b9b9b"}}
                 labelStyle={{color: "#ffffff"}}
                 onTouchTap={this.closeProfileCoverModal}
                 onClick={this.props.onSave}
@@ -190,8 +190,8 @@ class Profile extends Component {
                                                         onChange={this.props.profile.ownUser ? this.props.onProfilePictureLinkChange : null}
                                                         style={{width: "100%"}}
                                                         inputStyle={{color: "#000000"}}
-                                                        floatingLabelStyle={{color: "#ee6e73"}}
-                                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                                        floatingLabelStyle={{color: "#000000"}}
+                                                        underlineFocusStyle={{borderColor: "#000000"}}
                                                     />
                                                 </Dialog>
                                             </CardMedia>
@@ -220,8 +220,8 @@ class Profile extends Component {
                                         onChange={this.props.profile.ownUser ? this.props.onProfileCoverChange : null}
                                         style={{width: "100%"}}
                                         inputStyle={{color: "#000000"}}
-                                        floatingLabelStyle={{color: "#ee6e73"}}
-                                        underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                        floatingLabelStyle={{color: "#000000"}}
+                                        underlineFocusStyle={{borderColor: "#000000"}}
                                     />
                                 </Dialog>
                             </CardMedia>

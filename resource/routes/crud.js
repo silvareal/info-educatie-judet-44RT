@@ -268,7 +268,7 @@ function readAll(req, res) {
             }
 
             if (collections.length === 0) {
-                return res.status(404).json({
+                return res.json({
                     message: "You have not added anything yet"
                 })
             }

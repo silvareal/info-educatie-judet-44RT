@@ -71,8 +71,10 @@ class ReadOneView extends Component {
         this.handlers.getCommentsCount(this.props.collectionId);
 
         socket.on('send:comment', () => {
-            this.handlers.getComments(this.props.collectionId);
-            this.handlers.getCommentsCount(this.props.collectionId);
+            setTimeout(() => {
+                this.handlers.getComments(this.props.collectionId);
+                this.handlers.getCommentsCount(this.props.collectionId);
+            }, 500)
         });
     };
 
@@ -88,8 +90,10 @@ class ReadOneView extends Component {
     onSave = () => {
 
         this.handlers.onSaveComment(this.props.collectionId, this.props.comments.comment);
-        this.handlers.getComments(this.props.collectionId);
-        this.handlers.getCommentsCount(this.props.collectionId);
+        setTimeout(() => {
+            this.handlers.getComments(this.props.collectionId);
+            this.handlers.getCommentsCount(this.props.collectionId);
+        }, 500);
 
         socket.emit('send:comment', {
             comment: this.props.comments.comment,
@@ -287,6 +291,8 @@ const comments = (state, ownProps) => {
                         userName={comments[key].userName}
                         handler={handler}
                         profilePictureLink={comments[key].profilePictureLink}
+                        admin={state.userReducer.data.admin}
+                        moderator={state.userReducer.data.moderator}
                     />;
             });
 

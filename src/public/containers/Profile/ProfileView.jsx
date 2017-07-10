@@ -312,7 +312,7 @@ const profile = (state) => {
             if (key < 2) {
                 return (
                     <div className="profile-latest-collection" key={key}>
-                        <Link to={`/manage/readOne/${pictures[key]._id}`}>
+                        <Link to={`/collections/${pictures[key]._id}`}>
                             <CardMedia
                                 style={{maxWidth: 640, maxHeight: "auto"}}
                                 overlay={<CardTitle
@@ -332,7 +332,7 @@ const profile = (state) => {
             if (key > 1) {
                 return (
                     <div className="profile-latest-collection" key={key}>
-                        <Link to={`/manage/readOne/${pictures[key]._id}`} key={key}>
+                        <Link to={`/collections/${pictures[key]._id}`} key={key}>
                             <CardMedia
                                 style={{maxWidth: 640, maxHeight: "auto"}}
                                 overlay={<CardTitle

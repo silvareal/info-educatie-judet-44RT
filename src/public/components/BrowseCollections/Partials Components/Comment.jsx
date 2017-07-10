@@ -16,10 +16,10 @@ let createHandler = function (dispatch) {
 };
 
 class Comment extends Component {
-    
+
     constructor(props) {
         super(props);
-        
+
         this.handlers = createHandler(this.props.dispatch);
     }
 
@@ -38,18 +38,26 @@ class Comment extends Component {
                                         to={`/profile/${this.props.userName}`}>{this.props.firstName}@{this.props.userName}
                                     </Link>
                                     <div>{this.props.date}</div>
-                                    <div><FlatButton label="Delete"
-                                                     onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
-                                    </div>
+                                    {this.props.admin === true || this.props.moderator === true ?
+                                        <div><FlatButton label="Delete"
+                                                         onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
+                                        </div>
+                                        :
+                                        null
+                                    }
                                 </div>
 
                                 :
                                 <div>
-                                <Link to={`/profile/${this.props.userName}`}>{this.props.userName}</Link>
+                                    <Link to={`/profile/${this.props.userName}`}>{this.props.userName}</Link>
                                     <div>{this.props.date}</div>
-                                    <div><FlatButton label="Delete"
-                                                     onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
-                                    </div>
+                                    {this.props.admin === true || this.props.moderator === true ?
+                                        <div><FlatButton label="Delete"
+                                                         onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
+                                        </div>
+                                        :
+                                        null
+                                    }
                                 </div>
                             }
                         </ListItem>
@@ -65,18 +73,26 @@ class Comment extends Component {
                                         to={`/profile/${this.props.userName}`}>{this.props.firstName}@{this.props.userName}
                                     </Link>
                                     <div>{this.props.date}</div>
-                                    <div><FlatButton label="Delete"
-                                                     onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
-                                    </div>
+                                    {this.props.admin === true || this.props.moderator === true ?
+                                        <div><FlatButton label="Delete"
+                                                         onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
+                                        </div>
+                                        :
+                                        null
+                                    }
                                 </div>
 
                                 :
                                 <div>
                                     <Link to={`/profile/${this.props.userName}`}>{this.props.userName}</Link>
                                     <div>{this.props.date}</div>
-                                    <div><FlatButton label="Delete"
-                                                     onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
-                                    </div>
+                                    {this.props.admin === true || this.props.moderator === true ?
+                                        <div><FlatButton label="Delete"
+                                                         onTouchTap={() => this.handlers.onDeleteComment(this.props._id)}/>
+                                        </div>
+                                        :
+                                        null
+                                    }
                                 </div>
                             }
                         </ListItem>

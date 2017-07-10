@@ -75,7 +75,7 @@ class UsersRowsMobile extends Component {
                                       label="Give/Revoke moderator permissions"
                                       onTouchTap={this.props.onAddModerator(this.props.user._id)}
                                       className="action-buttons-users"
-                                      buttonStyle={{backgroundColor: "#eb7077"}}
+                                      buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
                                       labelStyle={{color: "#ffffff"}}
                         />
                         :
@@ -84,7 +84,7 @@ class UsersRowsMobile extends Component {
                                       label="Ban/Unban user"
                                       onTouchTap={this.props.onBanUser(this.props.user._id)}
                                       className="action-buttons-users"
-                                      buttonStyle={{backgroundColor: "#eb7077"}}
+                                      buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
                                       labelStyle={{color: "#ffffff"}}
                         />
                     }
@@ -94,12 +94,13 @@ class UsersRowsMobile extends Component {
                                   label="Details"
                                   onTouchTap={this.handleOpen}
                                   className="action-buttons-users"
-                                  buttonStyle={{backgroundColor: "#42ab9e"}}
+                                  buttonStyle={{backgroundColor: "#9b9b9b"}}
                                   labelStyle={{color: "#ffffff"}}
                     />
                 </CardActions>
                 <Dialog
-                    title={<div className="dialog-break-word">{"Details about: " + this.props.user.email}</div>}
+                    title={<div className="dialog-break-word"
+                                style={{wordBreak: "break-all"}}>{"Details about: " + this.props.user.email}</div>}
                     modal={false}
                     open={this.state.open}
                     onRequestClose={this.handleClose}

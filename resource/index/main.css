@@ -688,23 +688,30 @@ body, html, main {
   @media screen and (max-width: 1200px) {
     .container-collections-delete {
       min-height: 400px; } }
-  .container-collections-delete .delete-header {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    font-size: 3em; }
-    @media screen and (max-width: 1200px) {
-      .container-collections-delete .delete-header {
-        font-size: 2em; } }
-  .container-collections-delete .delete-header-success {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    font-size: 1em; }
-  .container-collections-delete .delete-actions {
-    display: flex;
-    flex: 1;
-    justify-content: center; }
+
+.delete-header {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  font-size: 3em;
+  padding: 30px 30px 30px 30px;
+  text-align: center; }
+  @media screen and (max-width: 1200px) {
+    .delete-header {
+      font-size: 2em; } }
+
+.delete-header-success {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  font-size: 1em;
+  padding: 30px 30px 30px 30px;
+  text-align: center; }
+
+.delete-actions {
+  display: flex;
+  flex: 1;
+  justify-content: center; }
 
 .mobile-header {
   display: flex;
@@ -745,12 +752,7 @@ body, html, main {
 
 .parallax-collections-delete {
   width: auto;
-  height: 100%;
-  background-image: url("./images/img7.jpg");
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: repeat;
-  background-size: cover; }
+  height: 100%; }
 
 .pictures {
   display: flex;
@@ -838,7 +840,7 @@ body, html, main {
 
 .container-collections {
   padding: 64px 256px 64px 256px;
-  min-height: 800px;
+  min-height: 500px;
   display: block;
   flex: "";
   justify-content: ""; }
@@ -921,8 +923,8 @@ body, html, main {
       padding: 30px   ; } }
 
 .container-collections {
-  padding: 0 128px 64px 128px;
-  min-height: 800px;
+  padding: 64px 128px 64px 128px;
+  min-height: 500px;
   background: whitesmoke;
   display: block;
   flex: "";

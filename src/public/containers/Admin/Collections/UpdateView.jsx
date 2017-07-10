@@ -8,6 +8,8 @@ import Update from '../../../components/Admin/Collections/Main Components/Update
 import * as updateActions from '../../../actions/Admin/Collections/manageCollectionsUpdateActionsAdmin.js';
 import NotAuthorizedView from "../../Error/NotAuthorizedView.jsx";
 import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
+import {Chip} from 'material-ui';
+import {smoothScroll} from '../../MainApp/functions.js';
 
 let createHandler = function (dispatch) {
     let getCollection = function (collectionId, textEditorState) {
@@ -46,8 +48,8 @@ let createHandler = function (dispatch) {
         dispatch(updateActions.onRemoveInputField(pictures, index))
     };
 
-    let onUpdate = function (userId, userName, profilePictureLink, userIdOld, userNameOld, profilePictureLinkOld, collectionId, collectionName, collectionDescriptionRaw, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld) {
-        dispatch(updateActions.onUpdate(userId, userName, profilePictureLink, userIdOld, userNameOld, profilePictureLinkOld, collectionId, collectionName, collectionDescriptionRaw, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld))
+    let onUpdate = function (userId, userName, profilePictureLink, userIdOld, userNameOld, profilePictureLinkOld, collectionId, collectionName, collectionDescriptionRaw, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld, tags, tagsOld) {
+        dispatch(updateActions.onUpdate(userId, userName, profilePictureLink, userIdOld, userNameOld, profilePictureLinkOld, collectionId, collectionName, collectionDescriptionRaw, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld, tags, tagsOld))
     };
 
     return {
@@ -68,10 +70,86 @@ class UpdateView extends Component {
     constructor(props) {
         super(props);
         this.handlers = createHandler(this.props.dispatch);
+
+        this.state = {
+            chipInput: '',
+            chips: [],
+            mappedChips: '',
+            chipsOld: []
+        }
     };
 
     componentDidMount() {
         this.handlers.getCollection(this.props.params._collectionId, RichTextEditor.createEmptyValue());
+    };
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.collection.tagsOld) {
+
+            const mappedChips = nextProps.collection.tagsOld.map((data, i) => {
+                return <Chip key={i}
+                             onRequestDelete={() => this.onDeleteTag(data.value)}>
+                    {data.value}
+                </Chip>
+            });
+
+            if (this.state.chips.length === 0)
+            this.setState({
+                chips: nextProps.collection.tagsOld,
+                chipsOld: nextProps.collection.tagsOld,
+                mappedChips: mappedChips
+            })
+        }
+    }
+
+    onChipInputChange = (e) => {
+        this.setState({
+            chipInput: e.target.value
+        })
+    };
+
+    onDeleteTag = (value) => {
+        let currentChips = this.state.chips;
+        let chipToDelete;
+        if (currentChips) {
+            for (let i = 0; i < currentChips.length; i++)
+                if (currentChips[i].value === value) {
+                    chipToDelete = i;
+                    break;
+                }
+        }
+        currentChips.splice(chipToDelete, 1);
+        const mappedChips = currentChips.map((data, j) => {
+            return <Chip key={j}
+                         onRequestDelete={() => this.onDeleteTag(data.value)}
+                         style={{cursor: "pointer", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}
+                         labelStyle={{maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}>
+                {data.value}
+            </Chip>;
+        });
+        this.setState({
+            chips: currentChips,
+            mappedChips: mappedChips
+        })
+    };
+
+    onAddTag = (e) => {
+        if (e.key === 'Enter') {
+            let newChips = this.state.chips.concat({value: e.target.value});
+            const mappedChips = newChips.map((data, i) => {
+                return <Chip key={i}
+                             onRequestDelete={() => this.onDeleteTag(data.value)}
+                             style={{cursor: "pointer", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}
+                             labelStyle={{maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}>
+                    {data.value}
+                </Chip>;
+            });
+            this.setState({
+                chipInput: '',
+                mappedChips: mappedChips,
+                chips: newChips
+            })
+        }
     };
 
     onUserIdChange = (e) => {
@@ -141,7 +219,7 @@ class UpdateView extends Component {
     onSave = () => {
 
         if (this.props.collection.fetchedCollection === true) {
-
+            smoothScroll();
             for (let i = 0; i < this.props.collection.pictures.length; i++) {
                 const newPictures = this.props.collection.pictures.map((picture, j) => {
                     if (i !== j) return picture;
@@ -172,7 +250,16 @@ class UpdateView extends Component {
             const pictures = JSON.stringify(this.props.collection.pictures);
             const picturesOld = JSON.stringify(this.props.collection.picturesOld);
 
-            this.handlers.onUpdate(userId, userName, profilePictureLink, userIdOld, userNameOld, profilePictureLinkOld, collectionId, collectionName, collectionDescription, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld);
+            let tags, tagsOld;
+            if (this.state.chips)
+            tags = JSON.stringify(this.state.chips);
+            else tags = JSON.stringify([]);
+
+            if (this.props.collection.tags)
+                tagsOld = JSON.stringify(this.props.collection.tagsOld);
+            else tagsOld = JSON.stringify([]);
+
+            this.handlers.onUpdate(userId, userName, profilePictureLink, userIdOld, userNameOld, profilePictureLinkOld, collectionId, collectionName, collectionDescription, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld, tags, tagsOld);
         }
     };
 
@@ -214,6 +301,12 @@ class UpdateView extends Component {
                     handleRemovePictures={this.handleRemovePictures}
                     onSave={this.onSave}
                     successUpdate={this.props.collection.successUpdate}
+                    chipInput={this.state.chipInput}
+                    chips={this.state.chips}
+                    mappedChips={this.state.mappedChips}
+                    onChipInputChange={this.onChipInputChange}
+                    onAddTag={this.onAddTag}
+                    onDeleteTag={this.onDeleteTag}
                 />
             );
         else if (this.props.credentials.admin === false) return <NotAuthorizedView/>;
@@ -305,7 +398,8 @@ const collection = (state) => {
             pictureNameError: statePath.pictureNameError,
             pictureLinkError: statePath.pictureLinkError,
             pictureDescriptionError: statePath.pictureDescriptionError,
-            message: statePath.message
+            message: statePath.message,
+            tagsOld: statePath.collection.tags
         }
     }
     else if (state.manageCollectionsUpdateReducerAdmin.fetched === false && state.manageCollectionsUpdateReducerAdmin.fetching === false) {
@@ -323,7 +417,7 @@ const collection = (state) => {
 
 const mapStateToProps = (state) => ({
     credentials: credentials(state),
-    collection: collection(state)    
+    collection: collection(state)
 });
 
 export default connect(mapStateToProps)(UpdateView)

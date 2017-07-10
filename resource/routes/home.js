@@ -68,6 +68,7 @@ router.get('/credentials', (req, res) => {
                     firstName: user.firstName,
                     profilePictureLink: user.profilePictureLink,
                     admin: user.admin,
+                    moderator: user.moderator,
                     liked: user.liked
                 })
             });

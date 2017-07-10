@@ -8,6 +8,7 @@ import Update from '../../../components/Admin/News/Main Components/Update.jsx';
 import * as updateActions from '../../../actions/Admin/News/manageNewsUpdateActionsAdmin.js';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
+import {smoothScroll} from '../../MainApp/functions.js';
 
 let createHandler = function (dispatch) {
     let getNews = function (newsId, textEditorState) {
@@ -71,7 +72,7 @@ class UpdateView extends Component {
 
     onSave = () => {
         if (this.props.news.fetchedNews === true) {
-
+            smoothScroll();
             let editorState = this.props.news.newsDescription.getEditorState();
             let contentState = editorState.getCurrentContent();
             let rawContentState = window.rawContentState = convertToRaw(contentState);

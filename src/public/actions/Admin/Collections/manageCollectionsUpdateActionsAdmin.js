@@ -170,7 +170,7 @@ export function onUpdateFailure(success, errors, pictureNameError, pictureLinkEr
 }
 
 // Function for updating the collection
-export function onUpdate(userId, userName, profilePictureLink, userIdOld, userNameOld, profilePictureLinkOld, collectionId, collectionName, collectionDescriptionRaw, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld) {
+export function onUpdate(userId, userName, profilePictureLink, userIdOld, userNameOld, profilePictureLinkOld, collectionId, collectionName, collectionDescriptionRaw, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld, tags, tagsOld) {
     return function (dispatch) {
         dispatch(onUpdateInitiate());
         return axios({
@@ -193,7 +193,9 @@ export function onUpdate(userId, userName, profilePictureLink, userIdOld, userNa
                 'picturesArray': pictures,
                 'collectionNameOld': collectionNameOld,
                 'collectionDescriptionRawOld': collectionDescriptionRawOld,
-                'picturesArrayOld': picturesOld
+                'picturesArrayOld': picturesOld,
+                'tags': tags,
+                'tagsOld': tagsOld
             })
         }).then((response) => {
             dispatch(onUpdateSuccess(response.data.success))

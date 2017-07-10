@@ -68,8 +68,10 @@ class ReadOneView extends Component {
         this.handlers.getCommentsCount(this.props.collectionId ? this.props.collectionId : this.props.params._id);
 
         socket.on('send:comment', () => {
-            this.handlers.getComments(this.props.collectionId ? this.props.collectionId : this.props.params._id);
-            this.handlers.getCommentsCount(this.props.collectionId ? this.props.collectionId : this.props.params._id);
+            setTimeout(() => {
+                this.handlers.getComments(this.props.collectionId ? this.props.collectionId : this.props.params._id);
+                this.handlers.getCommentsCount(this.props.collectionId ? this.props.collectionId : this.props.params._id);
+            }, 500)
         });
     };
 
@@ -85,8 +87,10 @@ class ReadOneView extends Component {
     onSave = () => {
 
         this.handlers.onSaveComment(this.props.collectionId ? this.props.collectionId : this.props.params._id, this.props.comments.comment);
-        this.handlers.getComments(this.props.collectionId ? this.props.collectionId : this.props.params._id);
-        this.handlers.getCommentsCount(this.props.collectionId ? this.props.collectionId : this.props.params._id);
+        setTimeout(() => {
+            this.handlers.getComments(this.props.collectionId ? this.props.collectionId : this.props.params._id);
+            this.handlers.getCommentsCount(this.props.collectionId ? this.props.collectionId : this.props.params._id);
+        }, 500);
 
         socket.emit('send:comment', {
             comment: this.props.comments.comment,
@@ -284,6 +288,8 @@ const comments = (state) => {
                         firstName={comments[key].firstName}
                         userName={comments[key].userName}
                         profilePictureLink={comments[key].profilePictureLink}
+                        admin={state.userReducer.data.admin}
+                        moderator={state.userReducer.data.moderator}
                     />
                 )
             });

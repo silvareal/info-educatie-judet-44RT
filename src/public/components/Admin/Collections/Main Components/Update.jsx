@@ -23,6 +23,7 @@ import {
 } from "material-ui";
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
+import {smoothScroll} from '../../../../containers/MainApp/functions.js';
 
 let createHandler = function (dispatch) {
 
@@ -48,7 +49,7 @@ class Update extends Component {
             stepIndex++;
             this.handlers.onSlideIndexChange(stepIndex);
         }
-        this.resetScroll();
+        smoothScroll();
     };
 
     handlePrev = () => {
@@ -57,13 +58,17 @@ class Update extends Component {
             stepIndex--;
             this.handlers.onSlideIndexChange(stepIndex);
         }
-        this.resetScroll();
+        smoothScroll();
     };
 
     handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             this.handleNext();
         }
+    };
+
+    addDefaultPicture = (e) => {
+        e.target.src = "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg"
     };
 
     getStepContent(stepIndex) {
@@ -127,9 +132,9 @@ class Update extends Component {
                                 autoFocus={true}
                                 multiLine={true}
                                 className="step-textfields"
-                                inputStyle={{color: "#000000"}}
-                                floatingLabelStyle={{color: "#ee6e73"}}
-                                underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                inputStyle={{color: "#000000", opacity: 0.8}}
+                                floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                             />
 
                             <TextField
@@ -140,9 +145,9 @@ class Update extends Component {
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
-                                inputStyle={{color: "#000000"}}
-                                floatingLabelStyle={{color: "#ee6e73"}}
-                                underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                inputStyle={{color: "#000000", opacity: 0.8}}
+                                floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                             />
 
                             <TextField
@@ -153,9 +158,9 @@ class Update extends Component {
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
-                                inputStyle={{color: "#000000"}}
-                                floatingLabelStyle={{color: "#ee6e73"}}
-                                underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                inputStyle={{color: "#000000", opacity: 0.8}}
+                                floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                             />
                             <TextField
                                 hintText="Give your collection a cool title"
@@ -165,9 +170,9 @@ class Update extends Component {
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
-                                inputStyle={{color: "#000000"}}
-                                floatingLabelStyle={{color: "#ee6e73"}}
-                                underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                inputStyle={{color: "#000000", opacity: 0.8}}
+                                floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                             />
                         </div>
                         <div>
@@ -184,6 +189,20 @@ class Update extends Component {
                                 placeholder="Collection description"
                                 toolbarConfig={toolbarConfig}
                             />
+                        </div>
+                        <div>
+                            <TextField hintText="Type a tag and press Enter to add it !"
+                                       value={this.props.chipInput}
+                                       onChange={this.props.onChipInputChange}
+                                       onKeyDown={this.props.onAddTag}
+                                       className="step-textfields"
+                                       inputStyle={{color: "#000000", opacity: 0.8}}
+                                       floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                       underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
+                            />
+                            <div className="tags-container">
+                                {this.props.mappedChips}
+                            </div>
                         </div>
                     </div>
                 );
@@ -205,9 +224,9 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#000000"}}
-                                                   floatingLabelStyle={{color: "#ee6e73"}}
-                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000", opacity: 0.8}}
+                                                   floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                                   underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                                         />
                                         :
                                         <TextField hintText="Give your work of art a cool name"
@@ -216,9 +235,9 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#000000"}}
-                                                   floatingLabelStyle={{color: "#ee6e73"}}
-                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000", opacity: 0.8}}
+                                                   floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                                   underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                                         />
                                     }
                                 </div>
@@ -231,9 +250,9 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#000000"}}
-                                                   floatingLabelStyle={{color: "#ee6e73"}}
-                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000", opacity: 0.8}}
+                                                   floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                                   underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                                         />
                                         :
                                         <TextField hintText="Give us the link of your work of art"
@@ -242,14 +261,14 @@ class Update extends Component {
                                                    onKeyDown={this.handleKeyPress}
                                                    multiLine={true}
                                                    className="step-textfields"
-                                                   inputStyle={{color: "#000000"}}
-                                                   floatingLabelStyle={{color: "#ee6e73"}}
-                                                   underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                                   inputStyle={{color: "#000000", opacity: 0.8}}
+                                                   floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                                   underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                                         />
                                     }
                                 </div>
                                 <CardMedia>
-                                    <img src={picture.pictureLink} className="step-picture"/>
+                                    <img onError={this.addDefaultPicture} src={picture.pictureLink} className="step-picture"/>
                                 </CardMedia>
                                 <div className="input-field">
                                     {picture.pictureDescriptionRaw && picture.pictureDescriptionRaw.length > 5000 ?
@@ -281,7 +300,7 @@ class Update extends Component {
                                 </div>
                                 <RaisedButton type="button" primary={true} label="+"
                                               onClick={this.props.handleAddPictures(i)}
-                                              buttonStyle={{backgroundColor: "#42ab9e"}}/>
+                                              buttonStyle={{backgroundColor: "#9b9b9b"}}/>
 
                                 { (i !== 0) ? (
                                     <RaisedButton type="button" secondary={true} label="-"
@@ -298,8 +317,12 @@ class Update extends Component {
                     <div className="preview">
                         <div className="preview-title">The preview of what you wish to add is here</div>
                         <div>{this.props.collectionName}</div>
-                        <div dangerouslySetInnerHTML={this.props.getHTML()}/>
+                        <div dangerouslySetInnerHTML={this.props.getHTML()}
+                             style={{wordBreak: "break-all"}}/>
                         {rows}
+                        <div className="tags-container">
+                            {this.props.mappedChips}
+                        </div>
                     </div>
                 );
             default:
@@ -328,10 +351,6 @@ class Update extends Component {
                 flag = true;
         });
         return flag;
-    };
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
     };
 
     render() {
@@ -400,10 +419,8 @@ class Update extends Component {
                                     <Link to={`/admin/${this.props.adminId}/collections`}>
                                         <RaisedButton
                                             label="Finish"
-                                            buttonStyle={{backgroundColor: "#42ab9e"}}
-                                            secondary={true}
-                                            onTouchTap={this.resetScroll}
-                                        />
+                                            buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
+                                            primary={true}/>
                                     </Link>
                                 </div> : null
                             }
@@ -429,7 +446,7 @@ class Update extends Component {
                                     label={stepIndex === 2 ? "Save" : "Next"}
                                     primary={true}
                                     onTouchTap={stepIndex === 2 ? this.props.onSave : this.handleNext}
-                                    buttonStyle={{backgroundColor: "#42ab9e"}}/>
+                                    buttonStyle={{backgroundColor: "#9b9b9b"}}/>
                             </CardActions>
                         </Card>
                     </Card>

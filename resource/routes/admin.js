@@ -180,7 +180,7 @@ function validateCreateNewsForm(payload) {
     // validate news article's cover photo link
     if (!payload.newsCoverLink || typeof payload.newsCoverLink !== 'string' || payload.newsCoverLink.trim().length > 10000) {
         isFormValid = false;
-        errors.newsCoverLink = "Please use a shorter link"
+        errors.newsCoverLink = "Please use a valid link"
     }
     // validate news article's description
     if (!payload.newsDescriptionRaw || typeof payload.newsDescriptionRaw !== 'string' || payload.newsDescriptionRaw.trim().length > 5000) {
@@ -916,7 +916,8 @@ router.post("/createCollection", (req, res) => {
                 collectionDescriptionRaw: req.body.collectionDescriptionRaw,
                 picturesArray: JSON.parse(req.body.picturesArray),
                 profilePictureLink: req.body.userProfilePictureLink,
-                userName: req.body.userNameToAdd
+                userName: req.body.userNameToAdd,
+                tags: JSON.parse(req.body.tags)
             };
 
             const logData = {
@@ -1243,8 +1244,8 @@ router.post('/updateSaveCollections', (req, res) => {
                     collectionDescriptionRaw: req.body.collectionDescriptionRaw,
                     picturesArray: JSON.parse(req.body.picturesArray),
                     userName: req.body.userNameToAdd,
-                    qrLink: req.body.qrLink,
-                    profilePictureLink: req.body.userProfilePictureLink
+                    profilePictureLink: req.body.userProfilePictureLink,
+                    tags: JSON.parse(req.body.tags)
                 }
             }, (err, collection) => {
                 if (err) {
@@ -1283,8 +1284,8 @@ router.post('/updateSaveCollections', (req, res) => {
                     userNameOld: req.body.userNameToAddOld,
                     profilePictureLink: req.body.userProfilePictureLink,
                     profilePictureLinkOld: req.body.userProfilePictureLinkOld,
-                    qrLink: req.body.qrLink,
-                    qrLinkOld: req.body.qrLinkOld,
+                    tags: JSON.parse(req.body.tags),
+                    tagsOld: JSON.parse(req.body.tagsOld),
                     updatedByAdmin: true
                 };
 

@@ -27,8 +27,17 @@ export function getAllCollections() {
             url: '/crud/readAll',
             headers: {'Authorization': `bearer ${Auth.getToken()}`}
         }).then((response) => {
+            if (response.message === "You have not added anything yet")
+                dispatch(getCollectionsSuccess({
+                    data: {
+                        collections: []
+                    },
+                    message: "NoCollections"
+                }
+                ));
             dispatch(getCollectionsSuccess(response))
-        }).catch(() => {
+        }).catch((err) => {
+            console.log(err);
             dispatch(getCollectionsFailure())
         })
     }

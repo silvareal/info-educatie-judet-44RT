@@ -119,7 +119,7 @@ export function onSaveCollectionFailure(success, errors, pictureNameError, pictu
 }
 
 // Handle onClick the save button
-export function onSaveCollection(userId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, pictures) {
+export function onSaveCollection(userId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, pictures, tags) {
     return function (dispatch) {
         dispatch(onSaveCollectionInitiate(userId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, pictures));
         return axios({
@@ -135,7 +135,8 @@ export function onSaveCollection(userId, userName, profilePictureLink, collectio
                 'userProfilePictureLink': profilePictureLink,
                 'collectionName': collectionName,
                 'collectionDescriptionRaw': collectionDescriptionRaw,
-                'picturesArray': pictures
+                'picturesArray': pictures,
+                'tags': tags
             })
         }).then((response) => {
             dispatch(onSaveCollectionSuccess(response.data.success))

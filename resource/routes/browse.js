@@ -11,7 +11,7 @@ const client = redis.createClient();
 function validateSearchForm(payload) {
     let isFormValid = true;
 
-    if (!payload.searchQuery || typeof payload.searchQuery !== 'string' || payload.searchQuery.trim().length > 100) {
+    if (!payload.searchQuery || typeof payload.searchQuery !== 'string') {
         isFormValid = false
     }
 

@@ -7,6 +7,7 @@ import {Chip} from 'material-ui';
 import {connect} from 'react-redux';
 import * as updateActions from '../../actions/Collections/manageCollectionsUpdateActions.js'
 import Update from '../../components/Collections/Main Components/Update.jsx';
+import {smoothScroll} from '../MainApp/functions.js';
 
 let createHandler = function (dispatch) {
     let getCollection = function (collectionId, textEditorState) {
@@ -66,19 +67,19 @@ class UpdateView extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.tags) {
+        if (nextProps.tagsOld) {
 
-            const mappedChips = nextProps.tags.map((data, i) => {
+            const mappedChips = nextProps.tagsOld.map((data, i) => {
                 return <Chip key={i}
                              onRequestDelete={() => this.onDeleteTag(data.value)}>
                     {data.value}
                 </Chip>
             });
 
-
+            if (this.state.chips.length === 0)
             this.setState({
-                chips: nextProps.tags,
-                chipsOld: nextProps.tags,
+                chips: nextProps.tagsOld,
+                chipsOld: nextProps.tagsOld,
                 mappedChips: mappedChips
             })
         }
@@ -104,7 +105,8 @@ class UpdateView extends Component {
         const mappedChips = currentChips.map((data, j) => {
             return <Chip key={j}
                          onRequestDelete={() => this.onDeleteTag(data.value)}
-            >
+                         style={{cursor: "pointer", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}
+                         labelStyle={{maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}>
                 {data.value}
             </Chip>;
         });
@@ -120,7 +122,8 @@ class UpdateView extends Component {
             const mappedChips = newChips.map((data, i) => {
                 return <Chip key={i}
                              onRequestDelete={() => this.onDeleteTag(data.value)}
-                >
+                             style={{cursor: "pointer", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}
+                             labelStyle={{maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}>
                     {data.value}
                 </Chip>;
             });
@@ -187,7 +190,7 @@ class UpdateView extends Component {
     onSave = () => {
 
         if (this.props.fetchedCollection === true) {
-
+            smoothScroll();
             for (let i = 0; i < this.props.pictures.length; i++) {
                 const newPictures = this.props.pictures.map((picture, j) => {
                     if (i !== j) return picture;
@@ -213,8 +216,14 @@ class UpdateView extends Component {
             const pictures = JSON.stringify(this.props.pictures);
             const picturesOld = JSON.stringify(this.props.picturesOld);
 
-            const tags = JSON.stringify(this.state.chips);
-            const tagsOld = JSON.stringify(this.state.chipsOld);
+            let tags, tagsOld;
+            if (this.state.chips)
+                tags = JSON.stringify(this.state.chips);
+            else tags = JSON.stringify([]);
+
+            if (this.props.tags)
+                tagsOld = JSON.stringify(this.props.tagsOld);
+            else tagsOld = JSON.stringify([]);
 
             this.handlers.onUpdate(collectionId, collectionName, collectionDescription, pictures, collectionNameOld, collectionDescriptionRawOld, picturesOld, tags, tagsOld);
         }
@@ -311,7 +320,7 @@ const mapStateToProps = (state) => {
             pictureLinkError: statePath.pictureLinkError,
             pictureDescriptionError: statePath.pictureDescriptionError,
             message: statePath.message,
-            tags: statePath.collection.tags
+            tagsOld: statePath.collection.tags
         }
     }
     else if (state.manageCollectionsUpdateReducer.fetched === false && state.manageCollectionsUpdateReducer.fetching === false) {

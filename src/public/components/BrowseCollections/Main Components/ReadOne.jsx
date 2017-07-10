@@ -101,7 +101,7 @@ class ReadOne extends Component {
                                             <CardActions>
                                                 <div className="heart-red-color">
                                                     <Checkbox
-                                                        label={"Likes: " + this.props.collection.likes}
+                                                        label={this.props.collection.likes}
                                                         checked={isLiked}
                                                         checkedIcon={<ActionFavorite/>}
                                                         uncheckedIcon={<ActionFavoriteBorder/>}

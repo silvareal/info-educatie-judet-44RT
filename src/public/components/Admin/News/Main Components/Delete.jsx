@@ -5,15 +5,6 @@ import {RaisedButton, Card, CardHeader, CardActions} from 'material-ui';
 import LoadingIndicator from '../../../Loading Indicator/LoadingIndicator.jsx';
 
 class Delete extends Component {
-
-    componentDidMount() {
-        this.resetScroll();
-    }
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
-    };
-
     render() {
         if (this.props.response) {
             if (this.props.message === "The item you are searching for does not exist")
@@ -28,24 +19,26 @@ class Delete extends Component {
                     <div className="parallax-collections-delete">
                         <div className="top-bar-spacing"/>
                         {this.props.message === "News article deleted" ?
-                            <Card className="container-collections-delete" style={{backgroundColor: 'none'}}>
-                                <Card>
+                            <Card className="container-collections"
+                                  style={{backgroundColor: 'none', boxShadow: "transparent"}}>
+                                <Card style={{boxShadow: "transparent"}}>
                                     <CardHeader>
-                                        <div className="delete-header-success">{this.props.message}</div>
+                                        <div className="delete-header">{this.props.message}</div>
                                     </CardHeader>
                                     <CardActions>
                                         <div className="delete-actions">
                                             <Link to={`/news`}>
                                                 <RaisedButton label="Finish"
-                                                              secondary={true}
-                                                              buttonStyle={{backgroundColor: "#42ab9e"}}/>
+                                                              primary={true}
+                                                              buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>
                                             </Link>
                                         </div>
                                     </CardActions>
                                 </Card>
                             </Card>
                             :
-                            <Card className="container-collections-delete" style={{backgroundColor: 'none'}}>
+                            <Card className="container-collections"
+                                  style={{backgroundColor: 'none', boxShadow: "transparent"}}>
                                 <Card>
                                     <CardHeader>
                                         <div className="delete-header">Delete this article?</div>
@@ -64,8 +57,7 @@ class Delete extends Component {
                                                     <RaisedButton
                                                         secondary={true}
                                                         label="No"
-                                                        onTouchTap={this.resetScroll}
-                                                        buttonStyle={{backgroundColor: "#42ab9e"}}
+                                                        buttonStyle={{backgroundColor: "#9b9b9b"}}
                                                     />
                                                 </Link>
                                             </div>

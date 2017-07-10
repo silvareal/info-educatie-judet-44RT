@@ -4,8 +4,7 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import * as createActions from '../../../../actions/Admin/News/manageNewsCreateActionsAdmin.js';
 import RichTextEditor from 'react-rte';
-import PictureRow from '../Partials Components/PictureRow.jsx';
-
+import {smoothScroll} from '../../../../containers/MainApp/functions.js';
 import {
     RaisedButton,
     Step,
@@ -45,7 +44,7 @@ class Create extends Component {
             stepIndex++;
             this.handlers.onSlideIndexChange(stepIndex);
         }
-        this.resetScroll();
+        smoothScroll();
     };
 
     handlePrev = () => {
@@ -54,13 +53,17 @@ class Create extends Component {
             stepIndex--;
             this.handlers.onSlideIndexChange(stepIndex);
         }
-        this.resetScroll();
+        smoothScroll();
     };
 
     handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             this.handleNext();
         }
+    };
+
+    addDefaultPicture = (e) => {
+        e.target.src = "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg"
     };
 
     getStepContent(stepIndex) {
@@ -101,9 +104,9 @@ class Create extends Component {
                                 autoFocus={true}
                                 multiLine={true}
                                 className="step-textfields"
-                                inputStyle={{color: "#000000"}}
-                                floatingLabelStyle={{color: "#ee6e73"}}
-                                underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                inputStyle={{color: "#000000", opacity: 0.8}}
+                                floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                             />
                             <TextField
                                 hintText="Cover photo link"
@@ -113,9 +116,9 @@ class Create extends Component {
                                 onKeyDown={this.handleKeyPress}
                                 multiLine={true}
                                 className="step-textfields"
-                                inputStyle={{color: "#000000"}}
-                                floatingLabelStyle={{color: "#ee6e73"}}
-                                underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                inputStyle={{color: "#000000", opacity: 0.8}}
+                                floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                             />
                         </div>
                         <div>
@@ -141,9 +144,10 @@ class Create extends Component {
                         <div className="preview-title">The preview of what you wish to add is here</div>
                         <div>{this.props.newsTitle}</div>
                         <CardMedia>
-                            <img src={this.props.newsCoverLink}/>
+                            <img onError={this.addDefaultPicture} src={this.props.newsCoverLink}/>
                         </CardMedia>
-                        <div dangerouslySetInnerHTML={this.props.getHTML()}/>
+                        <div dangerouslySetInnerHTML={this.props.getHTML()}
+                             style={{wordBreak: "break-all"}}/>
                     </div>
                 );
             default:
@@ -159,10 +163,6 @@ class Create extends Component {
         if (errors && Object.keys(errors).length === 0)
             return false;
         return true
-    };
-
-    resetScroll = () => {
-        window.scrollTo(0, 0);
     };
 
     render() {
@@ -207,8 +207,7 @@ class Create extends Component {
                                 <Link to={`/news`}>
                                     <RaisedButton label="Return"
                                                   primary={true}
-                                                  onTouchTap={this.resetScroll}
-                                                  buttonStyle={{backgroundColor: "#42ab9e"}}
+                                                  buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
                                     />
                                 </Link>
                             </div> : null}
@@ -244,7 +243,7 @@ class Create extends Component {
                                 label={stepIndex === 1 ? "Save article" : "Next"}
                                 primary={true}
                                 onTouchTap={stepIndex === 1 ? this.props.onSave : this.handleNext}
-                                buttonStyle={{backgroundColor: "#42ab9e"}}/>
+                                buttonStyle={{backgroundColor: "#9b9b9b"}}/>
                         </CardActions>
                     </Card>
                 </Card>

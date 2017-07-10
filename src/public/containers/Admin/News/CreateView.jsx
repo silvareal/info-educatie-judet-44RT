@@ -8,6 +8,7 @@ import Create from '../../../components/Admin/News/Main Components/Create.jsx'
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
 import * as createActions from '../../../actions/Admin/News/manageNewsCreateActionsAdmin.js';
+import {smoothScroll} from '../../MainApp/functions.js';
 
 let createHandler = function (dispatch) {
     let getInitialState = function (newsDescription) {
@@ -70,7 +71,7 @@ class CreateView extends Component {
     };
 
     onSave = () => {
-
+        smoothScroll();
         let editorState = this.props.UIState.newsDescription.getEditorState();
         let contentState = editorState.getCurrentContent();
         let rawContentState = window.rawContentState = convertToRaw(contentState);

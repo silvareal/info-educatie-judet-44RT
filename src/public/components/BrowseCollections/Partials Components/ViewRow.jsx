@@ -47,7 +47,7 @@ class ViewRow extends Component {
                     <div className="heart-red-color">
                         {Auth.isUserAuthenticated() ?
                             <Checkbox
-                                label={"Likes: " + this.props.collection.likes}
+                                label={this.props.collection.likes}
                                 checked={isLiked}
                                 checkedIcon={<ActionFavorite/>}
                                 uncheckedIcon={<ActionFavoriteBorder/>}
@@ -55,7 +55,7 @@ class ViewRow extends Component {
                             />
                             :
                             <Checkbox
-                                label={"Likes: " + this.props.collection.likes}
+                                label={this.props.collection.likes}
                                 checked={isLiked}
                                 checkedIcon={<ActionFavorite/>}
                                 uncheckedIcon={<ActionFavoriteBorder/>}

@@ -45,10 +45,10 @@ class ReadAll extends Component {
 
         let modeComponent = <LoadingIndicator/>;
 
-        if (this.props.fetchingCollections === true) {
+        if (this.props.fetchingCollections === true && this.props.message !== "You have not added anything yet") {
             modeComponent = <LoadingIndicator/>;
         }
-        else if (this.props.fetchingCollections === false && this.props.fetchedCollections === true) {
+        else if (this.props.fetchingCollections === false && this.props.fetchedCollections === true && this.props.message !== "You have not added anything yet") {
             modeComponent =
                 <ViewTable
                     collections={this.props.collections}
@@ -61,7 +61,7 @@ class ReadAll extends Component {
                     requesting={this.props.requesting}
                 />
         }
-        else if (this.props.fetchingCollections === false && this.props.fetchedCollections === false) {
+        else if ((this.props.fetchingCollections === false && this.props.fetchedCollections === false) || this.props.message === "You have not added anything yet") {
             modeComponent = <NoCollectionsFound/>
         }
 
@@ -80,11 +80,13 @@ class ReadAll extends Component {
                     <TopActions/>
                     {modeComponent}
                     <Dialog
+
                         actions={<RaisedButton
                             onClick={this.handleClose}
                             label="Close me"
                             primary={true}
                             buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>}
+
                         contentStyle={{width: "90%", height: "90%", maxWidth: 'none', maxHeight: 'none'}}
                         modal={false}
                         open={this.state.open}

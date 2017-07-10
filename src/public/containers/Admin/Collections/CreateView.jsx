@@ -8,6 +8,8 @@ import Create from '../../../components/Admin/Collections/Main Components/Create
 import * as createActions from '../../../actions/Admin/Collections/manageCollectionsCreateActionsAdmin.js';
 import NotAuthorizedView from '../../Error/NotAuthorizedView.jsx';
 import LoadingIndicator from "../../../components/Loading Indicator/LoadingIndicator.jsx";
+import {Chip} from 'material-ui';
+import {smoothScroll} from '../../MainApp/functions.js';
 
 let createHandler = function (dispatch) {
     let getInitialState = function (collectionDescription, pictureDescription) {
@@ -46,8 +48,8 @@ let createHandler = function (dispatch) {
         dispatch(createActions.onRemoveInputField(pictures, index))
     };
 
-    let onSave = function (userId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, pictures) {
-        dispatch(createActions.onSaveCollection(userId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, pictures))
+    let onSave = function (userId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, pictures, tags) {
+        dispatch(createActions.onSaveCollection(userId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, pictures, tags))
     };
 
     return {
@@ -68,6 +70,12 @@ class CreateView extends Component {
     constructor(props) {
         super(props);
         this.handlers = createHandler(this.props.dispatch);
+
+        this.state = {
+            chipInput: '',
+            chips: [],
+            mappedChips: ''
+        }
     };
 
     componentDidMount() {
@@ -138,8 +146,61 @@ class CreateView extends Component {
         this.handlers.onRemoveInputField(this.props.UIState.pictures, i);
     };
 
-    onSave = () => {
+    onChipInputChange = (e) => {
+        this.setState({
+            chipInput: e.target.value
+        })
+    };
 
+    onDeleteTag = (value) => {
+        let currentChips = this.state.chips;
+        let chipToDelete;
+        if (currentChips) {
+            for (let i = 0; i < currentChips.length; i++)
+                if (currentChips[i].value === value) {
+                    chipToDelete = i;
+                    break;
+                }
+        }
+        currentChips.splice(chipToDelete, 1);
+        const mappedChips = currentChips.map((data, j) => {
+            return <Chip key={j}
+                         onRequestDelete={() => this.onDeleteTag(data.value)}
+                         style={{cursor: "pointer", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}
+                         labelStyle={{maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}>
+                {data.value}
+            </Chip>;
+        });
+        this.setState({
+            chips: currentChips,
+            mappedChips: mappedChips
+        });
+        localStorage.setItem("tags", JSON.stringify(currentChips));
+    };
+
+    onAddTag = (e) => {
+        if (e.key === 'Enter') {
+
+            let newChips = this.state.chips.concat({value: e.target.value});
+            const mappedChips = newChips.map((data, i) => {
+                return <Chip key={i}
+                             onRequestDelete={() => this.onDeleteTag(data.value)}
+                             style={{cursor: "pointer", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}
+                             labelStyle={{maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}>
+                    {data.value}
+                </Chip>;
+            });
+            this.setState({
+                chipInput: '',
+                mappedChips: mappedChips,
+                chips: newChips
+            });
+            localStorage.setItem("tags", JSON.stringify(newChips));
+        }
+    };
+
+    onSave = () => {
+        smoothScroll();
         // Convert editorState to contentState and then "HTML-ize" it
         let editorState = this.props.UIState.collectionDescription.getEditorState();
         let contentState = editorState.getCurrentContent();
@@ -153,7 +214,9 @@ class CreateView extends Component {
         const collectionDescriptionRaw = JSON.stringify(rawContentState);
         const pictures = JSON.stringify(this.props.UIState.pictures);
 
-        this.handlers.onSave(userId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, pictures);
+        const tags = JSON.stringify(this.state.chips);
+
+        this.handlers.onSave(userId, userName, profilePictureLink, collectionName, collectionDescriptionRaw, pictures, tags);
     };
 
     render() {
@@ -187,6 +250,12 @@ class CreateView extends Component {
                     pictureNameError={this.props.UIState.pictureNameError}
                     pictureDescriptionError={this.props.UIState.pictureDescriptionError}
                     pictureLinkError={this.props.UIState.pictureLinkError}
+                    chipInput={this.state.chipInput}
+                    chips={this.state.chips}
+                    mappedChips={this.state.mappedChips}
+                    onChipInputChange={this.onChipInputChange}
+                    onAddTag={this.onAddTag}
+                    onDeleteTag={this.onDeleteTag}
                 />);
         else if (this.props.credentials.admin === false) return <NotAuthorizedView/>;
         else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;

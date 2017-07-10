@@ -49,8 +49,9 @@ class Users extends Component {
                 <div className="top-bar-spacing"/>
                 <Card className="container-manage-users" style={{boxShadow: "none"}}>
                     <Tabs initialSelectedIndex={this.props.currentMode === 'Ban' ? 1 : 2}
-                          inkBarStyle={{color: "#ee6e73", backgroundColor: "#ee6e73"}}
-                          tabItemContainerStyle={{backgroundColor: "#42ab9e"}}>
+                          inkBarStyle={{color: "red", backgroundColor: "red"}}
+                          tabItemContainerStyle={{backgroundColor: "#000000"}}
+                          style={{opacity: 0.8}}>
                         <Tab icon={<ActionPermContactCalendar/>}
                              onClick={() => this.props.changeAppMode('Moderators')}/>
                         <Tab icon={<ContentRemoveCircle/>} onClick={() => this.props.changeAppMode('Ban')}/>
@@ -62,8 +63,8 @@ class Users extends Component {
                                        onChange={this.props.onSearchQueryChange}
                                        onKeyDown={this.props.handleKeyPress}
                                        inputStyle={{color: "#000000"}}
-                                       floatingLabelStyle={{color: "#ee6e73"}}
-                                       underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                       floatingLabelStyle={{color: "#000000"}}
+                                       underlineFocusStyle={{borderColor: "#000000"}}
                             />
                             <IconButton onTouchTap={this.props.onSearchUser}>
                                 <ActionSearch/>

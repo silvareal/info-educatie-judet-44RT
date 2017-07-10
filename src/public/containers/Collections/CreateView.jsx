@@ -8,6 +8,7 @@ import * as createActions from '../../actions/Collections/manageCollectionsCreat
 import Create from '../../components/Collections/Main Components/Create.jsx'
 import LoadingIndicator from "../../components/Loading Indicator/LoadingIndicator.jsx";
 import {Chip} from 'material-ui';
+import {smoothScroll} from '../MainApp/functions.js';
 
 let createHandler = function (dispatch) {
     let getInitialState = function (collectionDescription, pictureDescription) {
@@ -217,7 +218,8 @@ class CreateView extends Component {
         const mappedChips = currentChips.map((data, j) => {
             return <Chip key={j}
                          onRequestDelete={() => this.onDeleteTag(data.value)}
-            >
+                         style={{cursor: "pointer", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}
+                         labelStyle={{maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}>
                 {data.value}
             </Chip>;
         });
@@ -235,7 +237,8 @@ class CreateView extends Component {
             const mappedChips = newChips.map((data, i) => {
                 return <Chip key={i}
                              onRequestDelete={() => this.onDeleteTag(data.value)}
-                >
+                             style={{cursor: "pointer", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}
+                             labelStyle={{maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis"}}>
                     {data.value}
                 </Chip>;
             });
@@ -249,6 +252,7 @@ class CreateView extends Component {
     };
 
     onSave = () => {
+        smoothScroll();
         // Convert editorState to contentState and then "HTML-ize" it
         let editorState = this.props.UIState.collectionDescription.getEditorState();
         let contentState = editorState.getCurrentContent();

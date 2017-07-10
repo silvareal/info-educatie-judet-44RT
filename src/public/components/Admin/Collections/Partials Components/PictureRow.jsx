@@ -29,6 +29,10 @@ class PictureRow extends Component {
         }
     };
 
+    addDefaultPicture = (e) => {
+        e.target.src = "http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg"
+    };
+
     render() {
         return (
             <div className="force-image-height">
@@ -37,16 +41,17 @@ class PictureRow extends Component {
                     onClick={this.handleOpenModal}
                     overlay={<CardTitle title={this.props.pictureName}/>}
                 >
-                    <img src={this.props.pictureLink}/>
+                    <img onError={this.addDefaultPicture} src={this.props.pictureLink}/>
                 </CardMedia>
                 <Dialog open={this.state.modalIsOpen}
                         title={this.props.pictureName}
                         autoScrollBodyContent={true}
                         onRequestClose={this.handleCloseModal}>
                     <CardMedia>
-                        <img src={this.props.pictureLink}/>
+                        <img onError={this.addDefaultPicture} src={this.props.pictureLink}/>
                     </CardMedia>
-                    <div dangerouslySetInnerHTML={this.getHTML()}/>
+                    <div dangerouslySetInnerHTML={this.getHTML()}
+                         style={{wordBreak: "break-all"}}/>
                 </Dialog>
             </div>
         )

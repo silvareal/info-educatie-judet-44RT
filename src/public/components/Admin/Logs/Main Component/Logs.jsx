@@ -38,7 +38,7 @@ class Logs extends Component {
                                     primary={true}
                                     label="Login logs"
                                     style={styles.buttons}
-                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                    buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
                                 />
                             </Link>
                             <Link to={`/admin/${this.props.userId}/logs/signup`}>
@@ -46,7 +46,7 @@ class Logs extends Component {
                                     primary={true}
                                     label="Logs signup"
                                     style={styles.buttons}
-                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                    buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
                                 />
                             </Link>
                         </div>
@@ -56,7 +56,7 @@ class Logs extends Component {
                                     primary={true}
                                     label="Logs news"
                                     style={styles.buttons}
-                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                    buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
                                 />
                             </Link>
                             <Link to={`/admin/${this.props.userId}/logs/collections`}>
@@ -64,7 +64,7 @@ class Logs extends Component {
                                     primary={true}
                                     label="Logs collections"
                                     style={styles.buttons}
-                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                    buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
                                 />
                             </Link>
                         </div>
@@ -74,7 +74,7 @@ class Logs extends Component {
                                     primary={true}
                                     label="Logs profile update"
                                     style={styles.buttons}
-                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                    buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
                                 />
                             </Link>
                         </div>

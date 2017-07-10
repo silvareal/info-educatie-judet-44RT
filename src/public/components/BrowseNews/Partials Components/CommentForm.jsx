@@ -26,8 +26,8 @@ class CommentForm extends Component {
                                               src={this.props.profilePictureLink }/>
                                       </Link>}
                                   rightIcon={<ContentSend onClick={this.props.onSave}
-                                                          hoverColor="#f3989b"
-                                                          color="#eb7077"/>}
+                                                          hoverColor="#9b9b9b"
+                                                          color="#000000"/>}
                         >
                             {this.props.commentAdded === false ? "Comments can only have 1000 characters and they cannot be empty" : null}
                             <TextField
@@ -39,9 +39,9 @@ class CommentForm extends Component {
                                 onKeyDown={this.props.handleKeyPress}
                                 multiLine={true}
                                 rowsMax={2}
-                                inputStyle={{color: "#000000"}}
-                                floatingLabelStyle={{color: "#ee6e73"}}
-                                underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                inputStyle={{color: "#000000", opacity: 0.8}}
+                                floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                             />
                         </ListItem>
                         :
@@ -50,8 +50,8 @@ class CommentForm extends Component {
                                       <ActionAccountCircle style={{width: 48, height: 48}}/>
                                   </Link>}
                                   rightIcon={<ContentSend onClick={this.props.onSave}
-                                                          hoverColor="#f3989b"
-                                                          color="#eb7077"/>}
+                                                          hoverColor="#9b9b9b"
+                                                          color="#000000"/>}
                         >
                             {this.props.commentAdded === false ? "Comments can only have 1000 characters and they cannot be empty" : null}
                             <TextField
@@ -63,9 +63,9 @@ class CommentForm extends Component {
                                 onKeyDown={this.props.handleKeyPress}
                                 multiLine={true}
                                 rowsMax={2}
-                                inputStyle={{color: "#000000"}}
-                                floatingLabelStyle={{color: "#ee6e73"}}
-                                underlineFocusStyle={{borderColor: "#ee6e73"}}
+                                inputStyle={{color: "#000000", opacity: 0.8}}
+                                floatingLabelStyle={{color: "#000000", opacity: 0.8}}
+                                underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                             />
                         </ListItem>
                     }

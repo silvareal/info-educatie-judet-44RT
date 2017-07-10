@@ -522,38 +522,6 @@ npm install bcrypt
 <h3><i>Issues:</i></h3>
 
 <h5>Any issue found on the website should be well documented and posted in the Issues section on GitHub</h5>
-
-<h3><i>TODO for v0.0.4</i></h3>
-
-<ul>
-<li>All of our AJAX requests need to be rewritten with <a href="https://github.com/mzabriskie/axios">Axios</a> - DONE</li>
-<li><a href="https://github.com/reactjs/redux/">Redux</a> is required to increase performance ( a.k.a. reduce the number of AJAX requests ) - DONE</li>
-<li>Implementation of a Like/Favourite System - SYSTEM FUNCTIONAL ON MANAGE COLLECTIONS AT THIS TIME</li>
-<li>Implementation of Actions for Moderators (delete comments, hide offensive collections etc) - SYSTEM FUNCTIONAL ON MANAGE READ ONE FOR BOTH ADMIN AND MODS AT THIS TIME</li>
-<li><strike>Implementation of an upload system</strike> REMOVED</li>
-<li><strike>OPTIONAL: Rework the backend in Hacklang</strike> REMOVED</li>
-<li>Add tags to collections - DONE</li>
-<li>Add Redis to the application - DONE</li>
-</ul>
-
-<h1>Version 0.0.4 is live, in regards of features</h1>
-
-<h3>TODO for v0.0.5</h3>
-
-<ul>
-<li>Finish the final design</li>
-<li>Add all the features from 0.0.4 to all pages of collections/news management</li>
-<li>Add a scroll to top button - DONE</li>
-<li>Add the resume function for Create collections -DONE</li>
-</ul>
-
 <h1>Creators:</h1>
 <h5>Valentin Marian Constanda</h5>
 <h5>Cristiana Lazar</h5>
-
-
-// load more is not stable as it is since it does require time from redux to know the request has finished therefore use something like we use on comments, a load more button.
-
-// SearchView needs to check if shouldUpdate is set to true and fetch collectionNamesReducer again if so
-// for profile: if profile picture updated we must fetch everything again. use a flag as shouldUpdate fr the componentWillUnmount lifecycle - for when, say, user wants to add a collection, their old profile pic will be used unless you do this
-// instead of nothing when user is not logged, use a disabled textfield on readOne - commentInput

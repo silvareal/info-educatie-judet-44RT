@@ -81,6 +81,7 @@ class ReadAllView extends Component {
                 dispatch={this.props.dispatch}
                 onLoadMoreCollections={this.onLoadMoreCollections}
                 finished={this.props.collections.finished}
+                message={this.props.collections.message}
             />;
         else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
     }
@@ -141,7 +142,8 @@ const collections = (state) => {
             loadAfter: state.manageCollectionsReadAllReducer.loadAfter,
             finished: state.manageCollectionsReadAllReducer.finished,
             requesting: state.manageCollectionsReadAllReducer.requesting,
-            openSnackBarLikes: state.manageCollectionsReadAllReducer.openSnackBarLikes
+            openSnackBarLikes: state.manageCollectionsReadAllReducer.openSnackBarLikes,
+            message: response.message
         }
     }
     else if (state.manageCollectionsReadAllReducer.fetched === false) {
