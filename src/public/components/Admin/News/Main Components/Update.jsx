@@ -150,7 +150,7 @@ class Update extends Component {
                             <img onError={this.addDefaultPicture} src={this.props.newsCoverLink}/>
                         </CardMedia>
                         <div dangerouslySetInnerHTML={this.props.getHTML()}
-                             style={{wordBreak: "break-all"}}/>
+                             style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}/>
                     </div>
                 );
             default:
@@ -184,7 +184,7 @@ class Update extends Component {
                                             <Stepper linear={false} activeStep={stepIndex}>
                                                 <Step>
                                                     <StepButton
-                                                        onClick={() => this.handlers.onSlideIndexChange(0)}
+                                                        onTouchTap={() => this.handlers.onSlideIndexChange(0)}
                                                         icon={this.checkStepOneErrors(this.props.errors) ?
                                                             <FontIcon className="material-icons"
                                                                       color={red500}>warning</FontIcon> :
@@ -194,7 +194,7 @@ class Update extends Component {
                                                     </StepButton>
                                                 </Step>
                                                 <Step>
-                                                    <StepButton onClick={() => this.handlers.onSlideIndexChange(1)}
+                                                    <StepButton onTouchTap={() => this.handlers.onSlideIndexChange(1)}
                                                                 icon={this.checkForErrors(this.props.message) ?
                                                                     <FontIcon className="material-icons"
                                                                               color={red500}>warning</FontIcon> :

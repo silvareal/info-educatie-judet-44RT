@@ -75,7 +75,7 @@ class ReadOne extends Component {
                                             <Card style={{background: "none", boxShadow: 'none'}}>
                                                 <CardText>
                                                     <div dangerouslySetInnerHTML={this.getHTML()}
-                                                         style={{wordBreak: "break-all"}}/>
+                                                         style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}/>
                                                 </CardText>
                                             </Card>
                                         </li>
@@ -104,7 +104,7 @@ class ReadOne extends Component {
                                             <div
                                                 className="collection-description"
                                                 dangerouslySetInnerHTML={this.getHTML()}
-                                                style={{wordBreak: "break-all"}}/>
+                                                style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}/>
                                         </CardText>
                                     </Card>
                                 </div>

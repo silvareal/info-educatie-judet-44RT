@@ -58,7 +58,7 @@ class Login extends Component {
 
                                 <div className="button-login-signup">
                                     <RaisedButton
-                                        onClick={this.props.onSubmit}
+                                        onTouchTap={this.props.onSubmit}
                                         style={styles.button}
                                         labelStyle={{color: "#ffffff"}}
                                         buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}

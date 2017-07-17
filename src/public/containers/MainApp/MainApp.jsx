@@ -8,59 +8,109 @@ import ScrollButton from './ScrollToTopButton.jsx'
 
 class MainApp extends Component {
     render() {
-        return (
-            <RouteTransition
-                pathname={this.props.location.pathname}
-                atEnter={{opacity: 0.3}}
-                atLeave={{opacity: 0.3}}
-                atActive={{opacity: 1}}
-            >
-                <div>
-                    <AppBarPersonal
-                        profilePictureLink={this.props.profilePictureLink}
-                        userId={this.props.userId}
-                        userName={this.props.userName}
-                        isAdmin={this.props.admin}
-                    />
 
-                    {this.props.children}
-                    <ScrollButton/>
+        if (this.props.location.pathname !== '/collections#') {
+            return (
+                <RouteTransition
+                    pathname={this.props.location.pathname}
+                    atEnter={{opacity: 0.3}}
+                    atLeave={{opacity: 0.3}}
+                    atActive={{opacity: 1}}
+                >
+                    <div>
+                        <AppBarPersonal
+                            profilePictureLink={this.props.profilePictureLink}
+                            userId={this.props.userId}
+                            userName={this.props.userName}
+                            isAdmin={this.props.admin}
+                        />
 
-                    <div className="footer">
-                        <ul className="footer-left">
-                            <li>
-                                <Link to={`/`}>
-                                    Home
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to={`/collections`}>
+                        {this.props.children}
+                        <ScrollButton/>
 
-                                    Browse all collections
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to={`/news`}>
-                                    See all recent news
-                                </Link>
-                            </li>
-                        </ul>
-                        <ul className="footer-right">
-                            <li>
-                                <Link to={`/contact`}>
-                                    Contact our team
-                                </Link>
-                            </li>
-                            <li>
-                                <a href={`https://github.com/saniagh/info-educatie-judet-44RT`}
-                                   target="_blank">
-                                    Github
-                                </a>
-                            </li>
-                        </ul>
+                        <div className="footer">
+                            <ul className="footer-left">
+                                <li>
+                                    <Link to={`/`}>
+                                        Home
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to={`/collections`}>
+
+                                        Browse all collections
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to={`/news`}>
+                                        See all recent news
+                                    </Link>
+                                </li>
+                            </ul>
+                            <ul className="footer-right">
+                                <li>
+                                    <Link to={`/contact`}>
+                                        Contact our team
+                                    </Link>
+                                </li>
+                                <li>
+                                    <a href={`https://github.com/saniagh/info-educatie-judet-44RT`}
+                                       target="_blank">
+                                        Github
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+                </RouteTransition>
+            )
+        }
+        else return (
+            <div>
+                <AppBarPersonal
+                    profilePictureLink={this.props.profilePictureLink}
+                    userId={this.props.userId}
+                    userName={this.props.userName}
+                    isAdmin={this.props.admin}
+                />
+
+                {this.props.children}
+                <ScrollButton/>
+
+                <div className="footer">
+                    <ul className="footer-left">
+                        <li>
+                            <Link to={`/`}>
+                                Home
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={`/collections`}>
+
+                                Browse all collections
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={`/news`}>
+                                See all recent news
+                            </Link>
+                        </li>
+                    </ul>
+                    <ul className="footer-right">
+                        <li>
+                            <Link to={`/contact`}>
+                                Contact our team
+                            </Link>
+                        </li>
+                        <li>
+                            <a href={`https://github.com/saniagh/info-educatie-judet-44RT`}
+                               target="_blank">
+                                Github
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </RouteTransition>
+            </div>
         )
     }
 }

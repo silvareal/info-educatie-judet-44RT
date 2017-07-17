@@ -120,7 +120,7 @@ class HomeView extends Component {
                             <Card style={{maxHeight: "auto", width: 800}}>
                                 <CardMedia overlay={<CardTitle title={news[key].newsTitle}
                                                                subtitle={"by " + news[key].userName}/>}
-                                           onClick={() => this.onClickNews(news[key]._id)}
+                                           onTouchTap={() => this.onClickNews(news[key]._id)}
                                            style={{cursor: "pointer"}}>
                                     <img onError={this.addDefaultPicture} src={news[key].newsCoverLink}/>
                                 </CardMedia>
@@ -141,7 +141,7 @@ class HomeView extends Component {
                 if (key < 3)
                     return (
                         <li className="left-news"
-                            onClick={() => this.onClickCollection(collections[key]._id)}
+                            onTouchTap={() => this.onClickCollection(collections[key]._id)}
                             key={key}>
                             <Card>
                                 <CardMedia
@@ -160,7 +160,7 @@ class HomeView extends Component {
                 if (key < 3)
                     return (
                         <li key={key}
-                            onClick={() => this.onClickCollection(collections[key]._id)}>
+                            onTouchTap={() => this.onClickCollection(collections[key]._id)}>
                             <Card>
                                 <CardMedia overlay={<CardTitle title={collections[key].collectionName}
                                                                subtitle={"by " + collections[key].userName}/>}

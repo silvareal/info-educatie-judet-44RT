@@ -114,13 +114,17 @@ class Profile extends Component {
                 label="Cancel"
                 buttonStyle={{backgroundColor: "#eb7077"}}
                 labelStyle={{color: "#ffffff"}}
-                onTouchTap={this.closeProfilePictureModal}
-                onClick={this.props.onCancelEdit}
+                onTouchTap={() => {
+                    this.closeProfilePictureModal();
+                    this.props.onCancelEdit();
+                }}
             />,
             <RaisedButton
                 label="Save"
-                onTouchTap={this.closeProfilePictureModal}
-                onClick={this.props.onSave}
+                onTouchTap={() => {
+                    this.closeProfilePictureModal();
+                    this.props.onSave();
+                }}
                 buttonStyle={{backgroundColor: "#9b9b9b"}}
                 labelStyle={{color: "#ffffff"}}
             />,
@@ -131,15 +135,19 @@ class Profile extends Component {
                 label="Cancel"
                 buttonStyle={{backgroundColor: "#eb7077"}}
                 labelStyle={{color: "#ffffff"}}
-                onTouchTap={this.closeProfileCoverModal}
-                onClick={this.props.onCancelEdit}
+                onTouchTap={() => {
+                    this.closeProfileCoverModal();
+                    this.props.onCancelEdit();
+                }}
             />,
             <RaisedButton
                 label="Save"
                 buttonStyle={{backgroundColor: "#9b9b9b"}}
                 labelStyle={{color: "#ffffff"}}
-                onTouchTap={this.closeProfileCoverModal}
-                onClick={this.props.onSave}
+                onTouchTap={() => {
+                    this.closeProfileCoverModal();
+                    this.props.onSave();
+                }}
             />
         ];
 
@@ -161,14 +169,14 @@ class Profile extends Component {
                         <Card className="cover-container"
                               style={{backgroundColor: 'whitesmoke', boxShadow: 'transparent'}}>
                             <CardMedia
-                                onClick={this.props.profile.ownUser ? this.openProfileCoverModal : null}
+                                onTouchTap={this.props.profile.ownUser ? this.openProfileCoverModal : null}
                                 className="force-no-overlay-background"
                                 overlay=
                                     {
                                         <Card style={{backgroundColor: 'whitesmoke', boxShadow: 'transparent'}}>
                                             <CardMedia className="force-profile-picture-width">
                                                 <img onError={this.addDefaultPicture}
-                                                     onClick={this.props.profile.ownUser ? this.openProfilePictureModal : null}
+                                                     onTouchTap={this.props.profile.ownUser ? this.openProfilePictureModal : null}
                                                      style={{borderRadius: "50%"}}
                                                      src={this.props.profile.profilePictureLink ? this.props.profile.profilePictureLink : "/images/img9.jpg"}/>
                                                 <Dialog
@@ -241,8 +249,8 @@ class Profile extends Component {
                                           tabItemContainerStyle={{backgroundColor: "#000000"}}
                                           style={{opacity: 0.8}}
                                     >
-                                        <Tab icon={<ImageCameraRoll/>} value={0} onClick={this.props.onCancelEdit}/>
-                                        <Tab icon={<ActionAccountBox/>} value={1} onClick={this.props.onCancelEdit}/>
+                                        <Tab icon={<ImageCameraRoll/>} value={0} onTouchTap={this.props.onCancelEdit}/>
+                                        <Tab icon={<ActionAccountBox/>} value={1} onTouchTap={this.props.onCancelEdit}/>
                                         {this.props.profile.ownUser ?
                                             <Tab icon={<ActionSettings/>} value={2}/>
                                             :
@@ -368,7 +376,7 @@ class Profile extends Component {
                                                                       style={{opacity: 0.8}}
                                                                       buttonStyle={{backgroundColor: "#000000"}}
                                                                       labelStyle={{color: "#ffffff"}}
-                                                                      onClick={this.props.onSave}/>}
+                                                                      onTouchTap={this.props.onSave}/>}
                                                     />
                                                 </List>
                                             </div>

@@ -47,7 +47,6 @@ export function onMountUpdate(newsId, textEditorState) {
                 newsDescription: textEditorState.setContentFromString(html, 'html')
             }, textEditorState))
         }).catch((err) => {
-            console.log(err);
             dispatch(onMountUpdateFailure(err.response.data.message))
         })
     }

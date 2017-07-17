@@ -37,7 +37,7 @@ class ViewRow extends Component {
                   style={{minWidth: "50%", boxShadow: "transparent"}}>
                 <CardMedia
                     style={{cursor: 'pointer'}}
-                    onClick={() => this.props.onClickCollection(this.props.collection._id)}
+                    onTouchTap={() => this.props.onClickCollection(this.props.collection._id)}
                     overlay={<CardTitle title={this.props.collection.collectionName}
                                         subtitle={"by " + this.props.collection.userName}/>}
                 >
@@ -47,19 +47,19 @@ class ViewRow extends Component {
                     <div className="heart-red-color">
                         {Auth.isUserAuthenticated() ?
                             <Checkbox
-                                label={"Likes: " + this.props.collection.likes}
+                                label={this.props.collection.likes}
                                 checked={isLiked}
                                 checkedIcon={<ActionFavorite/>}
                                 uncheckedIcon={<ActionFavoriteBorder/>}
-                                onClick={isLiked === false ? () => this.props.onLike(this.props.collection._id) : () => this.props.onUnlike(this.props.collection._id)}
+                                onTouchTap={isLiked === false ? () => this.props.onLike(this.props.collection._id) : () => this.props.onUnlike(this.props.collection._id)}
                             />
                             :
                             <Checkbox
-                                label={"Likes: " + this.props.collection.likes}
+                                label={this.props.collection.likes}
                                 checked={isLiked}
                                 checkedIcon={<ActionFavorite/>}
                                 uncheckedIcon={<ActionFavoriteBorder/>}
-                                onClick={() => this.props.context.router.push('/login')}
+                                onTouchTap={() => this.props.context.router.push('/login')}
                             />
                         }
                     </div>

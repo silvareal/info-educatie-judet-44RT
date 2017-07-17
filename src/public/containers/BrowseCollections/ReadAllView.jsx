@@ -84,6 +84,8 @@ class ReadAllView extends Component {
                 userId={this.props.credentials.userId}
                 onLoadMoreCollections={this.onLoadMoreCollections}
                 finished={this.props.collections.finished}
+                router={this.props.router}
+                location={this.props.location}
             />;
         else if (this.props.credentials.fetching === true) return <LoadingIndicator/>;
     }

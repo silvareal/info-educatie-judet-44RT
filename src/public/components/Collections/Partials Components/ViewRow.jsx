@@ -32,7 +32,7 @@ class ViewRow extends Component {
                   style={{minWidth: "50%", boxShadow: "transparent"}}>
                 <CardMedia
                     style={{cursor: 'pointer'}}
-                    onClick={() => this.props.onClickCollection(this.props.collection._id)}
+                    onTouchTap={() => this.props.onClickCollection(this.props.collection._id)}
                     overlay={<CardTitle title={this.props.collection.collectionName}
                                         subtitle={"by " + this.props.collection.userName}/>}
                 >
@@ -45,7 +45,7 @@ class ViewRow extends Component {
                             checked={isLiked}
                             checkedIcon={<ActionFavorite/>}
                             uncheckedIcon={<ActionFavoriteBorder/>}
-                            onClick={isLiked === false ? () => this.props.onLike(this.props.collection._id) : () => this.props.onUnlike(this.props.collection._id)}
+                            onTouchTap={isLiked === false ? () => this.props.onLike(this.props.collection._id) : () => this.props.onUnlike(this.props.collection._id)}
                         />
                     </div>
                     <div style={{display: "flex", flex: 1, maxWidth: "100%", overflow: "hidden"}}>

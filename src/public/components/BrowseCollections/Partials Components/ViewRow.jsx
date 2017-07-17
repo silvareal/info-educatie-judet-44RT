@@ -15,12 +15,12 @@ class ViewRow extends Component {
 
         let isLiked = false;
         if (Auth.isUserAuthenticated())
-        for (let i = 0; i < this.props.liked.length; i++) {
-            if (this.props.liked[i].toString() === this.props.collection._id) {
-                isLiked = true;
-                break;
+            for (let i = 0; i < this.props.liked.length; i++) {
+                if (this.props.liked[i].toString() === this.props.collection._id) {
+                    isLiked = true;
+                    break;
+                }
             }
-        }
 
         const tags = this.props.collection.tags.map((data, i) => {
             if (i < 3)
@@ -35,14 +35,16 @@ class ViewRow extends Component {
         return (
             <Card className="picture-separator"
                   style={{minWidth: "50%", boxShadow: "transparent"}}>
-                <CardMedia
-                    style={{cursor: 'pointer'}}
-                    onClick={() => this.props.onClickCollection(this.props.collection._id)}
-                    overlay={<CardTitle title={this.props.collection.collectionName}
-                                        subtitle={"by " + this.props.collection.userName}/>}
-                >
-                    <img onError={this.addDefaultPicture} src={this.props.collection.picturesArray[0].pictureLink}/>
-                </CardMedia>
+                <Link to="/collections#">
+                    <CardMedia
+                        style={{cursor: 'pointer'}}
+                        onTouchTap={() => this.props.onClickCollection(this.props.collection._id)}
+                        overlay={<CardTitle title={this.props.collection.collectionName}
+                                            subtitle={"by " + this.props.collection.userName}/>}
+                    >
+                        <img onError={this.addDefaultPicture} src={this.props.collection.picturesArray[0].pictureLink}/>
+                    </CardMedia>
+                </Link>
                 <div className="heart-and-tags-container">
                     <div className="heart-red-color">
                         {Auth.isUserAuthenticated() ?
@@ -51,7 +53,7 @@ class ViewRow extends Component {
                                 checked={isLiked}
                                 checkedIcon={<ActionFavorite/>}
                                 uncheckedIcon={<ActionFavoriteBorder/>}
-                                onClick={isLiked === false ? () => this.props.onLike(this.props.collection._id) : () => this.props.onUnlike(this.props.collection._id)}
+                                onTouchTap={isLiked === false ? () => this.props.onLike(this.props.collection._id) : () => this.props.onUnlike(this.props.collection._id)}
                             />
                             :
                             <Checkbox
@@ -59,7 +61,7 @@ class ViewRow extends Component {
                                 checked={isLiked}
                                 checkedIcon={<ActionFavorite/>}
                                 uncheckedIcon={<ActionFavoriteBorder/>}
-                                onClick={() => this.props.context.router.push('/login')}
+                                onTouchTap={() => this.props.context.router.push('/login')}
                             />
                         }
                     </div>

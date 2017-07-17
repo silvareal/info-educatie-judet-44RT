@@ -107,7 +107,7 @@ class LogsCollectionsDelete extends Component {
                                 <RaisedButton
                                     primary={true}
                                     label="Back"
-                                    buttonStyle={{backgroundColor: "#42ab9e"}}
+                                    buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}
                                     style={styles.buttons}
                                 />
                             </Link>

@@ -525,3 +525,14 @@ npm install bcrypt
 <h1>Creators:</h1>
 <h5>Valentin Marian Constanda</h5>
 <h5>Cristiana Lazar</h5>
+
+notes on bugs or issues met in live test version ( mostly for mobile ):
+
+- wordBreak: break-all was making long descriptions look strange by separating words - FIXED on /collections ( Browse )
+- added functionality to press the Back browser or phone button to close the modal by adding a # to the /collections = /collections# and some transition, scroll and router rules - FIXED
+- modals from the current material-ui are broken and update to the @next material ui might break the site, will look into it these days - in progress
+- loading indicator on modals is not shown as it should be on mobile but if we implement the @next modals, it shouldn't be a problem anymore - in progress
+- when user updates his/her profile we should sign another jwt and not ask them to relog - TBA
+- change colours for buttons on logs - TBA
+
+Other issues will be available here, at the bottom of the docs.

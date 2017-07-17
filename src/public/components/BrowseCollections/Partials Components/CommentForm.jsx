@@ -25,7 +25,7 @@ class CommentForm extends Component {
                                           <Avatar
                                               src={this.props.profilePictureLink }/>
                                       </Link>}
-                                  rightIcon={<ContentSend onClick={this.props.onSave}
+                                  rightIcon={<ContentSend onTouchTap={this.props.onSave}
                                                           hoverColor="#9b9b9b"
                                                           color="#000000"/>}
                         >
@@ -49,7 +49,7 @@ class CommentForm extends Component {
                                   leftIcon={<Link to={`/profile/${this.props.userName}`}>
                                       <ActionAccountCircle style={{width: 48, height: 48}}/>
                                   </Link>}
-                                  rightIcon={<ContentSend onClick={this.props.onSave}
+                                  rightIcon={<ContentSend onTouchTap={this.props.onSave}
                                                           hoverColor="#9b9b9b"
                                                           color="#000000"/>}
                         >

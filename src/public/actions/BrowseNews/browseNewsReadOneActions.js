@@ -197,7 +197,6 @@ export function onDeleteComment(commentId) {
             socket.emit("send:commentNews");
             dispatch(onDeleteCommentSuccess());
         }).catch((err) => {
-            console.log(err);
             dispatch(onDeleteCommentFailure());
         })
     }

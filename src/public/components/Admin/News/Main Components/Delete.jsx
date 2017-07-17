@@ -48,7 +48,7 @@ class Delete extends Component {
                                             <div style={{padding: 20}}>
                                                 <RaisedButton
                                                     primary={true}
-                                                    onClick={this.props.onDelete}
+                                                    onTouchTap={this.props.onDelete}
                                                     buttonStyle={{backgroundColor: "#ee6e73"}}
                                                     label="Yes"/>
                                             </div>

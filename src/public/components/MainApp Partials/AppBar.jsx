@@ -99,7 +99,7 @@ class AppBarPersonal extends Component {
         return (
             <div>
                 <div className="logo-wrap-desktop">
-                    <CardMedia onClick={() => this.context.router.push('/')}
+                    <CardMedia onTouchTap={() => this.context.router.push('/')}
                                style={{cursor: "pointer"}}>
                         <img src="/images/logo.png"
                              className="logo"
@@ -161,7 +161,7 @@ class AppBarPersonal extends Component {
                                 />}
                             leftIcon={<ActionSearch
                                 style={{cursor: "pointer"}}
-                                onClick={() => this.onSearch()}/>}
+                                onTouchTap={() => this.onSearch()}/>}
                             disabled={true}>
 
                         </ListItem>
@@ -273,7 +273,7 @@ class AppBarPersonal extends Component {
                              height: 50
                          }}>
                     <div style={{position: "absolute", top: 10}}
-                         onClick={this.handleOpenMenu}
+                         onTouchTap={this.handleOpenMenu}
                     >
                         <NavigationMenu style={{height: 30, width: 28}}/>
                     </div>
@@ -287,7 +287,7 @@ class AppBarPersonal extends Component {
                     </ToolbarGroup>
                     <ToolbarGroup/>
                     <div style={{position: "absolute", top: 10, right: 24}}
-                         onClick={this.handleOpenSearch}>
+                         onTouchTap={this.handleOpenSearch}>
                         <ActionSearch style={{height: 30, width: 28}}/>
                     </div>
                 </Toolbar>
@@ -327,7 +327,7 @@ class AppBarPersonal extends Component {
                         docked={false}
                         onRequestChange={() => this.handleCloseMenu()}>
                     {Auth.isUserAuthenticated() ?
-                        <span onClick={this.handleCloseMenu}>
+                        <span onTouchTap={this.handleCloseMenu}>
                         <List>
                             <Link to={`/profile/${this.props.userName}`}>
                                 {this.props.profilePictureLink ?
@@ -415,7 +415,7 @@ class AppBarPersonal extends Component {
                         </List>
                     </span>
                         :
-                        <span onClick={this.handleCloseMenu}>
+                        <span onTouchTap={this.handleCloseMenu}>
                             <List>
 
                             <Link to={`/`}

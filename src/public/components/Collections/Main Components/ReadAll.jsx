@@ -82,7 +82,7 @@ class ReadAll extends Component {
                     <Dialog
 
                         actions={<RaisedButton
-                            onClick={this.handleClose}
+                            onTouchTap={this.handleClose}
                             label="Close me"
                             primary={true}
                             buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>}

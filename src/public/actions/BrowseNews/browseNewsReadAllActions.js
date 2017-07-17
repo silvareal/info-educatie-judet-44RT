@@ -69,7 +69,6 @@ export function onLoadMore(loadAfter) {
             dispatch(onLoadMoreSuccess(response.data.news));
             dispatch(iterateLoadAfter(loadAfter))
         }).catch((err) => {
-            console.log(err);
             dispatch(onLoadMoreFailure(err.response.data.message))
         })
     }

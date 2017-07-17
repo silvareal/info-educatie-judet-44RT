@@ -105,7 +105,7 @@ class ReadOne extends Component {
                                                         checked={isLiked}
                                                         checkedIcon={<ActionFavorite/>}
                                                         uncheckedIcon={<ActionFavoriteBorder/>}
-                                                        onClick={isLiked === false ? () => this.handlers.onLike(this.props.collection._id) : () => this.handlers.onUnlike(this.props.collection._id)}
+                                                        onTouchTap={isLiked === false ? () => this.handlers.onLike(this.props.collection._id) : () => this.handlers.onUnlike(this.props.collection._id)}
                                                     />
                                                 </div>
                                             </CardActions>
@@ -116,7 +116,7 @@ class ReadOne extends Component {
                                             <CardText>
                                                 <div
                                                     className="collection-description"
-                                                    style={{wordBreak: "break-all"}}
+                                                    style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}
                                                     dangerouslySetInnerHTML={this.getHTML()}/>
                                             </CardText>
                                         </Card>
@@ -142,19 +142,16 @@ class ReadOne extends Component {
                                         <CardText>
                                             <div
                                                 className="collection-description"
-                                                style={{wordBreak: "break-all"}}
+                                                style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}
                                                 dangerouslySetInnerHTML={this.getHTML()}/>
                                         </CardText>
                                     </Card>
                                 </div>
                             </div>
                             <CardActions>
-                                <TextField name="Share"
-                                           disabled={true}
-                                           value={`localhost/collections/${this.props.collection._id}`}/>
                                 <CopyToClipboard text={`localhost/collections/${this.props.collection._id}`}
                                                  onCopy={() => this.setState({copied: true})}>
-                                    <RaisedButton label={this.state.copied === false ? "Copy link" : "Success !"}
+                                    <RaisedButton label={this.state.copied === false ? "Copy share link" : "Success !"}
                                                   labelPosition="before"
                                                   icon={this.state.copied === false ?  <SocialShare/> : <NavigationCheck/>}
                                                   primary={this.state.copied}

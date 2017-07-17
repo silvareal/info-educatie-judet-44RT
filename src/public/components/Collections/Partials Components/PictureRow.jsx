@@ -39,14 +39,16 @@ class PictureRow extends Component {
             <div className="force-image-height">
                 <CardMedia
                     style={{cursor: "pointer"}}
-                    onClick={this.handleOpenModal}
+                    onTouchTap={this.handleOpenModal}
                     overlay={<CardTitle title={this.props.pictureName}
                                         subtitle="Click for more details"/>}>
                     <img onError={this.addDefaultPicture} src={this.props.pictureLink}/>
                 </CardMedia>
                 <Dialog
+                    autoDetectWindowHeight={false}
+                    repositionOnUpdate={false}
                     actions={<RaisedButton
-                        onClick={this.handleCloseModal}
+                        onTouchTap={this.handleCloseModal}
                         label="Close me"
                         primary={true}
                         buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>}
@@ -59,7 +61,7 @@ class PictureRow extends Component {
                         <img onError={this.addDefaultPicture} src={this.props.pictureLink}/>
                     </CardMedia>
                     <div dangerouslySetInnerHTML={this.getHTML()}
-                         style={{wordBreak: "break-all"}}/>
+                         style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}/>
                 </Dialog>
             </div>
         )

@@ -25,13 +25,35 @@ export default function browseCollectionsReadOneReducer(state = {
                 fetching: true
             };
 
-        case types.GET_COMMENTS_BROWSE_SUCCESS:
-            return {
-                ...state,
-                fetched: true,
-                fetching:false,
-                comments: action.comments
-            };
+        case types.GET_COMMENTS_BROWSE_SUCCESS: {
+            if (action.comments.data.comments && action.comments.data.comments.length % 10 === 0) {
+                return {
+                    ...state,
+                    fetched: true,
+                    fetching: false,
+                    comments: action.comments,
+                    finished: false
+                }
+            }
+            else if (action.comments.data.comments && action.comments.data.comments.length % 10 !== 0) {
+                return {
+                    ...state,
+                    fetched: true,
+                    fetching: false,
+                    comments: action.comments,
+                    finished: true
+                }
+            }
+            else {
+                return {
+                    ...state,
+                    fetched: true,
+                    fetching: false,
+                    comments: action.comments,
+                    finished: false
+                }
+            }
+        }
 
         case types.GET_COMMENTS_BROWSE_FAILURE:
             return {
@@ -133,6 +155,15 @@ export default function browseCollectionsReadOneReducer(state = {
                 commentsCount: action.count
             };
 
+        case types.ON_RESET_REDUCER_BROWSE_COLLECTIONS:
+            return {
+                loadAfter: 10,
+                finished: false,
+                requesting: false,
+                comment: "",
+                commentAdded: null,
+                commentsCount: 0
+            };
 
         default:
             return state;

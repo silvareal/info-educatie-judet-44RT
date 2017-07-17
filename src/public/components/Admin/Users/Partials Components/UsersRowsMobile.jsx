@@ -99,9 +99,13 @@ class UsersRowsMobile extends Component {
                     />
                 </CardActions>
                 <Dialog
-                    title={<div className="dialog-break-word"
-                                style={{wordBreak: "break-all"}}>{"Details about: " + this.props.user.email}</div>}
+                    title={
+                        <div className="dialog-break-word"
+                             style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}>
+                            {"Details about: " + this.props.user.email}
+                        </div>}
                     modal={false}
+                    repositionOnUpdate={false}
                     open={this.state.open}
                     onRequestClose={this.handleClose}
                     autoScrollBodyContent={true}

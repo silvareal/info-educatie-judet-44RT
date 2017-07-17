@@ -190,7 +190,7 @@ class Home extends Component {
 
                 <Dialog
                     actions={<RaisedButton
-                        onClick={this.props.handleCloseCollections}
+                        onTouchTap={this.props.handleCloseCollections}
                         label="Close me" primary={true}
                         buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>}
                     contentStyle={{width: "90%", height: "90%", maxWidth: 'none', maxHeight: 'none'}}
@@ -206,7 +206,7 @@ class Home extends Component {
 
                 <Dialog
                     actions={<RaisedButton
-                        onClick={this.props.handleCloseNews}
+                        onTouchTap={this.props.handleCloseNews}
                         label="Close me" primary={true}
                         buttonStyle={{backgroundColor: "#000000", opacity: 0.8}}/>}
                     contentStyle={{width: "90%", height: "90%", maxWidth: 'none', maxHeight: 'none'}}

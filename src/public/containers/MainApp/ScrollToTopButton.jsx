@@ -8,11 +8,14 @@ class ScrollButton extends Component {
     render() {
         return <div>
                 <ContentAdd className="add"
-                            onClick={() => this.context.router.push("/manage/create")}
+                            onTouchTap={() => {
+                                this.context.router.push("/manage/create");
+                                smoothScroll();
+                            }}
                 />
             <HardwareKeyboardArrowUp
                 className="scroll"
-                onClick={() => smoothScroll()}
+                onTouchTap={() => smoothScroll()}
             />
 
         </div>

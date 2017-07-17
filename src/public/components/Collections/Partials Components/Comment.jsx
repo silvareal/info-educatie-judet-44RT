@@ -82,7 +82,8 @@ class Comment extends Component {
                         </ListItem>
                     }
 
-                    <ListItem disabled={true}>
+                    <ListItem disabled={true}
+                              style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}>
                         {this.props.comment}
                     </ListItem>
                 </Card>

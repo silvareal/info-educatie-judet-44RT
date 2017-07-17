@@ -6,10 +6,12 @@ export default function browseCollectionsReadAllReducer(state = {}, action) {
             return {
                 ...state,
                 fetching: true,
-                fetched: null
+                fetched: null,
+                finished: false
             };
 
-        case types.READ_ALL_COLLECTIONS_BROWSE_SUCCESS:
+        case types.READ_ALL_COLLECTIONS_BROWSE_SUCCESS: {
+            if (action.collections.data.collections && action.collections.data.collections.length % 10 === 0)
             return {
                 ...state,
                 fetched: true,
@@ -19,6 +21,16 @@ export default function browseCollectionsReadAllReducer(state = {}, action) {
                 finished: false,
                 requesting: false
             };
+            else return {
+                ...state,
+                fetched: true,
+                fetching: false,
+                collections: action.collections,
+                loadAfter: 10,
+                finished: true,
+                requesting: false
+            }
+        }
 
         case types.READ_ALL_COLLECTIONS_BROWSE_FAILURE:
             return {

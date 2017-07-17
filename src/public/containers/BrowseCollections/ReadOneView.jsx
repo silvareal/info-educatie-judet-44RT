@@ -75,10 +75,6 @@ class ReadOneView extends Component {
         });
     };
 
-    componentWillUnmount() {
-        this.handlers.resetReducer();
-    }
-
     onCommentChange = (e) => {
         this.handlers.onCommentInputChange(e.target.value);
     };

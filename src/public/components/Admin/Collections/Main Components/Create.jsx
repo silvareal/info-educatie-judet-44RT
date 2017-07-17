@@ -200,9 +200,7 @@ class Create extends Component {
                                        floatingLabelStyle={{color: "#000000", opacity: 0.8}}
                                        underlineFocusStyle={{borderColor: "#000000", opacity: 0.8}}
                             />
-                            <div className="tags-container">
-                                {this.props.mappedChips}
-                            </div>
+                            {this.props.mappedChips}
                         </div>
                     </div>
                 );
@@ -268,8 +266,7 @@ class Create extends Component {
                                     }
                                 </div>
                                 <CardMedia>
-                                    <img onError={this.addDefaultPicture} src={picture.pictureLink}
-                                         className="step-picture"/>
+                                    <img onError={this.addDefaultPicture} src={picture.pictureLink} className="step-picture"/>
                                 </CardMedia>
                                 <div className="input-field">
                                     {picture.pictureDescriptionRaw && picture.pictureDescriptionRaw.length > 5000 ?
@@ -299,12 +296,12 @@ class Create extends Component {
                                     }
                                 </div>
                                 <RaisedButton type="button" primary={true} label="+"
-                                              onClick={this.props.handleAddPictures(i)}
+                                              onTouchTap={this.props.handleAddPictures(i)}
                                               buttonStyle={{backgroundColor: "#9b9b9b"}}/>
 
                                 { (i !== 0) ? (
                                     <RaisedButton type="button" secondary={true} label="-"
-                                                  onClick={this.props.handleRemovePictures(i)}
+                                                  onTouchTap={this.props.handleRemovePictures(i)}
                                                   buttonStyle={{backgroundColor: "#ee6e73"}}/>
                                 ) : null}
 
@@ -318,11 +315,8 @@ class Create extends Component {
                         <div className="preview-title">The preview of what you wish to add is here</div>
                         <div>{this.props.collectionName}</div>
                         <div dangerouslySetInnerHTML={this.props.getHTML()}
-                             style={{wordBreak: "break-all"}}/>
+                             style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}/>
                         {rows}
-                        <div className="tags-container">
-                            {this.props.mappedChips}
-                        </div>
                     </div>
                 );
             default:
@@ -343,15 +337,15 @@ class Create extends Component {
     checkStepTwoErrors = (pictureNameError, pictureLinkError) => {
         let flag = false;
         if (pictureNameError)
-            Object.keys(pictureNameError).map((key) => {
-                if (pictureNameError[key] === "Please use a valid name for this picture")
-                    flag = true;
-            });
+        Object.keys(pictureNameError).map((key) => {
+            if (pictureNameError[key] === "Please use a valid name for this picture")
+                flag = true;
+        });
         if (pictureLinkError)
-            Object.keys(pictureLinkError).map((key) => {
-                if (pictureLinkError[key] === "Please use a link for the picture")
-                    flag = true;
-            });
+        Object.keys(pictureLinkError).map((key) => {
+            if (pictureLinkError[key] === "Please use a link for the picture")
+                flag = true;
+        });
         return flag;
     };
 
@@ -371,7 +365,7 @@ class Create extends Component {
                                         <Stepper linear={false} activeStep={stepIndex}>
                                             <Step>
                                                 <StepButton
-                                                    onClick={() => this.handlers.onSlideIndexChange(0)}
+                                                    onTouchTap={() => this.handlers.onSlideIndexChange(0)}
                                                     icon={this.checkStepOneErrors(this.props.errors) ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
@@ -381,7 +375,7 @@ class Create extends Component {
                                             </Step>
                                             <Step>
                                                 <StepButton
-                                                    onClick={() => this.handlers.onSlideIndexChange(1)}
+                                                    onTouchTap={() => this.handlers.onSlideIndexChange(1)}
                                                     icon={this.checkStepTwoErrors(this.props.pictureNameError, this.props.pictureLinkError) ?
                                                         <FontIcon className="material-icons"
                                                                   color={red500}>warning</FontIcon> :
@@ -390,7 +384,7 @@ class Create extends Component {
                                                 </StepButton>
                                             </Step>
                                             <Step>
-                                                <StepButton onClick={() => this.handlers.onSlideIndexChange(2)}
+                                                <StepButton onTouchTap={() => this.handlers.onSlideIndexChange(2)}
                                                             icon={this.checkForErrors(this.props.message) ?
                                                                 <FontIcon className="material-icons" color={red500}>warning</FontIcon> :
                                                                 <FontIcon className="material-icons">done</FontIcon>}

@@ -37,7 +37,6 @@ export function getAllCollections() {
                 ));
             dispatch(getCollectionsSuccess(response))
         }).catch((err) => {
-            console.log(err);
             dispatch(getCollectionsFailure())
         })
     }

@@ -33,7 +33,6 @@ export function getAllUsers() {
         }).then((response) => {
             dispatch(getAllUsersSuccess(response.data.users))
         }).catch((err) => {
-            console.log(err);
             dispatch(getAllUsersFailure())
         })
     }

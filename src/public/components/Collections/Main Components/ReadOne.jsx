@@ -99,7 +99,7 @@ class ReadOne extends Component {
                                                         checked={isLiked}
                                                         checkedIcon={<ActionFavorite/>}
                                                         uncheckedIcon={<ActionFavoriteBorder/>}
-                                                        onClick={isLiked === false ? () => this.handlers.onLike(this.props.collection._id) : () => this.handlers.onUnlike(this.props.collection._id)}
+                                                        onTouchTap={isLiked === false ? () => this.handlers.onLike(this.props.collection._id) : () => this.handlers.onUnlike(this.props.collection._id)}
                                                     />
                                                 </div>
                                             </CardActions>
@@ -110,7 +110,7 @@ class ReadOne extends Component {
                                             <CardText>
                                                 <div
                                                     className="collection-description"
-                                                    style={{wordBreak: "break-all"}}
+                                                    style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}
                                                     dangerouslySetInnerHTML={this.getHTML()}/>
                                             </CardText>
                                         </Card>
@@ -136,7 +136,8 @@ class ReadOne extends Component {
                                         <CardText>
                                             <div
                                                 className="collection-description"
-                                                dangerouslySetInnerHTML={this.getHTML()}/>
+                                                dangerouslySetInnerHTML={this.getHTML()}
+                                                style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}/>
                                         </CardText>
                                     </Card>
                                 </div>

@@ -34,19 +34,21 @@ class PictureRow extends Component {
             <div className="force-image-height">
                 <CardMedia
                     style={{cursor: "pointer"}}
-                    onClick={this.handleOpenModal}
+                    onTouchTap={this.handleOpenModal}
                     overlay={<CardTitle title={this.props.pictureName}/>}
                 >
                     <img src={this.props.pictureLink}/>
                 </CardMedia>
                 <Dialog open={this.state.modalIsOpen}
+                        repositionOnUpdate={false}
                         title={this.props.pictureName}
                         autoScrollBodyContent={true}
                         onRequestClose={this.handleCloseModal}>
                     <CardMedia>
                         <img src={this.props.pictureLink}/>
                     </CardMedia>
-                    <div dangerouslySetInnerHTML={this.getHTML()}/>
+                    <div dangerouslySetInnerHTML={this.getHTML()}
+                         style={{wordWrap: "break-word", wordBreak: 'break-word', overflowWrap: 'break-word'}}/>
                 </Dialog>
             </div>
         )

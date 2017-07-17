@@ -151,3 +151,9 @@ export function getCommentsCount(collectionId) {
         })
     }
 }
+
+export function onResetReducer() {
+    return function (dispatch) {
+        dispatch({type: types.ON_RESET_REDUCER_BROWSE_COLLECTIONS})
+    }
+}

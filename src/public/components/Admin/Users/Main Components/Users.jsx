@@ -53,8 +53,8 @@ class Users extends Component {
                           tabItemContainerStyle={{backgroundColor: "#000000"}}
                           style={{opacity: 0.8}}>
                         <Tab icon={<ActionPermContactCalendar/>}
-                             onClick={() => this.props.changeAppMode('Moderators')}/>
-                        <Tab icon={<ContentRemoveCircle/>} onClick={() => this.props.changeAppMode('Ban')}/>
+                             onTouchTap={() => this.props.changeAppMode('Moderators')}/>
+                        <Tab icon={<ContentRemoveCircle/>} onTouchTap={() => this.props.changeAppMode('Ban')}/>
                     </Tabs>
                     <div className="top-actions">
                         <div className="capsules">

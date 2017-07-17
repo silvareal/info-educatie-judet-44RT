@@ -13,7 +13,7 @@ class ViewRow extends Component {
             <Card className="picture-separator" style={{boxShadow: "transparent"}}>
                 <CardMedia
                     style={{cursor: 'pointer'}}
-                    onClick={() => this.props.onClickNews(this.props.news._id)}
+                    onTouchTap={() => this.props.onClickNews(this.props.news._id)}
                     overlay={<CardTitle title={this.props.news.newsTitle}
                                         subtitle={"by " + this.props.news.userName}/>}
                 >

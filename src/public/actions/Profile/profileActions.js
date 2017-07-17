@@ -65,7 +65,6 @@ export function onGetProfile(userName) {
                 user.ownUser
             ))
         }).catch((err) => {
-            console.log(err);
             dispatch(onGetProfileFailure());
         })
     }
